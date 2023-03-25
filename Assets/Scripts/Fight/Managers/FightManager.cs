@@ -1,0 +1,200 @@
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+using System.Linq;
+
+public class FightManager : MonoBehaviour
+{
+
+    #region Fields
+
+        [SerializeField]
+        CameraManager cameraManager;
+        StructureManager structureManager;
+        AIManager aiManager;
+        UIManager uiManager;
+
+        Level level;
+
+        // This list stores all the units on the battlefield
+        public List<Unit> units;
+        
+        float scrollWheelInput;
+
+        [SerializeField]
+        GameObject OptionsPrefab;
+        GameObject OptionsObject;
+        
+        // This property stores the currently selected unit
+        public Unit UnitSelected { get; set; }
+
+        public bool IsCameraFocused { get{return cameraManager.GetCameraFocusStatus();} set{cameraManager.SetCameraFocusStatus(value);} }
+        public bool IsObjectMoving { get{return structureManager.isObjectMoving;} set{structureManager.isObjectMoving = value;} }
+        public bool IsOptionOpen { get; set; }
+        public bool IsScrollButtonDown { get; set; }
+        public int CurrentTurn { get; set; }
+        public bool IsGameInStandby { get{return IsObjectMoving || IsOptionOpen || CurrentTurn != 0;}}
+    #endregion
+
+    #region Start and Update
+        
+        void Start()
+        {
+            Debug.Log("START FIGHT MANAGER SETUP");
+
+            structureManager = this.GetComponent<StructureManager>();
+            aiManager = this.GetComponent<AIManager>();
+            uiManager = this.GetComponent<UIManager>();
+
+            var levelBase = GameObject.Find("Level One").GetComponent<LevelOne>();
+            levelBase.StartLevel();
+            level = levelBase.level;
+
+            // Setup the terrain based on the level information
+            structureManager.Setup(level.tilesDict, level.TopLeftSquarePositionX, level.YPosition, level.TopLeftSquarePositionZ, level.XLength, level.YLength);
+
+            GenerateUnits();
+            Debug.Log("END FIGHT MANAGER SETUP");
+        }
+
+        void Update()
+        {
+            ManageMovements();
+            ManageInputs();
+            ManageConstants();
+        }
+
+    #endregion
+    
+    #region Key Input Management
+
+        void ManageMovements(){
+            if(IsObjectMoving)
+                // If an object is being moved, check if it has finished moving
+                if(structureManager.MovementTick())
+                    UnitSelected = null;
+        }
+        void ManageInputs(){
+            if(!IsGameInStandby && (Input.anyKeyDown || IsScrollButtonDown))
+                ManageKeysDown();
+        }
+
+        //Method that manages the press of a key (only for the frame it is clicked)
+        void ManageKeysDown(){
+            //Aggiungere hotkey per pulire l'interfaccia
+            if (Input.GetKeyDown("escape"))
+            {
+                OptionsObject = MainMenu.GeneratePrefab(OptionsPrefab, "Options");
+                IsOptionOpen = true;
+            }
+            //Scroll wheel clicked or released
+            if(Input.GetMouseButtonDown(2)){
+                IsScrollButtonDown = true;
+            }
+            if(Input.GetMouseButtonUp(2)){
+                IsScrollButtonDown = false;
+            }
+        }
+        //Method that manages constant inputs (like wheel scroll)
+        void ManageConstants(){
+            scrollWheelInput = Input.GetAxis("Mouse ScrollWheel");
+            if(scrollWheelInput != 0f){
+                cameraManager.ScrollWheel(scrollWheelInput);
+            }
+            if(IsScrollButtonDown){
+                float scrollWheelValue = Input.GetAxisRaw("Mouse ScrollWheel");
+                cameraManager.UpdatePosition();
+            }
+        }
+    #endregion
+
+    void GenerateUnits(){
+        GameObject warriorPrefab = Resources.Load<GameObject>($"Prefabs/Fight/Warrior");
+        
+        Tile tileWarrior = GameObject.Find($"Terrain_1").GetComponent<Tile>();
+        GenerateSingleUnit(warriorPrefab, tileWarrior);
+
+        foreach (var enemy in level.enemyList)
+        {
+            Tile tile = structureManager.GetMapTiles()[enemy.Key];
+            GenerateSingleUnit(enemy.Value, tile);
+        }
+    }
+
+    void GenerateSingleUnit(GameObject unit, Tile tile){
+        var unitGenerated = GameObject.Instantiate(unit,tile.transform.position,Quaternion.identity) as GameObject;
+        var unitScript = unitGenerated.GetComponent<Unit>();
+
+        unitScript.currentTile = tile;
+        tile.unitOnTile = unitGenerated;
+        units.Add(unitScript);
+    }
+
+    public void ManageClick(ObjectClickedEnum obj, GameObject reference){
+        switch (obj)
+        {
+            case ObjectClickedEnum.EmptyTile:
+                var tileSelected = reference.GetComponent<Tile>();
+                if(UnitSelected){
+                    //If tile clicked is in range
+                    if(structureManager.tiles.Contains(tileSelected)){
+                        structureManager.StartUnitMovement(UnitSelected.gameObject, reference.GetComponent<Tile>());
+                        structureManager.SetInfoPanel(false, UnitSelected, uiManager.infoPanel);
+                        return;
+                    }else{
+                        //User clicked outside the range
+                        structureManager.ClearSelectedTiles();
+                        structureManager.TileSelected(tileSelected);
+                    }
+                }else{
+                    structureManager.TileSelected(tileSelected);
+                }   
+                structureManager.SetInfoPanel(false, UnitSelected, uiManager.infoPanel);
+            break;
+            case ObjectClickedEnum.UnitTile:
+                if(UnitSelected.faction == 0){
+                    structureManager.GeneratePossibleMovementForUnit(UnitSelected, true);
+                }else{
+                    structureManager.TileSelected(UnitSelected.currentTile);
+                }
+                structureManager.SetInfoPanel(true, UnitSelected, uiManager.infoPanel);
+            break;
+            case ObjectClickedEnum.Default:
+            break;
+        }
+    }
+
+    public void EndTurn(int faction){
+        switch (faction)
+        {
+            case 0:
+                CurrentTurn = 1;
+                uiManager.endTurnButton.SetActive(false);
+                aiManager.CalculateTurn();
+                break;
+            case 1:
+                CurrentTurn = 0;
+                uiManager.endTurnButton.SetActive(true);
+                break;
+            case 2:
+                break;
+            default:
+                break;
+        }
+    }
+
+    public void EndTurnButton(int faction){
+        FightManager fm = GameObject.Find("Manager").GetComponent<FightManager>();
+        fm.EndTurn(faction);
+    }
+
+    public bool isObjectMoving(){
+        return structureManager.isObjectMoving;
+    }
+}
+
+public enum ObjectClickedEnum{
+    EmptyTile,
+    UnitTile,
+    Default,
+}
