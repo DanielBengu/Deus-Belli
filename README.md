@@ -33,16 +33,17 @@ Omi, the Queen of Agbara and the wife of Ataiku, is a strong deity that controls
 Oshun is Omi’s champion, a human water priestess that was chosen by the god when she once ventured with a party into the wastelands and survived an attack from Aini, the demon of siccity an death. After becoming her champion Oshun amplified her water powers and now can control it like the god to create the same armor and weapons, and to attack enemies.
 
 
-### Oshosi: 
-Oshosi is the god of the hunt and the provider of food for the people. He uses a contraption in his hand that opens and becomes a big crossbow. When the people hunt a big beast, to honor this god they cut the beast’s head and leave it as an offering to the god, and they bring the body to the city for consumption.
+### Teriba: 
 
-### Oshosi Champion - Osanyin:
+Teriba is the god of the hunt and the provider of food for the people. He uses a contraption in his hand that opens and becomes a big crossbow. When the people hunt a big beast, to honor this god they cut the beast’s head and leave it as an offering to the god, and they bring the body to the city for consumption.
 
-Osanyin is Oshosi’s champion, she was once a beast that lived in the wastelands and was chosen by the god after she became the apex predator of the most dangerous zone in the wastelands. After becoming a champion she gained human-like features and to this day she keeps living in the wastes, surviving by killing his enemies. She isn’t an enemy of the people and sometimes joins a party when there’s a particularly strong enemy to hunt.
+### Teriba Champion - Eranko:
 
-### Ayangalu:
+Eranko is Oshosi’s champion, she was once a beast that lived in the wastelands and was chosen by the god after she became the apex predator of the most dangerous zone in the wastelands. After becoming a champion she gained human-like features and to this day she keeps living in the wastes, surviving by killing his enemies. She isn’t an enemy of the people and sometimes joins a party when there’s a particularly strong enemy to hunt.
 
-Ayangalu is the god of music and he is represented with four arms, which he often uses to play 4 drums simultaneously. He is a jokester and a bit of a rebel, he doesn't believe in strength and will like other gods and he only cares about enjoying life. He often disguises as a human and goes around cities playing music and partying.
+### Orin:
 
-### Aje:
-Aje is Ayangalu’s champion, chosen by the god once when the god disguised himself in the capital, got drunk and became best friends for the night with aje. aje is as joyful as Ayangalu and is one of the most famous musicians of the death lands. In combat he’s a support character that uses music to buff allies.
+Orin is the god of music and he is represented with four arms, which he often uses to play 4 drums simultaneously. He is a jokester and a bit of a rebel, he doesn't believe in strength and will like other gods and he only cares about enjoying life. He often disguises as a human and goes around cities playing music and partying.
+
+### Ore:
+Ore is Orin’s champion, chosen by the god once when the god disguised himself in the capital, got drunk and became best friends for the night with Ore. Ore is as joyful as Orin and is one of the most famous musicians of the death lands. In combat he’s a support character that uses music to buff allies.

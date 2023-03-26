@@ -13,47 +13,27 @@ public class StructureManager : MonoBehaviour
     public int X_Length;
     public int Y_Length;
 
+    UIManager uiManager;
+
     Pathfinding pathfinding;
+    Movement movement = new();
+
+    public bool IsObjectMoving { get{ return movement.isObjectMoving;}}
 
     public void Setup(Dictionary<int, GameObject> tileList, int topX, int y, int topZ, int X_Length, int Y_Length){
-
         this.X_Length = X_Length;
         this.Y_Length = Y_Length;
 
         GenerateTiles(tileList, topX, y, topZ, X_Length, Y_Length);
 
         pathfinding = new(mapTiles, X_Length, Y_Length);
+        uiManager = this.GetComponent<UIManager>();
     }
 
-    #region Movement variables
-        private float startTime; // the time when the movement started
-        private float journeyLength; // the total distance between the start and end markers
-        public bool isObjectMoving = false;
-        private Transform objectMovingTransform;
+    public void SetEndTurnButton(bool active){
+        uiManager.endTurnButton.SetActive(active);
+    }
 
-        Vector3 startingPosition;
-        Quaternion startingRotation;
-
-        Vector3 targetPosition;
-        Quaternion targetRotation;
-
-        [SerializeField]
-        float speed;
-
-        //List of steps necessary to go from point A to B
-        public List<Transform> movementSteps = new();
-    #endregion
-
-    #region Info Panel
-        [SerializeField] 
-        Image unitImage;
-        [SerializeField]
-        TextMeshProUGUI nameText;
-        [SerializeField]
-        TextMeshProUGUI hpValue;
-        [SerializeField]
-        TextMeshProUGUI movementValue;
-    #endregion
 
     public void GenerateTiles(Dictionary<int, GameObject> tileList, int topX, int y, int topZ, int XLength, int YLength)
     {
@@ -79,14 +59,8 @@ public class StructureManager : MonoBehaviour
         Debug.Log("END TILE GENERATION");
     }
 
-    public void SetInfoPanel(bool active, Unit unit, GameObject infoPanel){
-        infoPanel.SetActive(active);
-        if(active){
-            hpValue.text = $"{unit.hpCurrent}/{unit.hpMax}";
-            movementValue.text = $"{unit.movementCurrent}/{unit.movementMax}";
-            nameText.text = unit.unitName;
-            unitImage.sprite = unit.unitImage;
-        }
+    public void SetInfoPanel(bool active, Unit unit){
+        uiManager.SetInfoPanel(active, unit);
     }
 
     public void GenerateTileSelection(Unit unit, List<Tile> tilesToSelect){
@@ -107,24 +81,6 @@ public class StructureManager : MonoBehaviour
             Sprite sprite = Resources.Load<Sprite>($"Sprites/Terrain/{spriteName}");
             ChangeObjectSprite(tile.gameObject, sprite);
         }
-    }
-
-    public bool IsTileWalkableForUnit(Unit unit, Tile tile){
-        return (tile.IsPassable && !tile.unitOnTile);
-    }
-
-    ///<summary>
-    /// GetWalkableTilesForUnit calculates for a given list of tiles which ones are walkable by the unit passed,
-    /// and returns the result in a new list.
-    ///</summary>
-    public List<Tile> GetWalkableTilesForUnit(Unit unit, List<Tile> tiles){
-        List<Tile> result = new();
-        foreach (var tile in tiles)
-        {
-            if(IsTileWalkableForUnit(unit, tile))
-                result.Add(tile);
-        }
-        return result;
     }
 
     public void ChangeObjectSprite(GameObject obj, Sprite sprite){
@@ -152,70 +108,17 @@ public class StructureManager : MonoBehaviour
     }
 
     public bool StartObjectMovement(Transform starting, Transform target, float objectSpeed){
-        //Something else is already moving
-        if(isObjectMoving)
-            return false;
-
-        isObjectMoving = true;
-        objectMovingTransform = starting;
-        startTime = Time.time;
-        startingPosition = starting.position;
-        startingRotation = starting.rotation;
-        targetPosition = target.position;
-        targetRotation = target.rotation;
-        speed = objectSpeed;
-        journeyLength = Vector3.Distance(startingPosition, targetPosition);
-        Debug.Log("Started movement to " + targetPosition);
-        return true;
+        return movement.StartObjectMovement(starting, target, objectSpeed);
     }
 
     public bool MovementTick(){
-        float distanceCovered = (Time.time - startTime) * speed;
-        float fractionOfJourney = distanceCovered / journeyLength;
-        objectMovingTransform.position = Vector3.Lerp(startingPosition,targetPosition, fractionOfJourney);
-        objectMovingTransform.rotation = Quaternion.Lerp(startingRotation, targetRotation, fractionOfJourney);
-
-        if(objectMovingTransform.position == targetPosition && objectMovingTransform.rotation == targetRotation){
-            if(movementSteps.Count > 0){
-                isObjectMoving = false;
-                Transform destination = new GameObject().transform;
-                destination.position = movementSteps.First().position;
-                destination.rotation = objectMovingTransform.rotation;
-
-                StartObjectMovement(objectMovingTransform, destination, 800);
-                GameObject.Destroy(destination.gameObject);
-                movementSteps.RemoveAt(0);
-            }else{
-                isObjectMoving = false;
-                return true;
-            }
-        }
-
-        return false;
+        return movement.MovementTick();
     }
 
     public void MoveUnit(GameObject unit, Tile targetTile){
         Unit unitScript = unit.GetComponent<Unit>();
         List<Tile> tilesPath = pathfinding.FindPathToDestination(unitScript.currentTile, targetTile);
-
-        foreach (var tile in tilesPath.Skip(1))
-        {
-            movementSteps.Add(tile.transform);
-        }
-
-
-        unitScript.currentTile.unitOnTile = null;
-
-        Transform destination = new GameObject().transform;
-        destination.position = movementSteps.First().position;
-        destination.rotation = unitScript.transform.rotation;
-        movementSteps.RemoveAt(0);
-
-        targetTile.unitOnTile = unit;
-        unitScript.currentTile = targetTile;
-
-        StartObjectMovement(unit.transform, destination, 800);
-        GameObject.Destroy(destination.gameObject);
+        movement.MoveUnit(unitScript, targetTile, tilesPath);
     }
 
     public void StartUnitMovement(GameObject unitToMove, Tile tileScript){

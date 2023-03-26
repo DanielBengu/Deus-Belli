@@ -34,7 +34,6 @@ public class AIManager : MonoBehaviour
         {
             Debug.Log($"CALCULATING MOVE FOR UNIT {unit.unitName}");
             List<Tile> possibleMovements = structureManager.GeneratePossibleMovementForUnit(unit, false);
-            possibleMovements = structureManager.GetWalkableTilesForUnit(unit, possibleMovements);
             int randomInt = UnityEngine.Random.Range(0,possibleMovements.Count);
             Tile destinationTile = GameObject.Find($"Terrain_{possibleMovements[randomInt].tileNumber}").GetComponent<Tile>();
             structureManager.CalculateMapTilesDistance(unit);

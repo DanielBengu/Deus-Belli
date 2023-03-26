@@ -12,7 +12,6 @@ public class FightManager : MonoBehaviour
         CameraManager cameraManager;
         StructureManager structureManager;
         AIManager aiManager;
-        UIManager uiManager;
 
         Level level;
 
@@ -29,7 +28,7 @@ public class FightManager : MonoBehaviour
         public Unit UnitSelected { get; set; }
 
         public bool IsCameraFocused { get{return cameraManager.GetCameraFocusStatus();} set{cameraManager.SetCameraFocusStatus(value);} }
-        public bool IsObjectMoving { get{return structureManager.isObjectMoving;} set{structureManager.isObjectMoving = value;} }
+        public bool IsObjectMoving { get{return structureManager.IsObjectMoving;}}
         public bool IsOptionOpen { get; set; }
         public bool IsScrollButtonDown { get; set; }
         public int CurrentTurn { get; set; }
@@ -44,7 +43,6 @@ public class FightManager : MonoBehaviour
 
             structureManager = this.GetComponent<StructureManager>();
             aiManager = this.GetComponent<AIManager>();
-            uiManager = this.GetComponent<UIManager>();
 
             var levelBase = GameObject.Find("Level One").GetComponent<LevelOne>();
             levelBase.StartLevel();
@@ -139,7 +137,7 @@ public class FightManager : MonoBehaviour
                     //If tile clicked is in range
                     if(structureManager.tiles.Contains(tileSelected)){
                         structureManager.StartUnitMovement(UnitSelected.gameObject, reference.GetComponent<Tile>());
-                        structureManager.SetInfoPanel(false, UnitSelected, uiManager.infoPanel);
+                        structureManager.SetInfoPanel(false, UnitSelected);
                         return;
                     }else{
                         //User clicked outside the range
@@ -149,7 +147,7 @@ public class FightManager : MonoBehaviour
                 }else{
                     structureManager.TileSelected(tileSelected);
                 }   
-                structureManager.SetInfoPanel(false, UnitSelected, uiManager.infoPanel);
+                structureManager.SetInfoPanel(false, UnitSelected);
             break;
             case ObjectClickedEnum.UnitTile:
                 if(UnitSelected.faction == 0){
@@ -157,7 +155,7 @@ public class FightManager : MonoBehaviour
                 }else{
                     structureManager.TileSelected(UnitSelected.currentTile);
                 }
-                structureManager.SetInfoPanel(true, UnitSelected, uiManager.infoPanel);
+                structureManager.SetInfoPanel(true, UnitSelected);
             break;
             case ObjectClickedEnum.Default:
             break;
@@ -169,12 +167,12 @@ public class FightManager : MonoBehaviour
         {
             case 0:
                 CurrentTurn = 1;
-                uiManager.endTurnButton.SetActive(false);
+                structureManager.SetEndTurnButton(false);
                 aiManager.CalculateTurn();
                 break;
             case 1:
                 CurrentTurn = 0;
-                uiManager.endTurnButton.SetActive(true);
+                structureManager.SetEndTurnButton(true);
                 break;
             case 2:
                 break;
@@ -186,10 +184,6 @@ public class FightManager : MonoBehaviour
     public void EndTurnButton(int faction){
         FightManager fm = GameObject.Find("Manager").GetComponent<FightManager>();
         fm.EndTurn(faction);
-    }
-
-    public bool isObjectMoving(){
-        return structureManager.isObjectMoving;
     }
 }
 
