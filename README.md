@@ -45,5 +45,5 @@ Eranko is Oshosi’s champion, she was once a beast that lived in the wastelands
 
 Orin is the god of music and he is represented with four arms, which he often uses to play 4 drums simultaneously. He is a jokester and a bit of a rebel, he doesn't believe in strength and will like other gods and he only cares about enjoying life. He often disguises as a human and goes around cities playing music and partying.
 
-### Ore:
+### Orin Champion - Ore:
 Ore is Orin’s champion, chosen by the god once when the god disguised himself in the capital, got drunk and became best friends for the night with Ore. Ore is as joyful as Orin and is one of the most famous musicians of the death lands. In combat he’s a support character that uses music to buff allies.
