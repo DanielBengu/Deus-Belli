@@ -19,6 +19,9 @@ public class FightManager : MonoBehaviour
         StructureManager structureManager;
         AIManager aiManager;
 
+        [SerializeField]
+        GameObject warriorPrefab;
+
         Level level;
 
         // This list stores all the units on the battlefield
@@ -113,7 +116,6 @@ public class FightManager : MonoBehaviour
     #endregion
 
     void GenerateUnits(){
-        GameObject warriorPrefab = Resources.Load<GameObject>($"Prefabs/Fight/Warrior");
         
         Tile tileWarrior = GameObject.Find($"Terrain_1").GetComponent<Tile>();
         GenerateSingleUnit(warriorPrefab, tileWarrior);
@@ -126,7 +128,8 @@ public class FightManager : MonoBehaviour
     }
 
     void GenerateSingleUnit(GameObject unit, Tile tile){
-        var unitGenerated = GameObject.Instantiate(unit,tile.transform.position,Quaternion.identity) as GameObject;
+        Quaternion rotation = new Quaternion(0, 180, 0, 0);
+        var unitGenerated = GameObject.Instantiate(unit,tile.transform.position,rotation) as GameObject;
         var unitScript = unitGenerated.GetComponent<Unit>();
 
         unitScript.currentTile = tile;
@@ -154,7 +157,7 @@ public class FightManager : MonoBehaviour
         {
             case ObjectClickedEnum.EmptyTile:
                 var tileSelected = reference.GetComponent<Tile>();
-                if(UnitSelected){
+                if(UnitSelected && UnitSelected.faction == USER_FACTION){
                     //If tile clicked is in range
                     if(structureManager.tiles.Contains(tileSelected)){
                         if(IsShowingPath){
@@ -171,8 +174,11 @@ public class FightManager : MonoBehaviour
                         //User clicked outside the range
                         structureManager.ClearSelection();
                         structureManager.TileSelected(tileSelected);
+                        IsShowingPath = false;
+                        UnitSelected = null;
                     }
                 }else{
+                    IsShowingPath = false;
                     structureManager.TileSelected(tileSelected);
                 }   
                 structureManager.SetInfoPanel(false, UnitSelected);
@@ -183,6 +189,7 @@ public class FightManager : MonoBehaviour
                 }else{
                     structureManager.TileSelected(UnitSelected.currentTile);
                 }
+                IsShowingPath = false;
                 structureManager.SetInfoPanel(true, UnitSelected);
             break;
             case ObjectClickedEnum.RightClickOnField:

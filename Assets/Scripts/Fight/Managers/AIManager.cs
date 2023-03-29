@@ -36,6 +36,16 @@ public class AIManager : MonoBehaviour
         }
     }
 
+    public void StartAITurn(){
+        Debug.Log($"START AI TURN FOR FACTION {fightManager.CurrentTurn}");
+        foreach (var unit in fightManager.units.Where(u => u.faction == fightManager.CurrentTurn))
+        {
+            unit.movementCurrent = unit.movementMax;
+            unitsToCalculate.Enqueue(unit);
+        }
+        CalculateTurnForUnit(unitsToCalculate.Dequeue());
+    }
+
     void CalculateTurnForUnit(Unit unit){
         Debug.Log($"CALCULATING MOVE FOR UNIT {unit.unitName}");
         if(unit.movementCurrent > 0){
@@ -49,15 +59,5 @@ public class AIManager : MonoBehaviour
             }
             
         }
-    }
-
-    public void StartAITurn(){
-        Debug.Log($"START AI TURN FOR FACTION {fightManager.CurrentTurn}");
-        foreach (var unit in fightManager.units.Where(u => u.faction == fightManager.CurrentTurn))
-        {
-            unit.movementCurrent = unit.movementMax;
-            unitsToCalculate.Enqueue(unit);
-        }
-        CalculateTurnForUnit(unitsToCalculate.Dequeue());
     }
 }

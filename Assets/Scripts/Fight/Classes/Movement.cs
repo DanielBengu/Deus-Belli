@@ -6,6 +6,9 @@ using System.Linq;
 
 public class Movement
 {
+    private Animator animator;
+    private string gender;
+
     private float startTime; // the time when the movement started
     private float journeyLength; // the total distance between the start and end markers
     public bool isObjectMoving = false;
@@ -22,10 +25,6 @@ public class Movement
 
     //List of steps necessary to go from point A to B
     public List<Transform> movementSteps = new();
-
-    public void SetupNewMovement(){
-
-    }
 
     public bool MovementTick(){
         float distanceCovered = (Time.time - startTime) * speed;
@@ -45,6 +44,9 @@ public class Movement
                 movementSteps.RemoveAt(0);
             }else{
                 isObjectMoving = false;
+                animator.Play($"{gender} Sword Stance");
+                animator = null;
+                gender = "";
                 return true;
             }
         }
@@ -56,6 +58,10 @@ public class Movement
         //Something else is already moving
         if(isObjectMoving)
             return false;
+
+        animator = starting.GetComponent<Animator>();
+        gender = starting.gameObject.name.Split(' ')[0];
+        animator.Play($"{gender} Sword Walk");
 
         isObjectMoving = true;
         objectMovingTransform = starting;
@@ -75,7 +81,6 @@ public class Movement
         {
             movementSteps.Add(tile.transform);
         }
-
 
         unit.currentTile.unitOnTile = null;
 

@@ -54,12 +54,11 @@ public class LevelOne : MonoBehaviour
         Unit sorceressUnit = sorceressPrefab.GetComponent<Unit>();
         Unit sorceressUnit2 = sorceress2Prefab.GetComponent<Unit>();
         sorceressUnit.faction = 1;
-        sorceressUnit2.faction = 0;
+        sorceressUnit2.faction = 1;
         
 
         enemyList.Add(12, sorceressUnit.gameObject);
-        enemyList.Add(13, sorceressUnit.gameObject);
-        enemyList.Add(14, sorceressUnit2.gameObject);
+        enemyList.Add(13, sorceressUnit2.gameObject);
 
         return enemyList;
     }
