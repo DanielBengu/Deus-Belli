@@ -32,4 +32,11 @@ public class Unit : MonoBehaviour
         manager.UnitSelected = this;
         manager.ManageClick(ObjectClickedEnum.UnitTile, gameObject);
     }
+
+    //Workaround to manage right click like we do for the left click in OnMouseDown()
+    void OnMouseOver () {
+        if(Input.GetMouseButtonDown(FightManager.RIGHT_MOUSE_BUTTON)){
+            //manager.ManageClick(ObjectClickedEnum.RightClickOnField, currentTile.gameObject);
+        }
+    }
 }

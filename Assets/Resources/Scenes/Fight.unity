@@ -2221,17 +2221,33 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 1183173567}
     - target: {fileID: 2659454489441281042, guid: 99d4b6185d8babd4b8b8caab0b5d7561, type: 3}
+      propertyPath: hpValue
+      value: 
+      objectReference: {fileID: 809000986}
+    - target: {fileID: 2659454489441281042, guid: 99d4b6185d8babd4b8b8caab0b5d7561, type: 3}
       propertyPath: GodImage
       value: 
       objectReference: {fileID: 1673854170}
+    - target: {fileID: 2659454489441281042, guid: 99d4b6185d8babd4b8b8caab0b5d7561, type: 3}
+      propertyPath: nameText
+      value: 
+      objectReference: {fileID: 772764374}
     - target: {fileID: 2659454489441281042, guid: 99d4b6185d8babd4b8b8caab0b5d7561, type: 3}
       propertyPath: infoPanel
       value: 
       objectReference: {fileID: 266028914}
     - target: {fileID: 2659454489441281042, guid: 99d4b6185d8babd4b8b8caab0b5d7561, type: 3}
+      propertyPath: unitImage
+      value: 
+      objectReference: {fileID: 1900642688}
+    - target: {fileID: 2659454489441281042, guid: 99d4b6185d8babd4b8b8caab0b5d7561, type: 3}
       propertyPath: endTurnButton
       value: 
       objectReference: {fileID: 314631892}
+    - target: {fileID: 2659454489441281042, guid: 99d4b6185d8babd4b8b8caab0b5d7561, type: 3}
+      propertyPath: movementValue
+      value: 
+      objectReference: {fileID: 529280003}
     - target: {fileID: 6106894816546113668, guid: 99d4b6185d8babd4b8b8caab0b5d7561, type: 3}
       propertyPath: m_Name
       value: Manager

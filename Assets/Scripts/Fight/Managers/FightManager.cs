@@ -5,6 +5,8 @@ using System.Linq;
 
 public class FightManager : MonoBehaviour
 {
+    public const int RIGHT_MOUSE_BUTTON = 1;
+    public const int SCROLL_WHEEL_BUTTON = 2;
 
     #region Fields
 
@@ -33,6 +35,8 @@ public class FightManager : MonoBehaviour
         public bool IsScrollButtonDown { get; set; }
         public int CurrentTurn { get; set; }
         public bool IsGameInStandby { get{return IsObjectMoving || IsOptionOpen || CurrentTurn != 0;}}
+        public bool IsShowingPath { get; set; }
+
     #endregion
 
     #region Start and Update
@@ -72,6 +76,7 @@ public class FightManager : MonoBehaviour
                 if(structureManager.MovementTick())
                     UnitSelected = null;
         }
+
         void ManageInputs(){
             if(!IsGameInStandby && (Input.anyKeyDown || IsScrollButtonDown))
                 ManageKeysDown();
@@ -79,17 +84,14 @@ public class FightManager : MonoBehaviour
 
         //Method that manages the press of a key (only for the frame it is clicked)
         void ManageKeysDown(){
-            //Aggiungere hotkey per pulire l'interfaccia
-            if (Input.GetKeyDown("escape"))
-            {
+            if(Input.GetMouseButtonDown(RIGHT_MOUSE_BUTTON)){
+                structureManager.ClearSelection();
+            } else if (Input.GetKeyDown("escape")) {
                 OptionsObject = MainMenu.GeneratePrefab(OptionsPrefab, "Options");
                 IsOptionOpen = true;
-            }
-            //Scroll wheel clicked or released
-            if(Input.GetMouseButtonDown(2)){
+            } else if(Input.GetMouseButtonDown(SCROLL_WHEEL_BUTTON)){
                 IsScrollButtonDown = true;
-            }
-            if(Input.GetMouseButtonUp(2)){
+            } else if(Input.GetMouseButtonUp(SCROLL_WHEEL_BUTTON)){
                 IsScrollButtonDown = false;
             }
         }
@@ -136,12 +138,19 @@ public class FightManager : MonoBehaviour
                 if(UnitSelected){
                     //If tile clicked is in range
                     if(structureManager.tiles.Contains(tileSelected)){
-                        structureManager.StartUnitMovement(UnitSelected.gameObject, reference.GetComponent<Tile>());
-                        structureManager.SetInfoPanel(false, UnitSelected);
-                        return;
+                        if(IsShowingPath){
+                            structureManager.StartUnitMovement(UnitSelected, reference.GetComponent<Tile>());
+                            structureManager.SetInfoPanel(false, UnitSelected);
+                            IsShowingPath = false;
+                            return;
+                        }else{
+                            structureManager.ClearSelection(false);
+                            structureManager.FindPathToDestination(UnitSelected.currentTile, tileSelected, true, true);
+                            IsShowingPath = true;
+                        }
                     }else{
                         //User clicked outside the range
-                        structureManager.ClearSelectedTiles();
+                        structureManager.ClearSelection();
                         structureManager.TileSelected(tileSelected);
                     }
                 }else{
@@ -156,6 +165,9 @@ public class FightManager : MonoBehaviour
                     structureManager.TileSelected(UnitSelected.currentTile);
                 }
                 structureManager.SetInfoPanel(true, UnitSelected);
+            break;
+            case ObjectClickedEnum.RightClickOnField:
+                structureManager.ClearSelection();
             break;
             case ObjectClickedEnum.Default:
             break;
@@ -190,5 +202,6 @@ public class FightManager : MonoBehaviour
 public enum ObjectClickedEnum{
     EmptyTile,
     UnitTile,
+    RightClickOnField,
     Default,
 }

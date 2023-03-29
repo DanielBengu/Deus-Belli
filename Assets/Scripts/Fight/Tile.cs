@@ -45,6 +45,13 @@ public class Tile : MonoBehaviour, IComparable<Tile>
         manager.ManageClick(objClicked, gameObject);
     }
 
+    //Workaround to manage right click like we do for the left click in OnMouseDown()
+    void OnMouseOver () {
+        if(Input.GetMouseButtonDown(FightManager.RIGHT_MOUSE_BUTTON)){
+            //manager.ManageClick(ObjectClickedEnum.RightClickOnField, gameObject);
+        }
+    }
+
     public int CompareTo(Tile other){
         if(this.tentativeCost < other.tentativeCost) return -1;
         if(this.tentativeCost == other.tentativeCost) return 0;

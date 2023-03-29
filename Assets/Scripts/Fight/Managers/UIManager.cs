@@ -39,7 +39,7 @@ public class UIManager : MonoBehaviour
         GodImage.sprite = Resources.Load<Sprite>($"Sprites/Gods/{godSelected}");
     }
 
-    public void SetInfoPanel(bool active, Unit unit){
+    public void SetInfoPanel(bool active, Unit unit = null){
         infoPanel.SetActive(active);
         if(active){
             hpValue.text = $"{unit.hpCurrent}/{unit.hpMax}";

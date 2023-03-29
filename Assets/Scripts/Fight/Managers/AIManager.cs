@@ -7,6 +7,8 @@ public class AIManager : MonoBehaviour
 {
     StructureManager structureManager;
     FightManager fightManager;
+
+    List<Unit> unitsToCalculate = new();
     
     /// <summary>
     /// Start is called on the frame when a script is enabled just before
@@ -37,7 +39,7 @@ public class AIManager : MonoBehaviour
             int randomInt = UnityEngine.Random.Range(0,possibleMovements.Count);
             Tile destinationTile = GameObject.Find($"Terrain_{possibleMovements[randomInt].tileNumber}").GetComponent<Tile>();
             structureManager.CalculateMapTilesDistance(unit);
-            structureManager.StartUnitMovement(unit.gameObject, destinationTile);
+            structureManager.StartUnitMovement(unit, destinationTile);
         }
         
         Debug.Log($"END AI TURN FOR FACTION {fightManager.CurrentTurn}");

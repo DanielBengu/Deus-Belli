@@ -59,28 +59,8 @@ public class StructureManager : MonoBehaviour
         Debug.Log("END TILE GENERATION");
     }
 
-    public void SetInfoPanel(bool active, Unit unit){
+    public void SetInfoPanel(bool active, Unit unit = null){
         uiManager.SetInfoPanel(active, unit);
-    }
-
-    public void GenerateTileSelection(Unit unit, List<Tile> tilesToSelect){
-        foreach (var tile in tilesToSelect)
-        {
-            string spriteName = tile.gameObject.GetComponent<SpriteRenderer>().sprite.name.Split(' ')[0];
-            if(tile.unitOnTile){
-                if(tile.unitOnTile.GetComponent<Unit>().faction == unit.faction)
-                    spriteName += " ally";
-                else
-                    spriteName += " enemy";
-            }else{
-                if(tile.IsPassable)
-                    spriteName += " possible";
-                else
-                    spriteName += " base";
-            }
-            Sprite sprite = Resources.Load<Sprite>($"Sprites/Terrain/{spriteName}");
-            ChangeObjectSprite(tile.gameObject, sprite);
-        }
     }
 
     public void ChangeObjectSprite(GameObject obj, Sprite sprite){
@@ -95,16 +75,11 @@ public class StructureManager : MonoBehaviour
         SpriteRenderer spriteRendererNew = tile.GetComponent<SpriteRenderer>();
         spriteRendererNew.sprite = Resources.Load<Sprite>($"Sprites/Terrain/{spriteRendererNew.sprite.name.Split(' ')[0] + " selected"}");
     }
-    
-    public void ClearSelectedTiles(){
-        foreach (var tile in tiles)
-        {
-            string spriteName = tile.GetComponent<SpriteRenderer>().sprite.name;
-            Sprite newSprite = Resources.Load<Sprite>($"Sprites/Terrain/{spriteName.Split(' ')[0] + " base"}");
-            ChangeObjectSprite(tile.gameObject, newSprite);
-        }
 
-        tiles.Clear();
+    public void ClearSelection(bool closeInfoPanel = true){
+        if(closeInfoPanel)
+            uiManager.SetInfoPanel(false);
+        ClearSelectedTiles();
     }
 
     public bool StartObjectMovement(Transform starting, Transform target, float objectSpeed){
@@ -115,13 +90,22 @@ public class StructureManager : MonoBehaviour
         return movement.MovementTick();
     }
 
-    public void MoveUnit(GameObject unit, Tile targetTile){
-        Unit unitScript = unit.GetComponent<Unit>();
-        List<Tile> tilesPath = pathfinding.FindPathToDestination(unitScript.currentTile, targetTile);
-        movement.MoveUnit(unitScript, targetTile, tilesPath);
+    public void MoveUnit(Unit unit, Tile targetTile){
+        List<Tile> tilesPath = FindPathToDestination(unit.currentTile, targetTile, false, false);
+        movement.MoveUnit(unit, targetTile, tilesPath);
     }
 
-    public void StartUnitMovement(GameObject unitToMove, Tile tileScript){
+    public List<Tile> FindPathToDestination(Tile startingPoint, Tile targetTile, bool selectTiles, bool addToSelectedMapTiles){
+        List<Tile> path = pathfinding.FindPathToDestination(startingPoint, targetTile);
+        int factionOfUnit = startingPoint.unitOnTile.GetComponent<Unit>().faction;
+        if(selectTiles)
+            GenerateTileSelection(path, factionOfUnit);
+        if(addToSelectedMapTiles)
+            AddToMapSelectedTiles(path);
+        return path;
+    }
+
+    public void StartUnitMovement(Unit unitToMove, Tile tileScript){
         MoveUnit(unitToMove, tileScript);
         ClearSelectedTiles();
     }
@@ -140,7 +124,7 @@ public class StructureManager : MonoBehaviour
 
         
         if(selectTiles)
-            GenerateTileSelection(unit, tiles);
+            GenerateTileSelection(tiles, unit.faction);
 
         return tilesList;
     }
@@ -148,4 +132,43 @@ public class StructureManager : MonoBehaviour
     public Dictionary<int, Tile> GetMapTiles(){
         return mapTiles;
     }
+
+    #region Private functions
+
+        void ClearSelectedTiles(){
+            foreach (var tile in tiles)
+            {
+                string spriteName = tile.GetComponent<SpriteRenderer>().sprite.name;
+                Sprite newSprite = Resources.Load<Sprite>($"Sprites/Terrain/{spriteName.Split(' ')[0] + " base"}");
+                ChangeObjectSprite(tile.gameObject, newSprite);
+            }
+
+            tiles.Clear();
+        }
+
+        void GenerateTileSelection(List<Tile> tilesToSelect, int factionOfUnit = -1){
+            foreach (var tile in tilesToSelect)
+            {
+                string spriteName = tile.gameObject.GetComponent<SpriteRenderer>().sprite.name.Split(' ')[0];
+                if(tile.unitOnTile){
+                    if(tile.unitOnTile.GetComponent<Unit>().faction == factionOfUnit)
+                        spriteName += " ally";
+                    else
+                        spriteName += " enemy";
+                }else{
+                    if(tile.IsPassable)
+                        spriteName += " possible";
+                    else
+                        spriteName += " base";
+                }
+                Sprite sprite = Resources.Load<Sprite>($"Sprites/Terrain/{spriteName}");
+                ChangeObjectSprite(tile.gameObject, sprite);
+            }
+        }
+
+        void AddToMapSelectedTiles(List<Tile> tilesToAdd){
+            tiles = tilesToAdd;
+        }
+
+    #endregion
 }
