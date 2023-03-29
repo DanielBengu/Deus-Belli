@@ -70,7 +70,7 @@ public class Movement
         return true;
     }
 
-    public void MoveUnit(Unit unit, Tile targetTile, List<Tile> tilesPath){
+    public void MoveUnit(Unit unit, Tile targetTile, List<Tile> tilesPath, int movementSpeed){
         foreach (var tile in tilesPath.Skip(1))
         {
             movementSteps.Add(tile.transform);
@@ -87,7 +87,7 @@ public class Movement
         targetTile.unitOnTile = unit.gameObject;
         unit.currentTile = targetTile;
 
-        StartObjectMovement(unit.transform, destination, 800);
+        StartObjectMovement(unit.transform, destination, movementSpeed);
         GameObject.Destroy(destination.gameObject);
     }
 }

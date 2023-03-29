@@ -5,10 +5,12 @@ using UnityEngine;
 
 public class AIManager : MonoBehaviour
 {
+    private const int UNIT_MOVEMENT_SPEED = 1600;
+
     StructureManager structureManager;
     FightManager fightManager;
 
-    List<Unit> unitsToCalculate = new();
+    Queue<Unit> unitsToCalculate = new();
     
     /// <summary>
     /// Start is called on the frame when a script is enabled just before
@@ -25,23 +27,30 @@ public class AIManager : MonoBehaviour
             return;
 
         if(!fightManager.IsObjectMoving){
-            fightManager.EndTurn(fightManager.CurrentTurn);
+            if(unitsToCalculate.Count > 0){
+                CalculateTurnForUnit(unitsToCalculate.Dequeue());
+            }else{
+                fightManager.EndTurn(fightManager.CurrentTurn);
+                Debug.Log($"END AI TURN FOR FACTION {fightManager.CurrentTurn}");
+            }
         }
     }
 
-    public void CalculateTurn(){
+    void CalculateTurnForUnit(Unit unit){
+        Debug.Log($"CALCULATING MOVE FOR UNIT {unit.unitName}");
+        List<Tile> possibleMovements = structureManager.GeneratePossibleMovementForUnit(unit, false);
+        int randomInt = UnityEngine.Random.Range(0,possibleMovements.Count);
+        Tile destinationTile = GameObject.Find($"Terrain_{possibleMovements[randomInt].tileNumber}").GetComponent<Tile>();
+        structureManager.CalculateMapTilesDistance(unit);
+        structureManager.StartUnitMovement(unit, destinationTile, UNIT_MOVEMENT_SPEED);
+    }
+
+    public void StartAITurn(){
         Debug.Log($"START AI TURN FOR FACTION {fightManager.CurrentTurn}");
-        List<Unit> unitsOfFaction = fightManager.units.Where(u => u.faction == fightManager.CurrentTurn).ToList();
-        foreach (var unit in unitsOfFaction)
+        foreach (var unit in fightManager.units.Where(u => u.faction == fightManager.CurrentTurn))
         {
-            Debug.Log($"CALCULATING MOVE FOR UNIT {unit.unitName}");
-            List<Tile> possibleMovements = structureManager.GeneratePossibleMovementForUnit(unit, false);
-            int randomInt = UnityEngine.Random.Range(0,possibleMovements.Count);
-            Tile destinationTile = GameObject.Find($"Terrain_{possibleMovements[randomInt].tileNumber}").GetComponent<Tile>();
-            structureManager.CalculateMapTilesDistance(unit);
-            structureManager.StartUnitMovement(unit, destinationTile);
+            unitsToCalculate.Enqueue(unit);
         }
-        
-        Debug.Log($"END AI TURN FOR FACTION {fightManager.CurrentTurn}");
+        CalculateTurnForUnit(unitsToCalculate.Dequeue());
     }
 }

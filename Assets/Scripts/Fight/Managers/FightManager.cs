@@ -7,6 +7,7 @@ public class FightManager : MonoBehaviour
 {
     public const int RIGHT_MOUSE_BUTTON = 1;
     public const int SCROLL_WHEEL_BUTTON = 2;
+    private const int UNIT_MOVEMENT_SPEED = 800;
 
     #region Fields
 
@@ -139,7 +140,7 @@ public class FightManager : MonoBehaviour
                     //If tile clicked is in range
                     if(structureManager.tiles.Contains(tileSelected)){
                         if(IsShowingPath){
-                            structureManager.StartUnitMovement(UnitSelected, reference.GetComponent<Tile>());
+                            structureManager.StartUnitMovement(UnitSelected, reference.GetComponent<Tile>(), UNIT_MOVEMENT_SPEED);
                             structureManager.SetInfoPanel(false, UnitSelected);
                             IsShowingPath = false;
                             return;
@@ -180,7 +181,7 @@ public class FightManager : MonoBehaviour
             case 0:
                 CurrentTurn = 1;
                 structureManager.SetEndTurnButton(false);
-                aiManager.CalculateTurn();
+                aiManager.StartAITurn();
                 break;
             case 1:
                 CurrentTurn = 0;

@@ -90,9 +90,9 @@ public class StructureManager : MonoBehaviour
         return movement.MovementTick();
     }
 
-    public void MoveUnit(Unit unit, Tile targetTile){
+    public void MoveUnit(Unit unit, Tile targetTile, int movementSpeed){
         List<Tile> tilesPath = FindPathToDestination(unit.currentTile, targetTile, false, false);
-        movement.MoveUnit(unit, targetTile, tilesPath);
+        movement.MoveUnit(unit, targetTile, tilesPath, movementSpeed);
     }
 
     public List<Tile> FindPathToDestination(Tile startingPoint, Tile targetTile, bool selectTiles, bool addToSelectedMapTiles){
@@ -105,8 +105,8 @@ public class StructureManager : MonoBehaviour
         return path;
     }
 
-    public void StartUnitMovement(Unit unitToMove, Tile tileScript){
-        MoveUnit(unitToMove, tileScript);
+    public void StartUnitMovement(Unit unitToMove, Tile tileScript, int movementSpeed){
+        MoveUnit(unitToMove, tileScript, movementSpeed);
         ClearSelectedTiles();
     }
 
@@ -119,7 +119,8 @@ public class StructureManager : MonoBehaviour
 
         CalculateMapTilesDistance(unit);
 
-        List<Tile> tilesList = GetMapTiles().Select(t => t.Value).Where(t => t.tentativeCost <= unit.movementCurrent).ToList();
+        //We remove the starting tile for the unit and the tiles that costs too much movement for it
+        List<Tile> tilesList = GetMapTiles().Select(t => t.Value).Where(t => t.tileNumber != unit.currentTile.tileNumber && t.tentativeCost <= unit.movementCurrent).ToList();
         tiles = GetMapTiles().Select(t => t.Value).Where(t => t.tentativeCost <= unit.movementCurrent).ToList();
 
         
