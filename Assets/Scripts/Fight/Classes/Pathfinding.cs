@@ -72,7 +72,7 @@ public class Pathfinding
 
     //Dijkstra algorithm to calculate tiles movement cost
     public void CalculateMapTilesDistance(Unit startingUnit){
-        int maxMovementCost = startingUnit.movementCurrent;
+        float maxMovementCost = startingUnit.movementCurrent;
         if(!startingUnit){
             Debug.Log("CalculateMapTilesDistance - Invalid startingUnit");
             return;
@@ -124,12 +124,11 @@ public class Pathfinding
     }
 
     void CalculateNeighbours(Tile source){
-        Debug.Log($"Calculating tile n. {source.tileNumber}");
         foreach (var direction in directions)
         {
             Tile neighbourTile = direction(source);
             if(neighbourTile && neighbourTile.IsPassable && !neighbourTile.unitOnTile){
-                int newTentativeCost = source.tentativeCost + neighbourTile.MovementCost;
+                float newTentativeCost = source.tentativeCost + neighbourTile.MovementCost;
                 if(newTentativeCost < neighbourTile.tentativeCost)
                     neighbourTile.tentativeCost = newTentativeCost;
             }
@@ -142,7 +141,7 @@ public class Pathfinding
         Debug.Log($"Starting calculation at tile n.{result.Last()}");
         int failSafe = 0;
         while(true){
-            int lowestTentativeCost = OUT_OF_BOUND_VALUE;
+            float lowestTentativeCost = OUT_OF_BOUND_VALUE;
             Tile lowestTile = null;
 
             foreach (var direction in directions)

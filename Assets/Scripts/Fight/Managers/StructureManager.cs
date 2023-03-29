@@ -105,8 +105,9 @@ public class StructureManager : MonoBehaviour
         return path;
     }
 
-    public void StartUnitMovement(Unit unitToMove, Tile tileScript, int movementSpeed){
-        MoveUnit(unitToMove, tileScript, movementSpeed);
+    public void StartUnitMovement(Unit unitToMove, Tile destinationTile, int movementSpeed){
+        RemoveMovementFromUnit(unitToMove, destinationTile.tentativeCost);
+        MoveUnit(unitToMove, destinationTile, movementSpeed);
         ClearSelectedTiles();
     }
 
@@ -169,6 +170,11 @@ public class StructureManager : MonoBehaviour
 
         void AddToMapSelectedTiles(List<Tile> tilesToAdd){
             tiles = tilesToAdd;
+        }
+
+        void RemoveMovementFromUnit(Unit unit, float movementToRemove){
+            unit.movementCurrent -= movementToRemove;
+            if(unit.movementCurrent < 0) unit.movementCurrent = 0;
         }
 
     #endregion

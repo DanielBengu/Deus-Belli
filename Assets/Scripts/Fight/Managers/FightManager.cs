@@ -5,6 +5,9 @@ using System.Linq;
 
 public class FightManager : MonoBehaviour
 {
+    public const int USER_FACTION = 0;
+    public const int ENEMY_FACTION = 1;
+    public const int LEFT_MOUSE_BUTTON = 1;
     public const int RIGHT_MOUSE_BUTTON = 1;
     public const int SCROLL_WHEEL_BUTTON = 2;
     private const int UNIT_MOVEMENT_SPEED = 800;
@@ -131,8 +134,23 @@ public class FightManager : MonoBehaviour
         units.Add(unitScript);
     }
 
-    public void ManageClick(ObjectClickedEnum obj, GameObject reference){
-        switch (obj)
+    void StartUserTurn(){
+        CurrentTurn = USER_FACTION;
+        structureManager.SetEndTurnButton(true);
+        foreach(var unit in units.Where(u => u.faction == USER_FACTION)){
+            unit.movementCurrent = unit.movementMax;
+        }
+    }
+
+    void EndUserTurn(){
+        CurrentTurn = ENEMY_FACTION;
+        structureManager.SetEndTurnButton(false);
+        structureManager.ClearSelection(true);
+        aiManager.StartAITurn();
+    }
+
+    public void ManageClick(ObjectClickedEnum objectClicked, GameObject reference){
+        switch (objectClicked)
         {
             case ObjectClickedEnum.EmptyTile:
                 var tileSelected = reference.GetComponent<Tile>();
@@ -160,7 +178,7 @@ public class FightManager : MonoBehaviour
                 structureManager.SetInfoPanel(false, UnitSelected);
             break;
             case ObjectClickedEnum.UnitTile:
-                if(UnitSelected.faction == 0){
+                if(UnitSelected.faction == USER_FACTION){
                     structureManager.GeneratePossibleMovementForUnit(UnitSelected, true);
                 }else{
                     structureManager.TileSelected(UnitSelected.currentTile);
@@ -178,14 +196,11 @@ public class FightManager : MonoBehaviour
     public void EndTurn(int faction){
         switch (faction)
         {
-            case 0:
-                CurrentTurn = 1;
-                structureManager.SetEndTurnButton(false);
-                aiManager.StartAITurn();
+            case USER_FACTION:
+                EndUserTurn();
                 break;
-            case 1:
-                CurrentTurn = 0;
-                structureManager.SetEndTurnButton(true);
+            case ENEMY_FACTION:
+                StartUserTurn();
                 break;
             case 2:
                 break;

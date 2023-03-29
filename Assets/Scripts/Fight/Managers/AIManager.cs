@@ -30,25 +30,32 @@ public class AIManager : MonoBehaviour
             if(unitsToCalculate.Count > 0){
                 CalculateTurnForUnit(unitsToCalculate.Dequeue());
             }else{
-                fightManager.EndTurn(fightManager.CurrentTurn);
                 Debug.Log($"END AI TURN FOR FACTION {fightManager.CurrentTurn}");
+                fightManager.EndTurn(fightManager.CurrentTurn);
             }
         }
     }
 
     void CalculateTurnForUnit(Unit unit){
         Debug.Log($"CALCULATING MOVE FOR UNIT {unit.unitName}");
-        List<Tile> possibleMovements = structureManager.GeneratePossibleMovementForUnit(unit, false);
-        int randomInt = UnityEngine.Random.Range(0,possibleMovements.Count);
-        Tile destinationTile = GameObject.Find($"Terrain_{possibleMovements[randomInt].tileNumber}").GetComponent<Tile>();
-        structureManager.CalculateMapTilesDistance(unit);
-        structureManager.StartUnitMovement(unit, destinationTile, UNIT_MOVEMENT_SPEED);
+        if(unit.movementCurrent > 0){
+            List<Tile> possibleMovements = structureManager.GeneratePossibleMovementForUnit(unit, false);
+            if(possibleMovements.Count > 0){
+                int randomInt = Random.Range(0,possibleMovements.Count);
+                Debug.Log($"AI MOVING TO TILE N.{possibleMovements[randomInt].tileNumber}");
+                Tile destinationTile = GameObject.Find($"Terrain_{possibleMovements[randomInt].tileNumber}").GetComponent<Tile>();
+                structureManager.CalculateMapTilesDistance(unit);
+                structureManager.StartUnitMovement(unit, destinationTile, UNIT_MOVEMENT_SPEED);
+            }
+            
+        }
     }
 
     public void StartAITurn(){
         Debug.Log($"START AI TURN FOR FACTION {fightManager.CurrentTurn}");
         foreach (var unit in fightManager.units.Where(u => u.faction == fightManager.CurrentTurn))
         {
+            unit.movementCurrent = unit.movementMax;
             unitsToCalculate.Enqueue(unit);
         }
         CalculateTurnForUnit(unitsToCalculate.Dequeue());

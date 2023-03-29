@@ -15,8 +15,8 @@ public class Unit : MonoBehaviour
     #region Stats
         public int hpMax;
         public int hpCurrent;
-        public int movementMax;
-        public int movementCurrent;
+        public float movementMax;
+        public float movementCurrent;
         public int faction;
     #endregion
     

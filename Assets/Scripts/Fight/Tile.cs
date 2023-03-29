@@ -8,12 +8,12 @@ public class Tile : MonoBehaviour, IComparable<Tile>
 {
     #region Stats
         public bool IsPassable = true;
-        public int MovementCost = 1;
+        public float MovementCost = 1;
     #endregion
 
     #region Dijkstra
         public bool IsVisited = false;
-        public int tentativeCost = 99999;
+        public float tentativeCost = 99999;
     #endregion
     
 
