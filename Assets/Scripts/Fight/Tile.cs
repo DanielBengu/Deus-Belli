@@ -31,18 +31,22 @@ public class Tile : MonoBehaviour, IComparable<Tile>
     public void OnMouseDown()
     {
         ObjectClickedEnum objClicked;
+        GameObject objectToManage;
         if(manager.IsGameInStandby)
             return;
 
         if(unitOnTile){
-            manager.UnitSelected = unitOnTile.GetComponent<Unit>();
+            if(unitOnTile.GetComponent<Unit>().faction == FightManager.USER_FACTION)
+                manager.UnitSelected = unitOnTile.GetComponent<Unit>();
             objClicked = ObjectClickedEnum.UnitTile;
+            objectToManage = unitOnTile;
             
         }else{
             objClicked = ObjectClickedEnum.EmptyTile;
+            objectToManage = gameObject;
         }
 
-        manager.ManageClick(objClicked, gameObject);
+        manager.ManageClick(objClicked, objectToManage);
     }
 
     //Workaround to manage right click like we do for the left click in OnMouseDown()

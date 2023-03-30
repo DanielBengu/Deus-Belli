@@ -23,6 +23,7 @@ public class FightManager : MonoBehaviour
         GameObject warriorPrefab;
 
         Level level;
+        ActionPerformer actionPerformer;
 
         // This list stores all the units on the battlefield
         public List<Unit> units;
@@ -31,7 +32,6 @@ public class FightManager : MonoBehaviour
 
         [SerializeField]
         GameObject OptionsPrefab;
-        GameObject OptionsObject;
         
         // This property stores the currently selected unit
         public Unit UnitSelected { get; set; }
@@ -43,26 +43,23 @@ public class FightManager : MonoBehaviour
         public int CurrentTurn { get; set; }
         public bool IsGameInStandby { get{return IsObjectMoving || IsOptionOpen || CurrentTurn != 0;}}
         public bool IsShowingPath { get; set; }
+        public ActionPerformed ActionInQueue { get; set; }
+        public GameObject ActionTarget { get; set; }
 
     #endregion
 
     #region Start and Update
-        
-        void Start()
+
+    void Start()
         {
             Debug.Log("START FIGHT MANAGER SETUP");
 
             structureManager = this.GetComponent<StructureManager>();
             aiManager = this.GetComponent<AIManager>();
+            actionPerformer = new();
 
-            var levelBase = GameObject.Find("Level One").GetComponent<LevelOne>();
-            levelBase.StartLevel();
-            level = levelBase.level;
+            StartLevel();
 
-            // Setup the terrain based on the level information
-            structureManager.Setup(level.tilesDict, level.TopLeftSquarePositionX, level.YPosition, level.TopLeftSquarePositionZ, level.XLength, level.YLength);
-
-            GenerateUnits();
             Debug.Log("END FIGHT MANAGER SETUP");
         }
 
@@ -78,10 +75,20 @@ public class FightManager : MonoBehaviour
     #region Key Input Management
 
         void ManageMovements(){
-            if(IsObjectMoving)
+            if (IsObjectMoving)
+            {
                 // If an object is being moved, check if it has finished moving
-                if(structureManager.MovementTick())
+                if (structureManager.MovementTick())
+                {
+                    if(ActionInQueue == ActionPerformed.Attack)
+                    {
+                        actionPerformer.Attack(UnitSelected, ActionTarget.GetComponent<Unit>());
+                        ActionInQueue = ActionPerformed.Default;
+                        ActionTarget = null;
+                    }
                     UnitSelected = null;
+                }
+            }        
         }
 
         void ManageInputs(){
@@ -93,8 +100,8 @@ public class FightManager : MonoBehaviour
         void ManageKeysDown(){
             if(Input.GetMouseButtonDown(RIGHT_MOUSE_BUTTON)){
                 structureManager.ClearSelection();
-            } else if (Input.GetKeyDown("escape")) {
-                OptionsObject = MainMenu.GeneratePrefab(OptionsPrefab, "Options");
+            } else if (Input.GetKeyDown(KeyCode.Escape)) {
+                MainMenu.GeneratePrefab(OptionsPrefab, "Options");
                 IsOptionOpen = true;
             } else if(Input.GetMouseButtonDown(SCROLL_WHEEL_BUTTON)){
                 IsScrollButtonDown = true;
@@ -115,38 +122,60 @@ public class FightManager : MonoBehaviour
         }
     #endregion
 
-    void GenerateUnits(){
-        
-        Tile tileWarrior = GameObject.Find($"Terrain_1").GetComponent<Tile>();
-        GenerateSingleUnit(warriorPrefab, tileWarrior);
+    #region Startup Methods
 
-        foreach (var enemy in level.enemyList)
+        void StartLevel()
         {
-            Tile tile = structureManager.GetMapTiles()[enemy.Key];
-            GenerateSingleUnit(enemy.Value, tile);
+            var levelBase = GameObject.Find("Level One").GetComponent<LevelOne>();
+            levelBase.StartLevel();
+            level = levelBase.level;
+
+            // Setup the terrain based on the level information
+            structureManager.Setup(level.tilesDict, level.TopLeftSquarePositionX, level.YPosition, level.TopLeftSquarePositionZ, level.XLength, level.YLength);
+
+            GenerateUnits();
         }
-    }
 
-    void GenerateSingleUnit(GameObject unit, Tile tile){
-        Quaternion rotation = new Quaternion(0, 180, 0, 0);
-        var unitGenerated = GameObject.Instantiate(unit,tile.transform.position,rotation) as GameObject;
-        var unitScript = unitGenerated.GetComponent<Unit>();
+        void GenerateUnits()
+        {
 
-        unitScript.currentTile = tile;
-        tile.unitOnTile = unitGenerated;
-        units.Add(unitScript);
-    }
+            Tile tileWarrior = GameObject.Find($"Terrain_1").GetComponent<Tile>();
+            GenerateSingleUnit(warriorPrefab, tileWarrior);
 
-    void StartUserTurn(){
+            foreach (var enemy in level.enemyList)
+            {
+                Tile tile = structureManager.GetMapTiles()[enemy.Key];
+                GenerateSingleUnit(enemy.Value, tile);
+            }
+        }
+
+        void GenerateSingleUnit(GameObject unit, Tile tile)
+        {
+            Quaternion rotation = new Quaternion(0, 180, 0, 0);
+            var unitGenerated = GameObject.Instantiate(unit, tile.transform.position, rotation) as GameObject;
+            var unitScript = unitGenerated.GetComponent<Unit>();
+
+            unitScript.currentTile = tile;
+            tile.unitOnTile = unitGenerated;
+            units.Add(unitScript);
+        }
+
+    #endregion
+
+    void StartUserTurn()
+    {
         CurrentTurn = USER_FACTION;
         structureManager.SetEndTurnButton(true);
-        foreach(var unit in units.Where(u => u.faction == USER_FACTION)){
+        foreach (var unit in units.Where(u => u.faction == USER_FACTION))
+        {
             unit.movementCurrent = unit.movementMax;
         }
     }
 
     void EndUserTurn(){
         CurrentTurn = ENEMY_FACTION;
+        UnitSelected = null;
+        IsShowingPath = false;
         structureManager.SetEndTurnButton(false);
         structureManager.ClearSelection(true);
         aiManager.StartAITurn();
@@ -157,48 +186,87 @@ public class FightManager : MonoBehaviour
         {
             case ObjectClickedEnum.EmptyTile:
                 var tileSelected = reference.GetComponent<Tile>();
-                if(UnitSelected && UnitSelected.faction == USER_FACTION){
-                    //If tile clicked is in range
-                    if(structureManager.tiles.Contains(tileSelected)){
-                        if(IsShowingPath){
-                            structureManager.StartUnitMovement(UnitSelected, reference.GetComponent<Tile>(), UNIT_MOVEMENT_SPEED);
-                            structureManager.SetInfoPanel(false, UnitSelected);
-                            IsShowingPath = false;
-                            return;
-                        }else{
-                            structureManager.ClearSelection(false);
-                            structureManager.FindPathToDestination(UnitSelected.currentTile, tileSelected, true, true);
-                            IsShowingPath = true;
-                        }
-                    }else{
-                        //User clicked outside the range
-                        structureManager.ClearSelection();
-                        structureManager.TileSelected(tileSelected);
-                        IsShowingPath = false;
-                        UnitSelected = null;
-                    }
-                }else{
-                    IsShowingPath = false;
-                    structureManager.TileSelected(tileSelected);
-                }   
+                ManageClick_EmptyTileSelected(tileSelected);
                 structureManager.SetInfoPanel(false, UnitSelected);
             break;
+
             case ObjectClickedEnum.UnitTile:
-                if(UnitSelected.faction == USER_FACTION){
-                    structureManager.GeneratePossibleMovementForUnit(UnitSelected, true);
-                }else{
-                    structureManager.TileSelected(UnitSelected.currentTile);
-                }
-                IsShowingPath = false;
-                structureManager.SetInfoPanel(true, UnitSelected);
+                var unitSelected = reference.GetComponent<Unit>();
+                ManageClick_UnitSelected(unitSelected);
+                structureManager.SetInfoPanel(true, unitSelected);
             break;
+
             case ObjectClickedEnum.RightClickOnField:
                 structureManager.ClearSelection();
             break;
+
             case ObjectClickedEnum.Default:
             break;
         }
     }
+
+    #region Manage Click Actions
+
+        void ManageClick_UnitSelected(Unit unit)
+        {
+            if(unit.faction == USER_FACTION){
+                structureManager.GeneratePossibleMovementForUnit(UnitSelected, true);
+                IsShowingPath = false;
+            }
+            else{
+                if (IsShowingPath)
+                {
+                    Tile targetTile = structureManager.tiles[structureManager.tiles.Count - 2]; //The unit moves to the second-last tile of the path, adjacent to the enemy
+                    structureManager.MoveUnit(UnitSelected, targetTile, UNIT_MOVEMENT_SPEED);
+                    ActionInQueue = ActionPerformed.Attack;
+                    ActionTarget = unit.gameObject;
+                    IsShowingPath = false;
+                    structureManager.ClearSelection();
+                }
+                else
+                {
+                    structureManager.ClearSelection(false);
+                    structureManager.FindPathToDestination(UnitSelected.currentTile, unit.currentTile, true, true);
+                    IsShowingPath = true;
+                }
+            }
+        }
+
+        void DoneAttackAnimation()
+        {
+
+        }
+
+        void ManageClick_EmptyTileSelected(Tile tileSelected)
+        {
+            if(UnitSelected){
+                //If tile clicked is in range
+                if(structureManager.tiles.Contains(tileSelected)){
+                    if(IsShowingPath){
+                        structureManager.StartUnitMovement(UnitSelected, tileSelected, UNIT_MOVEMENT_SPEED);
+                        structureManager.SetInfoPanel(false, UnitSelected);
+                        IsShowingPath = false;
+                        UnitSelected = null;
+                        return;
+                    }else{
+                        structureManager.ClearSelection(false);
+                        structureManager.FindPathToDestination(UnitSelected.currentTile, tileSelected, true, true);
+                        IsShowingPath = true;
+                    }
+                }else{
+                    //User clicked outside the range
+                    structureManager.ClearSelection();
+                    structureManager.TileSelected(tileSelected);
+                    IsShowingPath = false;
+                    UnitSelected = null;
+                }
+            }else{
+                IsShowingPath = false;
+                structureManager.TileSelected(tileSelected);
+            }   
+        }
+
+	#endregion
 
     public void EndTurn(int faction){
         switch (faction)
@@ -226,5 +294,12 @@ public enum ObjectClickedEnum{
     EmptyTile,
     UnitTile,
     RightClickOnField,
+    Default,
+}
+
+public enum ActionPerformed
+{
+    Movement,
+    Attack,
     Default,
 }

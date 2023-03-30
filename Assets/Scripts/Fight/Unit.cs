@@ -17,6 +17,7 @@ public class Unit : MonoBehaviour
         public int hpCurrent;
         public float movementMax;
         public float movementCurrent;
+        public int attack;
         public int faction;
     #endregion
     
@@ -29,7 +30,8 @@ public class Unit : MonoBehaviour
         if(manager.IsGameInStandby)
             return;
 
-        manager.UnitSelected = this;
+        if(faction == FightManager.USER_FACTION)
+            manager.UnitSelected = this;
         manager.ManageClick(ObjectClickedEnum.UnitTile, gameObject);
     }
 

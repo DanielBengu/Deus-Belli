@@ -2,6 +2,8 @@
 
 ## HIGH PRIORITY
 
+- Characters dont rotate correctly when moving to a location
+
 ## MEDIUM PRIORITY
 
 ## LOW PRIORITY

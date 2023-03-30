@@ -892,6 +892,7 @@ Animator:
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0
 --- !u!114 &114064419799455960
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -953,6 +954,7 @@ MonoBehaviour:
   hpCurrent: 7
   movementMax: 3
   movementCurrent: 3
+  attack: 1
   faction: 0
 --- !u!1 &1142277583328720
 GameObject:
