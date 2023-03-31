@@ -1,16 +1,16 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Linq;
 using UnityEngine;
 
 public class Unit : MonoBehaviour
 {
-    public Tile currentTile;
+    public Tile CurrentTile { get; set; }
+    public bool HasPerformedMainAction { get; set; }
+
     FightManager manager;
 
     public string unitName;
     public Sprite unitImage;
+
+
 
     #region Stats
         public int hpMax;
@@ -38,7 +38,7 @@ public class Unit : MonoBehaviour
     //Workaround to manage right click like we do for the left click in OnMouseDown()
     void OnMouseOver () {
         if(Input.GetMouseButtonDown(FightManager.RIGHT_MOUSE_BUTTON)){
-            //manager.ManageClick(ObjectClickedEnum.RightClickOnField, currentTile.gameObject);
+            //manager.ManageClick(ObjectClickedEnum.RightClickOnField, CurrentTile.gameObject);
         }
     }
 }

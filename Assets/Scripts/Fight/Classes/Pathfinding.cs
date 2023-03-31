@@ -72,13 +72,13 @@ public class Pathfinding
 
     //Dijkstra algorithm to calculate tiles movement cost
     public void CalculateMapTilesDistance(Unit startingUnit){
-        float maxMovementCost = startingUnit.movementCurrent;
         if(!startingUnit){
             Debug.Log("CalculateMapTilesDistance - Invalid startingUnit");
             return;
         }
 
         Debug.Log("Starting Dijkstra calculation");
+        float maxMovementCost = startingUnit.movementCurrent;
 
         for (int i = 0; i < mapTiles.Count; i++)
         {
@@ -86,7 +86,7 @@ public class Pathfinding
             mapTiles[i].IsVisited = false;
         }
 
-        startingUnit.currentTile.tentativeCost = 0;
+        startingUnit.CurrentTile.tentativeCost = 0;
         bool pathFound = false;
         int lowestTileIndex = 0;
         Tile tileToCalculate;
@@ -136,7 +136,7 @@ public class Pathfinding
     }
 
     //Returns the list of steps necessary to reach the destination tile with the least movement cost
-    public List<Tile> FindPathToDestination(Tile source, Tile destination){
+    public List<Tile> FindPathToDestination(Tile destination){
         List<Tile> result = new(){destination};
         Debug.Log($"Starting calculation at tile n.{result.Last()}");
         int failSafe = 0;

@@ -949,7 +949,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   currentTile: {fileID: 0}
   unitName: Dixie
-  unitImage: {fileID: 0}
+  unitImage: {fileID: 21300000, guid: 0866b720585eada4e9e526b74df4e632, type: 3}
   hpMax: 7
   hpCurrent: 7
   movementMax: 3

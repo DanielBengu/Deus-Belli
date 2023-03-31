@@ -1,4 +1,3 @@
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
@@ -26,7 +25,7 @@ public class AIManager : MonoBehaviour
         if(fightManager.CurrentTurn == 0)
             return;
 
-        if(!fightManager.IsObjectMoving){
+        if(!fightManager.IsAnyUnitMoving){
             if(unitsToCalculate.Count > 0){
                 CalculateTurnForUnit(unitsToCalculate.Dequeue());
             }else{
@@ -38,12 +37,14 @@ public class AIManager : MonoBehaviour
 
     public void StartAITurn(){
         Debug.Log($"START AI TURN FOR FACTION {fightManager.CurrentTurn}");
-        foreach (var unit in fightManager.units.Where(u => u.faction == fightManager.CurrentTurn))
+        foreach (var unit in fightManager.unitsOnField.Where(u => u.faction == fightManager.CurrentTurn))
         {
             unit.movementCurrent = unit.movementMax;
             unitsToCalculate.Enqueue(unit);
         }
-        CalculateTurnForUnit(unitsToCalculate.Dequeue());
+
+        if (unitsToCalculate.Count > 0)
+            CalculateTurnForUnit(unitsToCalculate.Dequeue());
     }
 
     void CalculateTurnForUnit(Unit unit){

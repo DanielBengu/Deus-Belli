@@ -1,22 +1,18 @@
-using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
-using UnityEngine.UI;
-using TMPro;
 
 public class StructureManager : MonoBehaviour
 {
-    public List<Tile> tiles = new();
-    Dictionary<int, Tile> mapTiles = new Dictionary<int, Tile>();
+    public List<Tile> selectedTiles = new();
+    readonly Dictionary<int, Tile> mapTiles = new Dictionary<int, Tile>();
     public int X_Length;
     public int Y_Length;
 
     UIManager uiManager;
 
     Pathfinding pathfinding;
-    Movement movement = new();
+    readonly Movement movement = new();
 
     public bool IsObjectMoving { get{ return movement.isObjectMoving;}}
 
@@ -70,7 +66,7 @@ public class StructureManager : MonoBehaviour
 
     public void TileSelected(Tile tile){
         ClearSelectedTiles();
-        tiles.Add(tile);
+        selectedTiles.Add(tile);
 
         SpriteRenderer spriteRendererNew = tile.GetComponent<SpriteRenderer>();
         spriteRendererNew.sprite = Resources.Load<Sprite>($"Sprites/Terrain/{spriteRendererNew.sprite.name.Split(' ')[0] + " selected"}");
@@ -82,21 +78,17 @@ public class StructureManager : MonoBehaviour
         ClearSelectedTiles();
     }
 
-    public bool StartObjectMovement(Transform starting, Transform target, float objectSpeed){
-        return movement.StartObjectMovement(starting, target, objectSpeed);
-    }
-
     public bool MovementTick(){
         return movement.MovementTick();
     }
 
     public void MoveUnit(Unit unit, Tile targetTile, int movementSpeed){
-        List<Tile> tilesPath = FindPathToDestination(unit.currentTile, targetTile, false, false);
+        List<Tile> tilesPath = FindPathToDestination(unit.CurrentTile, targetTile, false, false);
         movement.MoveUnit(unit, targetTile, tilesPath, movementSpeed);
     }
 
     public List<Tile> FindPathToDestination(Tile startingPoint, Tile targetTile, bool selectTiles, bool addToSelectedMapTiles){
-        List<Tile> path = pathfinding.FindPathToDestination(startingPoint, targetTile);
+        List<Tile> path = pathfinding.FindPathToDestination(targetTile);
         int factionOfUnit = startingPoint.unitOnTile.GetComponent<Unit>().faction;
         if(selectTiles)
             GenerateTileSelection(path, factionOfUnit);
@@ -121,12 +113,12 @@ public class StructureManager : MonoBehaviour
         CalculateMapTilesDistance(unit);
 
         //We remove the starting tile for the unit and the tiles that costs too much movement for it
-        List<Tile> tilesList = GetMapTiles().Select(t => t.Value).Where(t => t.tileNumber != unit.currentTile.tileNumber && t.tentativeCost <= unit.movementCurrent).ToList();
-        tiles = GetMapTiles().Select(t => t.Value).Where(t => t.tentativeCost <= unit.movementCurrent).ToList();
+        List<Tile> tilesList = GetMapTiles().Select(t => t.Value).Where(t => t.tileNumber != unit.CurrentTile.tileNumber && t.tentativeCost <= unit.movementCurrent).ToList();
+        selectedTiles = GetMapTiles().Select(t => t.Value).Where(t => t.tentativeCost <= unit.movementCurrent).ToList();
 
         
         if(selectTiles)
-            GenerateTileSelection(tiles, unit.faction);
+            GenerateTileSelection(selectedTiles, unit.faction);
 
         return tilesList;
     }
@@ -138,14 +130,14 @@ public class StructureManager : MonoBehaviour
     #region Private functions
 
         void ClearSelectedTiles(){
-            foreach (var tile in tiles)
+            foreach (var tile in selectedTiles)
             {
                 string spriteName = tile.GetComponent<SpriteRenderer>().sprite.name;
                 Sprite newSprite = Resources.Load<Sprite>($"Sprites/Terrain/{spriteName.Split(' ')[0] + " base"}");
                 ChangeObjectSprite(tile.gameObject, newSprite);
             }
 
-            tiles.Clear();
+            selectedTiles.Clear();
         }
 
         void GenerateTileSelection(List<Tile> tilesToSelect, int factionOfUnit = -1){
@@ -169,7 +161,7 @@ public class StructureManager : MonoBehaviour
         }
 
         void AddToMapSelectedTiles(List<Tile> tilesToAdd){
-            tiles = tilesToAdd;
+            selectedTiles = tilesToAdd;
         }
 
         void RemoveMovementFromUnit(Unit unit, float movementToRemove){

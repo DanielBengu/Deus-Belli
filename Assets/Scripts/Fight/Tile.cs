@@ -1,8 +1,5 @@
 using System;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.EventSystems;
 
 public class Tile : MonoBehaviour, IComparable<Tile>
 {
@@ -15,10 +12,8 @@ public class Tile : MonoBehaviour, IComparable<Tile>
         public bool IsVisited = false;
         public float tentativeCost = 99999;
     #endregion
-    
 
-    [SerializeField]
-    public GameObject unitOnTile;
+    public Unit unitOnTile;
 
     public FightManager manager;
 
@@ -36,10 +31,10 @@ public class Tile : MonoBehaviour, IComparable<Tile>
             return;
 
         if(unitOnTile){
-            if(unitOnTile.GetComponent<Unit>().faction == FightManager.USER_FACTION)
+            if(unitOnTile.faction == FightManager.USER_FACTION)
                 manager.UnitSelected = unitOnTile.GetComponent<Unit>();
             objClicked = ObjectClickedEnum.UnitTile;
-            objectToManage = unitOnTile;
+            objectToManage = unitOnTile.gameObject;
             
         }else{
             objClicked = ObjectClickedEnum.EmptyTile;
@@ -56,6 +51,7 @@ public class Tile : MonoBehaviour, IComparable<Tile>
         }
     }
 
+    //Necessary for tile comparement during dijkstra calculations
     public int CompareTo(Tile other){
         if(this.tentativeCost < other.tentativeCost) return -1;
         if(this.tentativeCost == other.tentativeCost) return 0;

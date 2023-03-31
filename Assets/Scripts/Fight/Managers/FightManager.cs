@@ -1,4 +1,3 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using System.Linq;
@@ -26,7 +25,7 @@ public class FightManager : MonoBehaviour
         ActionPerformer actionPerformer;
 
         // This list stores all the units on the battlefield
-        public List<Unit> units;
+        public List<Unit> unitsOnField;
         
         float scrollWheelInput;
 
@@ -37,11 +36,11 @@ public class FightManager : MonoBehaviour
         public Unit UnitSelected { get; set; }
 
         public bool IsCameraFocused { get{return cameraManager.GetCameraFocusStatus();} set{cameraManager.SetCameraFocusStatus(value);} }
-        public bool IsObjectMoving { get{return structureManager.IsObjectMoving;}}
+        public bool IsAnyUnitMoving { get{return structureManager.IsObjectMoving;}}
         public bool IsOptionOpen { get; set; }
         public bool IsScrollButtonDown { get; set; }
         public int CurrentTurn { get; set; }
-        public bool IsGameInStandby { get{return IsObjectMoving || IsOptionOpen || CurrentTurn != 0;}}
+        public bool IsGameInStandby { get{return IsAnyUnitMoving || IsOptionOpen || CurrentTurn != 0;}}
         public bool IsShowingPath { get; set; }
         public ActionPerformed ActionInQueue { get; set; }
         public GameObject ActionTarget { get; set; }
@@ -56,7 +55,7 @@ public class FightManager : MonoBehaviour
 
             structureManager = this.GetComponent<StructureManager>();
             aiManager = this.GetComponent<AIManager>();
-            actionPerformer = new();
+            actionPerformer = new() { manager = this };
 
             StartLevel();
 
@@ -75,20 +74,17 @@ public class FightManager : MonoBehaviour
     #region Key Input Management
 
         void ManageMovements(){
-            if (IsObjectMoving)
+            if (!IsAnyUnitMoving)
+                return;
+
+            // If an object is being moved, check if it has finished moving
+            if (structureManager.MovementTick())
             {
-                // If an object is being moved, check if it has finished moving
-                if (structureManager.MovementTick())
-                {
-                    if(ActionInQueue == ActionPerformed.Attack)
-                    {
-                        actionPerformer.Attack(UnitSelected, ActionTarget.GetComponent<Unit>());
-                        ActionInQueue = ActionPerformed.Default;
-                        ActionTarget = null;
-                    }
-                    UnitSelected = null;
-                }
-            }        
+                if(ActionInQueue == ActionPerformed.Attack)
+                    actionPerformer.PerformAttack(UnitSelected, ActionTarget.GetComponent<Unit>());
+
+                UnitSelected = null;
+            }    
         }
 
         void ManageInputs(){
@@ -155,9 +151,9 @@ public class FightManager : MonoBehaviour
             var unitGenerated = GameObject.Instantiate(unit, tile.transform.position, rotation) as GameObject;
             var unitScript = unitGenerated.GetComponent<Unit>();
 
-            unitScript.currentTile = tile;
-            tile.unitOnTile = unitGenerated;
-            units.Add(unitScript);
+            unitScript.CurrentTile = tile;
+            tile.unitOnTile = unitGenerated.GetComponent<Unit>();
+            unitsOnField.Add(unitScript);
         }
 
     #endregion
@@ -166,9 +162,10 @@ public class FightManager : MonoBehaviour
     {
         CurrentTurn = USER_FACTION;
         structureManager.SetEndTurnButton(true);
-        foreach (var unit in units.Where(u => u.faction == USER_FACTION))
+        foreach (var unit in unitsOnField.Where(u => u.faction == USER_FACTION))
         {
             unit.movementCurrent = unit.movementMax;
+            unit.HasPerformedMainAction = false;
         }
     }
 
@@ -209,62 +206,70 @@ public class FightManager : MonoBehaviour
 
         void ManageClick_UnitSelected(Unit unit)
         {
+            //Allied unit already performed his action this turn
+            if ((UnitSelected && UnitSelected.HasPerformedMainAction) || unit.HasPerformedMainAction)
+            {
+                structureManager.TileSelected(unit.CurrentTile);
+                return;
+            }
+
             if(unit.faction == USER_FACTION){
                 structureManager.GeneratePossibleMovementForUnit(UnitSelected, true);
                 IsShowingPath = false;
             }
             else{
-                if (IsShowingPath)
+                if (!IsShowingPath)
                 {
-                    Tile targetTile = structureManager.tiles[structureManager.tiles.Count - 2]; //The unit moves to the second-last tile of the path, adjacent to the enemy
-                    structureManager.MoveUnit(UnitSelected, targetTile, UNIT_MOVEMENT_SPEED);
-                    ActionInQueue = ActionPerformed.Attack;
-                    ActionTarget = unit.gameObject;
-                    IsShowingPath = false;
-                    structureManager.ClearSelection();
+                    AskForMovementConfirmation(unit.CurrentTile);
+                    return;
                 }
-                else
-                {
-                    structureManager.ClearSelection(false);
-                    structureManager.FindPathToDestination(UnitSelected.currentTile, unit.currentTile, true, true);
-                    IsShowingPath = true;
-                }
+
+                Tile targetTile = structureManager.selectedTiles[structureManager.selectedTiles.Count - 2]; //The unit moves to the second-last tile of the path, adjacent to the enemy
+                structureManager.MoveUnit(UnitSelected, targetTile, UNIT_MOVEMENT_SPEED);
+                ActionInQueue = ActionPerformed.Attack;
+                ActionTarget = unit.gameObject;
+                IsShowingPath = false;
+                structureManager.ClearSelection();
             }
-        }
-
-        void DoneAttackAnimation()
-        {
-
         }
 
         void ManageClick_EmptyTileSelected(Tile tileSelected)
         {
-            if(UnitSelected){
-                //If tile clicked is in range
-                if(structureManager.tiles.Contains(tileSelected)){
-                    if(IsShowingPath){
-                        structureManager.StartUnitMovement(UnitSelected, tileSelected, UNIT_MOVEMENT_SPEED);
-                        structureManager.SetInfoPanel(false, UnitSelected);
-                        IsShowingPath = false;
-                        UnitSelected = null;
-                        return;
-                    }else{
-                        structureManager.ClearSelection(false);
-                        structureManager.FindPathToDestination(UnitSelected.currentTile, tileSelected, true, true);
-                        IsShowingPath = true;
-                    }
-                }else{
-                    //User clicked outside the range
-                    structureManager.ClearSelection();
-                    structureManager.TileSelected(tileSelected);
-                    IsShowingPath = false;
-                    UnitSelected = null;
-                }
-            }else{
+            if (!UnitSelected)
+            {
                 IsShowingPath = false;
                 structureManager.TileSelected(tileSelected);
-            }   
+                return;
+            }
+
+            //If tile clicked is in range
+            if(structureManager.selectedTiles.Contains(tileSelected)){
+                if(IsShowingPath){
+                    structureManager.StartUnitMovement(UnitSelected, tileSelected, UNIT_MOVEMENT_SPEED);
+                    structureManager.SetInfoPanel(false, UnitSelected);
+                    IsShowingPath = false;
+                    UnitSelected = null;
+                    return;
+                }else{
+                    AskForMovementConfirmation(tileSelected);
+                }
+            }else{
+                //User clicked outside the range
+                structureManager.ClearSelection();
+                structureManager.TileSelected(tileSelected);
+                IsShowingPath = false;
+                UnitSelected = null;
+            }  
         }
+
+    void AskForMovementConfirmation(Tile destinationTile)
+    {
+        /*if (!structureManager.selectedTiles.Find(t => t.tileNumber == destinationTile.tileNumber))
+            return;*/
+        structureManager.ClearSelection(false);
+        structureManager.FindPathToDestination(UnitSelected.CurrentTile, destinationTile, true, true);
+        IsShowingPath = true;
+    }
 
 	#endregion
 
@@ -284,6 +289,7 @@ public class FightManager : MonoBehaviour
         }
     }
 
+    //Called by "End Turn" button of UI
     public void EndTurnButton(int faction){
         FightManager fm = GameObject.Find("Manager").GetComponent<FightManager>();
         fm.EndTurn(faction);

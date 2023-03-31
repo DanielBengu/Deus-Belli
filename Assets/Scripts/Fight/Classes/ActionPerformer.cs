@@ -1,17 +1,34 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class ActionPerformer
 {
+    public FightManager manager;
 
-    public void Attack(Unit attacker, Unit defender)
+    public void PerformAttack(Unit attacker, Unit defender)
     {
-        Animator anim = attacker.GetComponent<Animator>();
-        string gender = attacker.name.Split(' ')[0];
-        anim.Play($"{gender} Attack 1");
+        attacker.HasPerformedMainAction = true;
+        Attack(attacker, defender);
+        manager.ActionInQueue = ActionPerformed.Default;
+        manager.ActionTarget = null;
+    }
+
+    void Attack(Unit attacker, Unit defender)
+    {
+        AnimationPerformer.PerformAnimation(Animation.Attack, attacker);
+        Quaternion rotation = defender.transform.rotation;
+        rotation.y = Movement.FindCharacterDirection(defender.transform, attacker.transform);
+        defender.transform.rotation = rotation;
+
+        AnimationPerformer.PerformAnimation(Animation.TakeDamage, defender);
+
         defender.hpCurrent -= attacker.attack;
         if (defender.hpCurrent <= 0)
-            Object.Destroy(defender.gameObject);
+            KillUnit(defender);
+    }
+
+    void KillUnit(Unit unitToKill)
+    {
+        manager.unitsOnField.Remove(unitToKill);
+        Object.Destroy(unitToKill.gameObject);
     }
 }

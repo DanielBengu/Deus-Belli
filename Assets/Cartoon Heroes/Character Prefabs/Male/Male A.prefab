@@ -2966,7 +2966,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   currentTile: {fileID: 0}
   unitName: bob guerriero
-  unitImage: {fileID: 0}
+  unitImage: {fileID: 21300000, guid: 9a27a138b21f93147b5d5eeff290ffcc, type: 3}
   hpMax: 10
   hpCurrent: 8
   movementMax: 4

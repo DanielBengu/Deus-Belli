@@ -1,14 +1,9 @@
-using System;
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using System.Linq;
 
 public class Movement
 {
-    private Animator animator;
-    private string gender;
-
     private float startTime; // the time when the movement started
     private float journeyLength; // the total distance between the start and end markers
     public bool isObjectMoving = false;
@@ -42,9 +37,7 @@ public class Movement
             else
             {
                 isObjectMoving = false;
-                animator.Play($"{gender} Sword Stance");
-                animator = null;
-                gender = "";
+                AnimationPerformer.PerformAnimation(Animation.Idle, objectMovingTransform.gameObject.GetComponent<Unit>());
                 return true;
             }
         }
@@ -58,10 +51,6 @@ public class Movement
         if (isObjectMoving)
             return false;
 
-        animator = starting.GetComponent<Animator>();
-        gender = starting.gameObject.name.Split(' ')[0];
-        animator.Play($"{gender} Sword Walk");
-
         isObjectMoving = true;
         objectMovingTransform = starting;
         startTime = Time.time;
@@ -71,29 +60,36 @@ public class Movement
         targetRotation = target.rotation;
         speed = objectSpeed;
         journeyLength = Vector3.Distance(startingPosition, targetPosition);
+
+        AnimationPerformer.PerformAnimation(Animation.Move, objectMovingTransform.gameObject.GetComponent<Unit>());
+
         Debug.Log("Started movement to " + targetPosition);
         return true;
     }
 
     public void MoveUnit(Unit unit, Tile targetTile, List<Tile> tilesPath, int movementSpeed)
     {
-        foreach (var tile in tilesPath.Skip(1))
+        //The first of tilesPath it's the starting tile so we skip it
+        movementSteps = tilesPath.Skip(1).Select(t => t.transform).ToList();
+
+        if(movementSteps.Count == 0)
         {
-            movementSteps.Add(tile.transform);
+            isObjectMoving = true; //Even if not moving we set it true to trigger the movement tick in update
+            return;
         }
 
-        unit.currentTile.unitOnTile = null;
+        unit.CurrentTile.unitOnTile = null;
 
         Transform destination = new GameObject().transform;
         destination.position = movementSteps.First().position;
         destination.rotation = unit.transform.rotation;
         movementSteps.RemoveAt(0);
 
-        targetTile.unitOnTile = unit.gameObject;
-        unit.currentTile = targetTile;
+        targetTile.unitOnTile = unit;
+        unit.CurrentTile = targetTile;
 
         StartObjectMovement(unit.transform, destination, movementSpeed);
-        GameObject.Destroy(destination.gameObject);
+        Object.Destroy(destination.gameObject);
     }
 
     void SetNewMovementStep()
@@ -101,28 +97,32 @@ public class Movement
         isObjectMoving = false;
         Transform destination = new GameObject().transform;
         destination.position = movementSteps.First().position;
-        objectMovingTransform.rotation = FindCharacterDirection(objectMovingTransform, destination);
+
+        Quaternion rotation = objectMovingTransform.rotation;
+        rotation.y = FindCharacterDirection(objectMovingTransform, destination);
+        objectMovingTransform.rotation = rotation;
+
         destination.rotation = objectMovingTransform.rotation;
 
         StartObjectMovement(objectMovingTransform, destination, 800);
-        GameObject.Destroy(destination.gameObject);
+        Object.Destroy(destination.gameObject);
         movementSteps.RemoveAt(0);
     }
 
-    Quaternion FindCharacterDirection(Transform character, Transform directionTile)
+    public static float FindCharacterDirection(Transform character, Transform directionTile)
     {
-        Quaternion directionRotation = new();
+        float rotationY = 0;
 
-        
-        if(character.position.x > directionTile.position.x && character.position.z == directionTile.position.z)         //Moving to the left
-            directionRotation = new Quaternion(0, 270, 0, 0);
+
+        if (character.position.x > directionTile.position.x && character.position.z == directionTile.position.z)         //Moving to the left
+            rotationY = 270f;
         else if (character.position.x < directionTile.position.x && character.position.z == directionTile.position.z)   //Moving to the right
-            directionRotation = new Quaternion(0, 90, 0, 0);
+            rotationY = 90f;
         else if (character.position.x == directionTile.position.x && character.position.z < directionTile.position.z)   //Moving up
-            directionRotation = new Quaternion(0, 0, 0, 0);
+            rotationY = 0f;
         else if (character.position.x == directionTile.position.x && character.position.z > directionTile.position.z)   //Moving down
-            directionRotation = new Quaternion(0, 0, 0, 0);
+            rotationY = 180f;
 
-        return directionRotation;
+        return rotationY;
     }
 }
