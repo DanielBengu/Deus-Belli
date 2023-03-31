@@ -19,7 +19,7 @@ MonoBehaviour:
     width: 1920
     height: 997
   m_ShowMode: 4
-  m_Title: Game
+  m_Title: Console
   m_RootView: {fileID: 7}
   m_MinSize: {x: 875, y: 300}
   m_MaxSize: {x: 10000, y: 10000}
@@ -43,15 +43,15 @@ MonoBehaviour:
     y: 0
     width: 1292
     height: 651
-  m_MinSize: {x: 100, y: 100}
-  m_MaxSize: {x: 4000, y: 4000}
+  m_MinSize: {x: 102, y: 121}
+  m_MaxSize: {x: 4002, y: 4021}
   m_ActualView: {fileID: 18}
   m_Panes:
   - {fileID: 16}
   - {fileID: 18}
   - {fileID: 12}
   m_Selected: 1
-  m_LastSelected: 2
+  m_LastSelected: 0
 --- !u!114 &3
 MonoBehaviour:
   m_ObjectHideFlags: 52
@@ -96,8 +96,8 @@ MonoBehaviour:
     y: 0
     width: 364
     height: 947
-  m_MinSize: {x: 275, y: 50}
-  m_MaxSize: {x: 4000, y: 4000}
+  m_MinSize: {x: 276, y: 71}
+  m_MaxSize: {x: 4001, y: 4021}
   m_ActualView: {fileID: 14}
   m_Panes:
   - {fileID: 14}
@@ -122,8 +122,8 @@ MonoBehaviour:
     y: 0
     width: 264
     height: 651
-  m_MinSize: {x: 200, y: 200}
-  m_MaxSize: {x: 4000, y: 4000}
+  m_MinSize: {x: 201, y: 221}
+  m_MaxSize: {x: 4001, y: 4021}
   m_ActualView: {fileID: 15}
   m_Panes:
   - {fileID: 15}
@@ -327,14 +327,14 @@ MonoBehaviour:
       e31: 0
       e32: 0
       e33: 1
-    - e00: 1
+    - e00: 1.1916158
       e01: 0
       e02: 0
-      e03: -187
+      e03: -475.79645
       e10: 0
-      e11: 1
+      e11: 1.1916158
       e12: 0
-      e13: 6
+      e13: -20.428768
       e20: 0
       e21: 0
       e22: 1
@@ -344,9 +344,9 @@ MonoBehaviour:
       e32: 0
       e33: 1
   m_PreviewAnimator: {fileID: 0}
-  m_AnimatorController: {fileID: 9100000, guid: d7c55390ab0320c47b84f63184ecb1b9, type: 2}
+  m_AnimatorController: {fileID: 9100000, guid: 65b24d220c8cbeb40a814835a4a35299, type: 2}
   m_BreadCrumbs:
-  - m_Target: {fileID: 1107632418391388642, guid: d7c55390ab0320c47b84f63184ecb1b9, type: 2}
+  - m_Target: {fileID: 1107632418391388642, guid: 65b24d220c8cbeb40a814835a4a35299, type: 2}
     m_ScrollPosition: {x: 0, y: 0}
   stateMachineGraph: {fileID: 0}
   stateMachineGraphGUI: {fileID: 0}
@@ -401,22 +401,22 @@ MonoBehaviour:
     m_SkipHidden: 1
     m_SearchArea: 1
     m_Folders:
-    - Assets/Cartoon Heroes/Male/3D/Animation Skeleton/Animations
+    - Assets/Cartoon Heroes/Female/3D/Animation Skeleton
     m_Globs: []
     m_OriginalText: 
   m_ViewMode: 1
   m_StartGridSize: 16
   m_LastFolders:
-  - Assets/Cartoon Heroes/Male/3D/Animation Skeleton/Animations
+  - Assets/Cartoon Heroes/Female/3D/Animation Skeleton
   m_LastFoldersGridSize: 16
   m_LastProjectPath: C:\Users\Daniel\The God Cup
   m_LockTracker:
     m_IsLocked: 0
   m_FolderTreeState:
-    scrollPos: {x: 0, y: 120}
-    m_SelectedIDs: dc790000
-    m_LastClickedID: 31196
-    m_ExpandedIDs: 000000007a7900007c7900007e79000080790000827900008479000086790000887900008a7900008c7900008e790000907900009279000096790000c0790000cc79000000ca9a3b
+    scrollPos: {x: 0, y: 191}
+    m_SelectedIDs: d28a0000
+    m_LastClickedID: 35538
+    m_ExpandedIDs: 000000009a7800009c7800009e780000a0780000a2780000a4780000a6780000a8780000ac780000ae780000b0780000b2780000b4780000b8780000dc780000de780000007900007e820000e4880000ee8b000000ca9a3b
     m_RenameOverlay:
       m_UserAcceptedRename: 0
       m_Name: 
@@ -444,7 +444,7 @@ MonoBehaviour:
     scrollPos: {x: 0, y: 0}
     m_SelectedIDs: 
     m_LastClickedID: 0
-    m_ExpandedIDs: 000000007a7900007c7900007e79000080790000827900008479000086790000887900008a7900008c7900008e79000090790000927900009479000096790000
+    m_ExpandedIDs: 000000009a7800009c7800009e780000a0780000a2780000a4780000a6780000a8780000aa780000ac780000ae780000b0780000b2780000b4780000b6780000b8780000
     m_RenameOverlay:
       m_UserAcceptedRename: 0
       m_Name: 
@@ -469,21 +469,21 @@ MonoBehaviour:
       m_Icon: {fileID: 0}
       m_ResourceFile: 
   m_ListAreaState:
-    m_SelectedInstanceIDs: d6830000
-    m_LastClickedInstanceID: 33750
+    m_SelectedInstanceIDs: c8150000
+    m_LastClickedInstanceID: 5576
     m_HadKeyboardFocusLastEvent: 1
     m_ExpandedInstanceIDs: c62300009c5e0000025e0000000000008a880000e2920000029b0000248e0000
     m_RenameOverlay:
       m_UserAcceptedRename: 0
-      m_Name: Male_Animation@Male_Attacks
-      m_OriginalName: Male_Animation@Male_Attacks
+      m_Name: GameData
+      m_OriginalName: GameData
       m_EditFieldRect:
         serializedVersion: 2
         x: 0
         y: 0
         width: 0
         height: 0
-      m_UserData: 33750
+      m_UserData: 102632
       m_IsWaitingForDelay: 0
       m_IsRenaming: 0
       m_OriginalEventType: 0
@@ -574,9 +574,9 @@ MonoBehaviour:
   m_SceneHierarchy:
     m_TreeViewState:
       scrollPos: {x: 0, y: 0}
-      m_SelectedIDs: d6830000
+      m_SelectedIDs: c8150000
       m_LastClickedID: 0
-      m_ExpandedIDs: 1e92ffff0494ffff7cd1ffff58d3ffff78f7ffff3efaffff025f0000
+      m_ExpandedIDs: 2afbffff
       m_RenameOverlay:
         m_UserAcceptedRename: 0
         m_Name: 
@@ -881,9 +881,9 @@ MonoBehaviour:
   m_PlayAudio: 0
   m_AudioPlay: 0
   m_Position:
-    m_Target: {x: 710.4624, y: -172.6597, z: 1932.5929}
+    m_Target: {x: 645.5978, y: -82.25345, z: 1977.1234}
     speed: 2
-    m_Value: {x: 710.4624, y: -172.6597, z: 1932.5929}
+    m_Value: {x: 645.5978, y: -82.25345, z: 1977.1234}
   m_RenderMode: 0
   m_CameraMode:
     drawMode: 0
@@ -934,9 +934,9 @@ MonoBehaviour:
     speed: 2
     m_Value: {x: -0.23216185, y: 0.00933388, z: -0.0022278358, w: -0.97262985}
   m_Size:
-    m_Target: 638.649
+    m_Target: 697.42065
     speed: 2
-    m_Value: 638.649
+    m_Value: 697.42065
   m_Ortho:
     m_Target: 0
     speed: 2

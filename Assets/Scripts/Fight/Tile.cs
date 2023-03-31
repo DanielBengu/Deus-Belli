@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using UnityEngine;
 
 public class Tile : MonoBehaviour, IComparable<Tile>
@@ -56,5 +57,10 @@ public class Tile : MonoBehaviour, IComparable<Tile>
         if(this.tentativeCost < other.tentativeCost) return -1;
         if(this.tentativeCost == other.tentativeCost) return 0;
         return 1;
+    }
+
+    public List<Tile> ToList()
+    {
+        return new List<Tile>() { this };
     }
 }

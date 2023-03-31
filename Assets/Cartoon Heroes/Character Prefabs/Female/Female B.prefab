@@ -4104,14 +4104,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 32f75263af4039848bdcbfad0a330509, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  currentTile: {fileID: 0}
   unitName: Charlie
   unitImage: {fileID: 21300000, guid: 0866b720585eada4e9e526b74df4e632, type: 3}
   hpMax: 3
   hpCurrent: 3
   movementMax: 3
   movementCurrent: 3
-  attack: 1
+  attack: 3
   faction: 1
 --- !u!1 &1897974537148550
 GameObject:

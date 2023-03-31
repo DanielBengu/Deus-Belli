@@ -1,15 +1,51 @@
+using System.Collections.Generic;
 using UnityEngine;
 
 public class ActionPerformer
 {
-    public FightManager manager;
+    public StructureManager structureManager;
+    public SpriteManager spriteManager;
+
+    public Pathfinding pathfinding;
+    public Movement movement;
+
+    public void StartAction(ActionPerformed action, Unit source, Tile target)
+    {
+        switch (action)
+        {
+            case ActionPerformed.Attack:
+                PerformAttack(source, target.unitOnTile);
+                break;
+            case ActionPerformed.Movement:
+                PerformMovement(source, target);
+                break;
+            case ActionPerformed.Default:
+                break;
+        }
+    }
+
+    public void PerformMovement(Unit source, Tile targetTile)
+    {
+        RemoveMovementFromUnit(source, targetTile.tentativeCost);
+        MoveUnit(source, targetTile, false, false);
+        //actionInQueue = ActionPerformed.Movement;
+        spriteManager.ClearSelectedTilesSprite();
+    }
+
+    public void MoveUnit(Unit unit, Tile targetTile, bool selectTiles, bool addToSelectedMapTiles)
+    {
+        List<Tile> tilesPath = pathfinding.FindPathToDestination(targetTile);
+        if (selectTiles)
+            spriteManager.GenerateTileSelection(tilesPath);
+        if (addToSelectedMapTiles)
+            structureManager.selectedTiles = tilesPath;
+        movement.MoveUnit(unit, targetTile, tilesPath, 800);
+    }
 
     public void PerformAttack(Unit attacker, Unit defender)
     {
         attacker.HasPerformedMainAction = true;
         Attack(attacker, defender);
-        manager.ActionInQueue = ActionPerformed.Default;
-        manager.ActionTarget = null;
     }
 
     void Attack(Unit attacker, Unit defender)
@@ -28,7 +64,13 @@ public class ActionPerformer
 
     void KillUnit(Unit unitToKill)
     {
-        manager.unitsOnField.Remove(unitToKill);
+        structureManager.gameData.unitsOnField.Remove(unitToKill);
         Object.Destroy(unitToKill.gameObject);
+    }
+
+    void RemoveMovementFromUnit(Unit unit, float movementToRemove)
+    {
+        unit.movementCurrent -= movementToRemove;
+        if (unit.movementCurrent < 0) unit.movementCurrent = 0;
     }
 }

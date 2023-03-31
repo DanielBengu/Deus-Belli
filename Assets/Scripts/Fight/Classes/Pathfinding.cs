@@ -10,12 +10,10 @@ public class Pathfinding
     const int OUT_OF_BOUND_VALUE = 99999;
     const int FAIL_SAFE_MAX = 1000;
 
-    private int X_Length;
-    private int Y_Length;
-
-    Dictionary<int, Tile> mapTiles;
-
-    Func<Tile, Tile>[] directions;
+    private readonly int X_Length;
+    private readonly int Y_Length;
+    readonly Dictionary<int, Tile> mapTiles;
+    readonly Func<Tile, Tile>[] directions;
 
     public Pathfinding(Dictionary<int, Tile> mapTiles, int X_Length, int Y_Length)
     {
@@ -110,7 +108,7 @@ public class Pathfinding
 
             tileToCalculate = mapTiles[lowestTileIndex];
             if(tileToCalculate.tentativeCost < maxMovementCost)
-                CalculateNeighbours(tileToCalculate);
+                FindNeighbours(tileToCalculate, true);
 
             tileToCalculate.IsVisited = true;
 
@@ -123,15 +121,42 @@ public class Pathfinding
         Debug.Log("Ending Dijkstra calculation");
     }
 
-    void CalculateNeighbours(Tile source){
+    public List<Tile> FindPossibleAttacks(Unit attacker, List<Tile> possibleMovements)
+    {
+        List<Tile> possibleAttacks = new();
+        foreach (var tile in possibleMovements)
+        {
+            List<Tile> neighboursTile = FindNeighbours(tile, false);
+            foreach (var neighbour in neighboursTile)
+            {
+                if (neighbour && neighbour.unitOnTile && neighbour.unitOnTile.faction != attacker.faction)
+                {
+                    possibleAttacks.Add(neighbour);
+                }
+            }
+        }
+        return possibleAttacks;
+    }
+
+    List<Tile> FindNeighbours(Tile source, bool calculateCosts){
+        List<Tile> neighbours = new();
         foreach (var direction in directions)
         {
             Tile neighbourTile = direction(source);
-            if(neighbourTile && neighbourTile.IsPassable && !neighbourTile.unitOnTile){
-                float newTentativeCost = source.tentativeCost + neighbourTile.MovementCost;
-                if(newTentativeCost < neighbourTile.tentativeCost)
-                    neighbourTile.tentativeCost = newTentativeCost;
-            }
+            neighbours.Add(neighbourTile);
+
+            if (calculateCosts) CalculateCost(source, neighbourTile);
+        }
+        return neighbours;
+    }
+
+    public void CalculateCost(Tile source, Tile neighbourTile)
+    {
+        if (neighbourTile && neighbourTile.IsPassable && !neighbourTile.unitOnTile)
+        {
+            float newTentativeCost = source.tentativeCost + neighbourTile.MovementCost;
+            if (newTentativeCost < neighbourTile.tentativeCost)
+                neighbourTile.tentativeCost = newTentativeCost;
         }
     }
 

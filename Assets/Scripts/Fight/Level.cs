@@ -10,7 +10,7 @@ public class Level
     public int YLength;
 
     //Key represents tile number
-    public Dictionary<int, GameObject> tilesDict = new Dictionary<int, GameObject>();
+    public Dictionary<int, GameObject> tilesDict = new();
 
     //Key represents the assigned tile number of the unit
     public Dictionary<int, GameObject> enemyList;

@@ -10,7 +10,7 @@ public class Movement
     private Transform objectMovingTransform;
 
     Vector3 startingPosition;
-    Quaternion startingRotation;
+    //Quaternion startingRotation;
 
     Vector3 targetPosition;
     Quaternion targetRotation;
@@ -55,7 +55,7 @@ public class Movement
         objectMovingTransform = starting;
         startTime = Time.time;
         startingPosition = starting.position;
-        startingRotation = starting.rotation;
+        //startingRotation = starting.rotation;
         targetPosition = target.position;
         targetRotation = target.rotation;
         speed = objectSpeed;
@@ -81,8 +81,7 @@ public class Movement
         unit.CurrentTile.unitOnTile = null;
 
         Transform destination = new GameObject().transform;
-        destination.position = movementSteps.First().position;
-        destination.rotation = unit.transform.rotation;
+        destination.SetPositionAndRotation(movementSteps.First().position, unit.transform.rotation);
         movementSteps.RemoveAt(0);
 
         targetTile.unitOnTile = unit;

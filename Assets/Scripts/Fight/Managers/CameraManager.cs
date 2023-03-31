@@ -20,9 +20,9 @@ public class CameraManager : MonoBehaviour
 
     bool isOutOfFocus = false;
 
-    Vector3 cameraPositionOutOfFocus = new Vector3(670, 300, 640);
+    Vector3 cameraPositionOutOfFocus = new(670, 300, 640);
     Quaternion rotationOutOfFocus = Quaternion.Euler(0, 0, 0);
-    Vector3 cameraPositionOnFocus = new Vector3(670, 690, 650);
+    Vector3 cameraPositionOnFocus = new(670, 690, 650);
     Quaternion rotationOnFocus = Quaternion.Euler(40, 0, 0);
     
     public void UpdatePosition(){
@@ -50,7 +50,7 @@ public class CameraManager : MonoBehaviour
         int scrollDirection = (int)Mathf.Sign(scroll);
 
         // Move the camera along the blue axis by the distance
-        transform.Translate(Vector3.forward * distance * scrollDirection, Space.Self);
+        transform.Translate(distance * scrollDirection * Vector3.forward, Space.Self);
     }
 
     /*
@@ -70,12 +70,10 @@ public class CameraManager : MonoBehaviour
     public Transform GetCameraSwitchFocus(){
         Transform cameraTarget = new GameObject().transform;
         if(isOutOfFocus){
-            cameraTarget.position = cameraPositionOnFocus;
-            cameraTarget.rotation = rotationOnFocus;
+            cameraTarget.SetPositionAndRotation(cameraPositionOnFocus, rotationOnFocus);
             isOutOfFocus = false;
         }else{
-            cameraTarget.position = cameraPositionOutOfFocus;
-            cameraTarget.rotation = rotationOutOfFocus;
+            cameraTarget.SetPositionAndRotation(cameraPositionOutOfFocus, rotationOutOfFocus);
             isOutOfFocus = true;
         }
         return cameraTarget;
