@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class AIManager : MonoBehaviour
 {
-    private const int UNIT_MOVEMENT_SPEED = 1600;
+    //private const int UNIT_MOVEMENT_SPEED = 1600;
 
     StructureManager structureManager;
     FightManager fightManager;
@@ -84,6 +84,6 @@ public class AIManager : MonoBehaviour
         Debug.Log($"AI MOVING TO TILE N.{possibleMovements[randomInt].tileNumber}");
         Tile destinationTile = GameObject.Find($"Terrain_{possibleMovements[randomInt].tileNumber}").GetComponent<Tile>();
         structureManager.CalculateMapTilesDistance(unit);
-        structureManager.StartUnitMovement(unit, destinationTile, UNIT_MOVEMENT_SPEED);
+        structureManager.StartUnitMovement(unit, destinationTile);
     }
 }

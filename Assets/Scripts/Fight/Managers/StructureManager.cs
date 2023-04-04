@@ -89,7 +89,7 @@ public class StructureManager : MonoBehaviour
         return path;
     }
 
-    public void StartUnitMovement(Unit unitToMove, Tile destinationTile, int movementSpeed){
+    public void StartUnitMovement(Unit unitToMove, Tile destinationTile){
         RemoveMovementFromUnit(unitToMove, destinationTile.tentativeCost);
         MoveUnit(unitToMove, destinationTile);
         ClearSelectedTiles();

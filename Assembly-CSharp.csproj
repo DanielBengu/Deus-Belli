@@ -56,8 +56,10 @@
     <Analyzer Include="C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\Common7\IDE\Extensions\Microsoft\Visual Studio Tools for Unity\Analyzers\Microsoft.Unity.Analyzers.dll" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Assets\Scripts\Fight\Managers\SpriteManager.cs" />
     <Compile Include="Assets\Scripts\Fight\Managers\FightManager.cs" />
     <Compile Include="Assets\Scripts\Menu\MainMenu.cs" />
+    <Compile Include="Assets\Scripts\Fight\Classes\AnimationPerformer.cs" />
     <Compile Include="Assets\Scripts\Fight\Level.cs" />
     <Compile Include="Assets\Scripts\Fight\Managers\UIManager.cs" />
     <Compile Include="Assets\Scripts\Fight\Managers\StructureManager.cs" />
@@ -73,8 +75,6 @@
     <Compile Include="Assets\Scripts\Menu\NewGameManager.cs" />
     <Compile Include="Assets\Scripts\Fight\Classes\Pathfinding.cs" />
     <Compile Include="Assets\Scripts\Fight\Unit.cs" />
-    <Compile Include="Assets\Scripts\Fight\Classes\AnimationPerformer.cs" />
-    <Compile Include="Assets\Scripts\Fight\Managers\SpriteManager.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Assets\TextMesh Pro\Shaders\TMPro.cginc" />
