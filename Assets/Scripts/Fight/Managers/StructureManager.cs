@@ -64,14 +64,16 @@ public class StructureManager : MonoBehaviour
         uiManager.SetInfoPanel(active, unit);
     }
 
-    public void SelectTiles(List<Tile> tilelist, bool clearBeforeSelecting){
+    public void SelectTiles(List<Tile> tilelist, bool clearBeforeSelecting, bool AddToSelected, TileType tileType = TileType.Default)
+    {
         if(clearBeforeSelecting)
             ClearSelectedTiles();
 
-        foreach (var tile in tilelist)
-            selectedTiles.Add(tile);
+        if(AddToSelected)
+            foreach (var tile in tilelist)
+                selectedTiles.Add(tile);
 
-        spriteManager.GenerateTileSelection(tilelist);
+        spriteManager.GenerateTileSelection(tilelist, tileType);
     }
 
     public void ClearSelection(bool closeInfoPanel){
@@ -121,7 +123,7 @@ public class StructureManager : MonoBehaviour
         public List<Tile> FindPossibleAttacks(Unit unit, List<Tile> possibleMovements)
         {
             possibleAttacks = pathfinding.FindPossibleAttacks(unit, possibleMovements);
-            SelectTiles(possibleAttacks, false);
+            SelectTiles(possibleAttacks, false, true);
             return possibleAttacks;
         }
 
@@ -140,7 +142,7 @@ public class StructureManager : MonoBehaviour
     #region Private functions
 
         void ClearSelectedTiles(){
-            spriteManager.ClearSelectedTilesSprite();
+            spriteManager.ClearMapTilesSprite();
             selectedTiles.Clear();
         }
 

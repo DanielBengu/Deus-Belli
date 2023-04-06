@@ -955,6 +955,7 @@ MonoBehaviour:
   movementCurrent: 3
   attack: 3
   faction: 0
+  range: 3
 --- !u!1 &1142277583328720
 GameObject:
   m_ObjectHideFlags: 0

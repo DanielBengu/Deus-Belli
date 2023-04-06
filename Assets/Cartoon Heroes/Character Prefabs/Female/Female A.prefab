@@ -1697,6 +1697,7 @@ MonoBehaviour:
   movementCurrent: 3
   attack: 3
   faction: 1
+  range: 1
 --- !u!1 &1257730882728438
 GameObject:
   m_ObjectHideFlags: 0

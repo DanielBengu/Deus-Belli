@@ -21,16 +21,14 @@ public class AIManager : MonoBehaviour
     }
 
     void Update(){
-        if(fightManager.CurrentTurn == 0)
+        if(fightManager.CurrentTurn == FightManager.USER_FACTION || fightManager.IsAnyUnitMoving)
             return;
 
-        if(!fightManager.IsAnyUnitMoving){
-            if(unitsToCalculate.Count > 0){
-                CalculateTurnForUnit(unitsToCalculate.Dequeue());
-            }else{
-                Debug.Log($"END AI TURN FOR FACTION {fightManager.CurrentTurn}");
-                fightManager.EndTurn(fightManager.CurrentTurn);
-            }
+        if(unitsToCalculate.Count > 0){
+            CalculateTurnForUnit(unitsToCalculate.Dequeue());
+        }else{
+            Debug.Log($"END AI TURN FOR FACTION {fightManager.CurrentTurn}");
+            fightManager.EndTurn(fightManager.CurrentTurn);
         }
     }
 
@@ -51,17 +49,27 @@ public class AIManager : MonoBehaviour
         List<Tile> possibleMovements = structureManager.GeneratePossibleMovementForUnit(unit, false);
         List<Tile> possibleAttacks = structureManager.FindPossibleAttacks(unit, possibleMovements);
 
-        int action = DecideAction();
+        ActionAI action = DecideAction(possibleMovements,possibleAttacks);
 
-        if (action == 0)
-            Flee(possibleMovements, unit);
-        else
-            Attack(possibleAttacks, unit);
+		switch (action)
+		{
+			case ActionAI.Flee:
+                Flee(possibleMovements, unit);
+                break;
+			case ActionAI.Attack:
+                Attack(possibleAttacks, unit);
+                break;
+		} 
     }
 
-    int DecideAction()
+    ActionAI DecideAction(List<Tile> possibleMovements, List<Tile> possibleAttacks)
     {
-        return Random.Range(0, 2); // 0 = flee, 1 = attack
+        ActionAI action = ActionAI.Skip;
+
+        if (possibleAttacks.Count > 0) action = ActionAI.Attack;
+        else if (possibleMovements.Count > 0) action = ActionAI.Flee;
+
+        return action;
     }
 
     public void Attack(List<Tile> possibleAttacks, Unit unit)
@@ -72,7 +80,7 @@ public class AIManager : MonoBehaviour
         Tile attackTarget = possibleAttacks[Random.Range(0, possibleAttacks.Count)]; //Attack at random possible targets
         Debug.Log($"AI ATTACKING TILE N.{attackTarget.tileNumber}");
         fightManager.UnitSelected = unit;
-        structureManager.FindPathToDestination(attackTarget, false, true);
+        structureManager.selectedTiles = structureManager.FindPathToDestination(attackTarget, false, true);
         fightManager.QueueAttack(unit, attackTarget.unitOnTile);
     }
 
@@ -86,4 +94,11 @@ public class AIManager : MonoBehaviour
         structureManager.CalculateMapTilesDistance(unit);
         structureManager.StartUnitMovement(unit, destinationTile);
     }
+}
+
+enum ActionAI
+{
+    Flee,
+    Attack, 
+    Skip
 }

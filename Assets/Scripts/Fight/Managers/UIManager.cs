@@ -23,6 +23,8 @@ public class UIManager : MonoBehaviour
         TextMeshProUGUI movementValue;
         [SerializeField]
         TextMeshProUGUI attackValue;
+        [SerializeField]
+        TextMeshProUGUI rangeValue;
     #endregion
 
     void Start(){
@@ -43,6 +45,7 @@ public class UIManager : MonoBehaviour
             hpValue.text = $"{unit.hpCurrent}/{unit.hpMax}";
             movementValue.text = $"{unit.movementCurrent}/{unit.movementMax}";
             attackValue.text = unit.attack.ToString();
+            rangeValue.text = unit.range.ToString();
         }
     }
 }

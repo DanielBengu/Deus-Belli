@@ -29,7 +29,7 @@ public class ActionPerformer
         RemoveMovementFromUnit(source, targetTile.tentativeCost);
         MoveUnit(source, targetTile, false);
         //actionInQueue = ActionPerformed.Movement;
-        spriteManager.ClearSelectedTilesSprite();
+        spriteManager.ClearMapTilesSprite();
     }
 
     public void MoveUnit(Unit unit, Tile targetTile, bool addToSelectedMapTiles)

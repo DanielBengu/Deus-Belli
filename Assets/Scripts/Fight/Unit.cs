@@ -19,6 +19,7 @@ public class Unit : MonoBehaviour
         public float movementCurrent;
         public int attack;
         public int faction;
+        public int range;
     #endregion
     
     void Start(){

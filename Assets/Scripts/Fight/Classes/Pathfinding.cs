@@ -123,9 +123,10 @@ public class Pathfinding
     public List<Tile> FindPossibleAttacks(Unit attacker, List<Tile> possibleMovements)
     {
         List<Tile> possibleAttacks = new();
-        foreach (var tile in possibleMovements)
+        foreach (var possibleMovementsTile in possibleMovements)
         {
-            List<Tile> neighboursTile = FindNeighbours(tile, false);
+            List<Tile> neighboursTile = FindNeighbours(possibleMovementsTile, false).Where(t => t != null).ToList();
+            
             foreach (var neighbour in neighboursTile)
             {
                 if (neighbour && neighbour.unitOnTile && neighbour.unitOnTile.faction != attacker.faction)

@@ -20,6 +20,8 @@ public class FightManager : MonoBehaviour
 
         [SerializeField]
         GameObject warriorPrefab;
+        [SerializeField]
+        GameObject warrior2Prefab;
 
         Level level;
         
@@ -129,8 +131,12 @@ public class FightManager : MonoBehaviour
         List<Unit> GenerateUnits(Dictionary<int, Tile> mapTiles)
         {
             List<Unit> unitList = new();
-            Tile tileWarrior = GameObject.Find($"Terrain_1").GetComponent<Tile>();
+
+            Tile tileWarrior = GameObject.Find($"Terrain_21").GetComponent<Tile>();
             unitList.Add(GenerateSingleUnit(warriorPrefab, tileWarrior));
+
+            Tile tileWarrior2 = GameObject.Find($"Terrain_28").GetComponent<Tile>();
+            unitList.Add(GenerateSingleUnit(warrior2Prefab, tileWarrior2));
 
             foreach (var enemy in level.enemyList)
             {
@@ -204,7 +210,7 @@ public class FightManager : MonoBehaviour
         if ((UnitSelected && UnitSelected.HasPerformedMainAction))
         {
             ResetGameState(false);
-            structureManager.SelectTiles(unit.CurrentTile.ToList(), true);
+            structureManager.SelectTiles(unit.CurrentTile.ToList(), true, true);
             return;
         }
 
@@ -221,14 +227,14 @@ public class FightManager : MonoBehaviour
         if (!UnitSelected || (UnitSelected && !structureManager.possibleAttacks.Find(t => t.tileNumber == unit.CurrentTile.tileNumber)))
 		{
             ResetGameState(true);
-            structureManager.SelectTiles(unit.CurrentTile.ToList(), true);
+            structureManager.SelectTiles(unit.CurrentTile.ToList(), true, true);
             return;
 		}
 
         //User wants to attack an enemy, we confirm the action and the path to take
         if (!IsShowingPath)
         {
-            AskForMovementConfirmation(unit.CurrentTile);
+            AskForMovementConfirmation(unit.CurrentTile, UnitSelected.range);
             return;
         }
 
@@ -241,7 +247,7 @@ public class FightManager : MonoBehaviour
         if (!UnitSelected)
         {
             ResetGameState(true);
-            structureManager.SelectTiles(tileSelected.ToList(), true);
+            structureManager.SelectTiles(tileSelected.ToList(), true, true);
             return;
         }
 
@@ -258,20 +264,25 @@ public class FightManager : MonoBehaviour
 
         //User clicked outside the range
         ResetGameState(true);
-        structureManager.SelectTiles(tileSelected.ToList(), true);
+        structureManager.SelectTiles(tileSelected.ToList(), true, true);
     }
 
-    void AskForMovementConfirmation(Tile destinationTile)
+    void AskForMovementConfirmation(Tile destinationTile, int attackerRange = 0)
     {
         structureManager.ClearSelection(false);
-        structureManager.FindPathToDestination(destinationTile, true, true);
+        List<Tile> path = structureManager.FindPathToDestination(destinationTile, false, false);
+        List<Tile> attackTiles = path.Skip(path.Count - attackerRange).ToList();
+        path = path.SkipLast(attackerRange).ToList();
+        structureManager.SelectTiles(path, true, true, TileType.Selected);
+        structureManager.SelectTiles(attackTiles, false, false, TileType.Enemy);
         IsShowingPath = true;
     }
 
     public void QueueAttack(Unit attacker, Unit defender)
     {
-        int secondLastTile = structureManager.selectedTiles.Count - 2;
-        Tile targetTile = structureManager.selectedTiles[secondLastTile]; //The unit moves to the second-last tile of the path, adjacent to the enemy
+        int secondLastTile = structureManager.selectedTiles.Count - 1 - attacker.range;
+        Tile targetTile = structureManager.selectedTiles[secondLastTile];
+
         structureManager.MoveUnit(UnitSelected, targetTile);
         ActionInQueue = ActionPerformed.Attack;
         ActionTarget = defender.gameObject;
