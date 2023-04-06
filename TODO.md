@@ -14,3 +14,4 @@
 
 ## FUTURE
 - ADD CONTROLLER INPUT
+- ACCESSIBILITY OPTIONS (https://gameaccessibilityguidelines.com)
