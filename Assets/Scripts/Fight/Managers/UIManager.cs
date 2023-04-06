@@ -1,21 +1,15 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 
 public class UIManager : MonoBehaviour
 {
-    FightManager fightManager;
-
-    
     [SerializeField]
     TextMeshProUGUI Title;
     [SerializeField] 
     Image GodImage;
-    [SerializeField]
+
     public GameObject infoPanel;
-    [SerializeField]
     public GameObject endTurnButton;
 
     #region Info Panel
@@ -27,6 +21,8 @@ public class UIManager : MonoBehaviour
         TextMeshProUGUI hpValue;
         [SerializeField]
         TextMeshProUGUI movementValue;
+        [SerializeField]
+        TextMeshProUGUI attackValue;
     #endregion
 
     void Start(){
@@ -42,10 +38,11 @@ public class UIManager : MonoBehaviour
     public void SetInfoPanel(bool active, Unit unit = null){
         infoPanel.SetActive(active);
         if(active){
-            hpValue.text = $"{unit.hpCurrent}/{unit.hpMax}";
-            movementValue.text = $"{unit.movementCurrent}/{unit.movementMax}";
             nameText.text = unit.unitName;
             unitImage.sprite = unit.unitImage;
+            hpValue.text = $"{unit.hpCurrent}/{unit.hpMax}";
+            movementValue.text = $"{unit.movementCurrent}/{unit.movementMax}";
+            attackValue.text = unit.attack.ToString();
         }
     }
 }

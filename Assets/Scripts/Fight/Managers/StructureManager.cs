@@ -23,8 +23,8 @@ public class StructureManager : MonoBehaviour
         var mapTiles = GenerateTiles(tileList, topX, y, topZ, X_Length, Y_Length);
 
         pathfinding = new(mapTiles, X_Length, Y_Length);
-        uiManager = this.GetComponent<UIManager>();
-        spriteManager = this.GetComponent<SpriteManager>();
+        uiManager = GetComponent<UIManager>();
+        spriteManager = GetComponent<SpriteManager>();
         actionPerformer = new() { structureManager = this, pathfinding = pathfinding, movement = movement};
         return mapTiles;
     }
@@ -74,7 +74,7 @@ public class StructureManager : MonoBehaviour
         spriteManager.GenerateTileSelection(tilelist);
     }
 
-    public void ClearSelection(bool closeInfoPanel = true){
+    public void ClearSelection(bool closeInfoPanel){
         if(closeInfoPanel)
             uiManager.SetInfoPanel(false);
         ClearSelectedTiles();
@@ -132,7 +132,7 @@ public class StructureManager : MonoBehaviour
 
         public void MoveUnit(Unit unit, Tile targetTile)
         {
-            actionPerformer.MoveUnit(unit, targetTile, false, false);
+            actionPerformer.MoveUnit(unit, targetTile, false);
         }
 
     #endregion

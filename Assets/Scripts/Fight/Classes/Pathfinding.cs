@@ -1,5 +1,4 @@
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using System.Linq;
@@ -7,7 +6,7 @@ using System.Linq;
 public class Pathfinding
 {
     //Substitute of the infinity value usually used in dijkstra algorithm for unvisited tiles
-    const int OUT_OF_BOUND_VALUE = 99999;
+    public const int OUT_OF_BOUND_VALUE = 99999;
     const int FAIL_SAFE_MAX = 1000;
 
     private readonly int X_Length;

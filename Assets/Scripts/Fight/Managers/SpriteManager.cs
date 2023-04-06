@@ -25,10 +25,10 @@ public class SpriteManager : MonoBehaviour
             }
             else
             {
-                if (tile.IsPassable)
+                if (fightManager.UnitSelected && tile.IsPassable)
                     spriteName += " possible";
                 else
-                    spriteName += " base";
+                    spriteName += " selected";
             }
             Sprite sprite = Resources.Load<Sprite>($"Sprites/Terrain/{spriteName}");
             ChangeObjectSprite(tile.gameObject, sprite);

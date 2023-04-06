@@ -27,16 +27,14 @@ public class ActionPerformer
     public void PerformMovement(Unit source, Tile targetTile)
     {
         RemoveMovementFromUnit(source, targetTile.tentativeCost);
-        MoveUnit(source, targetTile, false, false);
+        MoveUnit(source, targetTile, false);
         //actionInQueue = ActionPerformed.Movement;
         spriteManager.ClearSelectedTilesSprite();
     }
 
-    public void MoveUnit(Unit unit, Tile targetTile, bool selectTiles, bool addToSelectedMapTiles)
+    public void MoveUnit(Unit unit, Tile targetTile, bool addToSelectedMapTiles)
     {
         List<Tile> tilesPath = pathfinding.FindPathToDestination(targetTile);
-        if (selectTiles)
-            spriteManager.GenerateTileSelection(tilesPath);
         if (addToSelectedMapTiles)
             structureManager.selectedTiles = tilesPath;
         movement.MoveUnit(unit, targetTile, tilesPath, 800);

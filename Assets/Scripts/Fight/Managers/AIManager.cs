@@ -16,8 +16,8 @@ public class AIManager : MonoBehaviour
     /// </summary>
     void Start()
     {
-        structureManager = this.GetComponent<StructureManager>();
-        fightManager = this.GetComponent<FightManager>();
+        structureManager = GetComponent<StructureManager>();
+        fightManager = GetComponent<FightManager>();
     }
 
     void Update(){
