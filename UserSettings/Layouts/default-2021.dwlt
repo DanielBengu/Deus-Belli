@@ -19,7 +19,7 @@ MonoBehaviour:
     width: 1920
     height: 997
   m_ShowMode: 4
-  m_Title: Hierarchy
+  m_Title: Game
   m_RootView: {fileID: 2}
   m_MinSize: {x: 875, y: 300}
   m_MaxSize: {x: 10000, y: 10000}
@@ -119,7 +119,7 @@ MonoBehaviour:
   m_MinSize: {x: 300, y: 200}
   m_MaxSize: {x: 24288, y: 16192}
   vertical: 0
-  controlID: 4585
+  controlID: 45
 --- !u!114 &6
 MonoBehaviour:
   m_ObjectHideFlags: 52
@@ -144,7 +144,7 @@ MonoBehaviour:
   m_MinSize: {x: 200, y: 200}
   m_MaxSize: {x: 16192, y: 16192}
   vertical: 1
-  controlID: 4586
+  controlID: 46
 --- !u!114 &7
 MonoBehaviour:
   m_ObjectHideFlags: 52
@@ -169,7 +169,7 @@ MonoBehaviour:
   m_MinSize: {x: 200, y: 100}
   m_MaxSize: {x: 16192, y: 8096}
   vertical: 0
-  controlID: 4587
+  controlID: 47
 --- !u!114 &8
 MonoBehaviour:
   m_ObjectHideFlags: 52
@@ -404,9 +404,9 @@ MonoBehaviour:
   m_SceneHierarchy:
     m_TreeViewState:
       scrollPos: {x: 0, y: 0}
-      m_SelectedIDs: 
+      m_SelectedIDs: 6e0b0000
       m_LastClickedID: 0
-      m_ExpandedIDs: 765affff2afbffff245e0000885e0000
+      m_ExpandedIDs: 2afbffff
       m_RenameOverlay:
         m_UserAcceptedRename: 0
         m_Name: 
@@ -711,9 +711,9 @@ MonoBehaviour:
   m_PlayAudio: 0
   m_AudioPlay: 0
   m_Position:
-    m_Target: {x: 474.12872, y: -97.45987, z: 1913.6097}
+    m_Target: {x: 558.10144, y: -187.92563, z: 2042.7024}
     speed: 2
-    m_Value: {x: 474.12872, y: -97.45987, z: 1913.6097}
+    m_Value: {x: 558.10144, y: -187.92563, z: 2042.7024}
   m_RenderMode: 0
   m_CameraMode:
     drawMode: 0
@@ -760,13 +760,13 @@ MonoBehaviour:
     m_GridAxis: 1
     m_gridOpacity: 0.5
   m_Rotation:
-    m_Target: {x: -0.23139203, y: 0.17171307, z: -0.041531812, w: -0.95668614}
+    m_Target: {x: -0.24312893, y: 0.1281695, z: -0.03242818, w: -0.96094173}
     speed: 2
-    m_Value: {x: -0.23139192, y: 0.171713, z: -0.041531794, w: -0.95668566}
+    m_Value: {x: -0.24312897, y: 0.12816954, z: -0.032428186, w: -0.9609419}
   m_Size:
-    m_Target: 743.2986
+    m_Target: 848.5249
     speed: 2
-    m_Value: 743.2986
+    m_Value: 848.5249
   m_Ortho:
     m_Target: 0
     speed: 2
@@ -915,22 +915,22 @@ MonoBehaviour:
     m_SkipHidden: 1
     m_SearchArea: 1
     m_Folders:
-    - Assets/Scripts/Fight/Classes
+    - Assets/Scripts/Fight/Managers
     m_Globs: []
     m_OriginalText: 
   m_ViewMode: 1
   m_StartGridSize: 16
   m_LastFolders:
-  - Assets/Scripts/Fight/Classes
+  - Assets/Scripts/Fight/Managers
   m_LastFoldersGridSize: 16
   m_LastProjectPath: C:\Users\Daniel\The God Cup
   m_LockTracker:
     m_IsLocked: 0
   m_FolderTreeState:
-    scrollPos: {x: 0, y: 181}
-    m_SelectedIDs: de780000
-    m_LastClickedID: 30942
-    m_ExpandedIDs: 0000000060780000627800006478000066780000687800006a7800006c7800006e780000707800007278000076780000787800007c780000807800008278000084780000ba78000000ca9a3b
+    scrollPos: {x: 0, y: 65}
+    m_SelectedIDs: 287d0000
+    m_LastClickedID: 32040
+    m_ExpandedIDs: 000000005a7b00005c7b00005e7b0000607b0000627b0000647b0000667b0000687b00006a7b00006c7b00006e7b0000707b0000727b0000747b0000767b0000787b00007c7b0000d6890000488b000000ca9a3b
     m_RenameOverlay:
       m_UserAcceptedRename: 0
       m_Name: 
@@ -958,7 +958,7 @@ MonoBehaviour:
     scrollPos: {x: 0, y: 0}
     m_SelectedIDs: 
     m_LastClickedID: 0
-    m_ExpandedIDs: 0000000060780000627800006478000066780000687800006a7800006c7800006e780000707800007278000076780000787800007c780000807800008278000084780000ba78000000ca9a3b
+    m_ExpandedIDs: 000000005a7b00005c7b00005e7b0000607b0000627b0000647b0000667b0000687b00006a7b00006c7b00006e7b0000707b0000727b0000747b0000767b0000787b00007a7b00007c7b0000
     m_RenameOverlay:
       m_UserAcceptedRename: 0
       m_Name: 
@@ -983,8 +983,8 @@ MonoBehaviour:
       m_Icon: {fileID: 0}
       m_ResourceFile: 
   m_ListAreaState:
-    m_SelectedInstanceIDs: da200000
-    m_LastClickedInstanceID: 8410
+    m_SelectedInstanceIDs: 6e0b0000
+    m_LastClickedInstanceID: 2926
     m_HadKeyboardFocusLastEvent: 1
     m_ExpandedInstanceIDs: c62300009c5e0000025e0000000000008a880000e2920000029b0000248e0000
     m_RenameOverlay:

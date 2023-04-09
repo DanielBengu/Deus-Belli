@@ -80,7 +80,6 @@ public class AIManager : MonoBehaviour
         Tile attackTarget = possibleAttacks[Random.Range(0, possibleAttacks.Count)]; //Attack at random possible targets
         Debug.Log($"AI ATTACKING TILE N.{attackTarget.tileNumber}");
         fightManager.UnitSelected = unit;
-        structureManager.selectedTiles = structureManager.FindPathToDestination(attackTarget, false, true);
         fightManager.QueueAttack(unit, attackTarget.unitOnTile);
     }
 

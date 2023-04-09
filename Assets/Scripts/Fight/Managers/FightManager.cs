@@ -280,8 +280,11 @@ public class FightManager : MonoBehaviour
 
     public void QueueAttack(Unit attacker, Unit defender)
     {
-        int secondLastTile = structureManager.selectedTiles.Count - 1 - attacker.range;
-        Tile targetTile = structureManager.selectedTiles[secondLastTile];
+        structureManager.FindPathToDestination(defender.CurrentTile, false, true);
+
+        int targetMovementTileIndex = structureManager.selectedTiles.Count - 1 - attacker.range;
+        if (targetMovementTileIndex < 0) targetMovementTileIndex = 0;
+        Tile targetTile = structureManager.selectedTiles[targetMovementTileIndex];
 
         structureManager.MoveUnit(UnitSelected, targetTile);
         ActionInQueue = ActionPerformed.Attack;
