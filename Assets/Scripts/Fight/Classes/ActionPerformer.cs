@@ -48,11 +48,10 @@ public class ActionPerformer
 
     void Attack(Unit attacker, Unit defender)
     {
-        AnimationPerformer.PerformAnimation(Animation.Attack, attacker);
-        Quaternion rotation = defender.transform.rotation;
-        rotation.y = Movement.FindCharacterDirection(defender.transform, attacker.transform.position);
-        defender.transform.rotation = rotation;
+        defender.transform.LookAt(attacker.CurrentTile.transform, Vector3.up);
+        attacker.transform.LookAt(defender.CurrentTile.transform, Vector3.up);
 
+        AnimationPerformer.PerformAnimation(Animation.Attack, attacker);
         AnimationPerformer.PerformAnimation(Animation.TakeDamage, defender);
 
         defender.hpCurrent -= attacker.attack;

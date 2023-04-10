@@ -89,20 +89,4 @@ public class Movement
 
         StartObjectMovement(movingUnit.transform, nextTile);
     }
-
-    public static float FindCharacterDirection(Transform character, Vector3 directionTile)
-    {
-        float rotationY = 0;
-
-        if (character.position.x > directionTile.x && character.position.z == directionTile.z)         //Moving to the left
-            rotationY = 270f;
-        else if (character.position.x < directionTile.x && character.position.z == directionTile.z)   //Moving to the right
-            rotationY = 90f;
-        else if (character.position.x == directionTile.x && character.position.z < directionTile.z)   //Moving up
-            rotationY = 0f;
-        else if (character.position.x == directionTile.x && character.position.z > directionTile.z)   //Moving down
-            rotationY = 180f;
-
-        return rotationY;
-    }
 }
