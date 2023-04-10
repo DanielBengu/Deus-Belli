@@ -14,17 +14,17 @@ public class ActionPerformer
         switch (action)
         {
             case ActionPerformed.Attack:
-                PerformAttack(source, target.unitOnTile);
+                SetupAttack(source, target.unitOnTile);
                 break;
             case ActionPerformed.Movement:
-                PerformMovement(source, target);
+                SetupMovement(source, target);
                 break;
             case ActionPerformed.Default:
                 break;
         }
     }
 
-    public void PerformMovement(Unit source, Tile targetTile)
+    public void SetupMovement(Unit source, Tile targetTile)
     {
         RemoveMovementFromUnit(source, targetTile.tentativeCost);
         MoveUnit(source, targetTile, false);
@@ -37,10 +37,10 @@ public class ActionPerformer
         List<Tile> tilesPath = pathfinding.FindPathToDestination(targetTile);
         if (addToSelectedMapTiles)
             structureManager.selectedTiles = tilesPath;
-        movement.MoveUnit(unit, targetTile, tilesPath, 800);
+        movement.MoveUnit(unit, targetTile, tilesPath);
     }
 
-    public void PerformAttack(Unit attacker, Unit defender)
+    public void SetupAttack(Unit attacker, Unit defender)
     {
         attacker.HasPerformedMainAction = true;
         Attack(attacker, defender);
@@ -50,7 +50,7 @@ public class ActionPerformer
     {
         AnimationPerformer.PerformAnimation(Animation.Attack, attacker);
         Quaternion rotation = defender.transform.rotation;
-        rotation.y = Movement.FindCharacterDirection(defender.transform, attacker.transform);
+        rotation.y = Movement.FindCharacterDirection(defender.transform, attacker.transform.position);
         defender.transform.rotation = rotation;
 
         AnimationPerformer.PerformAnimation(Animation.TakeDamage, defender);

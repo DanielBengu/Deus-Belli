@@ -254,7 +254,7 @@ public class FightManager : MonoBehaviour
         //If tile clicked is in range
         if(structureManager.selectedTiles.Contains(tileSelected)){
             if(IsShowingPath){
-                structureManager.StartUnitMovement(UnitSelected, tileSelected);
+                structureManager.MoveUnit(UnitSelected, tileSelected);
                 ResetGameState(true);
             }else{
                 AskForMovementConfirmation(tileSelected);
@@ -303,6 +303,7 @@ public class FightManager : MonoBehaviour
         IsShowingPath = false;
         structureManager.ClearSelection(true);
         structureManager.SetInfoPanel(false);
+        ActionInQueue = ActionPerformed.Default;
     }
 
     public void EndTurn(int faction){

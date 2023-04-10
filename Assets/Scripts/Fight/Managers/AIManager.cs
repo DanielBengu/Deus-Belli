@@ -91,7 +91,7 @@ public class AIManager : MonoBehaviour
         Debug.Log($"AI MOVING TO TILE N.{possibleMovements[randomInt].tileNumber}");
         Tile destinationTile = GameObject.Find($"Terrain_{possibleMovements[randomInt].tileNumber}").GetComponent<Tile>();
         structureManager.CalculateMapTilesDistance(unit);
-        structureManager.StartUnitMovement(unit, destinationTile);
+        structureManager.MoveUnit(unit, destinationTile);
     }
 }
 

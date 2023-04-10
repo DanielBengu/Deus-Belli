@@ -25,7 +25,7 @@ public class StructureManager : MonoBehaviour
         pathfinding = new(mapTiles, X_Length, Y_Length);
         uiManager = GetComponent<UIManager>();
         spriteManager = GetComponent<SpriteManager>();
-        actionPerformer = new() { structureManager = this, pathfinding = pathfinding, movement = movement};
+        actionPerformer = new() { structureManager = this, pathfinding = pathfinding, movement = movement, spriteManager = spriteManager};
         return mapTiles;
     }
 
@@ -87,14 +87,8 @@ public class StructureManager : MonoBehaviour
         if(selectTiles)
             spriteManager.GenerateTileSelection(path);
         if(addToSelectedMapTiles)
-            selectedTiles.AddRange(path);
+            selectedTiles = path;
         return path;
-    }
-
-    public void StartUnitMovement(Unit unitToMove, Tile destinationTile){
-        RemoveMovementFromUnit(unitToMove, destinationTile.tentativeCost);
-        MoveUnit(unitToMove, destinationTile);
-        ClearSelectedTiles();
     }
 
     public List<Tile> GeneratePossibleMovementForUnit(Unit unit, bool selectTiles){
@@ -134,7 +128,7 @@ public class StructureManager : MonoBehaviour
 
         public void MoveUnit(Unit unit, Tile targetTile)
         {
-            actionPerformer.MoveUnit(unit, targetTile, false);
+            actionPerformer.StartAction(ActionPerformed.Movement, unit, targetTile);
         }
 
     #endregion
@@ -144,11 +138,6 @@ public class StructureManager : MonoBehaviour
         void ClearSelectedTiles(){
             spriteManager.ClearMapTilesSprite();
             selectedTiles.Clear();
-        }
-
-        void RemoveMovementFromUnit(Unit unit, float movementToRemove){
-            unit.movementCurrent -= movementToRemove;
-            if(unit.movementCurrent < 0) unit.movementCurrent = 0;
         }
 
     #endregion
