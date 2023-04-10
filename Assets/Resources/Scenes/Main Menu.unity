@@ -178,13 +178,65 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 3935821388908199528, guid: 83296696181aac043b7c8a71945fe7a0, type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: -301
+      objectReference: {fileID: 0}
+    - target: {fileID: 3935821388962022416, guid: 83296696181aac043b7c8a71945fe7a0, type: 3}
+      propertyPath: m_Camera
+      value: 
+      objectReference: {fileID: 519420031}
+    - target: {fileID: 3935821388962022416, guid: 83296696181aac043b7c8a71945fe7a0, type: 3}
+      propertyPath: m_RenderMode
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3935821388962022416, guid: 83296696181aac043b7c8a71945fe7a0, type: 3}
+      propertyPath: m_PixelPerfect
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3935821388962022416, guid: 83296696181aac043b7c8a71945fe7a0, type: 3}
+      propertyPath: m_SortingOrder
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 3935821388962022421, guid: 83296696181aac043b7c8a71945fe7a0, type: 3}
       propertyPath: OptionPrefab
       value: 
       objectReference: {fileID: 7649992450677276450, guid: d7e1925e215cef34882fedb7bf94467a, type: 3}
+    - target: {fileID: 3935821388962022423, guid: 83296696181aac043b7c8a71945fe7a0, type: 3}
+      propertyPath: m_UiScaleMode
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3935821389196868288, guid: 83296696181aac043b7c8a71945fe7a0, type: 3}
+      propertyPath: m_text
+      value: Deus Belli
+      objectReference: {fileID: 0}
+    - target: {fileID: 3935821389196868288, guid: 83296696181aac043b7c8a71945fe7a0, type: 3}
+      propertyPath: m_fontSize
+      value: 60
+      objectReference: {fileID: 0}
+    - target: {fileID: 3935821389196868288, guid: 83296696181aac043b7c8a71945fe7a0, type: 3}
+      propertyPath: m_margin.z
+      value: -256.59756
+      objectReference: {fileID: 0}
+    - target: {fileID: 3935821389196868288, guid: 83296696181aac043b7c8a71945fe7a0, type: 3}
+      propertyPath: m_fontSizeBase
+      value: 60
+      objectReference: {fileID: 0}
+    - target: {fileID: 3935821389196868295, guid: 83296696181aac043b7c8a71945fe7a0, type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: 187
+      objectReference: {fileID: 0}
+    - target: {fileID: 3935821389250116995, guid: 83296696181aac043b7c8a71945fe7a0, type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: -299
+      objectReference: {fileID: 0}
     - target: {fileID: 3935821389578015299, guid: 83296696181aac043b7c8a71945fe7a0, type: 3}
       propertyPath: m_LocalPosition.x
       value: -391
+      objectReference: {fileID: 0}
+    - target: {fileID: 3935821389618502540, guid: 83296696181aac043b7c8a71945fe7a0, type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: -301
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 83296696181aac043b7c8a71945fe7a0, type: 3}

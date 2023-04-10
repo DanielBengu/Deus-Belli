@@ -13,8 +13,9 @@ GameObject:
   - component: {fileID: 8568974036890818163}
   - component: {fileID: 6130778563513864247}
   - component: {fileID: 2659454489441281042}
+  - component: {fileID: 658962934874093962}
   m_Layer: 0
-  m_Name: Manager
+  m_Name: Fight Manager
   m_TagString: Untagged
   m_Icon: {fileID: 7174288486110832750, guid: 0000000000000000d000000000000000, type: 0}
   m_NavMeshLayer: 0
@@ -48,8 +49,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   cameraManager: {fileID: 0}
-  UIManager: {fileID: 0}
-  units: []
+  warriorPrefab: {fileID: 0}
+  warrior2Prefab: {fileID: 0}
   OptionsPrefab: {fileID: 7649992450677276450, guid: d7e1925e215cef34882fedb7bf94467a, type: 3}
 --- !u!114 &8568974036890818163
 MonoBehaviour:
@@ -63,16 +64,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d8bbb9aea8e2a904ebd0c3bcaba5afb2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  tiles: []
-  X_Length: 0
-  Y_Length: 0
-  isObjectMoving: 0
-  speed: 0
-  movementSteps: []
-  unitImage: {fileID: 0}
-  nameText: {fileID: 0}
-  hpValue: {fileID: 0}
-  movementValue: {fileID: 0}
+  selectedTiles: []
+  possibleAttacks: []
 --- !u!114 &6130778563513864247
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -101,3 +94,21 @@ MonoBehaviour:
   GodImage: {fileID: 0}
   infoPanel: {fileID: 0}
   endTurnButton: {fileID: 0}
+  unitImage: {fileID: 0}
+  nameText: {fileID: 0}
+  hpValue: {fileID: 0}
+  movementValue: {fileID: 0}
+  attackValue: {fileID: 0}
+  rangeValue: {fileID: 0}
+--- !u!114 &658962934874093962
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6106894816546113668}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 22a1d11a5f9cb0d44a17d4d5b85927ee, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
