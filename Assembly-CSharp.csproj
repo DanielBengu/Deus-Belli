@@ -65,18 +65,19 @@
     <Compile Include="Assets\Scripts\Fight\Managers\StructureManager.cs" />
     <Compile Include="Assets\Scripts\Fight\Managers\CameraManager.cs" />
     <Compile Include="Assets\Scripts\Fight\Classes\ActionPerformer.cs" />
+    <Compile Include="Assets\Scripts\Rogue\Classes\PRNG.cs" />
     <Compile Include="Assets\Scripts\Fight\Managers\AIManager.cs" />
     <Compile Include="Assets\Scripts\Menu\OptionsMenu.cs" />
     <Compile Include="Assets\Scripts\Fight\Classes\Movement.cs" />
     <Compile Include="Assets\Scripts\Fight\Levels\LevelOne.cs" />
     <Compile Include="Assets\Scripts\Fight\Tile.cs" />
     <Compile Include="Assets\Scripts\Fight\Levels\LevelTwo.cs" />
+    <Compile Include="Assets\Scripts\Rogue\Managers\RogueManager.cs" />
     <Compile Include="Assets\Cartoon Heroes\Scripts\SetCharacter\SetCharacter.cs" />
     <Compile Include="Assets\Scripts\Menu\NewGameManager.cs" />
     <Compile Include="Assets\Scripts\Fight\Classes\Pathfinding.cs" />
     <Compile Include="Assets\Scripts\Fight\Unit.cs" />
-    <Compile Include="Assets\Scripts\Rogue\Managers\RogueManager.cs" />
-    <Compile Include="Assets\Scripts\Rogue\Classes\PRNG.cs" />
+    <Compile Include="Assets\Scripts\Rogue\RogueTile.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Assets\TextMesh Pro\Shaders\TMPro.cginc" />

@@ -149,7 +149,7 @@ public class FightManager : MonoBehaviour
         Unit GenerateSingleUnit(GameObject unit, Tile tile)
         {
             Quaternion rotation = new(0, 180, 0, 0);
-            var unitGenerated = GameObject.Instantiate(unit, tile.transform.position, rotation) as GameObject;
+            var unitGenerated = Instantiate(unit, tile.transform.position, rotation);
             var unitScript = unitGenerated.GetComponent<Unit>();
 
             unitScript.CurrentTile = tile;
