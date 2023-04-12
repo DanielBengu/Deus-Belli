@@ -21,10 +21,6 @@ public class Unit : MonoBehaviour
         public int faction;
         public int range;
     #endregion
-    
-    void Start(){
-        manager = GameObject.Find("Manager").GetComponent<FightManager>();
-    }
 
     public void OnMouseDown()
     {
@@ -42,4 +38,9 @@ public class Unit : MonoBehaviour
             //manager.ManageClick(ObjectClickedEnum.RightClickOnField, CurrentTile.gameObject);
         }
     }
+
+    public void SetupManager(FightManager manager)
+	{
+        this.manager = manager;
+	}
 }

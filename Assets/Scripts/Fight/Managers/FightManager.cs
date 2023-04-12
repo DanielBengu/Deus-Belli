@@ -4,6 +4,9 @@ using System.Linq;
 
 public class FightManager : MonoBehaviour
 {
+    [SerializeField]
+    GeneralManager generalManager;
+
     public const int USER_FACTION = 0;
     public const int ENEMY_FACTION = 1;
     public const int LEFT_MOUSE_BUTTON = 1;
@@ -22,6 +25,9 @@ public class FightManager : MonoBehaviour
         GameObject warriorPrefab;
         [SerializeField]
         GameObject warrior2Prefab;
+
+        [SerializeField]
+        GameObject rogueSection;
 
         Level level;
         
@@ -49,23 +55,23 @@ public class FightManager : MonoBehaviour
     #region Start and Update
 
     void Start()
-        {
-            Debug.Log("START FIGHT MANAGER SETUP");
+    {
+        Debug.Log("START FIGHT MANAGER SETUP");
 
-            structureManager = GetComponent<StructureManager>();
-            aiManager = GetComponent<AIManager>();
+        structureManager = GetComponent<StructureManager>();
+        aiManager = GetComponent<AIManager>();
 
-            StartLevel();
+        StartLevel();
 
-            Debug.Log("END FIGHT MANAGER SETUP");
-        }
+        Debug.Log("END FIGHT MANAGER SETUP");
+    }
 
-        void Update()
-        {
-            ManageMovements();
-            ManageInputs();
-            ManageConstants();
-        }
+    void Update()
+    {
+        ManageMovements();
+        ManageInputs();
+        ManageConstants();
+    }
 
     #endregion
     
@@ -115,47 +121,48 @@ public class FightManager : MonoBehaviour
 
     #region Startup Methods
 
-        void StartLevel()
+    void StartLevel()
+    {
+        var levelBase = GameObject.Find("Level One").GetComponent<LevelOne>();
+        levelBase.StartLevel();
+        level = levelBase.level;
+
+        // Setup the terrain based on the level information
+        var tiles = structureManager.Setup(level.tilesDict, this, level.TopLeftSquarePositionX, level.YPosition, level.TopLeftSquarePositionZ, level.XLength, level.YLength);
+
+        var units = GenerateUnits(tiles);
+        structureManager.gameData = new(tiles, units, level.XLength, level.YLength);
+    }
+
+    List<Unit> GenerateUnits(Dictionary<int, Tile> mapTiles)
+    {
+        List<Unit> unitList = new();
+
+        Tile tileWarrior = GameObject.Find($"Terrain_21").GetComponent<Tile>();
+        unitList.Add(GenerateSingleUnit(warriorPrefab, tileWarrior));
+
+        Tile tileWarrior2 = GameObject.Find($"Terrain_28").GetComponent<Tile>();
+        unitList.Add(GenerateSingleUnit(warrior2Prefab, tileWarrior2));
+
+        foreach (var enemy in level.enemyList)
         {
-            var levelBase = GameObject.Find("Level One").GetComponent<LevelOne>();
-            levelBase.StartLevel();
-            level = levelBase.level;
-
-            // Setup the terrain based on the level information
-            var tiles = structureManager.Setup(level.tilesDict, level.TopLeftSquarePositionX, level.YPosition, level.TopLeftSquarePositionZ, level.XLength, level.YLength);
-
-            var units = GenerateUnits(tiles);
-            structureManager.gameData = new(tiles, units, level.XLength, level.YLength);
+            Tile tile = mapTiles[enemy.Key];
+            unitList.Add(GenerateSingleUnit(enemy.Value, tile));
         }
+        return unitList;
+    }
 
-        List<Unit> GenerateUnits(Dictionary<int, Tile> mapTiles)
-        {
-            List<Unit> unitList = new();
+    Unit GenerateSingleUnit(GameObject unit, Tile tile)
+    {
+        Quaternion rotation = new(0, 180, 0, 0);
+        var unitGenerated = Instantiate(unit, tile.transform.position, rotation);
+        var unitScript = unitGenerated.GetComponent<Unit>();
 
-            Tile tileWarrior = GameObject.Find($"Terrain_21").GetComponent<Tile>();
-            unitList.Add(GenerateSingleUnit(warriorPrefab, tileWarrior));
-
-            Tile tileWarrior2 = GameObject.Find($"Terrain_28").GetComponent<Tile>();
-            unitList.Add(GenerateSingleUnit(warrior2Prefab, tileWarrior2));
-
-            foreach (var enemy in level.enemyList)
-            {
-                Tile tile = mapTiles[enemy.Key];
-                unitList.Add(GenerateSingleUnit(enemy.Value, tile));
-            }
-            return unitList;
-        }
-
-        Unit GenerateSingleUnit(GameObject unit, Tile tile)
-        {
-            Quaternion rotation = new(0, 180, 0, 0);
-            var unitGenerated = Instantiate(unit, tile.transform.position, rotation);
-            var unitScript = unitGenerated.GetComponent<Unit>();
-
-            unitScript.CurrentTile = tile;
-            tile.unitOnTile = unitGenerated.GetComponent<Unit>();
-            return unitScript;
-        }
+        unitScript.SetupManager(this);
+        unitScript.CurrentTile = tile;
+        tile.unitOnTile = unitGenerated.GetComponent<Unit>();
+        return unitScript;
+    }
 
     #endregion
 
@@ -324,7 +331,7 @@ public class FightManager : MonoBehaviour
 
     //Called by "End Turn" button of UI
     public void EndTurnButton(int faction){
-        FightManager fm = GameObject.Find("Manager").GetComponent<FightManager>();
+        FightManager fm = GameObject.Find("Fight Manager").GetComponent<FightManager>();
         fm.EndTurn(faction);
     }
 }

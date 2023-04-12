@@ -18,14 +18,16 @@ public class StructureManager : MonoBehaviour
 
     public bool IsObjectMoving { get{ return movement.isObjectMoving;}}
 
-    public Dictionary<int, Tile> Setup(Dictionary<int, GameObject> tileList, int topX, int y, int topZ, int X_Length, int Y_Length){
-
-        var mapTiles = GenerateTiles(tileList, topX, y, topZ, X_Length, Y_Length);
+    public Dictionary<int, Tile> Setup(Dictionary<int, GameObject> tileList, FightManager manager, int topX, int y, int topZ, int X_Length, int Y_Length){
+        var mapTiles = GenerateTiles(tileList, manager, topX, y, topZ, X_Length, Y_Length);
 
         pathfinding = new(mapTiles, X_Length, Y_Length);
         uiManager = GetComponent<UIManager>();
         spriteManager = GetComponent<SpriteManager>();
         actionPerformer = new() { structureManager = this, pathfinding = pathfinding, movement = movement, spriteManager = spriteManager};
+
+        uiManager.SetupUpFightUI();
+
         return mapTiles;
     }
 
@@ -34,7 +36,7 @@ public class StructureManager : MonoBehaviour
     }
 
 
-    public Dictionary<int, Tile> GenerateTiles(Dictionary<int, GameObject> tileList, int topX, int y, int topZ, int XLength, int YLength)
+    public Dictionary<int, Tile> GenerateTiles(Dictionary<int, GameObject> tileList, FightManager manager, int topX, int y, int topZ, int XLength, int YLength)
     {
         Dictionary<int, Tile> mapTiles = new();
         Debug.Log("START TILE GENERATION");
@@ -47,6 +49,8 @@ public class StructureManager : MonoBehaviour
                     GameObject tile = tileList[x + (i * YLength)];
                     tile.transform.position = spawnPosition;
                     Tile tileScript = tile.GetComponent<Tile>();
+
+                    tileScript.SetupManager(manager);
                     tileScript.tileNumber = x + (i * XLength);
 
                     float angle = 90f;

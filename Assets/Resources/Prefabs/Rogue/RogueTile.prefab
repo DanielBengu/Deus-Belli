@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 5013846965654771606}
   - component: {fileID: 3250769358841541791}
   - component: {fileID: 6022507953866795920}
+  - component: {fileID: 5813328648502031528}
   m_Layer: 0
   m_Name: RogueTile
   m_TagString: Untagged
@@ -98,3 +99,15 @@ CapsuleCollider:
   m_Height: 2
   m_Direction: 1
   m_Center: {x: 0.000000059604645, y: 0, z: -0.00000008940697}
+--- !u!114 &5813328648502031528
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8233011120004536846}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: dbafa0e22f8f2f14e812ad8efe45f88e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 

@@ -59,6 +59,7 @@
     <Compile Include="Assets\Scripts\Fight\Managers\SpriteManager.cs" />
     <Compile Include="Assets\Scripts\Fight\Managers\FightManager.cs" />
     <Compile Include="Assets\Scripts\Menu\MainMenu.cs" />
+    <Compile Include="Assets\Scripts\Rogue\RogueTile.cs" />
     <Compile Include="Assets\Scripts\Fight\Classes\AnimationPerformer.cs" />
     <Compile Include="Assets\Scripts\Fight\Level.cs" />
     <Compile Include="Assets\Scripts\Fight\Managers\UIManager.cs" />
@@ -77,7 +78,7 @@
     <Compile Include="Assets\Scripts\Menu\NewGameManager.cs" />
     <Compile Include="Assets\Scripts\Fight\Classes\Pathfinding.cs" />
     <Compile Include="Assets\Scripts\Fight\Unit.cs" />
-    <Compile Include="Assets\Scripts\Rogue\RogueTile.cs" />
+    <Compile Include="Assets\Scripts\General\GeneralManager.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Assets\TextMesh Pro\Shaders\TMPro.cginc" />

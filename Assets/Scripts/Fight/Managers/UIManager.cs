@@ -5,6 +5,10 @@ using TMPro;
 public class UIManager : MonoBehaviour
 {
     [SerializeField]
+    GameObject fightSection;
+    [SerializeField]
+    GameObject rogueSection;
+    [SerializeField]
     TextMeshProUGUI Title;
     [SerializeField] 
     Image GodImage;
@@ -48,4 +52,9 @@ public class UIManager : MonoBehaviour
             rangeValue.text = unit.range.ToString();
         }
     }
+
+    public void SetupUpFightUI()
+	{
+        fightSection.SetActive(true);
+	}
 }

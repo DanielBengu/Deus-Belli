@@ -16,13 +16,9 @@ public class Tile : MonoBehaviour, IComparable<Tile>
 
     public Unit unitOnTile;
 
-    public FightManager manager;
+    FightManager manager;
 
     public int tileNumber;
-
-    void Start(){
-        manager = GameObject.Find("Manager").GetComponent<FightManager>();
-    }
 
     public void OnMouseDown()
     {
@@ -62,5 +58,10 @@ public class Tile : MonoBehaviour, IComparable<Tile>
     public List<Tile> ToList()
     {
         return new List<Tile>() { this };
+    }
+
+    public void SetupManager(FightManager manager)
+    {
+        this.manager = manager;
     }
 }

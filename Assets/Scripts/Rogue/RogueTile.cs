@@ -4,15 +4,20 @@ using UnityEngine;
 
 public class RogueTile : MonoBehaviour
 {
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
+	RogueManager rogueManager;
+    public int nodeNumber;
 
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
+	public void SetupManager(RogueManager rm)
+	{
+		rogueManager = rm;
+	}
+
+    public void OnMouseDown()
+	{
+		//We only enable the input of the next playable node
+		if (rogueManager.GetPlayerCurrentNode() != nodeNumber - 1)
+			return;
+
+		rogueManager.NodeClicked();
+	}
 }
