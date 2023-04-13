@@ -10,6 +10,9 @@ GameObject:
   m_Component:
   - component: {fileID: 6106894816546113675}
   - component: {fileID: -4015313132077449474}
+  - component: {fileID: 8586093743117608651}
+  - component: {fileID: 6896595092497986572}
+  - component: {fileID: 3740167142961308301}
   m_Layer: 0
   m_Name: Rogue Manager
   m_TagString: Untagged
@@ -44,3 +47,58 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 68dadcdfa7f7922488037b903a7decd9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  generalManager: {fileID: 0}
+  origin: {fileID: 0}
+  tile: {fileID: 0}
+  link: {fileID: 0}
+  playerUnitTransform: {fileID: 0}
+--- !u!114 &8586093743117608651
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6106894816546113668}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d8bbb9aea8e2a904ebd0c3bcaba5afb2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  selectedTiles: []
+  possibleAttacks: []
+--- !u!114 &6896595092497986572
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6106894816546113668}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 22a1d11a5f9cb0d44a17d4d5b85927ee, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &3740167142961308301
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6106894816546113668}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9a5e4d189a6f47f4cbbc597e93c4df46, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  fightSection: {fileID: 0}
+  rogueSection: {fileID: 0}
+  Title: {fileID: 0}
+  GodImage: {fileID: 0}
+  infoPanel: {fileID: 0}
+  endTurnButton: {fileID: 0}
+  unitImage: {fileID: 0}
+  nameText: {fileID: 0}
+  hpValue: {fileID: 0}
+  movementValue: {fileID: 0}
+  attackValue: {fileID: 0}
+  rangeValue: {fileID: 0}

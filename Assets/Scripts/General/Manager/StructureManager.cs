@@ -18,16 +18,20 @@ public class StructureManager : MonoBehaviour
 
     public bool IsObjectMoving { get{ return movement.isObjectMoving;}}
 
-    public Dictionary<int, Tile> Setup(Dictionary<int, GameObject> tileList, FightManager manager, int topX, int y, int topZ, int X_Length, int Y_Length){
-        var mapTiles = GenerateTiles(tileList, manager, topX, y, topZ, X_Length, Y_Length);
-
-        pathfinding = new(mapTiles, X_Length, Y_Length);
+    public void SetupClasses(){
+        
         uiManager = GetComponent<UIManager>();
         spriteManager = GetComponent<SpriteManager>();
-        actionPerformer = new() { structureManager = this, pathfinding = pathfinding, movement = movement, spriteManager = spriteManager};
+        actionPerformer = new() { structureManager = this, movement = new(), spriteManager = spriteManager};
 
-        uiManager.SetupUpFightUI();
+        //uiManager.SetupUpFightUI();
+    }
 
+    public Dictionary<int, Tile> SetupFightSection(Dictionary<int, GameObject> tileList, FightManager manager, int topX, int y, int topZ, int X_Length, int Y_Length)
+	{
+        var mapTiles = GenerateTiles(tileList, manager, topX, y, topZ, X_Length, Y_Length);
+        pathfinding = new(mapTiles, X_Length, Y_Length);
+        actionPerformer.pathfinding = pathfinding;
         return mapTiles;
     }
 
@@ -132,14 +136,19 @@ public class StructureManager : MonoBehaviour
 
         public void MoveUnit(Unit unit, Tile targetTile)
         {
-            actionPerformer.StartAction(ActionPerformed.Movement, unit, targetTile);
+            actionPerformer.StartAction(ActionPerformed.FightMovement, unit.gameObject, targetTile.gameObject);
+        }
+
+        public void MoveUnit(Transform unit, RogueTile targetTile)
+        {
+            actionPerformer.StartAction(ActionPerformed.RogueMovement, unit.gameObject, targetTile.gameObject);
         }
 
     #endregion
 
     #region Private functions
 
-        void ClearSelectedTiles(){
+    void ClearSelectedTiles(){
             spriteManager.ClearMapTilesSprite();
             selectedTiles.Clear();
         }

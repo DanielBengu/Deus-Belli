@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public class ActionPerformer
@@ -9,22 +10,29 @@ public class ActionPerformer
     public Pathfinding pathfinding;
     public Movement movement;
 
-    public void StartAction(ActionPerformed action, Unit source, Tile target)
+    public void StartAction(ActionPerformed action, GameObject source, GameObject target)
     {
         switch (action)
         {
             case ActionPerformed.Attack:
-                SetupAttack(source, target.unitOnTile);
+                var unitScriptAttack = source.GetComponent<Unit>();
+                var targetUnit = target.GetComponent<Tile>().unitOnTile;
+                SetupAttack(unitScriptAttack, targetUnit);
                 break;
-            case ActionPerformed.Movement:
-                SetupMovement(source, target);
+            case ActionPerformed.FightMovement:
+                var unitScriptMovement = source.GetComponent<Unit>();
+                var targetTile = target.GetComponent<Tile>();
+                SetupFightMovement(unitScriptMovement, targetTile);
+                break;
+            case ActionPerformed.RogueMovement:
+                SetupRogueMovement(source.transform, target.transform);
                 break;
             case ActionPerformed.Default:
                 break;
         }
     }
 
-    public void SetupMovement(Unit source, Tile targetTile)
+    public void SetupFightMovement(Unit source, Tile targetTile)
     {
         RemoveMovementFromUnit(source, targetTile.tentativeCost);
         MoveUnit(source, targetTile, false);
@@ -32,12 +40,17 @@ public class ActionPerformer
         spriteManager.ClearMapTilesSprite();
     }
 
+    public void SetupRogueMovement(Transform source, Transform targetTile)
+    {
+        movement.MoveUnit(source.transform, new List<Transform>() { targetTile }, false);
+    }
+
     public void MoveUnit(Unit unit, Tile targetTile, bool addToSelectedMapTiles)
     {
         List<Tile> tilesPath = pathfinding.FindPathToDestination(targetTile);
         if (addToSelectedMapTiles)
             structureManager.selectedTiles = tilesPath;
-        movement.MoveUnit(unit, targetTile, tilesPath);
+        movement.MoveUnit(unit.transform, tilesPath.Select(t => t.transform).ToList(), true);
     }
 
     public void SetupAttack(Unit attacker, Unit defender)
@@ -51,8 +64,8 @@ public class ActionPerformer
         defender.transform.LookAt(attacker.CurrentTile.transform, Vector3.up);
         attacker.transform.LookAt(defender.CurrentTile.transform, Vector3.up);
 
-        AnimationPerformer.PerformAnimation(Animation.Attack, attacker);
-        AnimationPerformer.PerformAnimation(Animation.TakeDamage, defender);
+        AnimationPerformer.PerformAnimation(Animation.Attack, attacker.gameObject);
+        AnimationPerformer.PerformAnimation(Animation.TakeDamage, defender.gameObject);
 
         defender.hpCurrent -= attacker.attack;
         if (defender.hpCurrent <= 0)

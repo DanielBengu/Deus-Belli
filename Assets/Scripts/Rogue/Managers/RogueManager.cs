@@ -6,16 +6,23 @@ public class RogueManager : MonoBehaviour
     [SerializeField]
     GeneralManager generalManager;
 
+    StructureManager structureManager;
+
     PRNG random;
     public RogueTile origin;
     public GameObject tile;
     public GameObject link;
     int currentNode = 0;
-    List<GameObject> mapObjectsList = new();
+    readonly List<GameObject> mapObjectsList = new();
+
+    public Transform playerUnitTransform;
 
     // Start is called before the first frame update
     void Start()
     {
+        structureManager = GetComponent<StructureManager>();
+        structureManager.SetupClasses();
+
         int rngSeed = Random.Range(0, 100);
         Debug.Log($"ROGUE - SEED GENERATED: {rngSeed}");
 
@@ -60,8 +67,9 @@ public class RogueManager : MonoBehaviour
         return newTileScript;
     }
 
-    public void NodeClicked()
+    public void NodeClicked(RogueTile tile)
 	{
+        structureManager.MoveUnit(playerUnitTransform, tile);
         generalManager.StartFight();
 	}
 

@@ -287,6 +287,10 @@ PrefabInstance:
       propertyPath: generalManager
       value: 
       objectReference: {fileID: 1412221413}
+    - target: {fileID: 1664738761293605994, guid: 4607e3baf5a716c449103d259bf51fc4, type: 3}
+      propertyPath: playerUnitTransform
+      value: 
+      objectReference: {fileID: 339625410}
     - target: {fileID: 2258734877458320886, guid: 4607e3baf5a716c449103d259bf51fc4, type: 3}
       propertyPath: m_Name
       value: Tile_0
@@ -343,6 +347,14 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 7834949284754534425, guid: 4607e3baf5a716c449103d259bf51fc4, type: 3}
+      propertyPath: fightSection
+      value: 
+      objectReference: {fileID: 194246001}
+    - target: {fileID: 7834949284754534425, guid: 4607e3baf5a716c449103d259bf51fc4, type: 3}
+      propertyPath: rogueSection
+      value: 
+      objectReference: {fileID: 849224024}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 4607e3baf5a716c449103d259bf51fc4, type: 3}
 --- !u!1 &266028914
@@ -554,6 +566,11 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 314631892}
   m_CullTransparentMesh: 1
+--- !u!4 &339625410 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 6867128382496166384, guid: 4607e3baf5a716c449103d259bf51fc4, type: 3}
+  m_PrefabInstance: {fileID: 254949764}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &345251682
 GameObject:
   m_ObjectHideFlags: 0

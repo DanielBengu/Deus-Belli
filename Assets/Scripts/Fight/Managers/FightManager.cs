@@ -85,7 +85,7 @@ public class FightManager : MonoBehaviour
             if (structureManager.MovementTick())
             {
                 if(ActionInQueue == ActionPerformed.Attack)
-                    structureManager.actionPerformer.StartAction(ActionPerformed.Attack, UnitSelected, ActionTarget.GetComponent<Unit>().CurrentTile);
+                    structureManager.actionPerformer.StartAction(ActionPerformed.Attack, UnitSelected.gameObject, ActionTarget.GetComponent<Unit>().CurrentTile.gameObject);
 
                 ResetGameState(true);
             }    
@@ -127,8 +127,10 @@ public class FightManager : MonoBehaviour
         levelBase.StartLevel();
         level = levelBase.level;
 
+        structureManager.SetupClasses();
         // Setup the terrain based on the level information
-        var tiles = structureManager.Setup(level.tilesDict, this, level.TopLeftSquarePositionX, level.YPosition, level.TopLeftSquarePositionZ, level.XLength, level.YLength);
+        var tiles = structureManager.SetupFightSection(level.tilesDict, this, level.TopLeftSquarePositionX, level.YPosition, level.TopLeftSquarePositionZ, level.XLength, level.YLength);
+       
 
         var units = GenerateUnits(tiles);
         structureManager.gameData = new(tiles, units, level.XLength, level.YLength);
@@ -345,7 +347,8 @@ public enum ObjectClickedEnum{
 
 public enum ActionPerformed
 {
-    Movement,
+    FightMovement,
+    RogueMovement,
     Attack,
     Default,
 }

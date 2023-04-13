@@ -18,6 +18,6 @@ public class RogueTile : MonoBehaviour
 		if (rogueManager.GetPlayerCurrentNode() != nodeNumber - 1)
 			return;
 
-		rogueManager.NodeClicked();
+		rogueManager.NodeClicked(this);
 	}
 }

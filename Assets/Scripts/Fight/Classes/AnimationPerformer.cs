@@ -2,7 +2,7 @@ using UnityEngine;
 
 public static class AnimationPerformer
 {
-    public static void PerformAnimation(Animation animation, Unit unit)
+    public static void PerformAnimation(Animation animation, GameObject unit)
     {
         string animationToPlay = "";
 
@@ -29,7 +29,7 @@ public static class AnimationPerformer
         StartAnimation(unit, animationToPlay);
     }
 
-    static void StartAnimation(Unit unit, string animation)
+    static void StartAnimation(GameObject unit, string animation)
     {
         string gender = unit.name.Split(' ')[0];
         unit.GetComponent<Animator>().Play($"{gender} {animation}");

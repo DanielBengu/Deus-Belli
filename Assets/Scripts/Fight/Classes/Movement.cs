@@ -34,7 +34,7 @@ public class Movement
             else
             {
                 isObjectMoving = false;
-                AnimationPerformer.PerformAnimation(Animation.Idle, objectMovingTransform.gameObject.GetComponent<Unit>());
+                AnimationPerformer.PerformAnimation(Animation.Idle, objectMovingTransform.gameObject);
                 return true;
             }
         }
@@ -55,28 +55,34 @@ public class Movement
         targetPosition = target.position;
         journeyLength = Vector3.Distance(startingPosition, targetPosition);
 
-        AnimationPerformer.PerformAnimation(Animation.Move, objectMovingTransform.gameObject.GetComponent<Unit>());
+        AnimationPerformer.PerformAnimation(Animation.Move, objectMovingTransform.gameObject);
 
         Debug.Log("Started movement to " + targetPosition);
         return true;
     }
 
-    public void MoveUnit(Unit unit, Tile targetTile, List<Tile> tilesPath)
+    public void MoveUnit(Transform unit, List<Transform> tilesPath, bool isFightSection)
     {
-        //The first of tilesPath it's the starting tile so we skip it
-        movementSteps = tilesPath.Skip(1).Select(t => t.transform).ToList();
+        movementSteps = tilesPath.ToList();
 
-        if(movementSteps.Count == 0)
-        {
-            isObjectMoving = true; //Even if not moving we set it true to trigger the movement tick in update
-            return;
+        if (isFightSection)
+		{
+            Unit unitScript = unit.GetComponent<Unit>();
+
+            if (movementSteps.Count == 0)
+            {
+                isObjectMoving = true; //Even if not moving we set it true to trigger the movement tick in update
+                return;
+            }
+
+            Tile targetTile = tilesPath.Last().GetComponent<Tile>();
+
+            unitScript.CurrentTile.unitOnTile = null;
+            targetTile.unitOnTile = unitScript;
+            unitScript.CurrentTile = targetTile;
         }
 
-        unit.CurrentTile.unitOnTile = null;
-        targetTile.unitOnTile = unit;
-        unit.CurrentTile = targetTile;
-
-        SetNewMovementStep(unit.transform);
+        SetNewMovementStep(unit);
     }
 
     void SetNewMovementStep(Transform movingUnit)

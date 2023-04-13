@@ -36,9 +36,9 @@ public class UIManager : MonoBehaviour
     }
 
     void SetUI(){
-        string godSelected = PlayerPrefs.GetString("God Selected", "");
+        /*string godSelected = PlayerPrefs.GetString("God Selected", "");
         Title.text = $"{godSelected} Run";
-        GodImage.sprite = Resources.Load<Sprite>($"Sprites/Gods/{godSelected}");
+        GodImage.sprite = Resources.Load<Sprite>($"Sprites/Gods/{godSelected}");*/
     }
 
     public void SetInfoPanel(bool active, Unit unit = null){
