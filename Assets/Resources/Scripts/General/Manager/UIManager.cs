@@ -1,20 +1,21 @@
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
+using System;
 
 public class UIManager : MonoBehaviour
 {
-    [SerializeField]
-    GameObject fightSection;
-    [SerializeField]
-    GameObject rogueSection;
     [SerializeField]
     TextMeshProUGUI Title;
     [SerializeField] 
     Image GodImage;
 
-    public GameObject infoPanel;
-    public GameObject endTurnButton;
+    [SerializeField]
+    GameObject infoPanel;
+    [SerializeField]
+    GameObject endTurnButton;
+    [SerializeField]
+    GameObject victoryScreen;
 
     #region Info Panel
         [SerializeField] 
@@ -32,18 +33,18 @@ public class UIManager : MonoBehaviour
     #endregion
 
     void Start(){
-        SetUI();
+        SetVariables();
     }
 
-    void SetUI(){
+    void SetVariables(){
         /*string godSelected = PlayerPrefs.GetString("God Selected", "");
         Title.text = $"{godSelected} Run";
         GodImage.sprite = Resources.Load<Sprite>($"Sprites/Gods/{godSelected}");*/
     }
 
     public void SetInfoPanel(bool active, Unit unit = null){
-        infoPanel.SetActive(active);
-        if(active){
+        SetGameObject(infoPanel, active);
+        if (active){
             nameText.text = unit.unitName;
             unitImage.sprite = unit.unitImage;
             hpValue.text = $"{unit.hpCurrent}/{unit.hpMax}";
@@ -53,8 +54,18 @@ public class UIManager : MonoBehaviour
         }
     }
 
-    public void SetupUpFightUI()
+    public void SetEndTurnButton(bool active)
 	{
-        fightSection.SetActive(true);
-	}
+        SetGameObject(endTurnButton, active);
+    }
+
+	internal void GetVictoryScreen()
+	{
+        SetGameObject(victoryScreen, true);
+    }
+
+    public void SetGameObject(GameObject gameObject, bool active)
+	{
+        gameObject.SetActive(active);
+    }
 }

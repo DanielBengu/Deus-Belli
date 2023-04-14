@@ -12,19 +12,16 @@ public class StructureManager : MonoBehaviour
     public ActionPerformer actionPerformer;
 
     Pathfinding pathfinding;
-    readonly Movement movement = new();
 
     public GameData gameData;
 
-    public bool IsObjectMoving { get{ return movement.isObjectMoving;}}
+    public bool IsObjectMoving { get{ return actionPerformer.movement.IsObjectMoving;}}
 
     public void SetupClasses(){
         
         uiManager = GetComponent<UIManager>();
         spriteManager = GetComponent<SpriteManager>();
         actionPerformer = new() { structureManager = this, movement = new(), spriteManager = spriteManager};
-
-        //uiManager.SetupUpFightUI();
     }
 
     public Dictionary<int, Tile> SetupFightSection(Dictionary<int, GameObject> tileList, FightManager manager, int topX, int y, int topZ, int X_Length, int Y_Length)
@@ -36,7 +33,7 @@ public class StructureManager : MonoBehaviour
     }
 
     public void SetEndTurnButton(bool active){
-        uiManager.endTurnButton.SetActive(active);
+        uiManager.SetEndTurnButton(active);
     }
 
 
@@ -90,6 +87,11 @@ public class StructureManager : MonoBehaviour
         ClearSelectedTiles();
     }
 
+    public void GetVictoryScreen()
+	{
+        uiManager.GetVictoryScreen();
+	}
+
     public List<Tile> FindPathToDestination(Tile targetTile, bool selectTiles, bool addToSelectedMapTiles){
         List<Tile> path = pathfinding.FindPathToDestination(targetTile);
         if(selectTiles)
@@ -131,7 +133,7 @@ public class StructureManager : MonoBehaviour
 
         public bool MovementTick()
         {
-            return movement.MovementTick();
+            return actionPerformer.movement.MovementTick();
         }
 
         public void MoveUnit(Unit unit, Tile targetTile)

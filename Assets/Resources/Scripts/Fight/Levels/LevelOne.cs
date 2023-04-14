@@ -57,8 +57,7 @@ public class LevelOne : MonoBehaviour
         sorceressUnit2.faction = 1;
         
 
-        enemyList.Add(12, sorceressUnit.gameObject);
-        enemyList.Add(13, sorceressUnit2.gameObject);
+        enemyList.Add(30, sorceressUnit.gameObject);
 
         return enemyList;
     }

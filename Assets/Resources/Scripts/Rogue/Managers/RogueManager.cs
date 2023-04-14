@@ -3,9 +3,7 @@ using UnityEngine;
 
 public class RogueManager : MonoBehaviour
 {
-    [SerializeField]
     GeneralManager generalManager;
-
     StructureManager structureManager;
 
     PRNG random;
@@ -17,9 +15,12 @@ public class RogueManager : MonoBehaviour
 
     public Transform playerUnitTransform;
 
+    public bool IsAnyUnitMoving { get { return structureManager.IsObjectMoving; } }
+
     // Start is called before the first frame update
     void Start()
     {
+        generalManager = GameObject.Find("General Manager").GetComponent<GeneralManager>();
         structureManager = GetComponent<StructureManager>();
         structureManager.SetupClasses();
 
@@ -31,12 +32,12 @@ public class RogueManager : MonoBehaviour
         GenerateMap();
     }
 
-    public int GetPlayerCurrentNode()
+	private void Update()
 	{
-        return currentNode;
-    }
+        structureManager.MovementTick();
+	}
 
-    void GenerateMap()
+	void GenerateMap()
 	{
         int tileLength = random.Next(10);
         RogueTile originTile = origin;
@@ -69,22 +70,23 @@ public class RogueManager : MonoBehaviour
 
     public void NodeClicked(RogueTile tile)
 	{
-        structureManager.MoveUnit(playerUnitTransform, tile);
-        generalManager.StartFight();
-	}
+		if (IsAnyUnitMoving) return;
+
+        if (currentNode == tile.nodeNumber)
+            generalManager.StartFight();
+        else if (currentNode == tile.nodeNumber - 1)
+		{
+            currentNode++;
+            structureManager.MoveUnit(playerUnitTransform, tile);
+        }
+            
+    }
 
     public void DisableRogueSection()
 	{
-        ClearMap();
-    }
-
-    void ClearMap()
-	{
-		foreach (var item in mapObjectsList)
-		{
+        foreach (var item in mapObjectsList)
             Destroy(item);
-		}
-	}
+    }
 }
 
 public enum RogueChoices

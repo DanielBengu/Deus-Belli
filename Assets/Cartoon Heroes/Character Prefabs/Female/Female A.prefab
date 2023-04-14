@@ -1692,7 +1692,7 @@ MonoBehaviour:
   unitName: Affammocc
   unitImage: {fileID: 21300000, guid: 0866b720585eada4e9e526b74df4e632, type: 3}
   hpMax: 4
-  hpCurrent: 4
+  hpCurrent: 1
   movementMax: 3
   movementCurrent: 3
   attack: 3

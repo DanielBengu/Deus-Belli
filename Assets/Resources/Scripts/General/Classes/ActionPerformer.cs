@@ -36,7 +36,6 @@ public class ActionPerformer
     {
         RemoveMovementFromUnit(source, targetTile.tentativeCost);
         MoveUnit(source, targetTile, false);
-        //actionInQueue = ActionPerformed.Movement;
         spriteManager.ClearMapTilesSprite();
     }
 

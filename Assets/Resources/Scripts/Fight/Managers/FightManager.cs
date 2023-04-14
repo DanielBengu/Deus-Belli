@@ -16,39 +16,41 @@ public class FightManager : MonoBehaviour
 
     #region Fields
 
-        [SerializeField]
-        CameraManager cameraManager;
-        StructureManager structureManager;
-        AIManager aiManager;
+    [SerializeField]
+    CameraManager cameraManager;
+    StructureManager structureManager;
+    AIManager aiManager;
 
-        [SerializeField]
-        GameObject warriorPrefab;
-        [SerializeField]
-        GameObject warrior2Prefab;
+    [SerializeField]
+    GameObject warriorPrefab;
+    [SerializeField]
+    GameObject warrior2Prefab;
 
-        [SerializeField]
-        GameObject rogueSection;
+    [SerializeField]
+    GameObject rogueSection;
 
-        Level level;
+    Level level;
         
-        float scrollWheelInput;
+    float scrollWheelInput;
 
-        [SerializeField]
-        GameObject OptionsPrefab;
+    bool isGameOver = false;
+
+    [SerializeField]
+    GameObject OptionsPrefab;
         
-        // This property stores the currently selected unit
-        public Unit UnitSelected { get; set; }
+    // This property stores the currently selected unit
+    public Unit UnitSelected { get; set; }
 
-        //public bool IsCameraFocused { get{return cameraManager.GetCameraFocusStatus();} set{cameraManager.SetCameraFocusStatus(value);} }
-        public bool IsAnyUnitMoving { get{return structureManager.IsObjectMoving;}}
-        public bool IsOptionOpen { get; set; }
-        public bool IsScrollButtonDown { get; set; }
-        public int CurrentTurn { get; set; }
-        public bool IsGameInStandby { get{return IsAnyUnitMoving || IsOptionOpen || CurrentTurn != 0;}}
-        public bool IsShowingPath { get; set; }
-        public ActionPerformed ActionInQueue { get; set; }
-        public GameObject ActionTarget { get; set; }
-        public List<Tile> TilesSelected { get { return structureManager.selectedTiles; } set { structureManager.selectedTiles = value; } }
+    //public bool IsCameraFocused { get{return cameraManager.GetCameraFocusStatus();} set{cameraManager.SetCameraFocusStatus(value);} }
+    public bool IsAnyUnitMoving { get{return structureManager.IsObjectMoving;}}
+    public bool IsOptionOpen { get; set; }
+    public bool IsScrollButtonDown { get; set; }
+    public int CurrentTurn { get; set; }
+    public bool IsGameInStandby { get{return IsAnyUnitMoving || IsOptionOpen || CurrentTurn != 0 || isGameOver;}}
+    public bool IsShowingPath { get; set; }
+    public ActionPerformed ActionInQueue { get; set; }
+    public GameObject ActionTarget { get; set; }
+    public List<Tile> TilesSelected { get { return structureManager.selectedTiles; } set { structureManager.selectedTiles = value; } }
 
     #endregion
 
@@ -60,6 +62,7 @@ public class FightManager : MonoBehaviour
 
         structureManager = GetComponent<StructureManager>();
         aiManager = GetComponent<AIManager>();
+        cameraManager = GameObject.Find("Main Camera").GetComponent<CameraManager>();
 
         StartLevel();
 
@@ -68,6 +71,7 @@ public class FightManager : MonoBehaviour
 
     void Update()
     {
+        ManageGame();
         ManageMovements();
         ManageInputs();
         ManageConstants();
@@ -78,9 +82,6 @@ public class FightManager : MonoBehaviour
     #region Key Input Management
 
         void ManageMovements(){
-            if (!IsAnyUnitMoving)
-                return;
-
             // If an object is being moved, check if it has finished moving
             if (structureManager.MovementTick())
             {
@@ -187,6 +188,16 @@ public class FightManager : MonoBehaviour
         aiManager.StartAITurn();
     }
 
+    void ManageGame()
+	{
+        //Killed every enemy unit
+        if(isGameOver == false && structureManager.gameData.unitsOnField.Where(u => u.faction == ENEMY_FACTION).ToList().Count == 0)
+		{
+            isGameOver = true;
+            structureManager.GetVictoryScreen();
+        }
+            
+	}
     public void ManageClick(ObjectClickedEnum objectClicked, GameObject reference){
         switch (objectClicked)
         {
@@ -331,10 +342,24 @@ public class FightManager : MonoBehaviour
         }
     }
 
+    public void DisableFightSection()
+	{
+		foreach (var tile in structureManager.gameData.mapTiles.Values)
+            Destroy(tile.gameObject);
+
+		foreach (var unit in structureManager.gameData.unitsOnField)
+            Destroy(unit.gameObject);
+    }
+
     //Called by "End Turn" button of UI
     public void EndTurnButton(int faction){
         FightManager fm = GameObject.Find("Fight Manager").GetComponent<FightManager>();
         fm.EndTurn(faction);
+    }
+    public void ReturnToRogueButton()
+    {
+        GeneralManager fm = GameObject.Find("General Manager").GetComponent<GeneralManager>();
+        fm.ReturnToRogueFromFightButton();
     }
 }
 

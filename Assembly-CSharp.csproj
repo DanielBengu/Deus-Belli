@@ -56,30 +56,29 @@
     <Analyzer Include="C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\Common7\IDE\Extensions\Microsoft\Visual Studio Tools for Unity\Analyzers\Microsoft.Unity.Analyzers.dll" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Assets\Scripts\General\Manager\SpriteManager.cs" />
-    <Compile Include="Assets\Scripts\Fight\Managers\FightManager.cs" />
-    <Compile Include="Assets\Scripts\Menu\MainMenu.cs" />
-    <Compile Include="Assets\Scripts\Rogue\RogueTile.cs" />
-    <Compile Include="Assets\Scripts\Fight\Classes\AnimationPerformer.cs" />
-    <Compile Include="Assets\Scripts\Fight\Level.cs" />
-    <Compile Include="Assets\Scripts\General\Manager\GeneralManager.cs" />
-    <Compile Include="Assets\Scripts\General\Manager\UIManager.cs" />
-    <Compile Include="Assets\Scripts\General\Manager\StructureManager.cs" />
-    <Compile Include="Assets\Scripts\Fight\Managers\CameraManager.cs" />
-    <Compile Include="Assets\Scripts\General\Classes\ActionPerformer.cs" />
-    <Compile Include="Assets\Scripts\Rogue\Classes\PRNG.cs" />
-    <Compile Include="Assets\Scripts\Fight\Managers\AIManager.cs" />
-    <Compile Include="Assets\Scripts\Menu\OptionsMenu.cs" />
-    <Compile Include="Assets\Scripts\Fight\Classes\Movement.cs" />
-    <Compile Include="Assets\Scripts\Fight\Levels\LevelOne.cs" />
-    <Compile Include="Assets\Scripts\Fight\Tile.cs" />
-    <Compile Include="Assets\Scripts\Fight\Levels\LevelTwo.cs" />
-    <Compile Include="Assets\Scripts\Rogue\Managers\RogueManager.cs" />
+    <Compile Include="Assets\Resources\Scripts\General\Manager\SpriteManager.cs" />
+    <Compile Include="Assets\Resources\Scripts\Fight\Managers\FightManager.cs" />
+    <Compile Include="Assets\Resources\Scripts\Menu\MainMenu.cs" />
+    <Compile Include="Assets\Resources\Scripts\Rogue\RogueTile.cs" />
+    <Compile Include="Assets\Resources\Scripts\Fight\Classes\AnimationPerformer.cs" />
+    <Compile Include="Assets\Resources\Scripts\Fight\Level.cs" />
+    <Compile Include="Assets\Resources\Scripts\General\Manager\GeneralManager.cs" />
+    <Compile Include="Assets\Resources\Scripts\General\Manager\UIManager.cs" />
+    <Compile Include="Assets\Resources\Scripts\General\Manager\StructureManager.cs" />
+    <Compile Include="Assets\Resources\Scripts\Fight\Managers\CameraManager.cs" />
+    <Compile Include="Assets\Resources\Scripts\General\Classes\ActionPerformer.cs" />
+    <Compile Include="Assets\Resources\Scripts\Rogue\Classes\PRNG.cs" />
+    <Compile Include="Assets\Resources\Scripts\Fight\Managers\AIManager.cs" />
+    <Compile Include="Assets\Resources\Scripts\Menu\OptionsMenu.cs" />
+    <Compile Include="Assets\Resources\Scripts\Fight\Classes\Movement.cs" />
+    <Compile Include="Assets\Resources\Scripts\Fight\Levels\LevelOne.cs" />
+    <Compile Include="Assets\Resources\Scripts\Fight\Tile.cs" />
+    <Compile Include="Assets\Resources\Scripts\Fight\Levels\LevelTwo.cs" />
+    <Compile Include="Assets\Resources\Scripts\Rogue\Managers\RogueManager.cs" />
     <Compile Include="Assets\Cartoon Heroes\Scripts\SetCharacter\SetCharacter.cs" />
-    <Compile Include="Assets\Scripts\Menu\NewGameManager.cs" />
-    <Compile Include="Assets\Scripts\Fight\Classes\Pathfinding.cs" />
-    <Compile Include="Assets\Scripts\Fight\Unit.cs" />
-    <Compile Include="Assets\Scripts\Rogue\RoguePlayerUnit.cs" />
+    <Compile Include="Assets\Resources\Scripts\Menu\NewGameManager.cs" />
+    <Compile Include="Assets\Resources\Scripts\Fight\Classes\Pathfinding.cs" />
+    <Compile Include="Assets\Resources\Scripts\Fight\Unit.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Assets\TextMesh Pro\Shaders\TMPro.cginc" />

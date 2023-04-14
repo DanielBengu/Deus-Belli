@@ -14,10 +14,6 @@ public class RogueTile : MonoBehaviour
 
     public void OnMouseDown()
 	{
-		//We only enable the input of the next playable node
-		if (rogueManager.GetPlayerCurrentNode() != nodeNumber - 1)
-			return;
-
 		rogueManager.NodeClicked(this);
 	}
 }

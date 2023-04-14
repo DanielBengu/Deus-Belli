@@ -6,7 +6,11 @@ public class Movement
 {
     private float startTime; // the time when the movement started
     private float journeyLength; // the total distance between the start and end markers
-    public bool isObjectMoving = false;
+    public bool IsObjectMoving
+	{
+        get;
+        set;
+	}
     private Transform objectMovingTransform;
 
     Vector3 startingPosition;
@@ -20,6 +24,9 @@ public class Movement
 
     public bool MovementTick()
     {
+        if (!IsObjectMoving)
+            return false;
+
         float distanceCovered = (Time.time - startTime) * speed;
         float fractionOfJourney = distanceCovered / journeyLength;
         objectMovingTransform.position = Vector3.Lerp(startingPosition, targetPosition, fractionOfJourney);
@@ -33,7 +40,7 @@ public class Movement
             }
             else
             {
-                isObjectMoving = false;
+                IsObjectMoving = false;
                 AnimationPerformer.PerformAnimation(Animation.Idle, objectMovingTransform.gameObject);
                 return true;
             }
@@ -45,14 +52,17 @@ public class Movement
     public bool StartObjectMovement(Transform starting, Transform target)
     {
         //Something else is already moving
-        if (isObjectMoving)
+        if (IsObjectMoving)
             return false;
 
-        isObjectMoving = true;
+        IsObjectMoving = true;
         objectMovingTransform = starting;
         startTime = Time.time;
         startingPosition = starting.position;
+
+        //Unit needs to stay at same Y
         targetPosition = target.position;
+        targetPosition.y = startingPosition.y;
         journeyLength = Vector3.Distance(startingPosition, targetPosition);
 
         AnimationPerformer.PerformAnimation(Animation.Move, objectMovingTransform.gameObject);
@@ -67,11 +77,12 @@ public class Movement
 
         if (isFightSection)
 		{
+            movementSteps = movementSteps.Skip(1).ToList();
             Unit unitScript = unit.GetComponent<Unit>();
 
             if (movementSteps.Count == 0)
             {
-                isObjectMoving = true; //Even if not moving we set it true to trigger the movement tick in update
+                IsObjectMoving = true; //Even if not moving we set it true to trigger the movement tick in update
                 return;
             }
 
@@ -87,7 +98,7 @@ public class Movement
 
     void SetNewMovementStep(Transform movingUnit)
     {
-        isObjectMoving = false;
+        IsObjectMoving = false;
 
         Transform nextTile = movementSteps.First().transform;
         movingUnit.transform.LookAt(nextTile, Vector3.up);

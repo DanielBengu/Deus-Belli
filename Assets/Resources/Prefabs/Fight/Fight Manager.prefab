@@ -48,9 +48,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8c740d8efda210e4d9b916d44e725fb6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  generalManager: {fileID: 0}
   cameraManager: {fileID: 0}
   warriorPrefab: {fileID: 0}
   warrior2Prefab: {fileID: 0}
+  rogueSection: {fileID: 0}
   OptionsPrefab: {fileID: 7649992450677276450, guid: d7e1925e215cef34882fedb7bf94467a, type: 3}
 --- !u!114 &8568974036890818163
 MonoBehaviour:
@@ -94,6 +96,7 @@ MonoBehaviour:
   GodImage: {fileID: 0}
   infoPanel: {fileID: 0}
   endTurnButton: {fileID: 0}
+  victoryScreen: {fileID: 5336481261709404008, guid: b7529a87f7232644c91dbcbee5b40f38, type: 3}
   unitImage: {fileID: 0}
   nameText: {fileID: 0}
   hpValue: {fileID: 0}
