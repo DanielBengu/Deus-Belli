@@ -6,14 +6,15 @@ public class RogueManager : MonoBehaviour
     GeneralManager generalManager;
     StructureManager structureManager;
 
-    PRNG random;
     public RogueTile origin;
     public GameObject tile;
     public GameObject link;
-    int currentNode = 0;
     readonly List<GameObject> mapObjectsList = new();
 
     public Transform playerUnitTransform;
+
+    public int currentNode;
+    public PRNG seed;
 
     public bool IsAnyUnitMoving { get { return structureManager.IsObjectMoving; } }
 
@@ -23,13 +24,6 @@ public class RogueManager : MonoBehaviour
         generalManager = GameObject.Find("General Manager").GetComponent<GeneralManager>();
         structureManager = GetComponent<StructureManager>();
         structureManager.SetupClasses();
-
-        int rngSeed = Random.Range(0, 100);
-        Debug.Log($"ROGUE - SEED GENERATED: {rngSeed}");
-
-        random = new(rngSeed);
-
-        GenerateMap();
     }
 
 	private void Update()
@@ -37,17 +31,27 @@ public class RogueManager : MonoBehaviour
         structureManager.MovementTick();
 	}
 
+    public void SetupRogue(int currentNode, PRNG seed, float playerX)
+	{
+        this.currentNode = currentNode;
+        this.seed = seed;
+        if(playerX != 0)
+            playerUnitTransform.position = new Vector3(playerX, playerUnitTransform.position.y, playerUnitTransform.position.z);
+        GenerateMap();
+    }
+
 	void GenerateMap()
 	{
-        int tileLength = random.Next(10);
+        int tileLength = seed.Next(10);
         RogueTile originTile = origin;
+        originTile.SetupManager(this);
 		for (int i = 0; i < 5; i++) originTile = CreateNewNode(tileLength, originTile);
     }
 
-    RogueTile CreateNewNode(int seed, RogueTile originTile)
+    RogueTile CreateNewNode(int randomLength, RogueTile originTile)
 	{
         Vector3 tilePosition = tile.transform.position;
-        tilePosition.x = originTile.transform.position.x + 150 + (50 * seed);
+        tilePosition.x = originTile.transform.position.x + 150 + (50 * randomLength);
 
         GameObject newTile = Instantiate(tile, tilePosition, tile.transform.rotation);
         mapObjectsList.Add(newTile);
@@ -87,12 +91,11 @@ public class RogueManager : MonoBehaviour
         foreach (var item in mapObjectsList)
             Destroy(item);
     }
-}
-
-public enum RogueChoices
-{
-    StandardFight,
-    EliteFight,
-    Merchant,
-    Smith
+    enum RogueChoices
+    {
+        StandardFight,
+        EliteFight,
+        Merchant,
+        Smith
+    }
 }

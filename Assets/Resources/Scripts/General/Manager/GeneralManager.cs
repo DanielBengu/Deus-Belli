@@ -1,7 +1,4 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
-
 public class GeneralManager : MonoBehaviour
 {
     [SerializeField]
@@ -14,12 +11,16 @@ public class GeneralManager : MonoBehaviour
     GameObject rogueSectionInstance;
     RogueManager rogueManager;
 
+    RunData runData;
+
     CurrentSection currentSection = CurrentSection.Rogue;
 
     public bool IsGameInStandby { get { return IsGameInStandbyMethod(); } }
 
 	private void Start()
 	{
+        PRNG seed = new(Random.Range(0, 100));
+        runData = new RunData(0, seed, 0);
         GenerateRogueSection();
     }
 
@@ -48,6 +49,7 @@ public class GeneralManager : MonoBehaviour
     }
     void DestroyRogueSection()
     {
+        runData = new(rogueManager.currentNode, rogueManager.seed, rogueManager.playerUnitTransform.position.x);
         rogueManager.DisableRogueSection();
         Destroy(rogueSectionInstance);
     }
@@ -62,12 +64,26 @@ public class GeneralManager : MonoBehaviour
     {
         rogueSectionInstance = Instantiate(rogueSectionPrefab);
         rogueManager = GameObject.Find("Rogue Manager").GetComponent<RogueManager>();
+        rogueManager.SetupRogue(runData.currentNode, runData.seed, runData.playerX);
     }
 
     public void ReturnToRogueFromFightButton()
 	{
         DestroyFightSection();
         GenerateRogueSection();
+    }
+    struct RunData
+    {
+        public int currentNode;
+        public PRNG seed;
+        public float playerX;
+
+        public RunData(int currentNode, PRNG seed, float playerX)
+        {
+            this.currentNode = currentNode;
+            this.seed = seed;
+            this.playerX = playerX;
+        }
     }
 
     enum CurrentSection

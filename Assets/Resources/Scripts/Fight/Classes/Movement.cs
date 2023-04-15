@@ -29,7 +29,8 @@ public class Movement
 
         float distanceCovered = (Time.time - startTime) * speed;
         float fractionOfJourney = distanceCovered / journeyLength;
-        objectMovingTransform.position = Vector3.Lerp(startingPosition, targetPosition, fractionOfJourney);
+        if (fractionOfJourney > 0)
+            objectMovingTransform.position = Vector3.Lerp(startingPosition, targetPosition, fractionOfJourney);
 
         //Unit arrived at destination
         if (objectMovingTransform.position == targetPosition)
@@ -83,14 +84,15 @@ public class Movement
             if (movementSteps.Count == 0)
             {
                 IsObjectMoving = true; //Even if not moving we set it true to trigger the movement tick in update
-                return;
+			}
+			else
+			{
+                Tile targetTile = tilesPath.Last().GetComponent<Tile>();
+
+                unitScript.CurrentTile.unitOnTile = null;
+                targetTile.unitOnTile = unitScript;
+                unitScript.CurrentTile = targetTile;
             }
-
-            Tile targetTile = tilesPath.Last().GetComponent<Tile>();
-
-            unitScript.CurrentTile.unitOnTile = null;
-            targetTile.unitOnTile = unitScript;
-            unitScript.CurrentTile = targetTile;
         }
 
         SetNewMovementStep(unit);
@@ -98,12 +100,20 @@ public class Movement
 
     void SetNewMovementStep(Transform movingUnit)
     {
+        Transform nextTile;
         IsObjectMoving = false;
 
-        Transform nextTile = movementSteps.First().transform;
+        if (movementSteps.Count > 0)
+		{
+            nextTile = movementSteps.First().transform;
+            movementSteps.RemoveAt(0);
+        }
+        else
+		{
+            nextTile = movingUnit;
+        }
+            
         movingUnit.transform.LookAt(nextTile, Vector3.up);
-        movementSteps.RemoveAt(0);
-
         StartObjectMovement(movingUnit.transform, nextTile);
     }
 }
