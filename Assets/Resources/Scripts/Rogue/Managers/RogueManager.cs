@@ -28,8 +28,10 @@ public class RogueManager : MonoBehaviour
 
 	private void Update()
 	{
-        structureManager.MovementTick();
-	}
+        bool isPlayerMovementFinished = structureManager.MovementTick();
+        if (isPlayerMovementFinished)
+            generalManager.StartFight();
+    }
 
     public void SetupRogue(int currentNode, PRNG seed, float playerX)
 	{
@@ -75,10 +77,8 @@ public class RogueManager : MonoBehaviour
     public void NodeClicked(RogueTile tile)
 	{
 		if (IsAnyUnitMoving) return;
-
-        if (currentNode == tile.nodeNumber)
-            generalManager.StartFight();
-        else if (currentNode == tile.nodeNumber - 1)
+        
+        if (currentNode == tile.nodeNumber - 1)
 		{
             currentNode++;
             structureManager.MoveUnit(playerUnitTransform, tile);

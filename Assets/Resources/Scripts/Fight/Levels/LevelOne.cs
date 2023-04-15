@@ -10,7 +10,9 @@ public class LevelOne : MonoBehaviour
     GameObject sorceress2Prefab;
     private const int _XLength = 7;
     private const int _YLength = 7;
-    public Level level = new Level();
+    public Level level = new();
+
+    public int enemyStartTile;
 
     public void StartLevel(){
         level.TopLeftSquarePositionX = 400;
@@ -57,7 +59,7 @@ public class LevelOne : MonoBehaviour
         sorceressUnit2.faction = 1;
         
 
-        enemyList.Add(30, sorceressUnit.gameObject);
+        enemyList.Add(enemyStartTile, sorceressUnit.gameObject);
 
         return enemyList;
     }

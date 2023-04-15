@@ -1,6 +1,6 @@
 public class PRNG
 {
-    private int seed;
+    private readonly int seed;
 
 	public PRNG(int seed)
 	{

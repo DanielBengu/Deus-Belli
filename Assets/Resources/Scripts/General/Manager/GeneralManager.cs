@@ -1,6 +1,8 @@
 using UnityEngine;
 public class GeneralManager : MonoBehaviour
 {
+    public const int SCROLL_WHEEL_BUTTON = 2;
+
     [SerializeField]
     GameObject fightSectionPrefab;
     GameObject fightSectionInstance;
@@ -11,9 +13,14 @@ public class GeneralManager : MonoBehaviour
     GameObject rogueSectionInstance;
     RogueManager rogueManager;
 
+    [SerializeField]
+    CameraManager cameraManager;
+
     RunData runData;
 
     CurrentSection currentSection = CurrentSection.Rogue;
+
+    public bool IsScrollButtonDown { get; set; }
 
     public bool IsGameInStandby { get { return IsGameInStandbyMethod(); } }
 
@@ -24,7 +31,28 @@ public class GeneralManager : MonoBehaviour
         GenerateRogueSection();
     }
 
-	bool IsGameInStandbyMethod()
+	private void Update()
+	{
+        if (!IsGameInStandby && (Input.anyKeyDown || IsScrollButtonDown))
+            ManageKeysDown();
+
+        if (IsScrollButtonDown)
+            cameraManager.UpdatePosition();
+    }
+
+    void ManageKeysDown()
+	{
+        if (Input.GetMouseButtonDown(SCROLL_WHEEL_BUTTON))
+        {
+            IsScrollButtonDown = true;
+        }
+        else if (Input.GetMouseButtonUp(SCROLL_WHEEL_BUTTON))
+        {
+            IsScrollButtonDown = false;
+        }
+    }
+
+    bool IsGameInStandbyMethod()
 	{
 		return currentSection switch
 		{
@@ -58,6 +86,7 @@ public class GeneralManager : MonoBehaviour
 	{
         fightSectionInstance = Instantiate(fightSectionPrefab);
         fightManager = GameObject.Find("Fight Manager").GetComponent<FightManager>();
+        fightManager.cameraManager = cameraManager;
 	}
 
     void GenerateRogueSection()

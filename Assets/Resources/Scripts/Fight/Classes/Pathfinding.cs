@@ -152,7 +152,7 @@ public class Pathfinding
 
     public void CalculateCost(Tile source, Tile neighbourTile)
     {
-        if (neighbourTile && neighbourTile.IsPassable && !neighbourTile.unitOnTile)
+        if (neighbourTile && neighbourTile.IsPassable && !(neighbourTile.unitOnTile && neighbourTile.unitOnTile.faction != FightManager.USER_FACTION))
         {
             float newTentativeCost = source.tentativeCost + neighbourTile.MovementCost;
             if (newTentativeCost < neighbourTile.tentativeCost)

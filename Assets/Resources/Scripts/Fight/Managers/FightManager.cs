@@ -11,13 +11,11 @@ public class FightManager : MonoBehaviour
     public const int ENEMY_FACTION = 1;
     public const int LEFT_MOUSE_BUTTON = 1;
     public const int RIGHT_MOUSE_BUTTON = 1;
-    public const int SCROLL_WHEEL_BUTTON = 2;
     //private const int UNIT_MOVEMENT_SPEED = 800;
 
     #region Fields
 
-    [SerializeField]
-    CameraManager cameraManager;
+    public CameraManager cameraManager;
     StructureManager structureManager;
     AIManager aiManager;
 
@@ -44,7 +42,6 @@ public class FightManager : MonoBehaviour
     //public bool IsCameraFocused { get{return cameraManager.GetCameraFocusStatus();} set{cameraManager.SetCameraFocusStatus(value);} }
     public bool IsAnyUnitMoving { get{return structureManager.IsObjectMoving;}}
     public bool IsOptionOpen { get; set; }
-    public bool IsScrollButtonDown { get; set; }
     public int CurrentTurn { get; set; }
     public bool IsGameInStandby { get{return IsAnyUnitMoving || IsOptionOpen || CurrentTurn != 0 || isGameOver;}}
     public bool IsShowingPath { get; set; }
@@ -62,7 +59,6 @@ public class FightManager : MonoBehaviour
 
         structureManager = GetComponent<StructureManager>();
         aiManager = GetComponent<AIManager>();
-        cameraManager = GameObject.Find("Main Camera").GetComponent<CameraManager>();
 
         StartLevel();
 
@@ -81,43 +77,40 @@ public class FightManager : MonoBehaviour
     
     #region Key Input Management
 
-        void ManageMovements(){
-            // If an object is being moved, check if it has finished moving
-            if (structureManager.MovementTick())
-            {
-                if(ActionInQueue == ActionPerformed.Attack)
-                    structureManager.actionPerformer.StartAction(ActionPerformed.Attack, UnitSelected.gameObject, ActionTarget.GetComponent<Unit>().CurrentTile.gameObject);
+    void ManageMovements(){
+        // If an object is being moved, check if it has finished moving
+        if (structureManager.MovementTick())
+        {
+            if(ActionInQueue == ActionPerformed.Attack)
+                structureManager.actionPerformer.StartAction(ActionPerformed.Attack, UnitSelected.gameObject, ActionTarget.GetComponent<Unit>().CurrentTile.gameObject);
 
-                ResetGameState(true);
-            }    
-        }
+            ResetGameState(true);
+        }    
+    }
 
-        void ManageInputs(){
-            if(!IsGameInStandby && (Input.anyKeyDown || IsScrollButtonDown))
-                ManageKeysDown();
-        }
+    void ManageInputs(){
+        if (!IsGameInStandby && Input.anyKeyDown)
+            ManageKeysDown();
+    }
 
-        //Method that manages the press of a key (only for the frame it is clicked)
-        void ManageKeysDown(){
-            if(Input.GetMouseButtonDown(RIGHT_MOUSE_BUTTON)){
-                ResetGameState(true);
-            } else if (Input.GetKeyDown(KeyCode.Escape)) {
-                MainMenu.GeneratePrefab(OptionsPrefab, "Options");
-                IsOptionOpen = true;
-            } else if(Input.GetMouseButtonDown(SCROLL_WHEEL_BUTTON)){
-                IsScrollButtonDown = true;
-            } else if(Input.GetMouseButtonUp(SCROLL_WHEEL_BUTTON)){
-                IsScrollButtonDown = false;
-            }
+    //Method that manages the press of a key (only for the frame it is clicked)
+    void ManageKeysDown(){
+        if (Input.GetMouseButtonDown(RIGHT_MOUSE_BUTTON))
+        {
+            ResetGameState(true);
         }
-        //Method that manages constant inputs (like wheel scroll)
-        void ManageConstants(){
-            scrollWheelInput = Input.GetAxis("Mouse ScrollWheel");
-            if(scrollWheelInput != 0f)
-                cameraManager.ScrollWheel(scrollWheelInput);
-            if(IsScrollButtonDown)
-                cameraManager.UpdatePosition();
+        else if (Input.GetKeyDown(KeyCode.Escape))
+        {
+            MainMenu.GeneratePrefab(OptionsPrefab, "Options");
+            IsOptionOpen = true;
         }
+    }
+    //Method that manages constant inputs (like wheel scroll)
+    void ManageConstants(){
+        scrollWheelInput = Input.GetAxis("Mouse ScrollWheel");
+        if(scrollWheelInput != 0f)
+            cameraManager.ScrollWheel(scrollWheelInput);
+    }
     #endregion
 
     #region Startup Methods
