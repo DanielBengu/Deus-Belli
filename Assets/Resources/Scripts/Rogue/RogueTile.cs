@@ -14,6 +14,9 @@ public class RogueTile : MonoBehaviour
 
     public void OnMouseDown()
 	{
+		if (rogueManager.IsGameInStandby)
+			return;
+
 		rogueManager.NodeClicked(this);
 	}
 }

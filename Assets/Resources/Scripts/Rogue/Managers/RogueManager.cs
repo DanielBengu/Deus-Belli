@@ -18,10 +18,12 @@ public class RogueManager : MonoBehaviour
 
     public bool IsAnyUnitMoving { get { return structureManager.IsObjectMoving; } }
 
+    public bool IsGameInStandby { get { return generalManager.IsGameInStandby; } }
+
     // Start is called before the first frame update
     void Start()
     {
-        generalManager = GameObject.Find("General Manager").GetComponent<GeneralManager>();
+        generalManager = GameObject.Find(GeneralManager.GENERAL_MANAGER_OBJ_NAME).GetComponent<GeneralManager>();
         structureManager = GetComponent<StructureManager>();
         structureManager.SetupClasses();
     }

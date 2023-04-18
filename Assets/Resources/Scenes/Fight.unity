@@ -431,6 +431,8 @@ MonoBehaviour:
   fightSectionPrefab: {fileID: 1278397633198017817, guid: e3f7b2171804fe64ea5b30f32f1c89d1, type: 3}
   rogueSectionPrefab: {fileID: 6871625446447118757, guid: 4607e3baf5a716c449103d259bf51fc4, type: 3}
   cameraManager: {fileID: 519420033}
+  OptionsPrefab: {fileID: 7649992450677276450, guid: d7e1925e215cef34882fedb7bf94467a, type: 3}
+  OptionsInstance: {fileID: 0}
 --- !u!4 &1412221414
 Transform:
   m_ObjectHideFlags: 0

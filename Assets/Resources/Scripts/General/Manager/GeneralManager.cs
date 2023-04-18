@@ -2,6 +2,9 @@ using UnityEngine;
 public class GeneralManager : MonoBehaviour
 {
     public const int SCROLL_WHEEL_BUTTON = 2;
+    public const string FIGHT_MANAGER_OBJ_NAME = "Fight Manager";
+    public const string ROGUE_MANAGER_OBJ_NAME = "Rogue Manager";
+    public const string GENERAL_MANAGER_OBJ_NAME = "General Manager";
 
     [SerializeField]
     GameObject fightSectionPrefab;
@@ -16,11 +19,15 @@ public class GeneralManager : MonoBehaviour
     [SerializeField]
     CameraManager cameraManager;
 
+    [SerializeField]
+    GameObject OptionsPrefab;
+
     RunData runData;
 
     CurrentSection currentSection = CurrentSection.Rogue;
 
     public bool IsScrollButtonDown { get; set; }
+    public bool IsOptionOpen { get; set; }
 
     public bool IsGameInStandby { get { return IsGameInStandbyMethod(); } }
 
@@ -42,6 +49,14 @@ public class GeneralManager : MonoBehaviour
 
     void ManageKeysDown()
 	{
+        if (Input.GetKeyDown(KeyCode.Escape))
+        {
+			if (!IsOptionOpen)
+			{
+                MainMenu.GeneratePrefab(OptionsPrefab, "Options");
+                IsOptionOpen = true;
+            }
+        } else
         if (Input.GetMouseButtonDown(SCROLL_WHEEL_BUTTON))
         {
             IsScrollButtonDown = true;
@@ -56,8 +71,8 @@ public class GeneralManager : MonoBehaviour
 	{
 		return currentSection switch
 		{
-			CurrentSection.Fight => fightManager.IsAnyUnitMoving || fightManager.IsOptionOpen || fightManager.CurrentTurn != 0,
-			CurrentSection.Rogue => rogueManager.IsAnyUnitMoving,
+			CurrentSection.Fight => fightManager.IsAnyUnitMoving || IsOptionOpen || fightManager.CurrentTurn != 0 || fightManager.isGameOver,
+			CurrentSection.Rogue => rogueManager.IsAnyUnitMoving || IsOptionOpen,
 			_ => false,
 		};
 	}
@@ -85,15 +100,17 @@ public class GeneralManager : MonoBehaviour
     void GenerateFightSection()
 	{
         fightSectionInstance = Instantiate(fightSectionPrefab);
-        fightManager = GameObject.Find("Fight Manager").GetComponent<FightManager>();
+        fightManager = GameObject.Find(FIGHT_MANAGER_OBJ_NAME).GetComponent<FightManager>();
         fightManager.cameraManager = cameraManager;
+        fightManager.generalManager = this;
 	}
 
     void GenerateRogueSection()
     {
         rogueSectionInstance = Instantiate(rogueSectionPrefab);
-        rogueManager = GameObject.Find("Rogue Manager").GetComponent<RogueManager>();
+        rogueManager = GameObject.Find(ROGUE_MANAGER_OBJ_NAME).GetComponent<RogueManager>();
         rogueManager.SetupRogue(runData.currentNode, runData.seed, runData.playerX);
+        currentSection = CurrentSection.Rogue;
     }
 
     public void ReturnToRogueFromFightButton()

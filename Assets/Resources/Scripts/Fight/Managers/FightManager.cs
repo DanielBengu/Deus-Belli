@@ -4,8 +4,7 @@ using System.Linq;
 
 public class FightManager : MonoBehaviour
 {
-    [SerializeField]
-    GeneralManager generalManager;
+    public GeneralManager generalManager;
 
     public const int USER_FACTION = 0;
     public const int ENEMY_FACTION = 1;
@@ -31,19 +30,15 @@ public class FightManager : MonoBehaviour
         
     float scrollWheelInput;
 
-    bool isGameOver = false;
-
-    [SerializeField]
-    GameObject OptionsPrefab;
+    public bool isGameOver = false;
         
     // This property stores the currently selected unit
     public Unit UnitSelected { get; set; }
 
     //public bool IsCameraFocused { get{return cameraManager.GetCameraFocusStatus();} set{cameraManager.SetCameraFocusStatus(value);} }
     public bool IsAnyUnitMoving { get{return structureManager.IsObjectMoving;}}
-    public bool IsOptionOpen { get; set; }
     public int CurrentTurn { get; set; }
-    public bool IsGameInStandby { get{return IsAnyUnitMoving || IsOptionOpen || CurrentTurn != 0 || isGameOver;}}
+    public bool IsGameInStandby { get{return generalManager.IsGameInStandby;}}
     public bool IsShowingPath { get; set; }
     public ActionPerformed ActionInQueue { get; set; }
     public GameObject ActionTarget { get; set; }
@@ -56,7 +51,7 @@ public class FightManager : MonoBehaviour
     void Start()
     {
         Debug.Log("START FIGHT MANAGER SETUP");
-
+        
         structureManager = GetComponent<StructureManager>();
         aiManager = GetComponent<AIManager>();
 
@@ -96,14 +91,7 @@ public class FightManager : MonoBehaviour
     //Method that manages the press of a key (only for the frame it is clicked)
     void ManageKeysDown(){
         if (Input.GetMouseButtonDown(RIGHT_MOUSE_BUTTON))
-        {
             ResetGameState(true);
-        }
-        else if (Input.GetKeyDown(KeyCode.Escape))
-        {
-            MainMenu.GeneratePrefab(OptionsPrefab, "Options");
-            IsOptionOpen = true;
-        }
     }
     //Method that manages constant inputs (like wheel scroll)
     void ManageConstants(){
@@ -161,6 +149,11 @@ public class FightManager : MonoBehaviour
     }
 
     #endregion
+
+    public void SetIsOptionOpen(bool isOptionOpen)
+	{
+        generalManager.IsOptionOpen = isOptionOpen;
+	}
 
     void StartUserTurn()
     {
@@ -346,12 +339,12 @@ public class FightManager : MonoBehaviour
 
     //Called by "End Turn" button of UI
     public void EndTurnButton(int faction){
-        FightManager fm = GameObject.Find("Fight Manager").GetComponent<FightManager>();
+        FightManager fm = GameObject.Find(GeneralManager.FIGHT_MANAGER_OBJ_NAME).GetComponent<FightManager>();
         fm.EndTurn(faction);
     }
     public void ReturnToRogueButton()
     {
-        GeneralManager fm = GameObject.Find("General Manager").GetComponent<GeneralManager>();
+        GeneralManager fm = GameObject.Find(GeneralManager.GENERAL_MANAGER_OBJ_NAME).GetComponent<GeneralManager>();
         fm.ReturnToRogueFromFightButton();
     }
 }

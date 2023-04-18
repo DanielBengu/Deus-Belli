@@ -4,6 +4,8 @@ using UnityEngine.SceneManagement;
 public class OptionsMenu : MonoBehaviour
 {
     [SerializeField]
+    GameObject OptionsPrefab;
+    [SerializeField]
     GameObject MainPrefab;
     [SerializeField]
     GameObject VideoSettingsPrefab;
@@ -34,23 +36,22 @@ public class OptionsMenu : MonoBehaviour
         DestroySubOption();
 
         if(currentScene == "Main Menu"){
-            GameObject mainScene = GameObject.Instantiate(MainPrefab,new Vector3(600, 250, 0),Quaternion.identity) as GameObject;
+            GameObject mainScene = Instantiate(MainPrefab,new Vector3(600, 250, 0),Quaternion.identity);
             mainScene.name = "Main";
         }
 
         if(currentScene == "Fight"){
-            FightManager fightManager = GameObject.Find("Manager").GetComponent<FightManager>();
-            fightManager.IsOptionOpen = false;
+            GeneralManager generalManager = GameObject.Find(GeneralManager.GENERAL_MANAGER_OBJ_NAME).GetComponent<GeneralManager>();
+            generalManager.IsOptionOpen = false;
         }
 
-        GameObject optionsScene = GameObject.Find("Options");
-        Object.Destroy(optionsScene);
+        Destroy(OptionsPrefab);
     }
 
     void VideoOptions(){
         DestroySubOption();
             
-        GameObject videoSettings = GameObject.Instantiate(VideoSettingsPrefab,new Vector3(600, 250, 0),Quaternion.identity) as GameObject;
+        GameObject videoSettings = Instantiate(VideoSettingsPrefab,new Vector3(600, 250, 0),Quaternion.identity);
         videoSettings.name = "Video";
         optionSelected = "Video";
     }
@@ -58,7 +59,7 @@ public class OptionsMenu : MonoBehaviour
     void SoundOptions(){
         DestroySubOption();
 
-        GameObject soundSettings = GameObject.Instantiate(SoundSettingsPrefab,new Vector3(600, 250, 0),Quaternion.identity) as GameObject;
+        GameObject soundSettings = Instantiate(SoundSettingsPrefab,new Vector3(600, 250, 0),Quaternion.identity);
         soundSettings.name = "Sound";
         optionSelected = "Sound";
     }
@@ -66,7 +67,7 @@ public class OptionsMenu : MonoBehaviour
     void DestroySubOption(){
         if(optionSelected != null){
             GameObject subOption = GameObject.Find(optionSelected);
-            Object.Destroy(subOption);
+            Destroy(subOption);
         }
     }
 
