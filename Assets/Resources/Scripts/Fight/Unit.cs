@@ -1,9 +1,12 @@
+using System.Collections.Generic;
 using UnityEngine;
 
 public class Unit : MonoBehaviour
 {
     public Tile CurrentTile { get; set; }
     public bool HasPerformedMainAction { get; set; }
+
+    public List<Tile> PossibleAttacks { get { return GetPossibleAttacks(); } }
 
     FightManager manager;
 
@@ -42,5 +45,10 @@ public class Unit : MonoBehaviour
     public void SetupManager(FightManager manager)
 	{
         this.manager = manager;
+	}
+
+    List<Tile> GetPossibleAttacks()
+	{
+        return new();
 	}
 }

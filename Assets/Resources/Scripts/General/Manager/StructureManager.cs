@@ -119,32 +119,42 @@ public class StructureManager : MonoBehaviour
 
     #region Method Forwarding
 
-        public void CalculateMapTilesDistance(Unit startingUnit)
-        {
-            pathfinding.CalculateMapTilesDistance(startingUnit);
-        }
+    public void CalculateMapTilesDistance(Unit startingUnit)
+    {
+        pathfinding.CalculateMapTilesDistance(startingUnit);
+    }
 
-        public List<Tile> FindPossibleAttacks(Unit unit, List<Tile> possibleMovements)
-        {
-            possibleAttacks = pathfinding.FindPossibleAttacks(unit, possibleMovements);
-            SelectTiles(possibleAttacks, false, true);
-            return possibleAttacks;
-        }
+    public List<Tile> FindPossibleAttacks(Unit unit, List<Tile> possibleMovements)
+    {
+        possibleAttacks = pathfinding.FindPossibleAttacks(unit, possibleMovements);
+        SelectTiles(possibleAttacks, false, true);
+        return possibleAttacks;
+    }
 
-        public bool MovementTick()
-        {
-            return actionPerformer.movement.MovementTick();
-        }
+    public bool MovementTick()
+    {
+        return actionPerformer.movement.MovementTick();
+    }
 
-        public void MoveUnit(Unit unit, Tile targetTile)
-        {
-            actionPerformer.StartAction(ActionPerformed.FightMovement, unit.gameObject, targetTile.gameObject);
-        }
+    public void MoveUnit(Unit unit, Tile targetTile)
+    {
+        actionPerformer.StartAction(ActionPerformed.FightMovement, unit.gameObject, targetTile.gameObject);
+    }
 
-        public void MoveUnit(Transform unit, RogueTile targetTile)
-        {
-            actionPerformer.StartAction(ActionPerformed.RogueMovement, unit.gameObject, targetTile.gameObject);
-        }
+    public void MoveUnit(Transform unit, RogueTile targetTile)
+    {
+        actionPerformer.StartAction(ActionPerformed.RogueMovement, unit.gameObject, targetTile.gameObject);
+    }
+
+    public bool IsAttackPossible(Unit attacker, Unit defender)
+	{
+        //Unit out of movement range
+        if (attacker && !possibleAttacks.Find(t => t.tileNumber == defender.CurrentTile.tileNumber))
+            return false;
+
+
+        return true;
+	}
 
     #endregion
 

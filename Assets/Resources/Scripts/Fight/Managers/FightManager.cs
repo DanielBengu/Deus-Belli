@@ -27,8 +27,6 @@ public class FightManager : MonoBehaviour
     GameObject rogueSection;
 
     Level level;
-        
-    float scrollWheelInput;
 
     public bool isGameOver = false;
         
@@ -65,7 +63,6 @@ public class FightManager : MonoBehaviour
         ManageGame();
         ManageMovements();
         ManageInputs();
-        ManageConstants();
     }
 
     #endregion
@@ -92,12 +89,6 @@ public class FightManager : MonoBehaviour
     void ManageKeysDown(){
         if (Input.GetMouseButtonDown(RIGHT_MOUSE_BUTTON))
             ResetGameState(true);
-    }
-    //Method that manages constant inputs (like wheel scroll)
-    void ManageConstants(){
-        scrollWheelInput = Input.GetAxis("Mouse ScrollWheel");
-        if(scrollWheelInput != 0f)
-            cameraManager.ScrollWheel(scrollWheelInput);
     }
     #endregion
 
@@ -221,21 +212,21 @@ public class FightManager : MonoBehaviour
         }
 
         //We selected an allied unit that can still perform an action
-        if(unit.faction == USER_FACTION){
+        if (unit.faction == USER_FACTION) {
             ResetGameState(false);
             structureManager.GeneratePossibleMovementForUnit(UnitSelected, true);
             structureManager.FindPossibleAttacks(UnitSelected, structureManager.selectedTiles);
             return;
         }
-        
+
         ///We either selected an enemy unit and didn't select an ally to perform an attack before,
         ///or we selected an enemy out of reach from the ally
-        if (!UnitSelected || (UnitSelected && !structureManager.possibleAttacks.Find(t => t.tileNumber == unit.CurrentTile.tileNumber)))
-		{
+        if (!UnitSelected || !IsAttackPossible(UnitSelected, unit))
+        {
             ResetGameState(true);
             structureManager.SelectTiles(unit.CurrentTile.ToList(), true, true);
             return;
-		}
+        }
 
         //User wants to attack an enemy, we confirm the action and the path to take
         if (!IsShowingPath)
@@ -272,6 +263,14 @@ public class FightManager : MonoBehaviour
         ResetGameState(true);
         structureManager.SelectTiles(tileSelected.ToList(), true, true);
     }
+
+    bool IsAttackPossible(Unit attacker, Unit defender)
+	{
+        if(structureManager.IsAttackPossible(attacker, defender))
+            return true;
+
+        return false;
+	}
 
     void AskForMovementConfirmation(Tile destinationTile, int attackerRange = 0)
     {

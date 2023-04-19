@@ -65,6 +65,10 @@ public class GeneralManager : MonoBehaviour
         {
             IsScrollButtonDown = false;
         }
+
+        float scrollWheelInput = Input.GetAxis("Mouse ScrollWheel");
+        if (scrollWheelInput != 0f)
+            cameraManager.ScrollWheel(scrollWheelInput);
     }
 
     bool IsGameInStandbyMethod()

@@ -432,7 +432,6 @@ MonoBehaviour:
   rogueSectionPrefab: {fileID: 6871625446447118757, guid: 4607e3baf5a716c449103d259bf51fc4, type: 3}
   cameraManager: {fileID: 519420033}
   OptionsPrefab: {fileID: 7649992450677276450, guid: d7e1925e215cef34882fedb7bf94467a, type: 3}
-  OptionsInstance: {fileID: 0}
 --- !u!4 &1412221414
 Transform:
   m_ObjectHideFlags: 0
@@ -657,7 +656,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   sorceressPrefab: {fileID: 1253013051146282, guid: f018c9b8a16f9c3449b1c025f1a66ce4, type: 3}
   sorceress2Prefab: {fileID: 1896801731341158, guid: a367f32b0351f2648a0e15f3444c6f86, type: 3}
-  enemyStartTile: 30
+  enemyStartTile: 9
 --- !u!4 &1990137386
 Transform:
   m_ObjectHideFlags: 0
