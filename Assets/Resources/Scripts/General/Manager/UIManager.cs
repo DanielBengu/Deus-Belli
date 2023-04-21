@@ -5,41 +5,41 @@ using System;
 
 public class UIManager : MonoBehaviour
 {
-    [SerializeField]
     TextMeshProUGUI Title;
-    [SerializeField] 
     Image GodImage;
 
-    [SerializeField]
     GameObject infoPanel;
-    [SerializeField]
     GameObject endTurnButton;
-    [SerializeField]
     GameObject victoryScreen;
 
     #region Info Panel
-        [SerializeField] 
         Image unitImage;
-        [SerializeField]
         TextMeshProUGUI nameText;
-        [SerializeField]
         TextMeshProUGUI hpValue;
-        [SerializeField]
         TextMeshProUGUI movementValue;
-        [SerializeField]
         TextMeshProUGUI attackValue;
-        [SerializeField]
         TextMeshProUGUI rangeValue;
     #endregion
 
-    void Start(){
-        SetVariables();
-    }
-
-    void SetVariables(){
-        /*string godSelected = PlayerPrefs.GetString("God Selected", "");
+    public void SetFightVariables(){
+        string godSelected = PlayerPrefs.GetString("God Selected", "");
+        Title = GameObject.Find("GOD_RUN").GetComponent<TextMeshProUGUI>();
         Title.text = $"{godSelected} Run";
-        GodImage.sprite = Resources.Load<Sprite>($"Sprites/Gods/{godSelected}");*/
+
+        GodImage = GameObject.Find("God").GetComponent<Image>();
+        GodImage.sprite = Resources.Load<Sprite>($"Sprites/Gods/{godSelected}");
+
+        infoPanel = GameObject.Find("Info");
+        endTurnButton = GameObject.Find("End Turn Button");
+        victoryScreen = Resources.Load<GameObject>($"Prefabs/Fight/Victory");
+
+        unitImage = infoPanel.transform.Find("Image").gameObject.GetComponent<Image>();
+        nameText = infoPanel.transform.Find("Unit title").gameObject.GetComponent<TextMeshProUGUI>();
+        hpValue = infoPanel.transform.Find("HP value").gameObject.GetComponent<TextMeshProUGUI>();
+        movementValue = infoPanel.transform.Find("Movement value").gameObject.GetComponent<TextMeshProUGUI>();
+        attackValue = infoPanel.transform.Find("Attack value").gameObject.GetComponent<TextMeshProUGUI>();
+        rangeValue = infoPanel.transform.Find("Range value").gameObject.GetComponent<TextMeshProUGUI>();
+        SetInfoPanel(false);
     }
 
     public void SetInfoPanel(bool active, Unit unit = null){
@@ -61,7 +61,7 @@ public class UIManager : MonoBehaviour
 
 	internal void GetVictoryScreen()
 	{
-        SetGameObject(victoryScreen, true);
+        Instantiate(victoryScreen, infoPanel.transform.parent);
     }
 
     public void SetGameObject(GameObject gameObject, bool active)

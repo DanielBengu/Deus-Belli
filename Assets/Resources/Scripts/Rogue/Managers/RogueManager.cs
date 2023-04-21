@@ -4,7 +4,7 @@ using UnityEngine;
 public class RogueManager : MonoBehaviour
 {
     GeneralManager generalManager;
-    StructureManager structureManager;
+    public StructureManager structureManager;
 
     public RogueTile origin;
     public GameObject tile;
@@ -24,8 +24,6 @@ public class RogueManager : MonoBehaviour
     void Start()
     {
         generalManager = GameObject.Find(GeneralManager.GENERAL_MANAGER_OBJ_NAME).GetComponent<GeneralManager>();
-        structureManager = GetComponent<StructureManager>();
-        structureManager.SetupClasses();
     }
 
 	private void Update()
@@ -35,10 +33,11 @@ public class RogueManager : MonoBehaviour
             generalManager.StartFight();
     }
 
-    public void SetupRogue(int currentNode, PRNG seed, float playerX)
+    public void SetupRogue(StructureManager structureManager, int currentNode, PRNG seed, float playerX)
 	{
         this.currentNode = currentNode;
         this.seed = seed;
+        this.structureManager = structureManager;
         if(playerX != 0)
             playerUnitTransform.position = new Vector3(playerX, playerUnitTransform.position.y, playerUnitTransform.position.z);
         GenerateMap();

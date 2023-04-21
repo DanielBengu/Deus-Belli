@@ -18,6 +18,8 @@ public class GeneralManager : MonoBehaviour
 
     [SerializeField]
     CameraManager cameraManager;
+    [SerializeField]
+    StructureManager structureManager;
 
     [SerializeField]
     GameObject OptionsPrefab;
@@ -105,15 +107,18 @@ public class GeneralManager : MonoBehaviour
 	{
         fightSectionInstance = Instantiate(fightSectionPrefab);
         fightManager = GameObject.Find(FIGHT_MANAGER_OBJ_NAME).GetComponent<FightManager>();
+        fightManager.structureManager = structureManager;
         fightManager.cameraManager = cameraManager;
         fightManager.generalManager = this;
+        fightManager.structureManager.uiManager.SetFightVariables();
+        fightManager.structureManager.spriteManager.fightManager = fightManager;
 	}
 
     void GenerateRogueSection()
     {
         rogueSectionInstance = Instantiate(rogueSectionPrefab);
         rogueManager = GameObject.Find(ROGUE_MANAGER_OBJ_NAME).GetComponent<RogueManager>();
-        rogueManager.SetupRogue(runData.currentNode, runData.seed, runData.playerX);
+        rogueManager.SetupRogue(structureManager, runData.currentNode, runData.seed, runData.playerX);
         currentSection = CurrentSection.Rogue;
     }
 

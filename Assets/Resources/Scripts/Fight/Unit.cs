@@ -6,9 +6,9 @@ public class Unit : MonoBehaviour
     public Tile CurrentTile { get; set; }
     public bool HasPerformedMainAction { get; set; }
 
-    public List<Tile> PossibleAttacks { get { return GetPossibleAttacks(); } }
+    public List<Tile> PossibleAttacks { get { return fightManager.GetPossibleAttacksForUnit(this); } }
 
-    FightManager manager;
+    FightManager fightManager;
 
     public string unitName;
     public Sprite unitImage;
@@ -27,12 +27,12 @@ public class Unit : MonoBehaviour
 
     public void OnMouseDown()
     {
-        if(manager.IsGameInStandby)
+        if(fightManager.IsGameInStandby)
             return;
 
         if(faction == FightManager.USER_FACTION)
-            manager.UnitSelected = this;
-        manager.ManageClick(ObjectClickedEnum.UnitTile, gameObject);
+            fightManager.UnitSelected = this;
+        fightManager.ManageClick(ObjectClickedEnum.UnitTile, gameObject);
     }
 
     //Workaround to manage right click like we do for the left click in OnMouseDown()
@@ -44,11 +44,6 @@ public class Unit : MonoBehaviour
 
     public void SetupManager(FightManager manager)
 	{
-        this.manager = manager;
-	}
-
-    List<Tile> GetPossibleAttacks()
-	{
-        return new();
+        fightManager = manager;
 	}
 }

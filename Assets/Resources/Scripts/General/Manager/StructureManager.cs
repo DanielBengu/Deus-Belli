@@ -7,8 +7,8 @@ public class StructureManager : MonoBehaviour
     public List<Tile> selectedTiles = new();
     public List<Tile> possibleAttacks = new();
 
-    UIManager uiManager;
-    SpriteManager spriteManager;
+    public UIManager uiManager;
+    public SpriteManager spriteManager;
     public ActionPerformer actionPerformer;
 
     Pathfinding pathfinding;
@@ -17,14 +17,12 @@ public class StructureManager : MonoBehaviour
 
     public bool IsObjectMoving { get{ return actionPerformer.movement.IsObjectMoving;}}
 
-    public void SetupClasses(){
-        
-        uiManager = GetComponent<UIManager>();
-        spriteManager = GetComponent<SpriteManager>();
-        actionPerformer = new() { structureManager = this, movement = new(), spriteManager = spriteManager};
+	private void Start()
+	{
+        actionPerformer = new() { structureManager = this, movement = new(), spriteManager = spriteManager };
     }
 
-    public Dictionary<int, Tile> SetupFightSection(Dictionary<int, GameObject> tileList, FightManager manager, int topX, int y, int topZ, int X_Length, int Y_Length)
+	public Dictionary<int, Tile> SetupFightSection(Dictionary<int, GameObject> tileList, FightManager manager, int topX, int y, int topZ, int X_Length, int Y_Length)
 	{
         var mapTiles = GenerateTiles(tileList, manager, topX, y, topZ, X_Length, Y_Length);
         pathfinding = new(mapTiles, X_Length, Y_Length);
@@ -154,6 +152,13 @@ public class StructureManager : MonoBehaviour
 
 
         return true;
+	}
+
+    public List<Tile> GetPossibleAttacksForUnit(Unit unit)
+	{
+        
+        //pathfinding.FindPossibleAttacks(unit);
+        return new();
 	}
 
     #endregion

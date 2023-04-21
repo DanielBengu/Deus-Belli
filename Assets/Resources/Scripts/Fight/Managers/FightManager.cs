@@ -15,7 +15,7 @@ public class FightManager : MonoBehaviour
     #region Fields
 
     public CameraManager cameraManager;
-    StructureManager structureManager;
+    public StructureManager structureManager;
     AIManager aiManager;
 
     [SerializeField]
@@ -49,8 +49,6 @@ public class FightManager : MonoBehaviour
     void Start()
     {
         Debug.Log("START FIGHT MANAGER SETUP");
-        
-        structureManager = GetComponent<StructureManager>();
         aiManager = GetComponent<AIManager>();
 
         StartLevel();
@@ -100,7 +98,6 @@ public class FightManager : MonoBehaviour
         levelBase.StartLevel();
         level = levelBase.level;
 
-        structureManager.SetupClasses();
         // Setup the terrain based on the level information
         var tiles = structureManager.SetupFightSection(level.tilesDict, this, level.TopLeftSquarePositionX, level.YPosition, level.TopLeftSquarePositionZ, level.XLength, level.YLength);
        
@@ -335,16 +332,21 @@ public class FightManager : MonoBehaviour
 		foreach (var unit in structureManager.gameData.unitsOnField)
             Destroy(unit.gameObject);
     }
+    public void ReturnToRogueButton()
+    {
+        GeneralManager fm = GameObject.Find(GeneralManager.GENERAL_MANAGER_OBJ_NAME).GetComponent<GeneralManager>();
+        fm.ReturnToRogueFromFightButton();
+    }
+
+    public List<Tile> GetPossibleAttacksForUnit(Unit unit)
+	{
+        return structureManager.GetPossibleAttacksForUnit(unit);
+	}
 
     //Called by "End Turn" button of UI
     public void EndTurnButton(int faction){
         FightManager fm = GameObject.Find(GeneralManager.FIGHT_MANAGER_OBJ_NAME).GetComponent<FightManager>();
         fm.EndTurn(faction);
-    }
-    public void ReturnToRogueButton()
-    {
-        GeneralManager fm = GameObject.Find(GeneralManager.GENERAL_MANAGER_OBJ_NAME).GetComponent<GeneralManager>();
-        fm.ReturnToRogueFromFightButton();
     }
 }
 
