@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using System.Linq;
+using System;
 
 public class FightManager : MonoBehaviour
 {
@@ -33,14 +34,13 @@ public class FightManager : MonoBehaviour
     // This property stores the currently selected unit
     public Unit UnitSelected { get; set; }
 
-    //public bool IsCameraFocused { get{return cameraManager.GetCameraFocusStatus();} set{cameraManager.SetCameraFocusStatus(value);} }
-    public bool IsAnyUnitMoving { get{return structureManager.IsObjectMoving;}}
+	//public bool IsCameraFocused { get{return cameraManager.GetCameraFocusStatus();} set{cameraManager.SetCameraFocusStatus(value);} }
+	public bool IsAnyUnitMoving { get{return structureManager.IsObjectMoving;}}
     public int CurrentTurn { get; set; }
     public bool IsGameInStandby { get{return generalManager.IsGameInStandby;}}
     public bool IsShowingPath { get; set; }
     public ActionPerformed ActionInQueue { get; set; }
     public GameObject ActionTarget { get; set; }
-    public List<Tile> TilesSelected { get { return structureManager.selectedTiles; } set { structureManager.selectedTiles = value; } }
 
     #endregion
 
@@ -204,7 +204,7 @@ public class FightManager : MonoBehaviour
         if ((UnitSelected && UnitSelected.HasPerformedMainAction))
         {
             ResetGameState(false);
-            structureManager.SelectTiles(unit.CurrentTile.ToList(), true, true);
+            structureManager.SelectTiles(unit.CurrentTile.ToList(), true);
             return;
         }
 
@@ -212,7 +212,7 @@ public class FightManager : MonoBehaviour
         if (unit.faction == USER_FACTION) {
             ResetGameState(false);
             structureManager.GeneratePossibleMovementForUnit(UnitSelected, true);
-            structureManager.FindPossibleAttacks(UnitSelected, structureManager.selectedTiles);
+            structureManager.GetPossibleAttacksForUnit(UnitSelected, true);
             return;
         }
 
@@ -221,7 +221,7 @@ public class FightManager : MonoBehaviour
         if (!UnitSelected || !IsAttackPossible(UnitSelected, unit))
         {
             ResetGameState(true);
-            structureManager.SelectTiles(unit.CurrentTile.ToList(), true, true);
+            structureManager.SelectTiles(unit.CurrentTile.ToList(), true);
             return;
         }
 
@@ -241,12 +241,12 @@ public class FightManager : MonoBehaviour
         if (!UnitSelected)
         {
             ResetGameState(true);
-            structureManager.SelectTiles(tileSelected.ToList(), true, true);
+            structureManager.SelectTiles(tileSelected.ToList(), true);
             return;
         }
 
         //If tile clicked is in range
-        if(structureManager.selectedTiles.Contains(tileSelected)){
+        if(UnitSelected.PossibleMovements.Contains(tileSelected)){
             if(IsShowingPath){
                 structureManager.MoveUnit(UnitSelected, tileSelected);
                 ResetGameState(true);
@@ -258,7 +258,7 @@ public class FightManager : MonoBehaviour
 
         //User clicked outside the range
         ResetGameState(true);
-        structureManager.SelectTiles(tileSelected.ToList(), true, true);
+        structureManager.SelectTiles(tileSelected.ToList(), true);
     }
 
     bool IsAttackPossible(Unit attacker, Unit defender)
@@ -272,21 +272,21 @@ public class FightManager : MonoBehaviour
     void AskForMovementConfirmation(Tile destinationTile, int attackerRange = 0)
     {
         structureManager.ClearSelection(false);
-        List<Tile> path = structureManager.FindPathToDestination(destinationTile, false, false);
+        List<Tile> path = structureManager.FindPathToDestination(destinationTile, false);
         List<Tile> attackTiles = path.Skip(path.Count - attackerRange).ToList();
         path = path.SkipLast(attackerRange).ToList();
-        structureManager.SelectTiles(path, true, true, TileType.Selected);
-        structureManager.SelectTiles(attackTiles, false, false, TileType.Enemy);
+        structureManager.SelectTiles(path, true, TileType.Selected);
+        structureManager.SelectTiles(attackTiles, false, TileType.Enemy);
         IsShowingPath = true;
     }
 
     public void QueueAttack(Unit attacker, Unit defender)
     {
-        structureManager.FindPathToDestination(defender.CurrentTile, false, true);
+        List<Tile> path = structureManager.FindPathToDestination(defender.CurrentTile, false);
 
-        int targetMovementTileIndex = structureManager.selectedTiles.Count - 1 - attacker.range;
+        int targetMovementTileIndex = path.Count - 1 - attacker.range;
         if (targetMovementTileIndex < 0) targetMovementTileIndex = 0;
-        Tile targetTile = structureManager.selectedTiles[targetMovementTileIndex];
+        Tile targetTile = structureManager.gameData.mapTiles[path[targetMovementTileIndex].tileNumber];
 
         structureManager.MoveUnit(UnitSelected, targetTile);
         ActionInQueue = ActionPerformed.Attack;
@@ -301,7 +301,6 @@ public class FightManager : MonoBehaviour
     void ResetGameState(bool resetUnitSelected)
     {
         if (resetUnitSelected) UnitSelected = null;
-        structureManager.possibleAttacks = new();
         IsShowingPath = false;
         structureManager.ClearSelection(true);
         structureManager.SetInfoPanel(false);
@@ -340,8 +339,14 @@ public class FightManager : MonoBehaviour
 
     public List<Tile> GetPossibleAttacksForUnit(Unit unit)
 	{
-        return structureManager.GetPossibleAttacksForUnit(unit);
+        return structureManager.GetPossibleAttacksForUnit(unit, false);
 	}
+
+
+    public List<Tile> GetPossibleMovements(Unit unit)
+    {
+        return structureManager.GeneratePossibleMovementForUnit(unit, false);
+    }
 
     //Called by "End Turn" button of UI
     public void EndTurnButton(int faction){

@@ -3,15 +3,17 @@ using UnityEngine;
 
 public class Unit : MonoBehaviour
 {
+    List<Tile> _possibleMovements;
+
     public Tile CurrentTile { get; set; }
     public bool HasPerformedMainAction { get; set; }
-
-    public List<Tile> PossibleAttacks { get { return fightManager.GetPossibleAttacksForUnit(this); } }
 
     FightManager fightManager;
 
     public string unitName;
     public Sprite unitImage;
+
+    public List<Tile> PossibleMovements { get { return GetPossibleMovements(); } }
 
 
 
@@ -25,25 +27,22 @@ public class Unit : MonoBehaviour
         public int range;
     #endregion
 
-    public void OnMouseDown()
-    {
-        if(fightManager.IsGameInStandby)
-            return;
-
-        if(faction == FightManager.USER_FACTION)
-            fightManager.UnitSelected = this;
-        fightManager.ManageClick(ObjectClickedEnum.UnitTile, gameObject);
-    }
-
-    //Workaround to manage right click like we do for the left click in OnMouseDown()
-    void OnMouseOver () {
-        if(Input.GetMouseButtonDown(FightManager.RIGHT_MOUSE_BUTTON)){
-            //manager.ManageClick(ObjectClickedEnum.RightClickOnField, CurrentTile.gameObject);
-        }
-    }
-
     public void SetupManager(FightManager manager)
 	{
         fightManager = manager;
 	}
+
+	public List<Tile> GetPossibleAttacks()
+	{
+        return fightManager.GetPossibleAttacksForUnit(this);
+    }
+
+    List<Tile> GetPossibleMovements()
+    {
+        //if map has changed
+        if (true)
+            _possibleMovements = fightManager.GetPossibleMovements(this);
+
+        return _possibleMovements;
+    }
 }

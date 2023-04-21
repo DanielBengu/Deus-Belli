@@ -16,8 +16,8 @@ public class AIManager : MonoBehaviour
     /// </summary>
     void Start()
     {
-        structureManager = GetComponent<StructureManager>();
         fightManager = GetComponent<FightManager>();
+        structureManager = fightManager.structureManager;
     }
 
     void Update(){
@@ -46,8 +46,8 @@ public class AIManager : MonoBehaviour
 
     void CalculateTurnForUnit(Unit unit){
         Debug.Log($"CALCULATING MOVE FOR UNIT {unit.unitName}");
-        List<Tile> possibleMovements = structureManager.GeneratePossibleMovementForUnit(unit, false);
-        List<Tile> possibleAttacks = structureManager.FindPossibleAttacks(unit, possibleMovements);
+        List<Tile> possibleMovements = unit.PossibleMovements;
+        List<Tile> possibleAttacks = unit.GetPossibleAttacks();
 
         ActionAI action = DecideAction(possibleMovements,possibleAttacks);
 

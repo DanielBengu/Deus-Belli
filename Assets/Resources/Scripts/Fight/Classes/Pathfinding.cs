@@ -68,10 +68,12 @@ public class Pathfinding
 
 
     //Dijkstra algorithm to calculate tiles movement cost
-    public void CalculateMapTilesDistance(Unit startingUnit){
+    public List<Tile> CalculateMapTilesDistance(Unit startingUnit){
+        List<Tile> movementsPossible = new();
+
         if(!startingUnit){
             Debug.Log("CalculateMapTilesDistance - Invalid startingUnit");
-            return;
+            return null;
         }
 
         Debug.Log("Starting Dijkstra calculation");
@@ -107,7 +109,7 @@ public class Pathfinding
 
             tileToCalculate = mapTiles[lowestTileIndex];
             if(tileToCalculate.tentativeCost < maxMovementCost)
-                FindNeighbours(tileToCalculate, true);
+                FindNeighbours(startingUnit, tileToCalculate, true);
 
             tileToCalculate.IsVisited = true;
 
@@ -118,14 +120,17 @@ public class Pathfinding
             }
         }
         Debug.Log("Ending Dijkstra calculation");
+
+        return mapTiles.Select(t => t.Value).Where(t => t.tentativeCost <= startingUnit.movementCurrent && !(t.unitOnTile && t.unitOnTile.faction != startingUnit.faction)).ToList();
     }
 
-    public List<Tile> FindPossibleAttacks(Unit attacker, List<Tile> possibleMovements)
+    public List<Tile> FindPossibleAttacks(Unit attacker)
     {
         List<Tile> possibleAttacks = new();
+        List<Tile> possibleMovements = CalculateMapTilesDistance(attacker);
         foreach (var possibleMovementsTile in possibleMovements)
         {
-            List<Tile> neighboursTile = FindNeighbours(possibleMovementsTile, false).Where(t => t != null).ToList();
+            List<Tile> neighboursTile = FindNeighbours(attacker, possibleMovementsTile, false).Where(t => t != null).ToList();
             
             foreach (var neighbour in neighboursTile)
             {
@@ -138,21 +143,21 @@ public class Pathfinding
         return possibleAttacks;
     }
 
-    List<Tile> FindNeighbours(Tile source, bool calculateCosts){
+    List<Tile> FindNeighbours(Unit sourceUnit, Tile source, bool calculateCosts){
         List<Tile> neighbours = new();
         foreach (var direction in directions)
         {
             Tile neighbourTile = direction(source);
             neighbours.Add(neighbourTile);
 
-            if (calculateCosts) CalculateCost(source, neighbourTile);
+            if (calculateCosts) CalculateCost(sourceUnit, source, neighbourTile);
         }
         return neighbours;
     }
 
-    public void CalculateCost(Tile source, Tile neighbourTile)
+    public void CalculateCost(Unit sourceUnit, Tile source, Tile neighbourTile)
     {
-        if (neighbourTile && neighbourTile.IsPassable && !(neighbourTile.unitOnTile && neighbourTile.unitOnTile.faction != FightManager.USER_FACTION))
+        if (neighbourTile && neighbourTile.IsPassable && !(neighbourTile.unitOnTile && neighbourTile.unitOnTile.faction != sourceUnit.faction))
         {
             float newTentativeCost = source.tentativeCost + neighbourTile.MovementCost;
             if (newTentativeCost < neighbourTile.tentativeCost)

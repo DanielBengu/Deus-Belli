@@ -35,7 +35,7 @@ public class ActionPerformer
     public void SetupFightMovement(Unit source, Tile targetTile)
     {
         RemoveMovementFromUnit(source, targetTile.tentativeCost);
-        MoveUnit(source, targetTile, false);
+        MoveUnit(source, targetTile);
         spriteManager.ClearMapTilesSprite();
     }
 
@@ -44,11 +44,9 @@ public class ActionPerformer
         movement.MoveUnit(source.transform, new List<Transform>() { targetTile }, false);
     }
 
-    public void MoveUnit(Unit unit, Tile targetTile, bool addToSelectedMapTiles)
+    public void MoveUnit(Unit unit, Tile targetTile)
     {
         List<Tile> tilesPath = pathfinding.FindPathToDestination(targetTile);
-        if (addToSelectedMapTiles)
-            structureManager.selectedTiles = tilesPath;
         movement.MoveUnit(unit.transform, tilesPath.Select(t => t.transform).ToList(), true);
     }
 

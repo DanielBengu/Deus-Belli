@@ -4,9 +4,6 @@ using UnityEngine;
 
 public class StructureManager : MonoBehaviour
 {
-    public List<Tile> selectedTiles = new();
-    public List<Tile> possibleAttacks = new();
-
     public UIManager uiManager;
     public SpriteManager spriteManager;
     public ActionPerformer actionPerformer;
@@ -67,14 +64,10 @@ public class StructureManager : MonoBehaviour
         uiManager.SetInfoPanel(active, unit);
     }
 
-    public void SelectTiles(List<Tile> tilelist, bool clearBeforeSelecting, bool AddToSelected, TileType tileType = TileType.Default)
+    public void SelectTiles(List<Tile> tilelist, bool clearBeforeSelecting, TileType tileType = TileType.Default)
     {
         if(clearBeforeSelecting)
             ClearSelectedTiles();
-
-        if(AddToSelected)
-            foreach (var tile in tilelist)
-                selectedTiles.Add(tile);
 
         spriteManager.GenerateTileSelection(tilelist, tileType);
     }
@@ -90,43 +83,29 @@ public class StructureManager : MonoBehaviour
         uiManager.GetVictoryScreen();
 	}
 
-    public List<Tile> FindPathToDestination(Tile targetTile, bool selectTiles, bool addToSelectedMapTiles){
+    public List<Tile> FindPathToDestination(Tile targetTile, bool selectTiles){
         List<Tile> path = pathfinding.FindPathToDestination(targetTile);
         if(selectTiles)
             spriteManager.GenerateTileSelection(path);
-        if(addToSelectedMapTiles)
-            selectedTiles = path;
         return path;
     }
 
     public List<Tile> GeneratePossibleMovementForUnit(Unit unit, bool selectTiles){
         ClearSelectedTiles();
 
-        CalculateMapTilesDistance(unit);
+        List<Tile> possibleMovements = CalculateMapTilesDistance(unit);
 
-        //We remove the starting tile for the unit and the tiles that costs too much movement for it
-        List<Tile> tilesList = gameData.mapTiles.Select(t => t.Value).Where(t => t.tileNumber != unit.CurrentTile.tileNumber && t.tentativeCost <= unit.movementCurrent).ToList();
-        selectedTiles = gameData.mapTiles.Select(t => t.Value).Where(t => t.tentativeCost <= unit.movementCurrent).ToList();
+        if (selectTiles)
+            SelectTiles(possibleMovements, false);
 
-        
-        if(selectTiles)
-            spriteManager.GenerateTileSelection(selectedTiles);
-
-        return tilesList;
+        return possibleMovements;
     }
 
     #region Method Forwarding
 
-    public void CalculateMapTilesDistance(Unit startingUnit)
+    public List<Tile> CalculateMapTilesDistance(Unit startingUnit)
     {
-        pathfinding.CalculateMapTilesDistance(startingUnit);
-    }
-
-    public List<Tile> FindPossibleAttacks(Unit unit, List<Tile> possibleMovements)
-    {
-        possibleAttacks = pathfinding.FindPossibleAttacks(unit, possibleMovements);
-        SelectTiles(possibleAttacks, false, true);
-        return possibleAttacks;
+        return pathfinding.CalculateMapTilesDistance(startingUnit);
     }
 
     public bool MovementTick()
@@ -147,19 +126,22 @@ public class StructureManager : MonoBehaviour
     public bool IsAttackPossible(Unit attacker, Unit defender)
 	{
         //Unit out of movement range
-        if (attacker && !possibleAttacks.Find(t => t.tileNumber == defender.CurrentTile.tileNumber))
+        if (attacker && !attacker.GetPossibleAttacks().Find(t => t.tileNumber == defender.CurrentTile.tileNumber))
             return false;
 
 
         return true;
 	}
 
-    public List<Tile> GetPossibleAttacksForUnit(Unit unit)
+    public List<Tile> GetPossibleAttacksForUnit(Unit unit, bool selectTiles)
 	{
-        
-        //pathfinding.FindPossibleAttacks(unit);
-        return new();
-	}
+        List<Tile> possibleAttacks = pathfinding.FindPossibleAttacks(unit);
+
+        if (selectTiles)
+            SelectTiles(possibleAttacks, false);
+
+        return possibleAttacks;
+    }
 
     #endregion
 
@@ -167,9 +149,7 @@ public class StructureManager : MonoBehaviour
 
     void ClearSelectedTiles(){
             spriteManager.ClearMapTilesSprite();
-            selectedTiles.Clear();
-        }
-
+    }
     #endregion
 }
 
