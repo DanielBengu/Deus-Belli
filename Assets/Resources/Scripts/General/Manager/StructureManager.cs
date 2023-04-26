@@ -78,10 +78,15 @@ public class StructureManager : MonoBehaviour
         ClearSelectedTiles();
     }
 
-    public void GetVictoryScreen()
+    public void GetFightVictoryScreen()
 	{
-        uiManager.GetVictoryScreen();
+        uiManager.GetFightVictoryScreen();
 	}
+
+    public void GetRogueVictoryScreen()
+    {
+        uiManager.GetRogueVictoryScreen();
+    }
 
     public List<Tile> FindPathToDestination(Tile targetTile, bool selectTiles){
         List<Tile> path = pathfinding.FindPathToDestination(targetTile);

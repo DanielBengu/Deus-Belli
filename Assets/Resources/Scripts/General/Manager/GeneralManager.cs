@@ -119,7 +119,10 @@ public class GeneralManager : MonoBehaviour
         rogueSectionInstance = Instantiate(rogueSectionPrefab);
         rogueManager = GameObject.Find(ROGUE_MANAGER_OBJ_NAME).GetComponent<RogueManager>();
         rogueManager.SetupRogue(structureManager, runData.currentNode, runData.seed, runData.playerX);
+        rogueManager.structureManager.uiManager.SetRogueVariables();
         currentSection = CurrentSection.Rogue;
+
+        rogueManager.IsRunCompleted();
     }
 
     public void ReturnToRogueFromFightButton()

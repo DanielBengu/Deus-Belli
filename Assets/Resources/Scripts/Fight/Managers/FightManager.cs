@@ -168,7 +168,7 @@ public class FightManager : MonoBehaviour
         if(isGameOver == false && structureManager.gameData.unitsOnField.Where(u => u.faction == ENEMY_FACTION).ToList().Count == 0)
 		{
             isGameOver = true;
-            structureManager.GetVictoryScreen();
+            structureManager.GetFightVictoryScreen();
         }
             
 	}

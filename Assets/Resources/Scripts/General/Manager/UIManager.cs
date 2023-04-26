@@ -5,15 +5,20 @@ using System;
 
 public class UIManager : MonoBehaviour
 {
+    const string fightVictoryScreenPrefabName = "Fight Victory";
+    const string rogueVictoryScreenPrefabName = "Rogue Victory";
+
     TextMeshProUGUI Title;
     Image GodImage;
 
+    GameObject rogueCanvas;
     GameObject infoPanel;
     GameObject endTurnButton;
-    GameObject victoryScreen;
+    GameObject fightVictoryScreen;
+    GameObject rogueVictoryScreen;
 
     #region Info Panel
-        Image unitImage;
+    Image unitImage;
         TextMeshProUGUI nameText;
         TextMeshProUGUI hpValue;
         TextMeshProUGUI movementValue;
@@ -31,7 +36,8 @@ public class UIManager : MonoBehaviour
 
         infoPanel = GameObject.Find("Info");
         endTurnButton = GameObject.Find("End Turn Button");
-        victoryScreen = Resources.Load<GameObject>($"Prefabs/Fight/Victory");
+        fightVictoryScreen = Resources.Load<GameObject>($"Prefabs/Fight/{fightVictoryScreenPrefabName}");
+        
 
         unitImage = infoPanel.transform.Find("Image").gameObject.GetComponent<Image>();
         nameText = infoPanel.transform.Find("Unit title").gameObject.GetComponent<TextMeshProUGUI>();
@@ -40,6 +46,12 @@ public class UIManager : MonoBehaviour
         attackValue = infoPanel.transform.Find("Attack value").gameObject.GetComponent<TextMeshProUGUI>();
         rangeValue = infoPanel.transform.Find("Range value").gameObject.GetComponent<TextMeshProUGUI>();
         SetInfoPanel(false);
+    }
+
+    public void SetRogueVariables()
+	{
+        rogueCanvas = GameObject.Find("RogueCanvas");
+        rogueVictoryScreen = Resources.Load<GameObject>($"Prefabs/Rogue/Children/{rogueVictoryScreenPrefabName}");
     }
 
     public void SetInfoPanel(bool active, Unit unit = null){
@@ -59,9 +71,14 @@ public class UIManager : MonoBehaviour
         SetGameObject(endTurnButton, active);
     }
 
-	internal void GetVictoryScreen()
+	internal void GetFightVictoryScreen()
 	{
-        Instantiate(victoryScreen, infoPanel.transform.parent);
+        Instantiate(fightVictoryScreen, infoPanel.transform.parent);
+    }
+
+    internal void GetRogueVictoryScreen()
+    {
+        Instantiate(rogueVictoryScreen, rogueCanvas.transform);
     }
 
     public void SetGameObject(GameObject gameObject, bool active)

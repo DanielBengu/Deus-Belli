@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class RogueManager : MonoBehaviour
 {
@@ -14,6 +15,7 @@ public class RogueManager : MonoBehaviour
     public Transform playerUnitTransform;
 
     public int currentNode;
+	readonly int maxNode = 5;
     public PRNG seed;
 
     public bool IsAnyUnitMoving { get { return structureManager.IsObjectMoving; } }
@@ -33,6 +35,12 @@ public class RogueManager : MonoBehaviour
             generalManager.StartFight();
     }
 
+    public void IsRunCompleted()
+	{
+        if (currentNode == maxNode)
+            structureManager.GetRogueVictoryScreen();
+	}
+
     public void SetupRogue(StructureManager structureManager, int currentNode, PRNG seed, float playerX)
 	{
         this.currentNode = currentNode;
@@ -48,7 +56,7 @@ public class RogueManager : MonoBehaviour
         int tileLength = seed.Next(10);
         RogueTile originTile = origin;
         originTile.SetupManager(this);
-		for (int i = 0; i < 5; i++) originTile = CreateNewNode(tileLength, originTile);
+		for (int i = 0; i < maxNode; i++) originTile = CreateNewNode(tileLength, originTile);
     }
 
     RogueTile CreateNewNode(int randomLength, RogueTile originTile)
@@ -92,6 +100,12 @@ public class RogueManager : MonoBehaviour
         foreach (var item in mapObjectsList)
             Destroy(item);
     }
+
+    public void EndRun()
+	{
+        SceneManager.LoadScene(0);
+    }
+
     enum RogueChoices
     {
         StandardFight,
