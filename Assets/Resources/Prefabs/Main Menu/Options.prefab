@@ -1140,7 +1140,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   OptionsPrefab: {fileID: 7649992450677276450}
-  MainPrefab: {fileID: 3935821387841560350, guid: 83296696181aac043b7c8a71945fe7a0, type: 3}
+  MainPrefab: {fileID: 4089435185736633246, guid: 83296696181aac043b7c8a71945fe7a0, type: 3}
   VideoSettingsPrefab: {fileID: 2799283275636503987, guid: e398e623ac4124c43a3b389eb3d94069, type: 3}
   SoundSettingsPrefab: {fileID: 2799283275636503987, guid: 984ae45ab4205f543a2af1a1f4ecdd43, type: 3}
 --- !u!1 &4795067163321710680

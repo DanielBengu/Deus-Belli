@@ -18,7 +18,10 @@ public class RogueManager : MonoBehaviour
 	readonly int maxNode = 5;
     public PRNG seed;
 
-    public bool IsAnyUnitMoving { get { return structureManager.IsObjectMoving; } }
+	public int Gold { get { return generalManager.Gold; } }
+
+
+	public bool IsAnyUnitMoving { get { return structureManager.IsObjectMoving; } }
 
     public bool IsGameInStandby { get { return generalManager.IsGameInStandby; } }
 
@@ -55,7 +58,7 @@ public class RogueManager : MonoBehaviour
 	{
         int tileLength = seed.Next(10);
         RogueTile originTile = origin;
-        originTile.SetupManager(this);
+        originTile.SetupTile(this, RogueTileType.Fight);
 		for (int i = 0; i < maxNode; i++) originTile = CreateNewNode(tileLength, originTile);
     }
 
@@ -67,7 +70,7 @@ public class RogueManager : MonoBehaviour
         GameObject newTile = Instantiate(tile, tilePosition, tile.transform.rotation);
         mapObjectsList.Add(newTile);
         RogueTile newTileScript = newTile.GetComponent<RogueTile>();
-        newTileScript.SetupManager(this);
+        newTileScript.SetupTile(this, RogueTileType.Fight);
         newTileScript.nodeNumber = originTile.nodeNumber + 1;
 
 
@@ -104,13 +107,5 @@ public class RogueManager : MonoBehaviour
     public void EndRun()
 	{
         SceneManager.LoadScene(0);
-    }
-
-    enum RogueChoices
-    {
-        StandardFight,
-        EliteFight,
-        Merchant,
-        Smith
     }
 }

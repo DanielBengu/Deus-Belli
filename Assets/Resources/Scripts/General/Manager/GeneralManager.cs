@@ -30,13 +30,13 @@ public class GeneralManager : MonoBehaviour
 
     public bool IsScrollButtonDown { get; set; }
     public bool IsOptionOpen { get; set; }
-
     public bool IsGameInStandby { get { return IsGameInStandbyMethod(); } }
+	public int Gold { get { return runData.gold; } set { runData.gold = value; } }
 
 	private void Start()
 	{
-        PRNG seed = new(Random.Range(0, 100));
-        runData = new RunData(0, seed, 0);
+        PRNG seed = new(Random.Range(0, 1000));
+        runData = new RunData(0, seed, 0, 0);
         GenerateRogueSection();
     }
 
@@ -98,7 +98,7 @@ public class GeneralManager : MonoBehaviour
     }
     void DestroyRogueSection()
     {
-        runData = new(rogueManager.currentNode, rogueManager.seed, rogueManager.playerUnitTransform.position.x);
+        runData = new(rogueManager.currentNode, rogueManager.seed, rogueManager.playerUnitTransform.position.x, Gold);
         rogueManager.DisableRogueSection();
         Destroy(rogueSectionInstance);
     }
@@ -119,7 +119,7 @@ public class GeneralManager : MonoBehaviour
         rogueSectionInstance = Instantiate(rogueSectionPrefab);
         rogueManager = GameObject.Find(ROGUE_MANAGER_OBJ_NAME).GetComponent<RogueManager>();
         rogueManager.SetupRogue(structureManager, runData.currentNode, runData.seed, runData.playerX);
-        rogueManager.structureManager.uiManager.SetRogueVariables();
+        rogueManager.structureManager.uiManager.SetRogueVariables(Gold);
         currentSection = CurrentSection.Rogue;
 
         rogueManager.IsRunCompleted();
@@ -136,11 +136,14 @@ public class GeneralManager : MonoBehaviour
         public PRNG seed;
         public float playerX;
 
-        public RunData(int currentNode, PRNG seed, float playerX)
+        public int gold;
+
+        public RunData(int currentNode, PRNG seed, float playerX, int gold)
         {
             this.currentNode = currentNode;
             this.seed = seed;
             this.playerX = playerX;
+            this.gold = gold;
         }
     }
 
