@@ -81,6 +81,8 @@ public class UIManager : MonoBehaviour
 
 	internal void GetFightVictoryScreen()
 	{
+        var rew1 = fightVictoryScreen.transform.Find("Reward 1").GetComponent<TextMeshProUGUI>();
+        rew1.text = "500 gold";
         Instantiate(fightVictoryScreen, infoPanel.transform.parent);
     }
 

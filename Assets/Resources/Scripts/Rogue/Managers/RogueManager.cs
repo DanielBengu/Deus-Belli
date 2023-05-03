@@ -10,7 +10,6 @@ public class RogueManager : MonoBehaviour
     public RogueTile origin;
     public GameObject tile;
     public GameObject link;
-    readonly List<GameObject> mapObjectsList = new();
 
     public Transform playerUnitTransform;
 
@@ -59,29 +58,13 @@ public class RogueManager : MonoBehaviour
         int tileLength = seed.Next(10);
         RogueTile originTile = origin;
         originTile.SetupTile(this, RogueTileType.Fight);
-		for (int i = 0; i < maxNode; i++) originTile = CreateNewNode(tileLength, originTile);
+		for (int i = 0; i < maxNode; i++) originTile = CreateNewNode(tileLength, originTile, origin.transform);
     }
 
-    RogueTile CreateNewNode(int randomLength, RogueTile originTile)
+    RogueTile CreateNewNode(int randomLength, RogueTile destinationTile, Transform parent)
 	{
-        Vector3 tilePosition = tile.transform.position;
-        tilePosition.x = originTile.transform.position.x + 150 + (50 * randomLength);
-
-        GameObject newTile = Instantiate(tile, tilePosition, tile.transform.rotation);
-        mapObjectsList.Add(newTile);
-        RogueTile newTileScript = newTile.GetComponent<RogueTile>();
-        newTileScript.SetupTile(this, RogueTileType.Fight);
-        newTileScript.nodeNumber = originTile.nodeNumber + 1;
-
-
-        Vector3 linkPosition = newTile.transform.position;
-        linkPosition.x = (originTile.transform.position.x + newTile.transform.position.x) / 2;
-
-        GameObject newLine = Instantiate(link, linkPosition, link.transform.rotation);
-        mapObjectsList.Add(newLine);
-        Vector3 linkScale = newLine.transform.localScale;
-        linkScale.y = Mathf.Abs(originTile.transform.position.x - newTile.transform.position.x) / 2;
-        newLine.transform.localScale = linkScale;
+        RogueTile newTileScript = structureManager.GenerateRogueTiles(randomLength, destinationTile, tile.transform, parent, this);
+        structureManager.GenerateRogueLine(newTileScript.transform, destinationTile.transform, link, parent, randomLength);
 
         return newTileScript;
     }
@@ -100,8 +83,6 @@ public class RogueManager : MonoBehaviour
 
     public void DisableRogueSection()
 	{
-        foreach (var item in mapObjectsList)
-            Destroy(item);
     }
 
     public void EndRun()

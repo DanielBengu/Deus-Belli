@@ -21,7 +21,7 @@ public class StructureManager : MonoBehaviour
 
 	public Dictionary<int, Tile> SetupFightSection(Dictionary<int, GameObject> tileList, FightManager manager, int topX, int y, int topZ, int X_Length, int Y_Length)
 	{
-        var mapTiles = GenerateTiles(tileList, manager, topX, y, topZ, X_Length, Y_Length);
+        var mapTiles = GenerateFightTiles(tileList, manager, topX, y, topZ, X_Length, Y_Length);
         pathfinding = new(mapTiles, X_Length, Y_Length);
         actionPerformer.pathfinding = pathfinding;
         return mapTiles;
@@ -32,7 +32,7 @@ public class StructureManager : MonoBehaviour
     }
 
 
-    public Dictionary<int, Tile> GenerateTiles(Dictionary<int, GameObject> tileList, FightManager manager, int topX, int y, int topZ, int XLength, int YLength)
+    public Dictionary<int, Tile> GenerateFightTiles(Dictionary<int, GameObject> tileList, FightManager manager, int topX, int y, int topZ, int XLength, int YLength)
     {
         Dictionary<int, Tile> mapTiles = new();
         Debug.Log("START TILE GENERATION");
@@ -58,6 +58,30 @@ public class StructureManager : MonoBehaviour
         }
         Debug.Log("END TILE GENERATION");
         return mapTiles;
+    }
+
+    public RogueTile GenerateRogueTiles(int randomLength, RogueTile destinationTile, Transform origin, Transform parent, RogueManager rm)
+	{
+        Vector3 tilePosition = origin.position;
+        tilePosition.x = destinationTile.transform.position.x + 150 + (50 * randomLength);
+
+        GameObject newTile = Instantiate(origin.gameObject, tilePosition, origin.rotation, parent);
+        newTile.transform.localScale = new Vector3(1, 1, 1);
+        RogueTile newTileScript = newTile.GetComponent<RogueTile>();
+        newTileScript.SetupTile(rm, RogueTileType.Fight);
+        newTileScript.nodeNumber = destinationTile.nodeNumber + 1;
+
+        return newTileScript;
+    }
+
+    public void GenerateRogueLine(Transform newTile, Transform destinationTile, GameObject linkPrefab, Transform parent, int randomLength)
+	{
+        Vector3 linkPosition = newTile.position;
+        linkPosition.x = (destinationTile.position.x + newTile.position.x) / 2;
+
+        GameObject newLine = Instantiate(linkPrefab, linkPosition, linkPrefab.transform.rotation, parent);
+
+        newLine.transform.localScale = new Vector3((float)0.25, (float)(0.75 + (randomLength * 0.25)), (float)1.25);
     }
 
     public void SetInfoPanel(bool active, Unit unit = null){
