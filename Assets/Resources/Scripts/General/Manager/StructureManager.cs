@@ -102,9 +102,9 @@ public class StructureManager : MonoBehaviour
         ClearSelectedTiles();
     }
 
-    public void GetFightVictoryScreen()
+    public void GetFightVictoryScreen(int gold)
 	{
-        uiManager.GetFightVictoryScreen();
+        uiManager.GetFightVictoryScreen(gold);
 	}
 
     public void GetRogueVictoryScreen()

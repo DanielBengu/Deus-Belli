@@ -168,11 +168,21 @@ public class FightManager : MonoBehaviour
         if(isGameOver == false && structureManager.gameData.unitsOnField.Where(u => u.faction == ENEMY_FACTION).ToList().Count == 0)
 		{
             isGameOver = true;
-            generalManager.Gold += 20;
-            structureManager.GetFightVictoryScreen();
+            int gold = GenerateAndAddGold();
+            structureManager.GetFightVictoryScreen(gold);
         }
             
 	}
+
+    int GenerateAndAddGold()
+	{
+        int goldGenerated = 100;
+        generalManager.Gold += goldGenerated;
+        PlayerPrefs.SetString("Gold", generalManager.Gold.ToString());
+
+        return goldGenerated;
+    }
+
     public void ManageClick(ObjectClickedEnum objectClicked, GameObject reference){
         switch (objectClicked)
         {
