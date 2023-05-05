@@ -85,8 +85,15 @@ public class RogueManager : MonoBehaviour
 	{
     }
 
-    public void EndRun()
+    public void EndRun(int runType)
 	{
         SceneManager.LoadScene(0);
     }
+
+    public enum RunEndType
+	{
+        Close,
+        Abandon,
+        Finish
+	}
 }
