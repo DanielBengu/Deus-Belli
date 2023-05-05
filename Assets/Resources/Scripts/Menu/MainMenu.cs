@@ -1,5 +1,6 @@
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
 public class MainMenu: MonoBehaviour
 {
@@ -7,14 +8,22 @@ public class MainMenu: MonoBehaviour
     GameObject OptionPrefab;
     [SerializeField]
     GameObject NewGamePrefab;
+    [SerializeField]
+    Button ContinueButton;
 
-    public void NewGame(){
+	private void Start()
+	{
+        bool isRunOngoing = PlayerPrefs.GetInt("OngoingRun") != 0;
+        ContinueButton.interactable = isRunOngoing;
+	}
+
+	public void NewGame(){
         GameObject mainScene = GameObject.Find("Main");
         GeneratePrefab(NewGamePrefab, "NewGame");
         Destroy(mainScene);
     }
 
-    public void LoadGame(){
+    public void ContinueRun(){
         SceneManager.LoadScene(1);
     }
 

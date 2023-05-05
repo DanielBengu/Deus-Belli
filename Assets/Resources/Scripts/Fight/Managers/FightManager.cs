@@ -178,8 +178,7 @@ public class FightManager : MonoBehaviour
 	{
         int goldGenerated = 100;
         generalManager.Gold += goldGenerated;
-        PlayerPrefs.SetString("Gold", generalManager.Gold.ToString());
-
+        PlayerPrefs.SetInt("Gold", generalManager.Gold);
         return goldGenerated;
     }
 

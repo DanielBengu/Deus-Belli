@@ -72,6 +72,11 @@ public class OptionsMenu : MonoBehaviour
     }
 
     void AbandonRun(){
+        GeneralManager.AbandonRun();
+    }
 
+    public void ToMainMenu()
+	{
+        SceneManager.LoadScene(0);
     }
 }

@@ -1,4 +1,6 @@
 using UnityEngine;
+using UnityEngine.SceneManagement;
+
 public class GeneralManager : MonoBehaviour
 {
     public const int SCROLL_WHEEL_BUTTON = 2;
@@ -35,8 +37,21 @@ public class GeneralManager : MonoBehaviour
 
 	private void Start()
 	{
-        PRNG seed = new(Random.Range(0, 1000));
-        runData = new RunData(0, seed, 0, 0);
+        bool isOngoingRun = PlayerPrefs.GetInt("OngoingRun") != 0;
+        if (isOngoingRun)
+            runData = LoadRunData();
+		else
+		{
+            int baseSeed = Random.Range(0, 1000);
+            PRNG seed = new(baseSeed);
+            runData = new RunData(0, seed, 0, 0);
+
+            PlayerPrefs.SetInt("Seed", baseSeed);
+            PlayerPrefs.SetInt("Gold", 0);
+            PlayerPrefs.SetInt("CurrentNode", 0);
+            PlayerPrefs.SetFloat("PlayerX", 0);
+        }
+
         GenerateRogueSection();
     }
 
@@ -48,6 +63,15 @@ public class GeneralManager : MonoBehaviour
         if (IsScrollButtonDown)
             cameraManager.UpdatePosition();
     }
+
+    RunData LoadRunData()
+	{
+        PRNG seed = new(PlayerPrefs.GetInt("Seed"));
+        int currentNode = PlayerPrefs.GetInt("CurrentNode");
+        float playerX = PlayerPrefs.GetFloat("PlayerX");
+        int gold = PlayerPrefs.GetInt("Gold");
+        return new RunData(currentNode, seed, playerX, gold);
+	}
 
     void ManageKeysDown()
 	{
@@ -123,6 +147,12 @@ public class GeneralManager : MonoBehaviour
         currentSection = CurrentSection.Rogue;
 
         rogueManager.IsRunCompleted();
+    }
+
+    public static void AbandonRun()
+	{
+        PlayerPrefs.SetInt("OngoingRun", 0);
+        SceneManager.LoadScene(0);
     }
 
     public void ReturnToRogueFromFightButton()

@@ -37,7 +37,9 @@ public class NewGameManager : MonoBehaviour
 
     public void StartGame(){
         if(godSelected != null){
+            PlayerPrefs.SetInt("OngoingRun", 1);
             PlayerPrefs.SetString("God Selected", godSelected);
+            PlayerPrefs.SetInt("Gold", 0);
             SceneManager.LoadScene(1);
         }
     }

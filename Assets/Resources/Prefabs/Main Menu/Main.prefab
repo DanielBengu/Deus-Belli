@@ -614,7 +614,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 4089435185817667865}
         m_TargetAssemblyTypeName: MainMenu, Assembly-CSharp
-        m_MethodName: LoadGame
+        m_MethodName: ContinueRun
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -1184,3 +1184,4 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   OptionPrefab: {fileID: 7649992450677276450, guid: d7e1925e215cef34882fedb7bf94467a, type: 3}
   NewGamePrefab: {fileID: 7048840558436200652, guid: cf8c15daa25234f48a8f75db90fba77e, type: 3}
+  ContinueButton: {fileID: 4089435184696210498}

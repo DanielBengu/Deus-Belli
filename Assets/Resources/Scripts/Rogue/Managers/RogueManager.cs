@@ -87,7 +87,22 @@ public class RogueManager : MonoBehaviour
 
     public void EndRun(int runType)
 	{
-        SceneManager.LoadScene(0);
+        RunEndType runEndType = (RunEndType)runType;
+		switch (runEndType)
+		{
+            //Player temporarily closed the run
+			case RunEndType.Close:
+                SceneManager.LoadScene(0);
+                break;
+            //Player abandoned the run
+			case RunEndType.Abandon:
+                GeneralManager.AbandonRun();
+                break;
+            //Player completed a run
+			case RunEndType.Finish:
+                SceneManager.LoadScene(0);
+                break;
+		}
     }
 
     public enum RunEndType
