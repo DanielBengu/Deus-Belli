@@ -74,14 +74,18 @@ public class StructureManager : MonoBehaviour
         return newTileScript;
     }
 
-    public void GenerateRogueLine(Transform newTile, Transform destinationTile, GameObject linkPrefab, Transform parent, int randomLength)
+    public void GenerateRogueLine(List<RogueTile> tileList, LineRenderer lineRenderer)
 	{
-        Vector3 linkPosition = newTile.position;
-        linkPosition.x = (destinationTile.position.x + newTile.position.x) / 2;
+        lineRenderer.startColor = Color.red;
+        lineRenderer.endColor = Color.blue;
+        lineRenderer.startWidth = 10f;
+        lineRenderer.endWidth = 10f;
 
-        GameObject newLine = Instantiate(linkPrefab, linkPosition, linkPrefab.transform.rotation, parent);
-
-        newLine.transform.localScale = new Vector3((float)0.25, (float)(0.75 + (randomLength * 0.25)), (float)1.25);
+		for (int i = 1; i < tileList.Count; i++)
+		{
+            lineRenderer.SetPosition(i - 1, tileList[i - 1].transform.position);
+            lineRenderer.SetPosition(i, tileList[i].transform.position);
+        }
     }
 
     public void SetInfoPanel(bool active, Unit unit = null){

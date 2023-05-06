@@ -50,6 +50,7 @@ public class GeneralManager : MonoBehaviour
             PlayerPrefs.SetInt("Gold", 0);
             PlayerPrefs.SetInt("CurrentNode", 0);
             PlayerPrefs.SetFloat("PlayerX", 0);
+            PlayerPrefs.SetInt("OngoingRun", 1);
         }
 
         GenerateRogueSection();
@@ -72,6 +73,12 @@ public class GeneralManager : MonoBehaviour
         int gold = PlayerPrefs.GetInt("Gold");
         return new RunData(currentNode, seed, playerX, gold);
 	}
+
+	public void SaveMapProgress()
+	{
+        PlayerPrefs.SetInt("CurrentNode", runData.currentNode);
+        PlayerPrefs.SetFloat("PlayerX", runData.playerX);
+    }
 
     void ManageKeysDown()
 	{

@@ -9,9 +9,11 @@ public class RogueManager : MonoBehaviour
 
     public RogueTile origin;
     public GameObject tile;
-    public GameObject link;
+	readonly List<RogueTile> tileList = new();
 
     public Transform playerUnitTransform;
+
+    private LineRenderer lineRenderer;
 
     public int currentNode;
 	readonly int maxNode = 5;
@@ -23,12 +25,6 @@ public class RogueManager : MonoBehaviour
 	public bool IsAnyUnitMoving { get { return structureManager.IsObjectMoving; } }
 
     public bool IsGameInStandby { get { return generalManager.IsGameInStandby; } }
-
-    // Start is called before the first frame update
-    void Start()
-    {
-        generalManager = GameObject.Find(GeneralManager.GENERAL_MANAGER_OBJ_NAME).GetComponent<GeneralManager>();
-    }
 
 	private void Update()
 	{
@@ -45,6 +41,10 @@ public class RogueManager : MonoBehaviour
 
     public void SetupRogue(StructureManager structureManager, int currentNode, PRNG seed, float playerX)
 	{
+        lineRenderer = GetComponent<LineRenderer>();
+        lineRenderer.positionCount = maxNode + 1;
+        generalManager = GameObject.Find(GeneralManager.GENERAL_MANAGER_OBJ_NAME).GetComponent<GeneralManager>();
+
         this.currentNode = currentNode;
         this.seed = seed;
         this.structureManager = structureManager;
@@ -58,14 +58,16 @@ public class RogueManager : MonoBehaviour
         int tileLength = seed.Next(10);
         RogueTile originTile = origin;
         originTile.SetupTile(this, RogueTileType.Fight);
+        tileList.Add(originTile);
 		for (int i = 0; i < maxNode; i++) originTile = CreateNewNode(tileLength, originTile, origin.transform);
+
+        structureManager.GenerateRogueLine(tileList, lineRenderer);
     }
 
     RogueTile CreateNewNode(int randomLength, RogueTile destinationTile, Transform parent)
 	{
         RogueTile newTileScript = structureManager.GenerateRogueTiles(randomLength, destinationTile, tile.transform, parent, this);
-        structureManager.GenerateRogueLine(newTileScript.transform, destinationTile.transform, link, parent, randomLength);
-
+        tileList.Add(newTileScript);
         return newTileScript;
     }
 

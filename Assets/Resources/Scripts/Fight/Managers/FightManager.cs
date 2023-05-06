@@ -169,6 +169,7 @@ public class FightManager : MonoBehaviour
 		{
             isGameOver = true;
             int gold = GenerateAndAddGold();
+            generalManager.SaveMapProgress();
             structureManager.GetFightVictoryScreen(gold);
         }
             
