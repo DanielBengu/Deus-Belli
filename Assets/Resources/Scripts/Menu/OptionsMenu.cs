@@ -72,7 +72,7 @@ public class OptionsMenu : MonoBehaviour
     }
 
     void AbandonRun(){
-        GeneralManager.AbandonRun();
+        GeneralManager.CloseRun();
     }
 
     public void ToMainMenu()

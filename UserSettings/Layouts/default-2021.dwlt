@@ -215,15 +215,15 @@ MonoBehaviour:
     y: 0
     width: 1077
     height: 650
-  m_MinSize: {x: 202, y: 221}
-  m_MaxSize: {x: 4002, y: 4021}
+  m_MinSize: {x: 200, y: 200}
+  m_MaxSize: {x: 4000, y: 4000}
   m_ActualView: {fileID: 12}
   m_Panes:
-  - {fileID: 14}
   - {fileID: 12}
+  - {fileID: 14}
   - {fileID: 15}
-  m_Selected: 1
-  m_LastSelected: 0
+  m_Selected: 0
+  m_LastSelected: 1
 --- !u!114 &10
 MonoBehaviour:
   m_ObjectHideFlags: 52
@@ -558,9 +558,9 @@ MonoBehaviour:
   m_PlayAudio: 0
   m_AudioPlay: 0
   m_Position:
-    m_Target: {x: 1101.54, y: 529.0978, z: 902.32074}
+    m_Target: {x: 742.35547, y: -93.31961, z: 2048.4702}
     speed: 2
-    m_Value: {x: 1101.54, y: 529.0978, z: 902.32074}
+    m_Value: {x: 742.35547, y: -93.31961, z: 2048.4702}
   m_RenderMode: 0
   m_CameraMode:
     drawMode: 0
@@ -607,13 +607,13 @@ MonoBehaviour:
     m_GridAxis: 1
     m_gridOpacity: 0.5
   m_Rotation:
-    m_Target: {x: 0.266199, y: -0.07623535, z: 0.021132395, w: 0.9606883}
+    m_Target: {x: 0.14383033, y: -0.14021076, z: 0.020597, w: 0.9794243}
     speed: 2
-    m_Value: {x: 0.2661934, y: -0.07623374, z: 0.02113195, w: 0.960668}
+    m_Value: {x: 0.14382727, y: -0.14020778, z: 0.020596562, w: 0.9794035}
   m_Size:
-    m_Target: 331.969
+    m_Target: 755.4009
     speed: 2
-    m_Value: 331.969
+    m_Value: 755.4009
   m_Ortho:
     m_Target: 0
     speed: 2
@@ -631,7 +631,7 @@ MonoBehaviour:
     m_FarClip: 10000
     m_DynamicClip: 1
     m_OcclusionCulling: 0
-  m_LastSceneViewRotation: {x: -0.08717229, y: 0.89959055, z: -0.21045254, w: -0.3726226}
+  m_LastSceneViewRotation: {x: 0.14383033, y: -0.14021076, z: 0.020597, w: 0.9794243}
   m_LastSceneViewOrtho: 0
   m_ReplacementShader: {fileID: 0}
   m_ReplacementString: 
@@ -672,7 +672,7 @@ MonoBehaviour:
       scrollPos: {x: 0, y: 0}
       m_SelectedIDs: 
       m_LastClickedID: 0
-      m_ExpandedIDs: 32e8fdfff6eafdff7c19feff401cfeff3c2efeff7230feff7c3efeff4041feffac45feff7048feff0050feffda57feff9e5afeff4465feff0868feff388cfefffc8efeff52acfeff88aefeff4cb1feff40cbfeffa6e2feffdae4feff9ee7feff2afbffffcaa5000088ad0000
+      m_ExpandedIDs: d6bbfeff2ee8feffa607ffff6a0affffea5affff605bffffa25dffff6660ffffb284ffff1285ffff2a85ffff3485ffff7687ffff3a8affff2afbffffdea40000
       m_RenameOverlay:
         m_UserAcceptedRename: 0
         m_Name: 
@@ -814,7 +814,7 @@ MonoBehaviour:
     x: 479
     y: 73
     width: 1075
-    height: 630
+    height: 629
   m_ViewDataDictionary: {fileID: 0}
   m_OverlayCanvas:
     m_LastAppliedPresetName: Default
@@ -915,22 +915,22 @@ MonoBehaviour:
     m_SkipHidden: 1
     m_SearchArea: 1
     m_Folders:
-    - Assets/Resources/Prefabs/Rogue
+    - Assets/Resources/Prefabs/Fight
     m_Globs: []
     m_OriginalText: 
   m_ViewMode: 1
   m_StartGridSize: 16
   m_LastFolders:
-  - Assets/Resources/Prefabs/Rogue
+  - Assets/Resources/Prefabs/Fight
   m_LastFoldersGridSize: 16
   m_LastProjectPath: C:\Users\Daniel\The God Cup
   m_LockTracker:
     m_IsLocked: 0
   m_FolderTreeState:
     scrollPos: {x: 0, y: 111}
-    m_SelectedIDs: ac640000
-    m_LastClickedID: 25772
-    m_ExpandedIDs: 0000000066640000686400006a6400006c6400006e64000070640000726400007464000076640000786400007a6400007c6400007e64000080640000826400008464000086640000886400008a6400008c6400008e64000000ca9a3b
+    m_SelectedIDs: 9a6a0000
+    m_LastClickedID: 27290
+    m_ExpandedIDs: 0000000066640000686400006a6400006c6400006e64000070640000726400007464000076640000786400007a6400007c6400007e64000080640000826400008464000086640000886400008a6400008c6400008e640000246c000000ca9a3b
     m_RenameOverlay:
       m_UserAcceptedRename: 0
       m_Name: 
@@ -983,8 +983,8 @@ MonoBehaviour:
       m_Icon: {fileID: 0}
       m_ResourceFile: 
   m_ListAreaState:
-    m_SelectedInstanceIDs: 
-    m_LastClickedInstanceID: 0
+    m_SelectedInstanceIDs: 8ea60000
+    m_LastClickedInstanceID: 42638
     m_HadKeyboardFocusLastEvent: 1
     m_ExpandedInstanceIDs: c62300009c5e0000025e00008a880000e2920000029b0000248e000000000000
     m_RenameOverlay:

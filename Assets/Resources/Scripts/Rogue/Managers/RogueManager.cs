@@ -21,6 +21,7 @@ public class RogueManager : MonoBehaviour
 
 	public int Gold { get { return generalManager.Gold; } }
 
+	public bool IsGameOver { get { return currentNode == maxNode; } }
 
 	public bool IsAnyUnitMoving { get { return structureManager.IsObjectMoving; } }
 
@@ -83,9 +84,12 @@ public class RogueManager : MonoBehaviour
             
     }
 
-    public void DisableRogueSection()
+    //Method called by the red "Abandon Run" button on the Rogue section UI
+    public void AbandonRunClick()
 	{
-    }
+        if (!generalManager.IsGameInStandby)
+            EndRun(1);
+	}
 
     public void EndRun(int runType)
 	{
@@ -94,15 +98,16 @@ public class RogueManager : MonoBehaviour
 		{
             //Player temporarily closed the run
 			case RunEndType.Close:
+                GeneralManager.CloseRun();
                 SceneManager.LoadScene(0);
                 break;
             //Player abandoned the run
 			case RunEndType.Abandon:
-                GeneralManager.AbandonRun();
+                GeneralManager.CloseRun();
                 break;
             //Player completed a run
 			case RunEndType.Finish:
-                SceneManager.LoadScene(0);
+                GeneralManager.CloseRun();
                 break;
 		}
     }

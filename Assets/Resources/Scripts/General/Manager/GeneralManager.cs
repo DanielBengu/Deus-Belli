@@ -61,6 +61,18 @@ public class GeneralManager : MonoBehaviour
         if (!IsGameInStandby && (Input.anyKeyDown || IsScrollButtonDown))
             ManageKeysDown();
 
+        float scrollWheelInput = Input.GetAxis("Mouse ScrollWheel");
+        if (scrollWheelInput != 0f)
+            switch (currentSection)
+            {
+                case CurrentSection.Fight:
+                    cameraManager.ScrollWheel(scrollWheelInput);
+                    break;
+                case CurrentSection.Rogue:
+                    cameraManager.ScrollWheel(scrollWheelInput, rogueSectionInstance.transform);
+                    break;
+            }
+
         if (IsScrollButtonDown)
             cameraManager.UpdatePosition();
     }
@@ -98,10 +110,6 @@ public class GeneralManager : MonoBehaviour
         {
             IsScrollButtonDown = false;
         }
-
-        float scrollWheelInput = Input.GetAxis("Mouse ScrollWheel");
-        if (scrollWheelInput != 0f)
-            cameraManager.ScrollWheel(scrollWheelInput);
     }
 
     bool IsGameInStandbyMethod()
@@ -109,7 +117,7 @@ public class GeneralManager : MonoBehaviour
 		return currentSection switch
 		{
 			CurrentSection.Fight => fightManager.IsAnyUnitMoving || IsOptionOpen || fightManager.CurrentTurn != 0 || fightManager.isGameOver,
-			CurrentSection.Rogue => rogueManager.IsAnyUnitMoving || IsOptionOpen,
+			CurrentSection.Rogue => rogueManager.IsAnyUnitMoving || rogueManager.IsGameOver || IsOptionOpen,
 			_ => false,
 		};
 	}
@@ -130,7 +138,6 @@ public class GeneralManager : MonoBehaviour
     void DestroyRogueSection()
     {
         runData = new(rogueManager.currentNode, rogueManager.seed, rogueManager.playerUnitTransform.position.x, Gold);
-        rogueManager.DisableRogueSection();
         Destroy(rogueSectionInstance);
     }
 
@@ -156,7 +163,7 @@ public class GeneralManager : MonoBehaviour
         rogueManager.IsRunCompleted();
     }
 
-    public static void AbandonRun()
+    public static void CloseRun()
 	{
         PlayerPrefs.SetInt("OngoingRun", 0);
         SceneManager.LoadScene(0);

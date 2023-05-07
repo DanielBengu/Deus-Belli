@@ -39,7 +39,7 @@ public class CameraManager : MonoBehaviour
         transform.position = position;
     }
 
-    public void ScrollWheel(float scroll){
+    public void ScrollWheel(float scroll, Transform rogueSection = null){
         // Calculate the new distance based on the mouse wheel input
         distance += -scroll * scrollSpeed;
 
@@ -49,8 +49,10 @@ public class CameraManager : MonoBehaviour
         // Get the scroll direction
         int scrollDirection = (int)Mathf.Sign(scroll);
 
+        Transform objectToMove = rogueSection != null ? rogueSection : transform;
+        Vector3 direction = rogueSection != null ? Vector3.right : Vector3.forward;
         // Move the camera along the blue axis by the distance
-        transform.Translate(distance * scrollDirection * Vector3.forward, Space.Self);
+        objectToMove.Translate(distance * scrollDirection * 100 * Time.deltaTime * direction, Space.Self);
     }
 
     /*

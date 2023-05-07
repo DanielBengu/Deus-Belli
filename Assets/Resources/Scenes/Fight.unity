@@ -435,7 +435,6 @@ MonoBehaviour:
   rogueSectionPrefab: {fileID: 6871625446447118757, guid: 4607e3baf5a716c449103d259bf51fc4, type: 3}
   cameraManager: {fileID: 519420033}
   structureManager: {fileID: 1412221415}
-  spriteManager: {fileID: 0}
   OptionsPrefab: {fileID: 7649992450677276450, guid: d7e1925e215cef34882fedb7bf94467a, type: 3}
 --- !u!4 &1412221414
 Transform:
@@ -464,8 +463,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d8bbb9aea8e2a904ebd0c3bcaba5afb2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  selectedTiles: []
-  possibleAttacks: []
   uiManager: {fileID: 1412221416}
   spriteManager: {fileID: 1412221417}
 --- !u!114 &1412221416
@@ -492,6 +489,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 22a1d11a5f9cb0d44a17d4d5b85927ee, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  fightManager: {fileID: 0}
 --- !u!1 &1616851528
 GameObject:
   m_ObjectHideFlags: 0
