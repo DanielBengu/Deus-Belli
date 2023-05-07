@@ -40,7 +40,7 @@ public class RogueManager : MonoBehaviour
             structureManager.GetRogueVictoryScreen();
 	}
 
-    public void SetupRogue(StructureManager structureManager, int currentNode, PRNG seed, float playerX)
+    public void SetupRogue(StructureManager structureManager, int currentNode, PRNG seed)
 	{
         lineRenderer = GetComponent<LineRenderer>();
         lineRenderer.positionCount = maxNode + 1;
@@ -49,9 +49,10 @@ public class RogueManager : MonoBehaviour
         this.currentNode = currentNode;
         this.seed = seed;
         this.structureManager = structureManager;
-        if(playerX != 0)
-            playerUnitTransform.position = new Vector3(playerX, playerUnitTransform.position.y, playerUnitTransform.position.z);
+
         GenerateMap();
+
+        playerUnitTransform.position = new Vector3(tileList[currentNode].transform.position.x, playerUnitTransform.position.y, playerUnitTransform.position.z);
     }
 
 	void GenerateMap()
@@ -62,7 +63,7 @@ public class RogueManager : MonoBehaviour
         tileList.Add(originTile);
 		for (int i = 0; i < maxNode; i++) originTile = CreateNewNode(tileLength, originTile, origin.transform);
 
-        structureManager.GenerateRogueLine(tileList, lineRenderer);
+        GenerateNewNodeLines();
     }
 
     RogueTile CreateNewNode(int randomLength, RogueTile destinationTile, Transform parent)
@@ -70,6 +71,11 @@ public class RogueManager : MonoBehaviour
         RogueTile newTileScript = structureManager.GenerateRogueTiles(randomLength, destinationTile, tile.transform, parent, this);
         tileList.Add(newTileScript);
         return newTileScript;
+    }
+
+    public void GenerateNewNodeLines()
+	{
+        structureManager.GenerateRogueLine(tileList, lineRenderer);
     }
 
     public void NodeClicked(RogueTile tile)

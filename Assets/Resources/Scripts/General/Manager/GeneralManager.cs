@@ -44,7 +44,7 @@ public class GeneralManager : MonoBehaviour
 		{
             int baseSeed = Random.Range(0, 1000);
             PRNG seed = new(baseSeed);
-            runData = new RunData(0, seed, 0, 0);
+            runData = new RunData(0, seed, 0);
 
             PlayerPrefs.SetInt("Seed", baseSeed);
             PlayerPrefs.SetInt("Gold", 0);
@@ -70,6 +70,7 @@ public class GeneralManager : MonoBehaviour
                     break;
                 case CurrentSection.Rogue:
                     cameraManager.ScrollWheel(scrollWheelInput, rogueSectionInstance.transform);
+                    rogueManager.GenerateNewNodeLines();
                     break;
             }
 
@@ -81,15 +82,13 @@ public class GeneralManager : MonoBehaviour
 	{
         PRNG seed = new(PlayerPrefs.GetInt("Seed"));
         int currentNode = PlayerPrefs.GetInt("CurrentNode");
-        float playerX = PlayerPrefs.GetFloat("PlayerX");
         int gold = PlayerPrefs.GetInt("Gold");
-        return new RunData(currentNode, seed, playerX, gold);
+        return new RunData(currentNode, seed, gold);
 	}
 
 	public void SaveMapProgress()
 	{
         PlayerPrefs.SetInt("CurrentNode", runData.currentNode);
-        PlayerPrefs.SetFloat("PlayerX", runData.playerX);
     }
 
     void ManageKeysDown()
@@ -124,6 +123,8 @@ public class GeneralManager : MonoBehaviour
 
     public void StartFight()
 	{
+        cameraManager.ResetCamera();
+
         DestroyRogueSection();
         GenerateFightSection();
 
@@ -135,9 +136,10 @@ public class GeneralManager : MonoBehaviour
         fightManager.DisableFightSection();
         Destroy(fightSectionInstance);
     }
+
     void DestroyRogueSection()
     {
-        runData = new(rogueManager.currentNode, rogueManager.seed, rogueManager.playerUnitTransform.position.x, Gold);
+        runData = new(rogueManager.currentNode, rogueManager.seed, Gold);
         Destroy(rogueSectionInstance);
     }
 
@@ -156,7 +158,7 @@ public class GeneralManager : MonoBehaviour
     {
         rogueSectionInstance = Instantiate(rogueSectionPrefab);
         rogueManager = GameObject.Find(ROGUE_MANAGER_OBJ_NAME).GetComponent<RogueManager>();
-        rogueManager.SetupRogue(structureManager, runData.currentNode, runData.seed, runData.playerX);
+        rogueManager.SetupRogue(structureManager, runData.currentNode, runData.seed);
         rogueManager.structureManager.uiManager.SetRogueVariables(Gold);
         currentSection = CurrentSection.Rogue;
 
@@ -171,6 +173,8 @@ public class GeneralManager : MonoBehaviour
 
     public void ReturnToRogueFromFightButton()
 	{
+        cameraManager.ResetCamera();
+
         DestroyFightSection();
         GenerateRogueSection();
     }
@@ -178,15 +182,13 @@ public class GeneralManager : MonoBehaviour
     {
         public int currentNode;
         public PRNG seed;
-        public float playerX;
 
         public int gold;
 
-        public RunData(int currentNode, PRNG seed, float playerX, int gold)
+        public RunData(int currentNode, PRNG seed, int gold)
         {
             this.currentNode = currentNode;
             this.seed = seed;
-            this.playerX = playerX;
             this.gold = gold;
         }
     }

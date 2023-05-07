@@ -20,6 +20,9 @@ public class CameraManager : MonoBehaviour
 
     bool isOutOfFocus = false;
 
+    Vector3 defaultCameraPosition = new(670, 790, 500);
+    Quaternion defaultCameraRotation = Quaternion.Euler((float)33.3, 0, 0);
+
     Vector3 cameraPositionOutOfFocus = new(670, 300, 640);
     Quaternion rotationOutOfFocus = Quaternion.Euler(0, 0, 0);
     Vector3 cameraPositionOnFocus = new(670, 690, 650);
@@ -39,12 +42,14 @@ public class CameraManager : MonoBehaviour
         transform.position = position;
     }
 
+    public void ResetCamera()
+	{
+        transform.SetPositionAndRotation(defaultCameraPosition, defaultCameraRotation);
+    }
+
     public void ScrollWheel(float scroll, Transform rogueSection = null){
         // Calculate the new distance based on the mouse wheel input
-        distance += -scroll * scrollSpeed;
-
-        // Clamp the distance between the minimum and maximum values
-        distance = Mathf.Clamp(distance, minDistance, maxDistance);
+        distance += scroll * scrollSpeed;
 
         // Get the scroll direction
         int scrollDirection = (int)Mathf.Sign(scroll);
@@ -52,7 +57,9 @@ public class CameraManager : MonoBehaviour
         Transform objectToMove = rogueSection != null ? rogueSection : transform;
         Vector3 direction = rogueSection != null ? Vector3.right : Vector3.forward;
         // Move the camera along the blue axis by the distance
-        objectToMove.Translate(distance * scrollDirection * 100 * Time.deltaTime * direction, Space.Self);
+        objectToMove.Translate(distance * scrollDirection * 1000 * Time.deltaTime * direction, Space.Self);
+
+        distance = 5f;
     }
 
     /*
