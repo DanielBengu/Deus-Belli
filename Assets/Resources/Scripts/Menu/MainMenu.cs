@@ -1,3 +1,4 @@
+using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
@@ -10,12 +11,22 @@ public class MainMenu: MonoBehaviour
     GameObject NewGamePrefab;
     [SerializeField]
     Button ContinueButton;
+    [SerializeField]
+    TextMeshProUGUI ContinueInfoText;
 
-	private void Start()
+    private void Start()
 	{
-        bool isRunOngoing = PlayerPrefs.GetInt("OngoingRun") != 0;
+        bool isRunOngoing = PlayerPrefs.GetInt(GeneralManager.ONGOING_RUN) != 0;
         ContinueButton.interactable = isRunOngoing;
-	}
+        ContinueInfoText.text = isRunOngoing ? GetContinueInfoText() : string.Empty;
+    }
+
+    string GetContinueInfoText()
+	{
+        string godSelected = PlayerPrefs.GetString(GeneralManager.GOD_SELECTED_PP);
+        string goldAccumulated = PlayerPrefs.GetInt(GeneralManager.GOLD).ToString();
+        return $"{godSelected}: {goldAccumulated}g";
+    }
 
 	public void NewGame(){
         GameObject mainScene = GameObject.Find("Main");

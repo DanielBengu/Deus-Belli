@@ -260,7 +260,7 @@ MonoBehaviour:
   yMax: 1400
   minDistance: 1
   maxDistance: 10
-  scrollSpeed: 50
+  scrollSpeed: 10
 --- !u!1001 &605229969
 PrefabInstance:
   m_ObjectHideFlags: 0

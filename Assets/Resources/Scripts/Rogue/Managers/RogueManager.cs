@@ -20,6 +20,7 @@ public class RogueManager : MonoBehaviour
     public PRNG seed;
 
 	public int Gold { get { return generalManager.Gold; } }
+	public string GodSelected { get { return generalManager.GodSelected; } }
 
 	public bool IsGameOver { get { return currentNode == maxNode; } }
 

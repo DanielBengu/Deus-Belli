@@ -16,28 +16,29 @@ public class NewGameManager : MonoBehaviour
 
     public void ZeusSelected(){
         DestroyGod();
-        GameObject god = GameObject.Instantiate(ZeusPrefab,new Vector3(600, 250, 0),Quaternion.identity) as GameObject;
+        GameObject god = Instantiate(ZeusPrefab,new Vector3(600, 250, 0),Quaternion.identity) as GameObject;
         god.name = "Zeus";
         godSelected = "Zeus";
     }
 
     public void PoseidonSelected(){
         DestroyGod();
-        GameObject god = GameObject.Instantiate(PoseidonPrefab,new Vector3(600, 250, 0),Quaternion.identity) as GameObject;
+        GameObject god = Instantiate(PoseidonPrefab,new Vector3(600, 250, 0),Quaternion.identity) as GameObject;
         god.name = "Poseidon";
         godSelected = "Poseidon";
     }
 
     public void HadesSelected(){
         DestroyGod();
-        GameObject god = GameObject.Instantiate(HadesPrefab,new Vector3(600, 250, 0),Quaternion.identity) as GameObject;
+        GameObject god = Instantiate(HadesPrefab,new Vector3(600, 250, 0),Quaternion.identity) as GameObject;
         god.name = "Hades";
         godSelected = "Hades";
     }
 
     public void StartGame(){
         if(godSelected != null){
-            PlayerPrefs.SetString("God Selected", godSelected);
+            PlayerPrefs.SetString(GeneralManager.GOD_SELECTED_PP, godSelected);
+            PlayerPrefs.SetInt(GeneralManager.ONGOING_RUN, 0);
             SceneManager.LoadScene(1);
         }
     }

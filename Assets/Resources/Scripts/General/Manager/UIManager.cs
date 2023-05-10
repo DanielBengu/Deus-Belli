@@ -1,7 +1,6 @@
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
-using System;
 
 public class UIManager : MonoBehaviour
 {
@@ -26,14 +25,8 @@ public class UIManager : MonoBehaviour
         TextMeshProUGUI rangeValue;
     #endregion
 
-    #region Rogue Manager
-
-    TextMeshProUGUI rogueGold;
-
-	#endregion
-
 	public void SetFightVariables(){
-        string godSelected = PlayerPrefs.GetString("God Selected", "");
+        string godSelected = PlayerPrefs.GetString(GeneralManager.GOD_SELECTED_PP, "");
         Title = GameObject.Find("GOD_RUN").GetComponent<TextMeshProUGUI>();
         Title.text = $"{godSelected} Run";
 
@@ -54,12 +47,14 @@ public class UIManager : MonoBehaviour
         SetInfoPanel(false);
     }
 
-    public void SetRogueVariables(int gold)
+    public void SetRogueVariables(int gold, string godSelected)
 	{
         rogueCanvas = GameObject.Find("RogueCanvas");
         rogueVictoryScreen = Resources.Load<GameObject>($"Prefabs/Rogue/Children/{rogueVictoryScreenPrefabName}");
-        rogueGold = GameObject.Find("Gold Value").GetComponent<TextMeshProUGUI>();
+        TextMeshProUGUI rogueGold = GameObject.Find("Gold Value").GetComponent<TextMeshProUGUI>();
         rogueGold.text = gold.ToString();
+        TextMeshProUGUI rogueGod = GameObject.Find("God Text").GetComponent<TextMeshProUGUI>();
+        rogueGod.text = godSelected;
     }
 
     public void SetInfoPanel(bool active, Unit unit = null){

@@ -3,6 +3,12 @@ using UnityEngine.SceneManagement;
 
 public class GeneralManager : MonoBehaviour
 {
+    public const string GOD_SELECTED_PP = "God Selected";
+    public const string ONGOING_RUN = "OngoingRun";
+    public const string CURRENT_NODE = "CurrentNode";
+    public const string SEED = "Seed";
+    public const string GOLD = "Gold";
+
     public const int SCROLL_WHEEL_BUTTON = 2;
     public const string FIGHT_MANAGER_OBJ_NAME = "Fight Manager";
     public const string ROGUE_MANAGER_OBJ_NAME = "Rogue Manager";
@@ -34,23 +40,24 @@ public class GeneralManager : MonoBehaviour
     public bool IsOptionOpen { get; set; }
     public bool IsGameInStandby { get { return IsGameInStandbyMethod(); } }
 	public int Gold { get { return runData.gold; } set { runData.gold = value; } }
+    public string GodSelected { get { return runData.godSelected; } set { runData.godSelected = value; } }
 
 	private void Start()
 	{
-        bool isOngoingRun = PlayerPrefs.GetInt("OngoingRun") != 0;
+        bool isOngoingRun = PlayerPrefs.GetInt(ONGOING_RUN) != 0;
         if (isOngoingRun)
             runData = LoadRunData();
 		else
 		{
+            string godSelected = PlayerPrefs.GetString(GOD_SELECTED_PP);
             int baseSeed = Random.Range(0, 1000);
             PRNG seed = new(baseSeed);
-            runData = new RunData(0, seed, 0);
+            runData = new RunData(godSelected, 0, seed, 0);
 
-            PlayerPrefs.SetInt("Seed", baseSeed);
-            PlayerPrefs.SetInt("Gold", 0);
-            PlayerPrefs.SetInt("CurrentNode", 0);
-            PlayerPrefs.SetFloat("PlayerX", 0);
-            PlayerPrefs.SetInt("OngoingRun", 1);
+            PlayerPrefs.SetInt(SEED, baseSeed);
+            PlayerPrefs.SetInt(GOLD, 0);
+            PlayerPrefs.SetInt(CURRENT_NODE, 0);
+            PlayerPrefs.SetInt(ONGOING_RUN, 1);
         }
 
         GenerateRogueSection();
@@ -80,15 +87,16 @@ public class GeneralManager : MonoBehaviour
 
     RunData LoadRunData()
 	{
-        PRNG seed = new(PlayerPrefs.GetInt("Seed"));
-        int currentNode = PlayerPrefs.GetInt("CurrentNode");
-        int gold = PlayerPrefs.GetInt("Gold");
-        return new RunData(currentNode, seed, gold);
+        PRNG seed = new(PlayerPrefs.GetInt(SEED));
+        string godSelected = PlayerPrefs.GetString(GOD_SELECTED_PP);
+        int currentNode = PlayerPrefs.GetInt(CURRENT_NODE);
+        int gold = PlayerPrefs.GetInt(GOLD);
+        return new RunData(godSelected, currentNode, seed, gold);
 	}
 
 	public void SaveMapProgress()
 	{
-        PlayerPrefs.SetInt("CurrentNode", runData.currentNode);
+        PlayerPrefs.SetInt(CURRENT_NODE, runData.currentNode);
     }
 
     void ManageKeysDown()
@@ -139,7 +147,7 @@ public class GeneralManager : MonoBehaviour
 
     void DestroyRogueSection()
     {
-        runData = new(rogueManager.currentNode, rogueManager.seed, Gold);
+        runData = new(GodSelected, rogueManager.currentNode, rogueManager.seed, Gold);
         Destroy(rogueSectionInstance);
     }
 
@@ -159,7 +167,7 @@ public class GeneralManager : MonoBehaviour
         rogueSectionInstance = Instantiate(rogueSectionPrefab);
         rogueManager = GameObject.Find(ROGUE_MANAGER_OBJ_NAME).GetComponent<RogueManager>();
         rogueManager.SetupRogue(structureManager, runData.currentNode, runData.seed);
-        rogueManager.structureManager.uiManager.SetRogueVariables(Gold);
+        rogueManager.structureManager.uiManager.SetRogueVariables(Gold, GodSelected);
         currentSection = CurrentSection.Rogue;
 
         rogueManager.IsRunCompleted();
@@ -167,7 +175,7 @@ public class GeneralManager : MonoBehaviour
 
     public static void CloseRun()
 	{
-        PlayerPrefs.SetInt("OngoingRun", 0);
+        PlayerPrefs.SetInt(ONGOING_RUN, 0);
         SceneManager.LoadScene(0);
     }
 
@@ -180,13 +188,15 @@ public class GeneralManager : MonoBehaviour
     }
     struct RunData
     {
+        public string godSelected;
         public int currentNode;
         public PRNG seed;
 
         public int gold;
 
-        public RunData(int currentNode, PRNG seed, int gold)
+        public RunData(string godSelected,int currentNode, PRNG seed, int gold)
         {
+            this.godSelected = godSelected;
             this.currentNode = currentNode;
             this.seed = seed;
             this.gold = gold;
