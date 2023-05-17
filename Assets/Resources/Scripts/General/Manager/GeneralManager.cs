@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -50,11 +51,10 @@ public class GeneralManager : MonoBehaviour
 		else
 		{
             string godSelected = PlayerPrefs.GetString(GOD_SELECTED_PP);
-            int baseSeed = Random.Range(0, 1000);
-            PRNG seed = new(baseSeed);
-            runData = new RunData(godSelected, 0, seed, 0);
+            int masterSeed = Guid.NewGuid().GetHashCode();
+            runData = new RunData(godSelected, 0, masterSeed, 0);
 
-            PlayerPrefs.SetInt(SEED, baseSeed);
+            PlayerPrefs.SetInt(SEED, masterSeed);
             PlayerPrefs.SetInt(GOLD, 0);
             PlayerPrefs.SetInt(CURRENT_NODE, 0);
             PlayerPrefs.SetInt(ONGOING_RUN, 1);
@@ -82,16 +82,20 @@ public class GeneralManager : MonoBehaviour
             }
 
         if (IsScrollButtonDown)
-            cameraManager.UpdatePosition();
+		{
+            cameraManager.UpdatePosition(rogueSectionInstance.transform);
+            rogueManager.GenerateNewNodeLines();
+        }
+            
     }
 
     RunData LoadRunData()
 	{
-        PRNG seed = new(PlayerPrefs.GetInt(SEED));
+        int masterSeed = PlayerPrefs.GetInt(SEED);
         string godSelected = PlayerPrefs.GetString(GOD_SELECTED_PP);
         int currentNode = PlayerPrefs.GetInt(CURRENT_NODE);
         int gold = PlayerPrefs.GetInt(GOLD);
-        return new RunData(godSelected, currentNode, seed, gold);
+        return new RunData(godSelected, currentNode, masterSeed, gold);
 	}
 
 	public void SaveMapProgress()
@@ -166,7 +170,7 @@ public class GeneralManager : MonoBehaviour
     {
         rogueSectionInstance = Instantiate(rogueSectionPrefab);
         rogueManager = GameObject.Find(ROGUE_MANAGER_OBJ_NAME).GetComponent<RogueManager>();
-        rogueManager.SetupRogue(structureManager, runData.currentNode, runData.seed);
+        rogueManager.SetupRogue(structureManager, runData.currentNode, runData.masterSeed);
         rogueManager.structureManager.uiManager.SetRogueVariables(Gold, GodSelected);
         currentSection = CurrentSection.Rogue;
 
@@ -190,15 +194,15 @@ public class GeneralManager : MonoBehaviour
     {
         public string godSelected;
         public int currentNode;
-        public PRNG seed;
+        public int masterSeed;
 
         public int gold;
 
-        public RunData(string godSelected,int currentNode, PRNG seed, int gold)
+        public RunData(string godSelected,int currentNode, int masterSeed, int gold)
         {
             this.godSelected = godSelected;
             this.currentNode = currentNode;
-            this.seed = seed;
+            this.masterSeed = masterSeed;
             this.gold = gold;
         }
     }

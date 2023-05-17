@@ -28,18 +28,18 @@ public class CameraManager : MonoBehaviour
     Vector3 cameraPositionOnFocus = new(670, 690, 650);
     Quaternion rotationOnFocus = Quaternion.Euler(40, 0, 0);
     
-    public void UpdatePosition(){
+    public void UpdatePosition(Transform rogueInstance){
         float moveHorizontal = Input.GetAxis("Mouse X");
         float moveVertical = Input.GetAxis("Mouse Y");
 
-        Vector3 position = transform.position;
+        Vector3 position = rogueInstance.position;
         position.x += moveHorizontal * movementSpeed;
         position.z += moveVertical * movementSpeed;
 
         position.x = Mathf.Clamp(position.x, xMin, xMax);
         position.z = Mathf.Clamp(position.z, yMin, yMax);
 
-        transform.position = position;
+        rogueInstance.position = position;
     }
 
     public void ResetCamera()

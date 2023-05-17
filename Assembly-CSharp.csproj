@@ -67,7 +67,6 @@
     <Compile Include="Assets\Resources\Scripts\General\Manager\StructureManager.cs" />
     <Compile Include="Assets\Resources\Scripts\General\Manager\CameraManager.cs" />
     <Compile Include="Assets\Resources\Scripts\General\Classes\ActionPerformer.cs" />
-    <Compile Include="Assets\Resources\Scripts\Rogue\Classes\PRNG.cs" />
     <Compile Include="Assets\Resources\Scripts\Fight\Managers\AIManager.cs" />
     <Compile Include="Assets\Resources\Scripts\Menu\OptionsMenu.cs" />
     <Compile Include="Assets\Resources\Scripts\Fight\Classes\Movement.cs" />

@@ -16,8 +16,9 @@ public class RogueManager : MonoBehaviour
     private LineRenderer lineRenderer;
 
     public int currentNode;
-	readonly int maxNode = 5;
-    public PRNG seed;
+    int maxNode;
+    public Dictionary<SeedType, int> seedList = new();
+    public int seed;
 
 	public int Gold { get { return generalManager.Gold; } }
 	public string GodSelected { get { return generalManager.GodSelected; } }
@@ -41,15 +42,22 @@ public class RogueManager : MonoBehaviour
             structureManager.GetRogueVictoryScreen();
 	}
 
-    public void SetupRogue(StructureManager structureManager, int currentNode, PRNG seed)
+    public void SetupRogue(StructureManager structureManager, int currentNode, int masterSeed)
 	{
-        lineRenderer = GetComponent<LineRenderer>();
-        lineRenderer.positionCount = maxNode + 1;
         generalManager = GameObject.Find(GeneralManager.GENERAL_MANAGER_OBJ_NAME).GetComponent<GeneralManager>();
 
         this.currentNode = currentNode;
-        this.seed = seed;
+        Random.InitState(masterSeed);
+        seedList.Add(SeedType.Master, masterSeed);
+        seedList.Add(SeedType.RogueTile, Random.Range(0, 99999));
+        seedList.Add(SeedType.MapLength, Random.Range(100000, 199999));
         this.structureManager = structureManager;
+
+        Random.InitState(seedList[SeedType.MapLength]);
+        maxNode = Random.Range(5, 8);
+
+        lineRenderer = GetComponent<LineRenderer>();
+        lineRenderer.positionCount = maxNode + 1;
 
         GenerateMap();
 
@@ -58,17 +66,19 @@ public class RogueManager : MonoBehaviour
 
 	void GenerateMap()
 	{
-        int tileLength = seed.Next(10);
         RogueTile originTile = origin;
-        originTile.SetupTile(this, RogueTileType.Fight);
+        originTile.SetupTile(this, RogueTileType.Fight, 1);
         tileList.Add(originTile);
-		for (int i = 0; i < maxNode; i++) originTile = CreateNewNode(tileLength, originTile, origin.transform);
+        
+		for (int i = 0; i < maxNode; i++) originTile = CreateNewNode(originTile, origin.transform);
 
         GenerateNewNodeLines();
     }
 
-    RogueTile CreateNewNode(int randomLength, RogueTile destinationTile, Transform parent)
+    RogueTile CreateNewNode(RogueTile destinationTile, Transform parent)
 	{
+        Random.InitState(seedList[SeedType.RogueTile] * destinationTile.nodeNumber);
+        int randomLength = Random.Range(3, 6);
         RogueTile newTileScript = structureManager.GenerateRogueTiles(randomLength, destinationTile, tile.transform, parent, this);
         tileList.Add(newTileScript);
         return newTileScript;
@@ -125,4 +135,11 @@ public class RogueManager : MonoBehaviour
         Abandon,
         Finish
 	}
+
+    public enum SeedType
+    {
+        Master,
+        RogueTile,
+        MapLength
+    }
 }

@@ -68,8 +68,9 @@ public class StructureManager : MonoBehaviour
         GameObject newTile = Instantiate(origin.gameObject, tilePosition, origin.rotation, parent);
         newTile.transform.localScale = new Vector3(1, 1, 1);
         RogueTile newTileScript = newTile.GetComponent<RogueTile>();
-        newTileScript.SetupTile(rm, RogueTileType.Fight);
-        newTileScript.nodeNumber = destinationTile.nodeNumber + 1;
+        int newTileNodeNumber = destinationTile.nodeNumber + 1;
+        newTileScript.SetupTile(rm, RogueTileType.Fight, newTileNodeNumber);
+        newTileScript.nodeNumber = newTileNodeNumber;
 
         return newTileScript;
     }
