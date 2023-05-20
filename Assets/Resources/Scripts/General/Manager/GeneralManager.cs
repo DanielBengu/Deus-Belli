@@ -151,7 +151,7 @@ public class GeneralManager : MonoBehaviour
 
     void DestroyRogueSection()
     {
-        runData = new(GodSelected, rogueManager.currentNode, rogueManager.seed, Gold);
+        runData = new(GodSelected, rogueManager.currentRow, rogueManager.seed, Gold);
         Destroy(rogueSectionInstance);
     }
 

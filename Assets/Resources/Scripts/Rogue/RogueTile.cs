@@ -4,15 +4,17 @@ using UnityEngine;
 public class RogueTile : MonoBehaviour
 {
 	RogueManager rogueManager;
-    public int nodeNumber;
 	public RogueTileType rogueTileType;
 	public List<RogueTile> rogueChilds;
+	public int mapRow;
+	public int positionInRow;
 
-	public void SetupTile(RogueManager rm, RogueTileType tileType, int nodeNumber)
+	public void SetupTile(RogueManager rm, RogueTileType tileType, int mapRow, int positionInRow)
 	{
 		rogueManager = rm;
 		rogueTileType = tileType;
-		this.nodeNumber = nodeNumber;
+		this.mapRow = mapRow;
+		this.positionInRow = positionInRow;
 	}
 
     public void OnMouseDown()

@@ -1,9 +1,13 @@
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
 public class RogueManager : MonoBehaviour
 {
+    const int MINIMUM_NODES = 2;
+    const int MAXIMUM_NODES = 5;
+
     GeneralManager generalManager;
     public StructureManager structureManager;
 
@@ -15,7 +19,8 @@ public class RogueManager : MonoBehaviour
 
     private LineRenderer lineRenderer;
 
-    public int currentNode;
+    public int currentRow;
+    public int currentPositionOnRow;
     int maxNode;
     public Dictionary<SeedType, int> seedList = new();
     public int seed;
@@ -23,7 +28,7 @@ public class RogueManager : MonoBehaviour
 	public int Gold { get { return generalManager.Gold; } }
 	public string GodSelected { get { return generalManager.GodSelected; } }
 
-	public bool IsGameOver { get { return currentNode == maxNode; } }
+	public bool IsGameOver { get { return currentRow == maxNode; } }
 
 	public bool IsAnyUnitMoving { get { return structureManager.IsObjectMoving; } }
 
@@ -38,7 +43,7 @@ public class RogueManager : MonoBehaviour
 
     public void IsRunCompleted()
 	{
-        if (currentNode == maxNode)
+        if (currentRow == maxNode)
             structureManager.GetRogueVictoryScreen();
 	}
 
@@ -46,11 +51,12 @@ public class RogueManager : MonoBehaviour
 	{
         generalManager = GameObject.Find(GeneralManager.GENERAL_MANAGER_OBJ_NAME).GetComponent<GeneralManager>();
 
-        this.currentNode = currentNode;
+        this.currentRow = currentNode;
         Random.InitState(masterSeed);
         seedList.Add(SeedType.Master, masterSeed);
         seedList.Add(SeedType.RogueTile, Random.Range(0, 99999));
         seedList.Add(SeedType.MapLength, Random.Range(100000, 199999));
+        seedList.Add(SeedType.NodesOnRow, Random.Range(200000, 299999));
         this.structureManager = structureManager;
 
         Random.InitState(seedList[SeedType.MapLength]);
@@ -67,21 +73,30 @@ public class RogueManager : MonoBehaviour
 	void GenerateMap()
 	{
         RogueTile originTile = origin;
-        originTile.SetupTile(this, RogueTileType.Fight, 1);
+        originTile.SetupTile(this, RogueTileType.Fight, 0, 0);
         tileList.Add(originTile);
-        
-		for (int i = 0; i < maxNode; i++) originTile = CreateNewNode(originTile, origin.transform);
+
+		for (int i = 1; i <= maxNode; i++) CreateRowOfNodes(i, origin.transform);
 
         GenerateNewNodeLines();
     }
 
-    RogueTile CreateNewNode(RogueTile destinationTile, Transform parent)
+    void CreateRowOfNodes(int row, Transform parent)
 	{
-        Random.InitState(seedList[SeedType.RogueTile] * destinationTile.nodeNumber);
-        int randomLength = Random.Range(3, 6);
-        RogueTile newTileScript = structureManager.GenerateRogueTiles(randomLength, destinationTile, tile.transform, parent, this);
-        tileList.Add(newTileScript);
-        return newTileScript;
+        List<RogueTile> newNodes = new();
+        Random.InitState(seedList[SeedType.NodesOnRow] + row);
+        int nodesOnRow = Random.Range(MINIMUM_NODES, MAXIMUM_NODES);
+		for (int i = 0; i < nodesOnRow; i++)
+		{
+            Random.InitState(seedList[SeedType.RogueTile] + i);
+            int randomLength = Random.Range(3, 6);
+            newNodes.Add(structureManager.GenerateRogueTile(randomLength, row, i, tile.transform, parent, this));
+        }
+        
+        if(newNodes != null)
+		{
+            tileList.AddRange(newNodes);
+        }
     }
 
     public void GenerateNewNodeLines()
@@ -93,9 +108,9 @@ public class RogueManager : MonoBehaviour
 	{
 		if (IsAnyUnitMoving) return;
         
-        if (currentNode == tile.nodeNumber - 1)
+        if (currentRow == tile.mapRow - 1)
 		{
-            currentNode++;
+            currentRow++;
             structureManager.MoveUnit(playerUnitTransform, tile);
         }
             
@@ -139,7 +154,8 @@ public class RogueManager : MonoBehaviour
     public enum SeedType
     {
         Master,
-        RogueTile,
-        MapLength
+        RogueTile, //Specific data for each node (e.g. Type of node)
+        MapLength,
+        NodesOnRow, //How much nodes we need to generate in each row
     }
 }
