@@ -234,7 +234,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 1
   m_Script: {fileID: 12006, guid: 0000000000000000e000000000000000, type: 0}
-  m_Name: ConsoleWindow
+  m_Name: ProjectBrowser
   m_EditorClassIdentifier: 
   m_Children: []
   m_Position:
@@ -243,14 +243,14 @@ MonoBehaviour:
     y: 650
     width: 1652
     height: 297
-  m_MinSize: {x: 101, y: 121}
-  m_MaxSize: {x: 4001, y: 4021}
-  m_ActualView: {fileID: 17}
+  m_MinSize: {x: 231, y: 271}
+  m_MaxSize: {x: 10001, y: 10021}
+  m_ActualView: {fileID: 16}
   m_Panes:
   - {fileID: 16}
   - {fileID: 17}
-  m_Selected: 1
-  m_LastSelected: 0
+  m_Selected: 0
+  m_LastSelected: 1
 --- !u!114 &11
 MonoBehaviour:
   m_ObjectHideFlags: 52
@@ -651,9 +651,9 @@ MonoBehaviour:
   m_PlayAudio: 0
   m_AudioPlay: 0
   m_Position:
-    m_Target: {x: 2075.7097, y: 729.3874, z: 686.159}
+    m_Target: {x: 1278.0044, y: 211.20642, z: 1271.0127}
     speed: 2
-    m_Value: {x: 2075.7097, y: 729.3874, z: 686.159}
+    m_Value: {x: 1278.0044, y: 211.20642, z: 1271.0127}
   m_RenderMode: 0
   m_CameraMode:
     drawMode: 0
@@ -700,13 +700,13 @@ MonoBehaviour:
     m_GridAxis: 1
     m_gridOpacity: 0.5
   m_Rotation:
-    m_Target: {x: 0.33141768, y: -0.008196711, z: 0.0028907428, w: 0.9434695}
+    m_Target: {x: 0.39967912, y: -0.024458922, z: 0.010679938, w: 0.9162958}
     speed: 2
-    m_Value: {x: 0.3299942, y: -0.008200841, z: 0.0028783744, w: 0.943943}
+    m_Value: {x: 0.3996519, y: -0.025832646, z: 0.0112791415, w: 0.91623354}
   m_Size:
-    m_Target: 418.29788
+    m_Target: 501.84814
     speed: 2
-    m_Value: 418.29788
+    m_Value: 501.84814
   m_Ortho:
     m_Target: 0
     speed: 2
@@ -763,9 +763,9 @@ MonoBehaviour:
   m_SceneHierarchy:
     m_TreeViewState:
       scrollPos: {x: 0, y: 0}
-      m_SelectedIDs: 
+      m_SelectedIDs: 82a50000
       m_LastClickedID: 0
-      m_ExpandedIDs: 1e0affffe20cffff543affff8a3cffff4e3fffff3457ffff6a59ffff2e5cffff265fffff5c61ffff2064ffff1eabffff22d7ffffbae8ffffe4f3ffff1af6ffffdef8ffff28fbffff2afbffffd0b20000
+      m_ExpandedIDs: aa5fffff4a68ffff5671ffff8c73ffff5076ffff08a9ffff3eabffff02aeffff2afbffff
       m_RenameOverlay:
         m_UserAcceptedRename: 0
         m_Name: 
@@ -913,22 +913,22 @@ MonoBehaviour:
     m_SkipHidden: 1
     m_SearchArea: 1
     m_Folders:
-    - Assets/Resources/Prefabs/Rogue
+    - Assets/Resources/Prefabs/Rogue/Children
     m_Globs: []
     m_OriginalText: 
   m_ViewMode: 1
   m_StartGridSize: 16
   m_LastFolders:
-  - Assets/Resources/Prefabs/Rogue
+  - Assets/Resources/Prefabs/Rogue/Children
   m_LastFoldersGridSize: 16
   m_LastProjectPath: C:\Users\Daniel\The God Cup
   m_LockTracker:
     m_IsLocked: 0
   m_FolderTreeState:
     scrollPos: {x: 0, y: 111}
-    m_SelectedIDs: ba640000
-    m_LastClickedID: 25786
-    m_ExpandedIDs: 000000007464000076640000786400007a6400007c6400007e64000080640000826400008464000086640000886400008a6400008c6400008e64000090640000926400009464000096640000986400009a6400009c640000ba64000000ca9a3b
+    m_SelectedIDs: 926b0000
+    m_LastClickedID: 27538
+    m_ExpandedIDs: 000000007464000076640000786400007a6400007c6400007e64000080640000826400008464000086640000886400008a6400008c6400008e64000090640000926400009464000096640000986400009a6400009c640000326c000000ca9a3b
     m_RenameOverlay:
       m_UserAcceptedRename: 0
       m_Name: 
@@ -981,21 +981,21 @@ MonoBehaviour:
       m_Icon: {fileID: 0}
       m_ResourceFile: 
   m_ListAreaState:
-    m_SelectedInstanceIDs: 6aa10000
-    m_LastClickedInstanceID: 41322
-    m_HadKeyboardFocusLastEvent: 0
+    m_SelectedInstanceIDs: 
+    m_LastClickedInstanceID: 0
+    m_HadKeyboardFocusLastEvent: 1
     m_ExpandedInstanceIDs: c62300009c5e0000025e00008a880000e2920000029b0000248e000000000000
     m_RenameOverlay:
       m_UserAcceptedRename: 0
-      m_Name: Rogue
-      m_OriginalName: Rogue
+      m_Name: RogueNode
+      m_OriginalName: RogueNode
       m_EditFieldRect:
         serializedVersion: 2
         x: 0
         y: 0
         width: 0
         height: 0
-      m_UserData: 25438
+      m_UserData: 25424
       m_IsWaitingForDelay: 0
       m_IsRenaming: 0
       m_OriginalEventType: 0

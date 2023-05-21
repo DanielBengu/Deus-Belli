@@ -91,6 +91,10 @@ public class RogueManager : MonoBehaviour
         int maximumNodesPossibleForCurrentRow = nodesOnPreviousRow < MAXIMUM_NODES ? nodesOnPreviousRow + 1 : MAXIMUM_NODES;
         if (nodesOnPreviousRow < MINIMUM_NODES)
             nodesOnCurrentRow = nodesOnPreviousRow + 1;
+        else if (row == maxNode)
+            nodesOnCurrentRow = 1;
+        else if (row == maxNode - 1)
+            nodesOnCurrentRow = 2;
         else
             nodesOnCurrentRow = Random.Range(MINIMUM_NODES, maximumNodesPossibleForCurrentRow + 1);
 
@@ -121,6 +125,8 @@ public class RogueManager : MonoBehaviour
             position = 1;
         else if (previousRowNodes.Count == 1)
             position = Random.Range(minimumOffset, firstNodeInPreviousRowPosition);
+        else if (previousRowNodes.Count == 2 && nodesOnCurrentRow == 1)
+            position = Random.Range(firstNodeInPreviousRowPosition, firstNodeInPreviousRowPosition + 1);
         else
             position = Random.Range(minimumOffset, maximumOffset);
 
