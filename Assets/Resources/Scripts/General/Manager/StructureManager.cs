@@ -60,14 +60,14 @@ public class StructureManager : MonoBehaviour
         return mapTiles;
     }
 
-    public RogueTile GenerateRogueTile(int randomLength, int currentRow, int positionOnRow, Transform origin, Transform parent, RogueManager rm)
+    public RogueTile GenerateRogueTile(int randomLength, int currentRow, int positionOnRow, Transform origin, Transform firstNode, RogueManager rm)
 	{
         Vector3 tilePosition = origin.position;
-        float precedentRowX = parent.transform.position.x + (450 * (currentRow - 1));
+        float precedentRowX = firstNode.transform.position.x + (450 * (currentRow - 1));
         tilePosition.x = precedentRowX + 150 + (50 * randomLength); //sourceTile.transform.position.x + 150 + (50 * randomLength);
-        tilePosition.z = parent.transform.position.z - (200 * positionOnRow);
+        tilePosition.z = firstNode.transform.position.z + 200 - (200 * positionOnRow);
 
-        GameObject newTile = Instantiate(origin.gameObject, tilePosition, origin.rotation, parent);
+        GameObject newTile = Instantiate(origin.gameObject, tilePosition, origin.rotation, firstNode);
         newTile.transform.localScale = new Vector3(1, 1, 1);
         RogueTile newTileScript = newTile.GetComponent<RogueTile>();
         newTileScript.SetupTile(rm, RogueTileType.Fight, currentRow, positionOnRow);
@@ -75,18 +75,20 @@ public class StructureManager : MonoBehaviour
         return newTileScript;
     }
 
-    public void GenerateRogueLine(List<RogueTile> tileList, LineRenderer lineRenderer)
+    public void GenerateRogueLine(List<RogueTile> tileList)
 	{
-        lineRenderer.startColor = Color.red;
-        lineRenderer.endColor = Color.blue;
-        lineRenderer.startWidth = 10f;
-        lineRenderer.endWidth = 10f;
-
-		for (int i = 1; i < tileList.Count; i++)
+        LineRenderer lr;
+		foreach (var tile in tileList)
 		{
-            lineRenderer.SetPosition(i - 1, tileList[i - 1].transform.position);
-            lineRenderer.SetPosition(i, tileList[i].transform.position);
-        }
+            lr = tile.GetComponent<LineRenderer>();
+            lr.positionCount = tile.rogueChilds.Count * 2;
+
+            for (int i = 0; i < tile.rogueChilds.Count; i++)
+			{
+                lr.SetPosition(i * 2, tile.transform.position);
+                lr.SetPosition((i * 2) + 1, tile.rogueChilds[i].transform.position);
+            }
+		}
     }
 
     public void SetInfoPanel(bool active, Unit unit = null){

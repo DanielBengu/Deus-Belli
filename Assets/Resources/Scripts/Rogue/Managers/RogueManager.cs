@@ -6,7 +6,7 @@ using UnityEngine.SceneManagement;
 public class RogueManager : MonoBehaviour
 {
     const int MINIMUM_NODES = 2;
-    const int MAXIMUM_NODES = 5;
+    const int MAXIMUM_NODES = 4;
 
     GeneralManager generalManager;
     public StructureManager structureManager;
@@ -16,8 +16,6 @@ public class RogueManager : MonoBehaviour
 	readonly List<RogueTile> tileList = new();
 
     public Transform playerUnitTransform;
-
-    private LineRenderer lineRenderer;
 
     public int currentRow;
     public int currentPositionOnRow;
@@ -62,9 +60,6 @@ public class RogueManager : MonoBehaviour
         Random.InitState(seedList[SeedType.MapLength]);
         maxNode = Random.Range(5, 8);
 
-        lineRenderer = GetComponent<LineRenderer>();
-        lineRenderer.positionCount = maxNode + 1;
-
         GenerateMap();
 
         playerUnitTransform.position = new Vector3(tileList[currentNode].transform.position.x, playerUnitTransform.position.y, playerUnitTransform.position.z);
@@ -76,21 +71,34 @@ public class RogueManager : MonoBehaviour
         originTile.SetupTile(this, RogueTileType.Fight, 0, 0);
         tileList.Add(originTile);
 
-		for (int i = 1; i <= maxNode; i++) CreateRowOfNodes(i, origin.transform);
+        for (int i = 1; i <= maxNode; i++)
+        {
+            CreateRowOfNodes(i, origin.transform);
+            SetNodesChilds(tileList.Where(t => t.mapRow == i - 1).ToList(), tileList.Where(t => t.mapRow == i).ToList());
+        }
+
 
         GenerateNewNodeLines();
     }
 
-    void CreateRowOfNodes(int row, Transform parent)
+    void CreateRowOfNodes(int row, Transform firstNode)
 	{
         List<RogueTile> newNodes = new();
+        List<RogueTile> previousRowNodes = tileList.Where(t => t.mapRow == row - 1).OrderBy(t=> t.mapRow).ToList();
         Random.InitState(seedList[SeedType.NodesOnRow] + row);
-        int nodesOnRow = Random.Range(MINIMUM_NODES, MAXIMUM_NODES);
-		for (int i = 0; i < nodesOnRow; i++)
+        int nodesOnCurrentRow;
+        int nodesOnPreviousRow = previousRowNodes.Count;
+        int maximumNodesPossibleForCurrentRow = nodesOnPreviousRow < MAXIMUM_NODES ? nodesOnPreviousRow + 1 : MAXIMUM_NODES;
+        if (nodesOnPreviousRow < MINIMUM_NODES)
+            nodesOnCurrentRow = nodesOnPreviousRow + 1;
+        else
+            nodesOnCurrentRow = Random.Range(MINIMUM_NODES, maximumNodesPossibleForCurrentRow + 1);
+
+		for (int i = 0; i < nodesOnCurrentRow; i++)
 		{
             Random.InitState(seedList[SeedType.RogueTile] + i);
             int randomLength = Random.Range(3, 6);
-            newNodes.Add(structureManager.GenerateRogueTile(randomLength, row, i, tile.transform, parent, this));
+            newNodes.Add(structureManager.GenerateRogueTile(randomLength, row, i, tile.transform, firstNode, this));
         }
         
         if(newNodes != null)
@@ -99,9 +107,20 @@ public class RogueManager : MonoBehaviour
         }
     }
 
+    void SetNodesChilds(List<RogueTile> tileParents, List<RogueTile> tileChilds)
+	{
+		foreach (var parent in tileParents)
+		{
+            parent.rogueChilds = tileChilds.Where(t =>
+            (t.positionInRow == parent.positionInRow - 1) ||
+            (t.positionInRow == parent.positionInRow) ||
+            (t.positionInRow == parent.positionInRow + 1)).ToList();
+		}
+	}
+
     public void GenerateNewNodeLines()
 	{
-        structureManager.GenerateRogueLine(tileList, lineRenderer);
+        structureManager.GenerateRogueLine(tileList);
     }
 
     public void NodeClicked(RogueTile tile)
