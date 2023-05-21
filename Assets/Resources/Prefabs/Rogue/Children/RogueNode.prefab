@@ -12,10 +12,10 @@ GameObject:
   - component: {fileID: 5013846965654771606}
   - component: {fileID: 3250769358841541791}
   - component: {fileID: 6022507953866795920}
-  - component: {fileID: 5813328648502031528}
   - component: {fileID: 4462869899471158533}
+  - component: {fileID: 7403966217391260248}
   m_Layer: 0
-  m_Name: RogueTile
+  m_Name: RogueNode
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -100,22 +100,6 @@ CapsuleCollider:
   m_Height: 2
   m_Direction: 1
   m_Center: {x: 0.000000059604645, y: 0, z: -0.00000008940697}
---- !u!114 &5813328648502031528
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8233011120004536846}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: dbafa0e22f8f2f14e812ad8efe45f88e, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  rogueTileType: 0
-  rogueChilds: []
-  mapRow: 0
-  positionInRow: 0
 --- !u!120 &4462869899471158533
 LineRenderer:
   m_ObjectHideFlags: 0
@@ -215,3 +199,19 @@ LineRenderer:
     generateLightingData: 0
   m_UseWorldSpace: 1
   m_Loop: 0
+--- !u!114 &7403966217391260248
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8233011120004536846}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: aadb2ceb85d23e347b53e979c34ce21c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  rogueTileType: 0
+  rogueChilds: []
+  mapRow: 0
+  positionInRow: 0

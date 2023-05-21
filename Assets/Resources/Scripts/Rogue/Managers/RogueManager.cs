@@ -11,9 +11,9 @@ public class RogueManager : MonoBehaviour
     GeneralManager generalManager;
     public StructureManager structureManager;
 
-    public RogueTile origin;
+    public RogueNode origin;
     public GameObject tile;
-	readonly List<RogueTile> tileList = new();
+	readonly List<RogueNode> tileList = new();
 
     public Transform playerUnitTransform;
 
@@ -67,8 +67,8 @@ public class RogueManager : MonoBehaviour
 
 	void GenerateMap()
 	{
-        RogueTile originTile = origin;
-        originTile.SetupTile(this, RogueTileType.Fight, 0, 0);
+        RogueNode originTile = origin;
+        originTile.SetupTile(this, RogueTileType.Fight, 0, 1);
         tileList.Add(originTile);
 
         for (int i = 1; i <= maxNode; i++)
@@ -83,8 +83,8 @@ public class RogueManager : MonoBehaviour
 
     void CreateRowOfNodes(int row, Transform firstNode)
 	{
-        List<RogueTile> newNodes = new();
-        List<RogueTile> previousRowNodes = tileList.Where(t => t.mapRow == row - 1).OrderBy(t=> t.mapRow).ToList();
+        List<RogueNode> newNodes = new();
+        List<RogueNode> previousRowNodes = tileList.Where(t => t.mapRow == row - 1).OrderBy(t=> t.positionInRow).ToList();
         Random.InitState(seedList[SeedType.NodesOnRow] + row);
         int nodesOnCurrentRow;
         int nodesOnPreviousRow = previousRowNodes.Count;
@@ -96,9 +96,10 @@ public class RogueManager : MonoBehaviour
 
 		for (int i = 0; i < nodesOnCurrentRow; i++)
 		{
+            int positionOnRow = i + FindOffsetPositionOnRow(nodesOnCurrentRow, previousRowNodes);
             Random.InitState(seedList[SeedType.RogueTile] + i);
             int randomLength = Random.Range(3, 6);
-            newNodes.Add(structureManager.GenerateRogueTile(randomLength, row, i, tile.transform, firstNode, this));
+            newNodes.Add(structureManager.GenerateRogueTile(randomLength, row, positionOnRow, tile.transform, firstNode, this));
         }
         
         if(newNodes != null)
@@ -107,7 +108,27 @@ public class RogueManager : MonoBehaviour
         }
     }
 
-    void SetNodesChilds(List<RogueTile> tileParents, List<RogueTile> tileChilds)
+    int FindOffsetPositionOnRow(int nodesOnCurrentRow, List<RogueNode> previousRowNodes)
+	{
+		Random.InitState(seedList[SeedType.NodesOnRow] * nodesOnCurrentRow);
+        int firstNodeInPreviousRowPosition = previousRowNodes.First().positionInRow;
+
+        int minimumOffset = firstNodeInPreviousRowPosition - 1 >= 0 ? firstNodeInPreviousRowPosition - 1 : 0;
+        int maximumOffset = firstNodeInPreviousRowPosition + 1 <= MAXIMUM_NODES ? firstNodeInPreviousRowPosition + 1 : MAXIMUM_NODES;
+
+        int position;
+        if (previousRowNodes.Count == MAXIMUM_NODES && nodesOnCurrentRow == MINIMUM_NODES)
+            position = 1;
+        else if (previousRowNodes.Count == 1)
+            position = Random.Range(minimumOffset, firstNodeInPreviousRowPosition);
+        else
+            position = Random.Range(minimumOffset, maximumOffset);
+
+
+		return position;
+    }
+
+    void SetNodesChilds(List<RogueNode> tileParents, List<RogueNode> tileChilds)
 	{
 		foreach (var parent in tileParents)
 		{
@@ -123,7 +144,7 @@ public class RogueManager : MonoBehaviour
         structureManager.GenerateRogueLine(tileList);
     }
 
-    public void NodeClicked(RogueTile tile)
+    public void NodeClicked(RogueNode tile)
 	{
 		if (IsAnyUnitMoving) return;
         
@@ -175,6 +196,6 @@ public class RogueManager : MonoBehaviour
         Master,
         RogueTile, //Specific data for each node (e.g. Type of node)
         MapLength,
-        NodesOnRow, //How much nodes we need to generate in each row
+        NodesOnRow, //How much nodes we need to generate in each row and position offset
     }
 }

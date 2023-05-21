@@ -60,7 +60,7 @@ public class StructureManager : MonoBehaviour
         return mapTiles;
     }
 
-    public RogueTile GenerateRogueTile(int randomLength, int currentRow, int positionOnRow, Transform origin, Transform firstNode, RogueManager rm)
+    public RogueNode GenerateRogueTile(int randomLength, int currentRow, int positionOnRow, Transform origin, Transform firstNode, RogueManager rm)
 	{
         Vector3 tilePosition = origin.position;
         float precedentRowX = firstNode.transform.position.x + (450 * (currentRow - 1));
@@ -69,13 +69,13 @@ public class StructureManager : MonoBehaviour
 
         GameObject newTile = Instantiate(origin.gameObject, tilePosition, origin.rotation, firstNode);
         newTile.transform.localScale = new Vector3(1, 1, 1);
-        RogueTile newTileScript = newTile.GetComponent<RogueTile>();
+        RogueNode newTileScript = newTile.GetComponent<RogueNode>();
         newTileScript.SetupTile(rm, RogueTileType.Fight, currentRow, positionOnRow);
 
         return newTileScript;
     }
 
-    public void GenerateRogueLine(List<RogueTile> tileList)
+    public void GenerateRogueLine(List<RogueNode> tileList)
 	{
         LineRenderer lr;
 		foreach (var tile in tileList)
@@ -154,7 +154,7 @@ public class StructureManager : MonoBehaviour
         actionPerformer.StartAction(ActionPerformed.FightMovement, unit.gameObject, targetTile.gameObject);
     }
 
-    public void MoveUnit(Transform unit, RogueTile targetTile)
+    public void MoveUnit(Transform unit, RogueNode targetTile)
     {
         actionPerformer.StartAction(ActionPerformed.RogueMovement, unit.gameObject, targetTile.gameObject);
     }

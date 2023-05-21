@@ -1,11 +1,11 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class RogueTile : MonoBehaviour
+public class RogueNode : MonoBehaviour
 {
 	RogueManager rogueManager;
 	public RogueTileType rogueTileType;
-	public List<RogueTile> rogueChilds;
+	public List<RogueNode> rogueChilds;
 	public int mapRow;
 	public int positionInRow;
 
