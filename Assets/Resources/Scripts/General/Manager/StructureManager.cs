@@ -60,7 +60,7 @@ public class StructureManager : MonoBehaviour
         return mapTiles;
     }
 
-    public RogueNode GenerateRogueTile(int randomLength, int currentRow, int positionOnRow, Transform origin, Transform firstNode, RogueManager rm)
+    public RogueNode GenerateRogueTile(int randomLength, int currentRow, int positionOnRow, int maxRowOnMap, Transform origin, Transform firstNode, RogueManager rm)
 	{
         Vector3 tilePosition = origin.position;
         float precedentRowX = firstNode.transform.position.x + (450 * (currentRow - 1));
@@ -70,7 +70,10 @@ public class StructureManager : MonoBehaviour
         GameObject newTile = Instantiate(origin.gameObject, tilePosition, origin.rotation, firstNode);
         newTile.transform.localScale = new Vector3(1, 1, 1);
         RogueNode newTileScript = newTile.GetComponent<RogueNode>();
-        newTileScript.SetupTile(rm, RogueTileType.Fight, currentRow, positionOnRow);
+        RogueTileType typeOfNode = RogueTileType.Fight;
+        if (currentRow == maxRowOnMap)
+            typeOfNode = RogueTileType.Boss;
+        newTileScript.SetupTile(rm, typeOfNode, currentRow, positionOnRow);
 
         return newTileScript;
     }

@@ -211,7 +211,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: aadb2ceb85d23e347b53e979c34ce21c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  boss: {fileID: 2100000, guid: 373e6596208a9114ca31e289c9a55f01, type: 2}
+  fight: {fileID: 2100000, guid: b939b6b8b8672a7499873bd30f9acae1, type: 2}
+  merchant: {fileID: 2100000, guid: b6247586cb213b043aa6184272c0732d, type: 2}
+  miniboss: {fileID: 2100000, guid: 6acbd51c20bc8c44c975f0740ad5d717, type: 2}
   rogueTileType: 0
+  rogueParents: []
   rogueChilds: []
   mapRow: 0
   positionInRow: 0

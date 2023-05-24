@@ -36,8 +36,8 @@ public class CameraManager : MonoBehaviour
         position.x += moveHorizontal * movementSpeed;
         position.z += moveVertical * movementSpeed;
 
-        position.x = Mathf.Clamp(position.x, xMin, xMax);
-        position.z = Mathf.Clamp(position.z, yMin, yMax);
+        /*position.x = Mathf.Clamp(position.x, xMin, xMax);
+        position.z = Mathf.Clamp(position.z, yMin, yMax);*/
 
         rogueInstance.position = position;
     }
