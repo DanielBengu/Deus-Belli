@@ -45,11 +45,12 @@ public class RogueManager : MonoBehaviour
             structureManager.GetRogueVictoryScreen();
 	}
 
-    public void SetupRogue(StructureManager structureManager, int currentNode, int masterSeed)
+    public void SetupRogue(StructureManager structureManager, int currentRow, int currentPositionOnRow, int masterSeed)
 	{
         generalManager = GameObject.Find(GeneralManager.GENERAL_MANAGER_OBJ_NAME).GetComponent<GeneralManager>();
 
-        this.currentRow = currentNode;
+        this.currentRow = currentRow;
+        this.currentPositionOnRow = currentPositionOnRow;
         Random.InitState(masterSeed);
         seedList.Add(SeedType.Master, masterSeed);
         seedList.Add(SeedType.RogueTile, Random.Range(0, 99999));
@@ -58,11 +59,11 @@ public class RogueManager : MonoBehaviour
         this.structureManager = structureManager;
 
         Random.InitState(seedList[SeedType.MapLength]);
-        maxNode = Random.Range(5, 8);
+        maxNode = Random.Range(6, 8);
 
         GenerateMap();
-
-        playerUnitTransform.position = new Vector3(tileList[currentNode].transform.position.x, playerUnitTransform.position.y, playerUnitTransform.position.z);
+        RogueNode currentNode = tileList.Find(t => t.mapRow == currentRow && t.positionInRow == currentPositionOnRow);
+        playerUnitTransform.position = new Vector3(currentNode.transform.position.x, playerUnitTransform.position.y, currentNode.transform.position.z);
     }
 
 	void GenerateMap()
@@ -242,10 +243,12 @@ public class RogueManager : MonoBehaviour
     public void NodeClicked(RogueNode tile)
 	{
 		if (IsAnyUnitMoving) return;
-        
-        if (currentRow == tile.mapRow - 1)
+
+        RogueNode startingNode = tileList.Find(t => t.mapRow == currentRow && t.positionInRow == currentPositionOnRow);
+        if (startingNode.rogueChilds.Contains(tile))
 		{
-            currentRow++;
+            currentRow = tile.mapRow;
+            currentPositionOnRow = tile.positionInRow;
             structureManager.MoveUnit(playerUnitTransform, tile);
         }
             

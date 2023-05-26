@@ -6,7 +6,8 @@ public class GeneralManager : MonoBehaviour
 {
     public const string GOD_SELECTED_PP = "God Selected";
     public const string ONGOING_RUN = "OngoingRun";
-    public const string CURRENT_NODE = "CurrentNode";
+    public const string CURRENT_ROW = "CurrentNode";
+    public const string CURRENT_POSITION_IN_ROW = "CurrentPositionInRow";
     public const string SEED = "Seed";
     public const string GOLD = "Gold";
 
@@ -52,11 +53,12 @@ public class GeneralManager : MonoBehaviour
 		{
             string godSelected = PlayerPrefs.GetString(GOD_SELECTED_PP);
             int masterSeed = Guid.NewGuid().GetHashCode();
-            runData = new RunData(godSelected, 0, masterSeed, 0);
+            runData = new RunData(godSelected, 0, 1, masterSeed, 0);
 
             PlayerPrefs.SetInt(SEED, masterSeed);
             PlayerPrefs.SetInt(GOLD, 0);
-            PlayerPrefs.SetInt(CURRENT_NODE, 0);
+            PlayerPrefs.SetInt(CURRENT_ROW, 0);
+            PlayerPrefs.SetInt(CURRENT_POSITION_IN_ROW, 1);
             PlayerPrefs.SetInt(ONGOING_RUN, 1);
         }
 
@@ -93,14 +95,16 @@ public class GeneralManager : MonoBehaviour
 	{
         int masterSeed = PlayerPrefs.GetInt(SEED);
         string godSelected = PlayerPrefs.GetString(GOD_SELECTED_PP);
-        int currentNode = PlayerPrefs.GetInt(CURRENT_NODE);
+        int currentRow = PlayerPrefs.GetInt(CURRENT_ROW);
+        int currentPositionInRow = PlayerPrefs.GetInt(CURRENT_POSITION_IN_ROW);
         int gold = PlayerPrefs.GetInt(GOLD);
-        return new RunData(godSelected, currentNode, masterSeed, gold);
+        return new RunData(godSelected, currentRow, currentPositionInRow, masterSeed, gold);
 	}
 
 	public void SaveMapProgress()
 	{
-        PlayerPrefs.SetInt(CURRENT_NODE, runData.currentNode);
+        PlayerPrefs.SetInt(CURRENT_ROW, runData.currentRow);
+        PlayerPrefs.SetInt(CURRENT_POSITION_IN_ROW, runData.currentPositionInRow);
     }
 
     void ManageKeysDown()
@@ -151,7 +155,7 @@ public class GeneralManager : MonoBehaviour
 
     void DestroyRogueSection()
     {
-        runData = new(GodSelected, rogueManager.currentRow, rogueManager.seed, Gold);
+        runData = new(GodSelected, rogueManager.currentRow, rogueManager.currentPositionOnRow, rogueManager.seedList[RogueManager.SeedType.Master], Gold);
         Destroy(rogueSectionInstance);
     }
 
@@ -170,7 +174,7 @@ public class GeneralManager : MonoBehaviour
     {
         rogueSectionInstance = Instantiate(rogueSectionPrefab);
         rogueManager = GameObject.Find(ROGUE_MANAGER_OBJ_NAME).GetComponent<RogueManager>();
-        rogueManager.SetupRogue(structureManager, runData.currentNode, runData.masterSeed);
+        rogueManager.SetupRogue(structureManager, runData.currentRow, runData.currentPositionInRow, runData.masterSeed);
         rogueManager.structureManager.uiManager.SetRogueVariables(Gold, GodSelected);
         currentSection = CurrentSection.Rogue;
 
@@ -193,15 +197,17 @@ public class GeneralManager : MonoBehaviour
     struct RunData
     {
         public string godSelected;
-        public int currentNode;
+        public int currentRow;
+        public int currentPositionInRow;
         public int masterSeed;
 
         public int gold;
 
-        public RunData(string godSelected,int currentNode, int masterSeed, int gold)
+        public RunData(string godSelected,int currentRow, int currentPositionInRow, int masterSeed, int gold)
         {
             this.godSelected = godSelected;
-            this.currentNode = currentNode;
+            this.currentRow = currentRow;
+            this.currentPositionInRow = currentPositionInRow;
             this.masterSeed = masterSeed;
             this.gold = gold;
         }

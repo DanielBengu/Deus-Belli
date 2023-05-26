@@ -20,7 +20,7 @@ public class CameraManager : MonoBehaviour
 
     bool isOutOfFocus = false;
 
-    Vector3 defaultCameraPosition = new(670, 790, 500);
+    Vector3 defaultCameraPosition = new(670, 1070, 73);
     Quaternion defaultCameraRotation = Quaternion.Euler((float)33.3, 0, 0);
 
     Vector3 cameraPositionOutOfFocus = new(670, 300, 640);
@@ -30,11 +30,11 @@ public class CameraManager : MonoBehaviour
     
     public void UpdatePosition(Transform rogueInstance){
         float moveHorizontal = Input.GetAxis("Mouse X");
-        float moveVertical = Input.GetAxis("Mouse Y");
+        //float moveVertical = Input.GetAxis("Mouse Y");
 
         Vector3 position = rogueInstance.position;
         position.x += moveHorizontal * movementSpeed;
-        position.z += moveVertical * movementSpeed;
+        //position.z += moveVertical * movementSpeed;
 
         /*position.x = Mathf.Clamp(position.x, xMin, xMax);
         position.z = Mathf.Clamp(position.z, yMin, yMax);*/
