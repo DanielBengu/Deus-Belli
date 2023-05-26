@@ -13,7 +13,7 @@ public class RogueManager : MonoBehaviour
 
     public RogueNode origin;
     public GameObject tile;
-	readonly List<RogueNode> tileList = new();
+	public readonly List<RogueNode> tileList = new();
 
     public Transform playerUnitTransform;
 
@@ -69,7 +69,7 @@ public class RogueManager : MonoBehaviour
 	void GenerateMap()
 	{
         RogueNode originTile = origin;
-        originTile.SetupTile(this, RogueTileType.Starting, originTile.mapRow, originTile.positionInRow);
+        originTile.SetupTile(this, RogueTileType.Starting, originTile.mapRow, originTile.positionInRow, 0);
         tileList.Add(originTile);
 
         for (int i = 1; i <= maxNode; i++)
@@ -109,7 +109,7 @@ public class RogueManager : MonoBehaviour
 
             Random.InitState(seedList[SeedType.RogueTile] + i);
             int randomLength = Random.Range(3, 6);
-            newNodes.Add(structureManager.GenerateRogueTile(randomLength, row, positionOnRow, maxRowOfMap, tile.transform, firstNode, this));
+            newNodes.Add(structureManager.GenerateRogueTile(randomLength, row, positionOnRow, maxRowOfMap, tileList.Count + i + 1, tile.transform, firstNode, this));
         }
         
         if(newNodes != null)

@@ -60,7 +60,7 @@ public class StructureManager : MonoBehaviour
         return mapTiles;
     }
 
-    public RogueNode GenerateRogueTile(int randomLength, int currentRow, int positionOnRow, int maxRowOnMap, Transform origin, Transform firstNode, RogueManager rm)
+    public RogueNode GenerateRogueTile(int randomLength, int currentRow, int positionOnRow, int maxRowOnMap, int nodeIndex, Transform origin, Transform firstNode, RogueManager rm)
 	{
         Vector3 tilePosition = origin.position;
         float precedentRowX = firstNode.transform.position.x + (450 * (currentRow - 1));
@@ -70,12 +70,22 @@ public class StructureManager : MonoBehaviour
         GameObject newTile = Instantiate(origin.gameObject, tilePosition, origin.rotation, firstNode);
         newTile.transform.localScale = new Vector3(1, 1, 1);
         RogueNode newTileScript = newTile.GetComponent<RogueNode>();
-        RogueTileType typeOfNode = RogueTileType.Fight;
-        if (currentRow == maxRowOnMap)
-            typeOfNode = RogueTileType.Boss;
-        newTileScript.SetupTile(rm, typeOfNode, currentRow, positionOnRow);
+        RogueTileType typeOfNode = GenerateRogueNodeType(currentRow == maxRowOnMap, rm, nodeIndex);
+        newTileScript.SetupTile(rm, typeOfNode, currentRow, positionOnRow, nodeIndex);
 
         return newTileScript;
+    }
+
+    public RogueTileType GenerateRogueNodeType(bool isFinalRow, RogueManager rm, int nodeIndex)
+	{
+		if (isFinalRow)
+            return RogueTileType.Boss;
+
+        int seed = rm.seedList[RogueManager.SeedType.RogueTile] * (nodeIndex + 1);
+        Random.InitState(seed);
+
+        //Currently the second parameter is set with a - 2 to exclude StartingNode and BossFight, if other non-generable nodes get added it needs to change.
+        return (RogueTileType)Random.Range(0, System.Enum.GetNames(typeof(RogueTileType)).Length - 2);
     }
 
     public void GenerateRogueLine(List<RogueNode> tileList)

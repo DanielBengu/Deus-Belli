@@ -9,13 +9,15 @@ public class RogueNode : MonoBehaviour
 	public List<RogueNode> rogueChilds;
 	public int mapRow;
 	public int positionInRow;
+	public int nodeIndex;
 
-	public void SetupTile(RogueManager rm, RogueTileType tileType, int mapRow, int positionInRow)
+	public void SetupTile(RogueManager rm, RogueTileType tileType, int mapRow, int positionInRow, int nodeIndex)
 	{
 		rogueManager = rm;
 		rogueTileType = tileType;
 		this.mapRow = mapRow;
 		this.positionInRow = positionInRow;
+		this.nodeIndex = nodeIndex;
 		SetupMaterial();
 	}
 
@@ -53,9 +55,10 @@ public class RogueNode : MonoBehaviour
 
 public enum RogueTileType
 {
-	Starting,
-	Boss,
 	Fight,
 	Merchant,
-	Miniboss
+	Miniboss,
+	//Out of bound for general map generation
+	Starting,
+	Boss
 }
