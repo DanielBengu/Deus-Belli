@@ -59,8 +59,8 @@ public class RogueManager : MonoBehaviour
         this.structureManager = structureManager;
 
         Random.InitState(seedList[SeedType.MapLength]);
-        maxNode = Random.Range(6, 8);
-
+        maxNode = Random.Range(7, 9);
+        
         GenerateMap();
         RogueNode currentNode = tileList.Find(t => t.mapRow == currentRow && t.positionInRow == currentPositionOnRow);
         playerUnitTransform.position = new Vector3(currentNode.transform.position.x, playerUnitTransform.position.y, currentNode.transform.position.z);

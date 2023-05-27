@@ -49,6 +49,9 @@ public class RogueNode : MonoBehaviour
 			case RogueTileType.Miniboss:
 				objMaterial.color = Color.blue;
 				break;
+			case RogueTileType.Event:
+				objMaterial.color = Color.magenta;
+				break;
 		}
 	}
 }
@@ -57,8 +60,9 @@ public enum RogueTileType
 {
 	Fight,
 	Merchant,
-	Miniboss,
+	Event,
 	//Out of bound for general map generation
+	Miniboss,
 	Starting,
 	Boss
 }

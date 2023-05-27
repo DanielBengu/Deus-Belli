@@ -70,22 +70,47 @@ public class StructureManager : MonoBehaviour
         GameObject newTile = Instantiate(origin.gameObject, tilePosition, origin.rotation, firstNode);
         newTile.transform.localScale = new Vector3(1, 1, 1);
         RogueNode newTileScript = newTile.GetComponent<RogueNode>();
-        RogueTileType typeOfNode = GenerateRogueNodeType(currentRow == maxRowOnMap, rm, nodeIndex);
+        RogueTileType typeOfNode = GenerateRogueNodeType(currentRow, positionOnRow, maxRowOnMap, rm, nodeIndex);
         newTileScript.SetupTile(rm, typeOfNode, currentRow, positionOnRow, nodeIndex);
 
         return newTileScript;
     }
 
-    public RogueTileType GenerateRogueNodeType(bool isFinalRow, RogueManager rm, int nodeIndex)
+    public RogueTileType GenerateRogueNodeType(int currentRow, int positionOnRow, int maxRowOnMap, RogueManager rm, int nodeIndex)
 	{
-		if (isFinalRow)
+		if (currentRow == maxRowOnMap)
             return RogueTileType.Boss;
 
-        int seed = rm.seedList[RogueManager.SeedType.RogueTile] * (nodeIndex + 1);
+        int seed = rm.seedList[RogueManager.SeedType.RogueTile];
         Random.InitState(seed);
 
-        //Currently the second parameter is set with a - 2 to exclude StartingNode and BossFight, if other non-generable nodes get added it needs to change.
-        return (RogueTileType)Random.Range(0, System.Enum.GetNames(typeof(RogueTileType)).Length - 2);
+        int minibossRow = Random.Range(3, 5);
+        if (minibossRow == currentRow)
+            return RogueTileType.Miniboss;
+        if (currentRow == 1)
+            return RogueTileType.Fight;
+
+        seed = rm.seedList[RogueManager.SeedType.RogueTile] * (nodeIndex + 1);
+        Random.InitState(seed);
+
+        int weightOfFightEncounter = 6;
+        int weightOffEventEncounter = 1;
+        int weightOffMerchantEncounter = 2;
+        int offset = 0;
+        RogueTileType[] weights = new RogueTileType[weightOfFightEncounter + weightOffEventEncounter + weightOffMerchantEncounter];
+
+        for (int i = 0; i < weightOfFightEncounter; i++)
+            weights[offset + i] = RogueTileType.Fight;
+        offset += weightOfFightEncounter;
+        for (int i = 0; i < weightOffEventEncounter; i++)
+            weights[offset + i] = RogueTileType.Event;
+        offset += weightOffEventEncounter;
+        for (int i = 0; i < weightOffMerchantEncounter; i++)
+            weights[offset + i] = RogueTileType.Merchant;
+
+        RogueTileType rogueTileType = weights[Random.Range(0, weights.Length)];
+
+        return rogueTileType;
     }
 
     public void GenerateRogueLine(List<RogueNode> tileList)
