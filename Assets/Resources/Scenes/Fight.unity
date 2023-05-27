@@ -463,6 +463,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d8bbb9aea8e2a904ebd0c3bcaba5afb2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  sorceressPrefab: {fileID: 1253013051146282, guid: 3c202d9019a613349804c8f1726919c8, type: 3}
+  orcPrefab: {fileID: 1186413494234004, guid: 629436ade9810844791296bd0506f056, type: 3}
+  dragonPrefab: {fileID: 971994670, guid: 67635bec777649d4dafd5182ffae25f7, type: 3}
   uiManager: {fileID: 1412221416}
   spriteManager: {fileID: 1412221417}
 --- !u!114 &1412221416

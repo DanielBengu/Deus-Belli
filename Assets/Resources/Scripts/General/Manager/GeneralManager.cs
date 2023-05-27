@@ -35,6 +35,7 @@ public class GeneralManager : MonoBehaviour
     GameObject OptionsPrefab;
 
     RunData runData;
+    public RogueNode selectedNode;
 
     CurrentSection currentSection = CurrentSection.Rogue;
 
@@ -142,7 +143,7 @@ public class GeneralManager : MonoBehaviour
         cameraManager.ResetCamera();
 
         DestroyRogueSection();
-        GenerateFightSection();
+        GenerateFightSection(selectedNode.level);
 
         currentSection = CurrentSection.Fight;
     }
@@ -159,7 +160,7 @@ public class GeneralManager : MonoBehaviour
         Destroy(rogueSectionInstance);
     }
 
-    void GenerateFightSection()
+    void GenerateFightSection(Level level)
 	{
         fightSectionInstance = Instantiate(fightSectionPrefab);
         fightManager = GameObject.Find(FIGHT_MANAGER_OBJ_NAME).GetComponent<FightManager>();
@@ -168,6 +169,7 @@ public class GeneralManager : MonoBehaviour
         fightManager.generalManager = this;
         fightManager.structureManager.uiManager.SetFightVariables();
         fightManager.structureManager.spriteManager.fightManager = fightManager;
+        fightManager.Setup(level);
 	}
 
     void GenerateRogueSection()
@@ -191,6 +193,7 @@ public class GeneralManager : MonoBehaviour
 	{
         cameraManager.ResetCamera();
 
+        selectedNode = null;
         DestroyFightSection();
         GenerateRogueSection();
     }

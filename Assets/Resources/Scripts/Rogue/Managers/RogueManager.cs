@@ -69,7 +69,7 @@ public class RogueManager : MonoBehaviour
 	void GenerateMap()
 	{
         RogueNode originTile = origin;
-        originTile.SetupTile(this, RogueTileType.Starting, originTile.mapRow, originTile.positionInRow, 0);
+        originTile.SetupTile(this, RogueTileType.Starting, originTile.mapRow, originTile.positionInRow, 0, new());
         tileList.Add(originTile);
 
         for (int i = 1; i <= maxNode; i++)
@@ -247,6 +247,7 @@ public class RogueManager : MonoBehaviour
         RogueNode startingNode = tileList.Find(t => t.mapRow == currentRow && t.positionInRow == currentPositionOnRow);
         if (startingNode.rogueChilds.Contains(tile))
 		{
+            generalManager.selectedNode = tile;
             currentRow = tile.mapRow;
             currentPositionOnRow = tile.positionInRow;
             structureManager.MoveUnit(playerUnitTransform, tile);

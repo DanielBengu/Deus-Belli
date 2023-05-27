@@ -70,9 +70,7 @@
     <Compile Include="Assets\Resources\Scripts\Fight\Managers\AIManager.cs" />
     <Compile Include="Assets\Resources\Scripts\Menu\OptionsMenu.cs" />
     <Compile Include="Assets\Resources\Scripts\Fight\Classes\Movement.cs" />
-    <Compile Include="Assets\Resources\Scripts\Fight\Levels\LevelOne.cs" />
     <Compile Include="Assets\Resources\Scripts\Fight\Tile.cs" />
-    <Compile Include="Assets\Resources\Scripts\Fight\Levels\LevelTwo.cs" />
     <Compile Include="Assets\Resources\Scripts\Rogue\Managers\RogueManager.cs" />
     <Compile Include="Assets\Cartoon Heroes\Scripts\SetCharacter\SetCharacter.cs" />
     <Compile Include="Assets\Resources\Scripts\Menu\NewGameManager.cs" />
@@ -96,6 +94,7 @@
     <None Include="Assets\TextMesh Pro\Shaders\TMPro_Surface.cginc" />
     <None Include="Assets\TextMesh Pro\Resources\LineBreaking Following Characters.txt" />
     <None Include="Assets\TextMesh Pro\Shaders\TMP_SDF-Mobile Masking.shader" />
+    <None Include="Assets\Ork berserker\materials\Standard_Two_Sided .shader" />
     <None Include="Assets\TextMesh Pro\Shaders\TMP_SDF Overlay.shader" />
     <None Include="Assets\TextMesh Pro\Shaders\TMP_Bitmap-Mobile.shader" />
     <None Include="Assets\TextMesh Pro\Fonts\LiberationSans - OFL.txt" />

@@ -44,26 +44,12 @@ public class FightManager : MonoBehaviour
 
     #endregion
 
-    #region Start and Update
-
-    void Start()
-    {
-        Debug.Log("START FIGHT MANAGER SETUP");
-        aiManager = GetComponent<AIManager>();
-
-        StartLevel();
-
-        Debug.Log("END FIGHT MANAGER SETUP");
-    }
-
     void Update()
     {
         ManageGame();
         ManageMovements();
         ManageInputs();
     }
-
-    #endregion
     
     #region Key Input Management
 
@@ -92,18 +78,27 @@ public class FightManager : MonoBehaviour
 
     #region Startup Methods
 
-    void StartLevel()
+    public void Setup(Level level)
+	{
+        Debug.Log("START FIGHT MANAGER SETUP");
+        aiManager = GetComponent<AIManager>();
+
+        StartLevel(level);
+
+        Debug.Log("END FIGHT MANAGER SETUP");
+    }
+
+    void StartLevel(Level level)
     {
-        var levelBase = GameObject.Find("Level One").GetComponent<LevelOne>();
-        levelBase.StartLevel();
-        level = levelBase.level;
+        this.level = level;
+        level.SetupTiles();
 
         // Setup the terrain based on the level information
-        var tiles = structureManager.SetupFightSection(level.tilesDict, this, level.TopLeftSquarePositionX, level.YPosition, level.TopLeftSquarePositionZ, level.XLength, level.YLength);
-       
+        var tiles = structureManager.SetupFightSection(level.tilesDict, this, level.TopLeftSquarePositionX, level.YPosition, level.TopLeftSquarePositionZ, level.HorizontalTiles, level.VerticalTiles);
 
         var units = GenerateUnits(tiles);
-        structureManager.gameData = new(tiles, units, level.XLength, level.YLength);
+        structureManager.gameData = new(tiles, units, level.HorizontalTiles, level.VerticalTiles);
+        
     }
 
     List<Unit> GenerateUnits(Dictionary<int, Tile> mapTiles)
