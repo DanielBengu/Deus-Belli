@@ -102,8 +102,8 @@ public class StructureManager : MonoBehaviour
         Random.InitState(seed);
 
         int weightOfFightEncounter = 6;
-        int weightOffEventEncounter = 1;
-        int weightOffMerchantEncounter = 2;
+        int weightOffEventEncounter = 2;
+        int weightOffMerchantEncounter = 1;
         int offset = 0;
         RogueTileType[] weights = new RogueTileType[weightOfFightEncounter + weightOffEventEncounter + weightOffMerchantEncounter];
 

@@ -15,10 +15,10 @@ public static class AnimationPerformer
                 animationToPlay = "Damage Light";
                 break;
             case Animation.Move:
-                animationToPlay = "Sword Walk";
+                animationToPlay = "Walk";
                 break;
             case Animation.Idle:
-                animationToPlay = "Sword Stance";
+                animationToPlay = "Idle";
                 break;
             case Animation.Default:
                 break;
@@ -26,13 +26,7 @@ public static class AnimationPerformer
                 break;
         }
 
-        StartAnimation(unit, animationToPlay);
-    }
-
-    static void StartAnimation(GameObject unit, string animation)
-    {
-        string gender = unit.name.Split(' ')[0];
-        unit.GetComponent<Animator>().Play($"{gender} {animation}");
+        unit.GetComponent<Animator>().Play(animationToPlay);
     }
 }
 

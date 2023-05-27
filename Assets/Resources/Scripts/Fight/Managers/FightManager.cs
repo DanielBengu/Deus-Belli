@@ -105,11 +105,13 @@ public class FightManager : MonoBehaviour
     {
         List<Unit> unitList = new();
 
-        Tile tileWarrior = GameObject.Find($"Terrain_21").GetComponent<Tile>();
-        unitList.Add(GenerateSingleUnit(warriorPrefab, tileWarrior));
+        var terrain = GameObject.Find($"Terrain_21");
+        if(terrain != null)
+            unitList.Add(GenerateSingleUnit(warriorPrefab, terrain.GetComponent<Tile>()));
 
-        Tile tileWarrior2 = GameObject.Find($"Terrain_28").GetComponent<Tile>();
-        unitList.Add(GenerateSingleUnit(warrior2Prefab, tileWarrior2));
+        terrain = GameObject.Find($"Terrain_28");
+        if(terrain != null)
+            unitList.Add(GenerateSingleUnit(warrior2Prefab, terrain.GetComponent<Tile>()));
 
         foreach (var enemy in level.enemyList)
         {
