@@ -17,6 +17,10 @@ public class GeneralManager : MonoBehaviour
     public const string GENERAL_MANAGER_OBJ_NAME = "General Manager";
 
     [SerializeField]
+    GameObject eventSectionPrefab;
+    GameObject eventSectionInstance;
+
+    [SerializeField]
     GameObject fightSectionPrefab;
     GameObject fightSectionInstance;
     FightManager fightManager;
@@ -44,6 +48,8 @@ public class GeneralManager : MonoBehaviour
     public bool IsGameInStandby { get { return IsGameInStandbyMethod(); } }
 	public int Gold { get { return runData.gold; } set { runData.gold = value; } }
     public string GodSelected { get { return runData.godSelected; } set { runData.godSelected = value; } }
+	public int CurrentRow { get { return runData.currentRow; } set { runData.currentRow = value; } }
+	public int CurrentPositionInRow { get { return runData.currentPositionInRow; } set { runData.currentPositionInRow = value; } }
 
 	private void Start()
 	{
@@ -148,6 +154,24 @@ public class GeneralManager : MonoBehaviour
         currentSection = CurrentSection.Fight;
     }
 
+    public void StartMerchant()
+	{
+        cameraManager.ResetCamera();
+        DestroyRogueSection();
+        GenerateMerchantSection(selectedNode);
+
+        currentSection = CurrentSection.Encounter;
+    }
+
+    public void StartEvent()
+	{
+        cameraManager.ResetCamera();
+
+        GenerateEventSection(selectedNode);
+
+        currentSection = CurrentSection.Encounter;
+    }
+
     void DestroyFightSection()
 	{
         fightManager.DisableFightSection();
@@ -156,8 +180,13 @@ public class GeneralManager : MonoBehaviour
 
     void DestroyRogueSection()
     {
-        runData = new(GodSelected, rogueManager.currentRow, rogueManager.currentPositionOnRow, rogueManager.seedList[RogueManager.SeedType.Master], Gold);
+        runData = new(GodSelected, CurrentRow, CurrentPositionInRow, rogueManager.seedList[RogueManager.SeedType.Master], Gold);
         Destroy(rogueSectionInstance);
+    }
+
+    public void DestroyEventSection()
+	{
+        Destroy(eventSectionInstance);
     }
 
     void GenerateFightSection(Level level)
@@ -171,6 +200,16 @@ public class GeneralManager : MonoBehaviour
         fightManager.structureManager.spriteManager.fightManager = fightManager;
         fightManager.Setup(level);
 	}
+
+    void GenerateMerchantSection(RogueNode node)
+    {
+
+    }
+
+    void GenerateEventSection(RogueNode node)
+    {
+        eventSectionInstance = Instantiate(eventSectionPrefab);
+    }
 
     void GenerateRogueSection()
     {
@@ -194,8 +233,17 @@ public class GeneralManager : MonoBehaviour
         cameraManager.ResetCamera();
 
         selectedNode = null;
+        SaveMapProgress();
         DestroyFightSection();
         GenerateRogueSection();
+    }
+    public void ReturnToRogueFromEventButton()
+    {
+        cameraManager.ResetCamera();
+
+        selectedNode = null;
+        SaveMapProgress();
+        DestroyEventSection();
     }
     struct RunData
     {
@@ -219,6 +267,7 @@ public class GeneralManager : MonoBehaviour
     enum CurrentSection
 	{
         Fight,
-        Rogue
+        Rogue,
+        Encounter,
 	}
 }

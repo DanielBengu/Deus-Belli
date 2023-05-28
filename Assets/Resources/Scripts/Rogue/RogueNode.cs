@@ -58,6 +58,11 @@ public class RogueNode : MonoBehaviour
 				break;
 		}
 	}
+
+	public bool IsFightEncounter()
+	{
+		return rogueTileType == RogueTileType.Fight || rogueTileType == RogueTileType.Miniboss || rogueTileType == RogueTileType.Boss;
+	}
 }
 
 public enum RogueTileType

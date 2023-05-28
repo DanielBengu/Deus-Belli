@@ -17,8 +17,9 @@ public class RogueManager : MonoBehaviour
 
     public Transform playerUnitTransform;
 
-    public int currentRow;
-    public int currentPositionOnRow;
+	public int CurrentRow { get { return generalManager.CurrentRow; } set { generalManager.CurrentRow = value; } }
+    public int CurrentPositionInRow { get { return generalManager.CurrentPositionInRow; } set { generalManager.CurrentPositionInRow = value; } }
+
     int maxNode;
     public Dictionary<SeedType, int> seedList = new();
     public int seed;
@@ -26,7 +27,7 @@ public class RogueManager : MonoBehaviour
 	public int Gold { get { return generalManager.Gold; } }
 	public string GodSelected { get { return generalManager.GodSelected; } }
 
-	public bool IsGameOver { get { return currentRow == maxNode; } }
+	public bool IsGameOver { get { return CurrentRow == maxNode; } }
 
 	public bool IsAnyUnitMoving { get { return structureManager.IsObjectMoving; } }
 
@@ -36,12 +37,23 @@ public class RogueManager : MonoBehaviour
 	{
         bool isPlayerMovementFinished = structureManager.MovementTick();
         if (isPlayerMovementFinished)
+            StartEncounter();
+    }
+
+    void StartEncounter()
+	{
+        RogueNode selectedNode = generalManager.selectedNode;
+        if (selectedNode.IsFightEncounter())
             generalManager.StartFight();
+        else if (selectedNode.rogueTileType == RogueTileType.Merchant)
+            generalManager.StartMerchant();
+        else if(selectedNode.rogueTileType == RogueTileType.Event)
+            generalManager.StartEvent();
     }
 
     public void IsRunCompleted()
 	{
-        if (currentRow == maxNode)
+        if (CurrentRow == maxNode)
             structureManager.GetRogueVictoryScreen();
 	}
 
@@ -49,8 +61,8 @@ public class RogueManager : MonoBehaviour
 	{
         generalManager = GameObject.Find(GeneralManager.GENERAL_MANAGER_OBJ_NAME).GetComponent<GeneralManager>();
 
-        this.currentRow = currentRow;
-        this.currentPositionOnRow = currentPositionOnRow;
+        CurrentRow = currentRow;
+        CurrentPositionInRow = currentPositionOnRow;
         Random.InitState(masterSeed);
         seedList.Add(SeedType.Master, masterSeed);
         seedList.Add(SeedType.RogueTile, Random.Range(0, 99999));
@@ -244,12 +256,12 @@ public class RogueManager : MonoBehaviour
 	{
 		if (IsAnyUnitMoving) return;
 
-        RogueNode startingNode = tileList.Find(t => t.mapRow == currentRow && t.positionInRow == currentPositionOnRow);
+        RogueNode startingNode = tileList.Find(t => t.mapRow == CurrentRow && t.positionInRow == CurrentPositionInRow);
         if (startingNode.rogueChilds.Contains(tile))
 		{
             generalManager.selectedNode = tile;
-            currentRow = tile.mapRow;
-            currentPositionOnRow = tile.positionInRow;
+            CurrentRow = tile.mapRow;
+            CurrentPositionInRow = tile.positionInRow;
             structureManager.MoveUnit(playerUnitTransform, tile);
         }
             
@@ -261,6 +273,12 @@ public class RogueManager : MonoBehaviour
         if (!generalManager.IsGameInStandby)
             EndRun(1);
 	}
+
+    public void EventChoiceClick(int choice)
+	{
+        GeneralManager fm = GameObject.Find(GeneralManager.GENERAL_MANAGER_OBJ_NAME).GetComponent<GeneralManager>();
+        fm.ReturnToRogueFromEventButton();
+    }
 
     public void EndRun(int runType)
 	{

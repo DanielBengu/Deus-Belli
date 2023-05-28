@@ -431,11 +431,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 82a31ee870959e3419c35ac726497d4d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  eventSectionPrefab: {fileID: 5336481261709404008, guid: b7529a87f7232644c91dbcbee5b40f38, type: 3}
   fightSectionPrefab: {fileID: 1278397633198017817, guid: e3f7b2171804fe64ea5b30f32f1c89d1, type: 3}
   rogueSectionPrefab: {fileID: 6871625446447118757, guid: 4607e3baf5a716c449103d259bf51fc4, type: 3}
   cameraManager: {fileID: 519420033}
   structureManager: {fileID: 1412221415}
   OptionsPrefab: {fileID: 7649992450677276450, guid: d7e1925e215cef34882fedb7bf94467a, type: 3}
+  selectedNode: {fileID: 0}
 --- !u!4 &1412221414
 Transform:
   m_ObjectHideFlags: 0
@@ -700,9 +702,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6a5625e8f6044794ca80f2701cc70f08, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  sorceressPrefab: {fileID: 1253013051146282, guid: f018c9b8a16f9c3449b1c025f1a66ce4, type: 3}
-  sorceress2Prefab: {fileID: 1896801731341158, guid: a367f32b0351f2648a0e15f3444c6f86, type: 3}
-  enemyStartTile: 9
 --- !u!4 &1990137386
 Transform:
   m_ObjectHideFlags: 0
