@@ -1073,6 +1073,10 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 853723031407629728}
     - target: {fileID: -4015313132077449474, guid: ee6197ad340c22942bbd95779136a1e5, type: 3}
+      propertyPath: roguePrefab
+      value: 
+      objectReference: {fileID: 6871625446447118757}
+    - target: {fileID: -4015313132077449474, guid: ee6197ad340c22942bbd95779136a1e5, type: 3}
       propertyPath: playerUnitTransform
       value: 
       objectReference: {fileID: 6867128382496166384}

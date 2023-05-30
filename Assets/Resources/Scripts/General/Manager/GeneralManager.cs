@@ -216,7 +216,7 @@ public class GeneralManager : MonoBehaviour
         rogueSectionInstance = Instantiate(rogueSectionPrefab);
         rogueManager = GameObject.Find(ROGUE_MANAGER_OBJ_NAME).GetComponent<RogueManager>();
         rogueManager.SetupRogue(structureManager, runData.currentRow, runData.currentPositionInRow, runData.masterSeed);
-        rogueManager.structureManager.uiManager.SetRogueVariables(Gold, GodSelected);
+        rogueManager.StructureManager.uiManager.SetRogueVariables(Gold, GodSelected);
         currentSection = CurrentSection.Rogue;
 
         rogueManager.IsRunCompleted();
