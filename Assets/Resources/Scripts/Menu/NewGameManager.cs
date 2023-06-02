@@ -1,7 +1,9 @@
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
 public class NewGameManager : MonoBehaviour
 {
@@ -12,9 +14,19 @@ public class NewGameManager : MonoBehaviour
     [SerializeField]
     GameObject HadesPrefab;
 
+    [SerializeField]
+    Button startButton;
+    [SerializeField]
+    TMP_InputField seedInputField;
+
     private string godSelected;
 
-    public void ZeusSelected(){
+	private void Update()
+	{
+        startButton.enabled = seedInputField.text.Length == 0 || seedInputField.text.Length > 2;
+	}
+
+	public void ZeusSelected(){
         DestroyGod();
         GameObject god = Instantiate(ZeusPrefab,new Vector3(600, 250, 0),Quaternion.identity) as GameObject;
         god.name = "Zeus";

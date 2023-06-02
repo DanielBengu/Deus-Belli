@@ -47,7 +47,7 @@ public class UIManager : MonoBehaviour
         SetInfoPanel(false);
     }
 
-    public void SetRogueVariables(int gold, string godSelected)
+    public void SetRogueVariables(int gold, string godSelected, int seed)
 	{
         rogueCanvas = GameObject.Find("RogueCanvas");
         rogueVictoryScreen = Resources.Load<GameObject>($"Prefabs/Rogue/Children/{rogueVictoryScreenPrefabName}");
@@ -55,6 +55,8 @@ public class UIManager : MonoBehaviour
         rogueGold.text = gold.ToString();
         TextMeshProUGUI rogueGod = GameObject.Find("God Text").GetComponent<TextMeshProUGUI>();
         rogueGod.text = godSelected;
+        TextMeshProUGUI rogueSeed = GameObject.Find("Seed Value").GetComponent<TextMeshProUGUI>();
+        rogueSeed.text = seed.ToString();
     }
 
     public void SetInfoPanel(bool active, Unit unit = null){

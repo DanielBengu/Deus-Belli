@@ -103,6 +103,10 @@ public class RogueManager : MonoBehaviour
         int nodesOnCurrentRow;
         int nodesOnPreviousRow = previousRowNodes.Count;
         int maximumNodesPossibleForCurrentRow = nodesOnPreviousRow < MAXIMUM_NODES ? nodesOnPreviousRow + 1 : MAXIMUM_NODES;
+
+        //Since a row with 4 nodes is locked at position 0 we can't generate it if the previous node starts with a position of 2 or greater
+        if (previousRowNodes.Max(n => n.positionInRow) > 1 && maximumNodesPossibleForCurrentRow == 4) maximumNodesPossibleForCurrentRow -= 1;
+
         if (nodesOnPreviousRow < MINIMUM_NODES)
             nodesOnCurrentRow = nodesOnPreviousRow + 1;
         else if (row == maxNode)

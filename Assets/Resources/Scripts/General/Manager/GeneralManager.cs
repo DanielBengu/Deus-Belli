@@ -59,7 +59,7 @@ public class GeneralManager : MonoBehaviour
 		else
 		{
             string godSelected = PlayerPrefs.GetString(GOD_SELECTED_PP);
-            int masterSeed = Guid.NewGuid().GetHashCode();
+            int masterSeed = Math.Abs(Guid.NewGuid().GetHashCode());
             runData = new RunData(godSelected, 0, 1, masterSeed, 0);
 
             PlayerPrefs.SetInt(SEED, masterSeed);
@@ -216,7 +216,7 @@ public class GeneralManager : MonoBehaviour
         rogueSectionInstance = Instantiate(rogueSectionPrefab);
         rogueManager = GameObject.Find(ROGUE_MANAGER_OBJ_NAME).GetComponent<RogueManager>();
         rogueManager.SetupRogue(structureManager, runData.currentRow, runData.currentPositionInRow, runData.masterSeed);
-        rogueManager.StructureManager.uiManager.SetRogueVariables(Gold, GodSelected);
+        rogueManager.StructureManager.uiManager.SetRogueVariables(Gold, GodSelected, runData.masterSeed);
         currentSection = CurrentSection.Rogue;
 
         rogueManager.IsRunCompleted();
