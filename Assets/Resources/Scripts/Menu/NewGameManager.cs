@@ -19,6 +19,11 @@ public class NewGameManager : MonoBehaviour
     [SerializeField]
     TMP_InputField seedInputField;
 
+    [SerializeField]
+    TextMeshProUGUI godData;
+    [SerializeField]
+    Image godImage;
+
     private string godSelected;
 
 	private void Update()
@@ -26,25 +31,25 @@ public class NewGameManager : MonoBehaviour
         startButton.enabled = seedInputField.text.Length == 0 || seedInputField.text.Length > 2;
 	}
 
-	public void ZeusSelected(){
-        DestroyGod();
-        GameObject god = Instantiate(ZeusPrefab,new Vector3(600, 250, 0),Quaternion.identity) as GameObject;
-        god.name = "Zeus";
-        godSelected = "Zeus";
-    }
+    string GetGodName(int god)
+	{
+        return ((Gods)god).ToString();
+	}
 
-    public void PoseidonSelected(){
-        DestroyGod();
-        GameObject god = Instantiate(PoseidonPrefab,new Vector3(600, 250, 0),Quaternion.identity) as GameObject;
-        god.name = "Poseidon";
-        godSelected = "Poseidon";
-    }
+    public void UpdateCharacterData(int god)
+	{
+        string godName = GetGodName(god);
+        godSelected = godName;
+        godData.text = $"{godName}";
 
-    public void HadesSelected(){
-        DestroyGod();
-        GameObject god = Instantiate(HadesPrefab,new Vector3(600, 250, 0),Quaternion.identity) as GameObject;
-        god.name = "Hades";
-        godSelected = "Hades";
+        if(godImage.color.a == 0f)
+		{
+            Color currentColor = godImage.color;
+            currentColor.a = 1f;
+            godImage.color = currentColor;
+        }
+
+        godImage.sprite = Resources.Load<Sprite>($"Sprites/Gods/{godName}");
     }
 
     public void StartGame(){
@@ -55,10 +60,10 @@ public class NewGameManager : MonoBehaviour
         }
     }
 
-    public void DestroyGod(){
-        if(godSelected != null){
-            GameObject god = GameObject.Find(godSelected);
-            Destroy(god);
-        }
-    }
+    public enum Gods
+	{
+        Zeus,
+        Poseidon,
+        Hades
+	}
 }

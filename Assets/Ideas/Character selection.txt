@@ -1,0 +1,1 @@
+1 - Whenever we click a god as a playable character, its model walks to the table behind the selection menu and sits on the table
