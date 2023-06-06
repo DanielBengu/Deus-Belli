@@ -54,6 +54,9 @@ public class NewGameManager : MonoBehaviour
 
     public void StartGame(){
         if(godSelected != null){
+            int seed = int.Parse(seedInputField.text);
+            if(seed > 0)
+                PlayerPrefs.SetInt(GeneralManager.SEED, seed);
             PlayerPrefs.SetString(GeneralManager.GOD_SELECTED_PP, godSelected);
             PlayerPrefs.SetInt(GeneralManager.ONGOING_RUN, 0);
             SceneManager.LoadScene(1);

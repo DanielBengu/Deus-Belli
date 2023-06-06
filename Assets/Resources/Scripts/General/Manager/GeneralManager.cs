@@ -59,7 +59,8 @@ public class GeneralManager : MonoBehaviour
 		else
 		{
             string godSelected = PlayerPrefs.GetString(GOD_SELECTED_PP);
-            int masterSeed = Math.Abs(Guid.NewGuid().GetHashCode());
+            int optionalSeed = PlayerPrefs.GetInt(SEED);
+            int masterSeed = optionalSeed > 0 ? optionalSeed : Math.Abs(Guid.NewGuid().GetHashCode());
             runData = new RunData(godSelected, 0, 1, masterSeed, 0);
 
             PlayerPrefs.SetInt(SEED, masterSeed);
