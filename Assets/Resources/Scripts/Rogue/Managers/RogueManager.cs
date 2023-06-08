@@ -119,9 +119,10 @@ public class RogueManager : MonoBehaviour
 		for (int i = 0; i < nodesOnCurrentRow; i++)
 		{
             int positionOnRow = i + FindOffsetPositionOnRow(nodesOnCurrentRow, row, previousRowNodes);
-            Random.InitState(seedList[SeedType.RogueTile] + i);
+            int nodeIndex = tileList.Count + i + 1;
+            Random.InitState(seedList[SeedType.RogueTile] * nodeIndex);
             int randomLength = Random.Range(3, 6);
-            newNodes.Add(StructureManager.GenerateRogueTile(randomLength, row, positionOnRow, maxRowOfMap, tileList.Count + i + 1, tile.transform, firstNode, this));
+            newNodes.Add(StructureManager.GenerateRogueTile(randomLength, row, positionOnRow, maxRowOfMap, nodeIndex, tile.transform, firstNode, this));
         }
         
         if(newNodes != null)
