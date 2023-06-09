@@ -342,7 +342,7 @@ public class FightManager : MonoBehaviour
     public void ReturnToRogueButton()
     {
         GeneralManager fm = GameObject.Find(GeneralManager.GENERAL_MANAGER_OBJ_NAME).GetComponent<GeneralManager>();
-        fm.ReturnToRogueFromFightButton();
+        fm.ReturnToRogue(RogueTileType.Fight);
     }
 
     public List<Tile> GetPossibleAttacksForUnit(Unit unit)

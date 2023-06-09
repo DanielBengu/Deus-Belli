@@ -59,6 +59,12 @@ public class UIManager : MonoBehaviour
         rogueSeed.text = seed.ToString();
     }
 
+    public void SetMerchantVariables(int availableGold)
+	{
+        TextMeshProUGUI rogueSeed = GameObject.Find("Current Gold").GetComponent<TextMeshProUGUI>();
+        rogueSeed.text = $"Current Gold: {availableGold}g";
+    }
+
     public void SetInfoPanel(bool active, Unit unit = null){
         SetGameObject(infoPanel, active);
         if (active){

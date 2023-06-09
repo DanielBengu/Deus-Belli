@@ -432,6 +432,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   eventSectionPrefab: {fileID: 5336481261709404008, guid: b7529a87f7232644c91dbcbee5b40f38, type: 3}
+  merchantSectionPrefab: {fileID: 6117302773034099411, guid: 9879b1d9b99b4be4aa37af125e2f2287, type: 3}
   fightSectionPrefab: {fileID: 1278397633198017817, guid: e3f7b2171804fe64ea5b30f32f1c89d1, type: 3}
   rogueSectionPrefab: {fileID: 6871625446447118757, guid: 4607e3baf5a716c449103d259bf51fc4, type: 3}
   cameraManager: {fileID: 519420033}
@@ -451,7 +452,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 6
+  m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &1412221415
 MonoBehaviour:
@@ -673,50 +674,6 @@ Transform:
   m_Father: {fileID: 519420032}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: -5.405, y: 0, z: 0}
---- !u!1 &1990137384
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 1990137386}
-  - component: {fileID: 1990137385}
-  m_Layer: 0
-  m_Name: Level One
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!114 &1990137385
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1990137384}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6a5625e8f6044794ca80f2701cc70f08, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
---- !u!4 &1990137386
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1990137384}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 605.8603, y: 117.234726, z: 1480.7634}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 0}
-  m_RootOrder: 5
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!4 &543450653141021990 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 6726588406727605113, guid: 2545c28c3b292144085fa963a94fbf2b, type: 3}

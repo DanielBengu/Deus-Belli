@@ -21,6 +21,10 @@ public class GeneralManager : MonoBehaviour
     GameObject eventSectionInstance;
 
     [SerializeField]
+    GameObject merchantSectionPrefab;
+    GameObject merchantSectionInstance;
+
+    [SerializeField]
     GameObject fightSectionPrefab;
     GameObject fightSectionInstance;
     FightManager fightManager;
@@ -145,38 +149,14 @@ public class GeneralManager : MonoBehaviour
 		};
 	}
 
-    public void StartFight()
+    public void StartSection(RogueTileType currentSectionType)
 	{
+        bool isFightEncounter = selectedNode.IsFightEncounter();
+        currentSection = isFightEncounter ? CurrentSection.Fight : CurrentSection.Rogue;
         cameraManager.ResetCamera();
-
-        DestroyRogueSection();
-        GenerateFightSection(selectedNode.level);
-
-        currentSection = CurrentSection.Fight;
-    }
-
-    public void StartMerchant()
-	{
-        cameraManager.ResetCamera();
-        DestroyRogueSection();
-        GenerateMerchantSection(selectedNode);
-
-        currentSection = CurrentSection.Encounter;
-    }
-
-    public void StartEvent()
-	{
-        cameraManager.ResetCamera();
-
-        GenerateEventSection(selectedNode);
-
-        currentSection = CurrentSection.Encounter;
-    }
-
-    void DestroyFightSection()
-	{
-        fightManager.DisableFightSection();
-        Destroy(fightSectionInstance);
+        GenerateSection(currentSectionType, selectedNode);
+        if (isFightEncounter)
+            DestroyRogueSection();
     }
 
     void DestroyRogueSection()
@@ -185,32 +165,31 @@ public class GeneralManager : MonoBehaviour
         Destroy(rogueSectionInstance);
     }
 
-    public void DestroyEventSection()
+    void GenerateSection(RogueTileType sectionToGenerate, RogueNode node = null)
 	{
-        Destroy(eventSectionInstance);
-    }
-
-    void GenerateFightSection(Level level)
-	{
-        fightSectionInstance = Instantiate(fightSectionPrefab);
-        fightManager = GameObject.Find(FIGHT_MANAGER_OBJ_NAME).GetComponent<FightManager>();
-        fightManager.structureManager = structureManager;
-        fightManager.cameraManager = cameraManager;
-        fightManager.generalManager = this;
-        fightManager.structureManager.uiManager.SetFightVariables();
-        fightManager.structureManager.spriteManager.fightManager = fightManager;
-        fightManager.Setup(level);
+		switch (sectionToGenerate)
+		{
+            case RogueTileType.Boss:
+            case RogueTileType.Miniboss:
+			case RogueTileType.Fight:
+                fightSectionInstance = Instantiate(fightSectionPrefab);
+                fightManager = GameObject.Find(FIGHT_MANAGER_OBJ_NAME).GetComponent<FightManager>();
+                fightManager.structureManager = structureManager;
+                fightManager.cameraManager = cameraManager;
+                fightManager.generalManager = this;
+                fightManager.structureManager.uiManager.SetFightVariables();
+                fightManager.structureManager.spriteManager.fightManager = fightManager;
+                fightManager.Setup(node.level);
+                break;
+			case RogueTileType.Event:
+                eventSectionInstance = Instantiate(eventSectionPrefab);
+                break;
+            case RogueTileType.Merchant:
+                merchantSectionInstance = Instantiate(merchantSectionPrefab);
+                rogueManager.StructureManager.uiManager.SetMerchantVariables(runData.gold);
+                break;
+		}
 	}
-
-    void GenerateMerchantSection(RogueNode node)
-    {
-
-    }
-
-    void GenerateEventSection(RogueNode node)
-    {
-        eventSectionInstance = Instantiate(eventSectionPrefab);
-    }
 
     void GenerateRogueSection()
     {
@@ -229,23 +208,31 @@ public class GeneralManager : MonoBehaviour
         SceneManager.LoadScene(0);
     }
 
-    public void ReturnToRogueFromFightButton()
+    public void ReturnToRogue(RogueTileType tileTypeReturning)
 	{
         cameraManager.ResetCamera();
 
         selectedNode = null;
         SaveMapProgress();
-        DestroyFightSection();
-        GenerateRogueSection();
-    }
-    public void ReturnToRogueFromEventButton()
-    {
-        cameraManager.ResetCamera();
 
-        selectedNode = null;
-        SaveMapProgress();
-        DestroyEventSection();
+		switch (tileTypeReturning)
+		{
+            case RogueTileType.Miniboss:
+            case RogueTileType.Boss:
+            case RogueTileType.Fight:
+                fightManager.DisableFightSection();
+                Destroy(fightSectionInstance);
+                GenerateRogueSection();
+                break;
+			case RogueTileType.Merchant:
+                Destroy(merchantSectionInstance);
+                break;
+			case RogueTileType.Event:
+                Destroy(eventSectionInstance);
+                break;
+		}
     }
+
     struct RunData
     {
         public string godSelected;
@@ -265,10 +252,9 @@ public class GeneralManager : MonoBehaviour
         }
     }
 
-    enum CurrentSection
+    public enum CurrentSection
 	{
         Fight,
         Rogue,
-        Encounter,
 	}
 }

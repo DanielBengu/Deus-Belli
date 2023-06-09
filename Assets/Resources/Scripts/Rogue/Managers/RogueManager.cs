@@ -42,12 +42,7 @@ public class RogueManager : MonoBehaviour
     void StartEncounter()
 	{
         RogueNode selectedNode = generalManager.selectedNode;
-        if (selectedNode.IsFightEncounter())
-            generalManager.StartFight();
-        else if (selectedNode.rogueTileType == RogueTileType.Merchant)
-            generalManager.StartMerchant();
-        else if(selectedNode.rogueTileType == RogueTileType.Event)
-            generalManager.StartEvent();
+        generalManager.StartSection(selectedNode.rogueTileType);
     }
 
     public void IsRunCompleted()
@@ -282,7 +277,18 @@ public class RogueManager : MonoBehaviour
     public void EventChoiceClick(int choice)
 	{
         GeneralManager fm = GameObject.Find(GeneralManager.GENERAL_MANAGER_OBJ_NAME).GetComponent<GeneralManager>();
-        fm.ReturnToRogueFromEventButton();
+        fm.ReturnToRogue(RogueTileType.Event);
+    }
+
+    public void MerchantBuyClick(int objectBought)
+	{
+
+	}
+
+    public void MerchantCloseClick()
+	{
+        GeneralManager fm = GameObject.Find(GeneralManager.GENERAL_MANAGER_OBJ_NAME).GetComponent<GeneralManager>();
+        fm.ReturnToRogue(RogueTileType.Merchant);
     }
 
     public void EndRun(int runType)
