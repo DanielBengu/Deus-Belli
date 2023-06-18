@@ -97,7 +97,7 @@ public class FightManager : MonoBehaviour
         var tiles = structureManager.SetupFightSection(level.tilesDict, this, level.TopLeftSquarePositionX, level.YPosition, level.TopLeftSquarePositionZ, level.HorizontalTiles, level.VerticalTiles);
 
         var units = GenerateUnits(tiles);
-        structureManager.gameData = new(tiles, units, level.HorizontalTiles, level.VerticalTiles);
+        structureManager.gameData = new(tiles, units, level.HorizontalTiles, level.VerticalTiles, generalManager.Gold);
         
     }
 
@@ -161,15 +161,16 @@ public class FightManager : MonoBehaviour
 
     void ManageGame()
 	{
-        //Killed every enemy unit
-        if(isGameOver == false && structureManager.gameData.unitsOnField.Where(u => u.faction == ENEMY_FACTION).ToList().Count == 0)
+        bool isFightWon = !isGameOver && structureManager.gameData.unitsOnField.Count(u => u.faction == ENEMY_FACTION) == 0;
+        bool isFightLost = !isGameOver && structureManager.gameData.unitsOnField.Count(u => u.faction == USER_FACTION) == 0;
+
+        if (isFightWon || isFightLost)
 		{
+            if (isFightWon) GenerateAndAddGold();
             isGameOver = true;
-            int gold = GenerateAndAddGold();
-            generalManager.SaveMapProgress();
-            structureManager.GetFightVictoryScreen(gold);
+            generalManager.SaveMapProgress(GeneralManager.GameStatus.Lost);
+            structureManager.GetGameScreen(GameScreens.FightDefeatScreen, structureManager.gameData);
         }
-            
 	}
 
     int GenerateAndAddGold()
@@ -339,10 +340,10 @@ public class FightManager : MonoBehaviour
 		foreach (var unit in structureManager.gameData.unitsOnField)
             Destroy(unit.gameObject);
     }
-    public void ReturnToRogueButton()
+    public void ReturnToRogueButton(bool isDefeat)
     {
         GeneralManager fm = GameObject.Find(GeneralManager.GENERAL_MANAGER_OBJ_NAME).GetComponent<GeneralManager>();
-        fm.ReturnToRogue(RogueTileType.Fight);
+        fm.ReturnToRogue(RogueTileType.Fight, isDefeat);
     }
 
     public List<Tile> GetPossibleAttacksForUnit(Unit unit)

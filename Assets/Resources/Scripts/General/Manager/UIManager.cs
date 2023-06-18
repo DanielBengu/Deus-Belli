@@ -5,7 +5,9 @@ using TMPro;
 public class UIManager : MonoBehaviour
 {
     const string fightVictoryScreenPrefabName = "Fight Victory";
+    const string fightDefeatScreenPrefabName = "Fight Defeat";
     const string rogueVictoryScreenPrefabName = "Rogue Victory";
+    const string rogueDefeatScreenPrefabName = "Rogue Defeat";
 
     TextMeshProUGUI Title;
     Image GodImage;
@@ -14,7 +16,9 @@ public class UIManager : MonoBehaviour
     GameObject infoPanel;
     GameObject endTurnButton;
     GameObject fightVictoryScreen;
+    GameObject fightDefeatScreen;
     GameObject rogueVictoryScreen;
+    GameObject rogueDefeatScreen;
 
     #region Info Panel
     Image unitImage;
@@ -36,7 +40,8 @@ public class UIManager : MonoBehaviour
         infoPanel = GameObject.Find("Info");
         endTurnButton = GameObject.Find("End Turn Button");
         fightVictoryScreen = Resources.Load<GameObject>($"Prefabs/Fight/{fightVictoryScreenPrefabName}");
-        
+        fightDefeatScreen = Resources.Load<GameObject>($"Prefabs/Fight/{fightDefeatScreenPrefabName}");
+
 
         unitImage = infoPanel.transform.Find("Image").gameObject.GetComponent<Image>();
         nameText = infoPanel.transform.Find("Unit title").gameObject.GetComponent<TextMeshProUGUI>();
@@ -51,6 +56,7 @@ public class UIManager : MonoBehaviour
 	{
         rogueCanvas = GameObject.Find("RogueCanvas");
         rogueVictoryScreen = Resources.Load<GameObject>($"Prefabs/Rogue/Children/{rogueVictoryScreenPrefabName}");
+        rogueDefeatScreen = Resources.Load<GameObject>($"Prefabs/Rogue/Children/{rogueDefeatScreenPrefabName}");
         TextMeshProUGUI rogueGold = GameObject.Find("Gold Value").GetComponent<TextMeshProUGUI>();
         rogueGold.text = gold.ToString();
         TextMeshProUGUI rogueGod = GameObject.Find("God Text").GetComponent<TextMeshProUGUI>();
@@ -82,17 +88,26 @@ public class UIManager : MonoBehaviour
         SetGameObject(endTurnButton, active);
     }
 
-	internal void GetFightVictoryScreen(int gold)
+    public void GetScreen(GameScreens screen, GameData gameData)
 	{
-        var rew1 = fightVictoryScreen.transform.Find("Reward 1").GetComponent<TextMeshProUGUI>();
-        rew1.text = $"{gold} gold";
-        Instantiate(fightVictoryScreen, infoPanel.transform.parent);
-    }
-
-    internal void GetRogueVictoryScreen()
-    {
-        Instantiate(rogueVictoryScreen, rogueCanvas.transform);
-    }
+		switch (screen)
+		{
+			case GameScreens.FightVictoryScreen:
+                var rew1 = fightVictoryScreen.transform.Find("Reward 1").GetComponent<TextMeshProUGUI>();
+                rew1.text = $"{gameData.Gold} gold";
+                Instantiate(fightVictoryScreen, infoPanel.transform.parent);
+                break;
+			case GameScreens.FightDefeatScreen:
+                Instantiate(fightDefeatScreen, infoPanel.transform.parent);
+                break;
+			case GameScreens.RogueVictoryScreen:
+                Instantiate(rogueVictoryScreen, rogueCanvas.transform);
+                break;
+			case GameScreens.RogueDefeatScreen:
+                Instantiate(rogueDefeatScreen, rogueCanvas.transform);
+                break;
+		}
+	}
 
     public void SetGameObject(GameObject gameObject, bool active)
 	{

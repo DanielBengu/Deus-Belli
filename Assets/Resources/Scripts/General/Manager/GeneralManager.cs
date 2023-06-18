@@ -8,6 +8,7 @@ public class GeneralManager : MonoBehaviour
     public const string ONGOING_RUN = "OngoingRun";
     public const string CURRENT_ROW = "CurrentNode";
     public const string CURRENT_POSITION_IN_ROW = "CurrentPositionInRow";
+    public const string GAME_STATUS = "GameStatus";
     public const string SEED = "Seed";
     public const string GOLD = "Gold";
 
@@ -74,7 +75,7 @@ public class GeneralManager : MonoBehaviour
             PlayerPrefs.SetInt(ONGOING_RUN, 1);
         }
 
-        GenerateRogueSection();
+        GenerateRogueSection(false);
     }
 
 	private void Update()
@@ -113,10 +114,11 @@ public class GeneralManager : MonoBehaviour
         return new RunData(godSelected, currentRow, currentPositionInRow, masterSeed, gold);
 	}
 
-	public void SaveMapProgress()
+	public void SaveMapProgress(GameStatus status)
 	{
         PlayerPrefs.SetInt(CURRENT_ROW, runData.currentRow);
         PlayerPrefs.SetInt(CURRENT_POSITION_IN_ROW, runData.currentPositionInRow);
+        PlayerPrefs.SetInt(GAME_STATUS, (int)status);
     }
 
     void ManageKeysDown()
@@ -191,7 +193,7 @@ public class GeneralManager : MonoBehaviour
 		}
 	}
 
-    void GenerateRogueSection()
+    void GenerateRogueSection(bool isDefeat)
     {
         rogueSectionInstance = Instantiate(rogueSectionPrefab);
         rogueManager = GameObject.Find(ROGUE_MANAGER_OBJ_NAME).GetComponent<RogueManager>();
@@ -199,7 +201,7 @@ public class GeneralManager : MonoBehaviour
         rogueManager.StructureManager.uiManager.SetRogueVariables(Gold, GodSelected, runData.masterSeed);
         currentSection = CurrentSection.Rogue;
 
-        rogueManager.IsRunCompleted();
+        rogueManager.IsRunCompleted(isDefeat);
     }
 
     public static void CloseRun()
@@ -208,12 +210,12 @@ public class GeneralManager : MonoBehaviour
         SceneManager.LoadScene(0);
     }
 
-    public void ReturnToRogue(RogueTileType tileTypeReturning)
+    public void ReturnToRogue(RogueTileType tileTypeReturning, bool isDefeat)
 	{
         cameraManager.ResetCamera();
 
         selectedNode = null;
-        SaveMapProgress();
+        SaveMapProgress(GameStatus.Current);
 
 		switch (tileTypeReturning)
 		{
@@ -222,7 +224,7 @@ public class GeneralManager : MonoBehaviour
             case RogueTileType.Fight:
                 fightManager.DisableFightSection();
                 Destroy(fightSectionInstance);
-                GenerateRogueSection();
+                GenerateRogueSection(isDefeat);
                 break;
 			case RogueTileType.Merchant:
                 Destroy(merchantSectionInstance);
@@ -257,4 +259,11 @@ public class GeneralManager : MonoBehaviour
         Fight,
         Rogue,
 	}
+
+    public enum GameStatus
+    {
+        Current,
+        Won,
+        Lost
+    }
 }

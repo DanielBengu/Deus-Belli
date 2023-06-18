@@ -10,7 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 5336481261709404009}
   m_Layer: 0
-  m_Name: Rogue Victory
+  m_Name: Rogue Defeat
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -368,7 +368,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: 5efa6f3b0eddcc8438b0cbcfe188da09, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 288498a4b412bfb4eba84af3268d5cf0, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1

@@ -45,10 +45,17 @@ public class RogueManager : MonoBehaviour
         generalManager.StartSection(selectedNode.rogueTileType);
     }
 
-    public void IsRunCompleted()
+    public void IsRunCompleted(bool isDefeat)
 	{
-        if (CurrentRow == maxNode)
-            StructureManager.GetRogueVictoryScreen();
+        GameScreens gameScreen = GameScreens.Default;
+
+        if (isDefeat)
+            gameScreen = GameScreens.RogueDefeatScreen;
+        else if (CurrentRow == maxNode)
+            gameScreen = GameScreens.RogueVictoryScreen;
+
+        if(gameScreen != GameScreens.Default)
+            StructureManager.GetGameScreen(gameScreen, StructureManager.gameData);
 	}
 
     public void SetupRogue(StructureManager structureManager, int currentRow, int currentPositionOnRow, int masterSeed)
@@ -277,7 +284,7 @@ public class RogueManager : MonoBehaviour
     public void EventChoiceClick(int choice)
 	{
         GeneralManager fm = GameObject.Find(GeneralManager.GENERAL_MANAGER_OBJ_NAME).GetComponent<GeneralManager>();
-        fm.ReturnToRogue(RogueTileType.Event);
+        fm.ReturnToRogue(RogueTileType.Event, false);
     }
 
     public void MerchantBuyClick(int objectBought)
@@ -288,7 +295,7 @@ public class RogueManager : MonoBehaviour
     public void MerchantCloseClick()
 	{
         GeneralManager fm = GameObject.Find(GeneralManager.GENERAL_MANAGER_OBJ_NAME).GetComponent<GeneralManager>();
-        fm.ReturnToRogue(RogueTileType.Merchant);
+        fm.ReturnToRogue(RogueTileType.Merchant, false);
     }
 
     public void EndRun(int runType)
@@ -304,10 +311,12 @@ public class RogueManager : MonoBehaviour
             //Player abandoned the run
 			case RunEndType.Abandon:
                 GeneralManager.CloseRun();
+                SceneManager.LoadScene(0);
                 break;
             //Player completed a run
 			case RunEndType.Finish:
                 GeneralManager.CloseRun();
+                SceneManager.LoadScene(0);
                 break;
 		}
     }

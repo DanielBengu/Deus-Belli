@@ -177,15 +177,10 @@ public class StructureManager : MonoBehaviour
         ClearSelectedTiles();
     }
 
-    public void GetFightVictoryScreen(int gold)
+    public void GetGameScreen(GameScreens screen, GameData gameData)
 	{
-        uiManager.GetFightVictoryScreen(gold);
+        uiManager.GetScreen(screen, gameData);
 	}
-
-    public void GetRogueVictoryScreen()
-    {
-        uiManager.GetRogueVictoryScreen();
-    }
 
     public List<Tile> FindPathToDestination(Tile targetTile, bool selectTiles){
         List<Tile> path = pathfinding.FindPathToDestination(targetTile);
@@ -265,11 +260,23 @@ public struct GameData
     public int Map_X_Length;
     public int Map_Y_Length;
 
-    public GameData(Dictionary<int, Tile> mapTiles, List<Unit> unitsOnField, int Map_X_Length, int Map_Y_Length)
+    public int Gold;
+
+    public GameData(Dictionary<int, Tile> mapTiles, List<Unit> unitsOnField, int Map_X_Length, int Map_Y_Length, int Gold)
     {
         this.mapTiles = mapTiles;
         this.unitsOnField = unitsOnField;
         this.Map_X_Length = Map_X_Length;
         this.Map_Y_Length = Map_Y_Length;
+        this.Gold = Gold;
     }
+}
+
+public enum GameScreens
+{
+    Default,
+    FightVictoryScreen,
+    FightDefeatScreen,
+    RogueVictoryScreen,
+    RogueDefeatScreen
 }
