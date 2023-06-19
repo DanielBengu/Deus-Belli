@@ -56,6 +56,7 @@ public class GeneralManager : MonoBehaviour
 	public int CurrentRow { get { return runData.currentRow; } set { runData.currentRow = value; } }
 	public int CurrentPositionInRow { get { return runData.currentPositionInRow; } set { runData.currentPositionInRow = value; } }
 
+
 	private void Start()
 	{
         bool isOngoingRun = PlayerPrefs.GetInt(ONGOING_RUN) != 0;
@@ -189,6 +190,7 @@ public class GeneralManager : MonoBehaviour
             case RogueTileType.Merchant:
                 merchantSectionInstance = Instantiate(merchantSectionPrefab);
                 rogueManager.StructureManager.uiManager.SetMerchantVariables(runData.gold);
+                rogueManager.MerchantShop = node.merchant;
                 break;
 		}
 	}
@@ -228,6 +230,7 @@ public class GeneralManager : MonoBehaviour
                 break;
 			case RogueTileType.Merchant:
                 Destroy(merchantSectionInstance);
+                structureManager.uiManager.SetRogueVariables(Gold, GodSelected, runData.masterSeed);
                 break;
 			case RogueTileType.Event:
                 Destroy(eventSectionInstance);

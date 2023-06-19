@@ -5,6 +5,7 @@ public class RogueNode : MonoBehaviour
 {
 	RogueManager rogueManager;
 	public Level level = new();
+	public Merchant merchant;
 	public RogueTileType rogueTileType;
 	public List<RogueNode> rogueParents;
 	public List<RogueNode> rogueChilds;
@@ -12,7 +13,7 @@ public class RogueNode : MonoBehaviour
 	public int positionInRow;
 	public int nodeIndex;
 
-	public void SetupTile(RogueManager rm, RogueTileType tileType, int mapRow, int positionInRow, int nodeIndex, Dictionary<int, GameObject> enemyList)
+	public void SetupTile(RogueManager rm, RogueTileType tileType, int mapRow, int positionInRow, int nodeIndex, Dictionary<int, GameObject> enemyList, int nodeSeed)
 	{
 		rogueManager = rm;
 		rogueTileType = tileType;
@@ -20,9 +21,23 @@ public class RogueNode : MonoBehaviour
 		this.positionInRow = positionInRow;
 		this.nodeIndex = nodeIndex;
 		SetupMaterial();
+			
+		switch (tileType)
+		{
+			case RogueTileType.Boss:
+			case RogueTileType.Miniboss:
+			case RogueTileType.Fight:
+				level.StartLevel(enemyList);
+				break;
+			case RogueTileType.Merchant:
+				merchant = new(nodeSeed);
+				break;
+			case RogueTileType.Event:
+				break;
+			case RogueTileType.Starting:
+				break;
 
-		if (tileType == RogueTileType.Fight || tileType == RogueTileType.Miniboss || tileType == RogueTileType.Boss)
-			level.StartLevel(enemyList);
+		}
 	}
 
 	public void OnMouseDown()

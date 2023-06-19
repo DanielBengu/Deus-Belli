@@ -67,8 +67,10 @@ public class StructureManager : MonoBehaviour
         return mapTiles;
     }
 
-    public RogueNode GenerateRogueTile(int randomLength, int currentRow, int positionOnRow, int maxRowOnMap, int nodeIndex, Transform origin, Transform firstNode, RogueManager rm)
+    public RogueNode GenerateRogueTile(int currentRow, int positionOnRow, int maxRowOnMap, int nodeIndex, int nodeSeed, Transform origin, Transform firstNode, RogueManager rm)
 	{
+        Random.InitState(nodeSeed);
+        int randomLength = Random.Range(3, 6);
         Vector3 tilePosition = origin.position;
         float precedentRowX = firstNode.transform.position.x + (450 * (currentRow - 1));
         tilePosition.x = precedentRowX + 150 + (50 * randomLength); //sourceTile.transform.position.x + 150 + (50 * randomLength);
@@ -79,7 +81,7 @@ public class StructureManager : MonoBehaviour
         RogueNode newTileScript = newTile.GetComponent<RogueNode>();
         RogueTileType typeOfNode = GenerateRogueNodeType(currentRow, positionOnRow, maxRowOnMap, rm, nodeIndex);
         Dictionary<int, GameObject> enemyList = GenerateEnemyList(typeOfNode);
-        newTileScript.SetupTile(rm, typeOfNode, currentRow, positionOnRow, nodeIndex, enemyList);
+        newTileScript.SetupTile(rm, typeOfNode, currentRow, positionOnRow, nodeIndex, enemyList, nodeSeed);
 
         return newTileScript;
     }
@@ -177,9 +179,14 @@ public class StructureManager : MonoBehaviour
         ClearSelectedTiles();
     }
 
-    public void GetGameScreen(GameScreens screen, GameData gameData)
+    public void ClearMerchantItem(int itemIndex, int newPlayerGoldAmount)
 	{
-        uiManager.GetScreen(screen, gameData);
+        uiManager.ItemBought(itemIndex, newPlayerGoldAmount);
+	}
+
+    public void GetGameScreen(GameScreens screen, int gold)
+	{
+        uiManager.GetScreen(screen, gold);
 	}
 
     public List<Tile> FindPathToDestination(Tile targetTile, bool selectTiles){
@@ -260,15 +267,12 @@ public struct GameData
     public int Map_X_Length;
     public int Map_Y_Length;
 
-    public int Gold;
-
-    public GameData(Dictionary<int, Tile> mapTiles, List<Unit> unitsOnField, int Map_X_Length, int Map_Y_Length, int Gold)
+    public GameData(Dictionary<int, Tile> mapTiles, List<Unit> unitsOnField, int Map_X_Length, int Map_Y_Length)
     {
         this.mapTiles = mapTiles;
         this.unitsOnField = unitsOnField;
         this.Map_X_Length = Map_X_Length;
         this.Map_Y_Length = Map_Y_Length;
-        this.Gold = Gold;
     }
 }
 

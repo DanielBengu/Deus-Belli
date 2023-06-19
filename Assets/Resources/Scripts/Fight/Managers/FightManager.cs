@@ -97,7 +97,7 @@ public class FightManager : MonoBehaviour
         var tiles = structureManager.SetupFightSection(level.tilesDict, this, level.TopLeftSquarePositionX, level.YPosition, level.TopLeftSquarePositionZ, level.HorizontalTiles, level.VerticalTiles);
 
         var units = GenerateUnits(tiles);
-        structureManager.gameData = new(tiles, units, level.HorizontalTiles, level.VerticalTiles, generalManager.Gold);
+        structureManager.gameData = new(tiles, units, level.HorizontalTiles, level.VerticalTiles);
         
     }
 
@@ -168,8 +168,10 @@ public class FightManager : MonoBehaviour
 		{
             if (isFightWon) GenerateAndAddGold();
             isGameOver = true;
-            generalManager.SaveMapProgress(GeneralManager.GameStatus.Lost);
-            structureManager.GetGameScreen(GameScreens.FightDefeatScreen, structureManager.gameData);
+            GeneralManager.GameStatus status = isFightWon ? GeneralManager.GameStatus.Won : GeneralManager.GameStatus.Lost;
+            GameScreens screen = isFightWon ? GameScreens.FightVictoryScreen : GameScreens.FightDefeatScreen;
+            generalManager.SaveMapProgress(status);
+            structureManager.GetGameScreen(screen, generalManager.Gold);
         }
 	}
 

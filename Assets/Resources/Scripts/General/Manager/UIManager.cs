@@ -67,8 +67,15 @@ public class UIManager : MonoBehaviour
 
     public void SetMerchantVariables(int availableGold)
 	{
-        TextMeshProUGUI rogueSeed = GameObject.Find("Current Gold").GetComponent<TextMeshProUGUI>();
-        rogueSeed.text = $"Current Gold: {availableGold}g";
+        TextMeshProUGUI currentGold = GameObject.Find("Current Gold").GetComponent<TextMeshProUGUI>();
+        currentGold.text = $"Current Gold: {availableGold}g";
+    }
+
+    public void ItemBought(int itemIndex, int newPlayerGoldAmount)
+	{
+        Destroy(GameObject.Find($"Obj{itemIndex + 1}"));
+        TextMeshProUGUI currentGold = GameObject.Find("Current Gold").GetComponent<TextMeshProUGUI>();
+        currentGold.text = $"Current Gold: {newPlayerGoldAmount}g";
     }
 
     public void SetInfoPanel(bool active, Unit unit = null){
@@ -88,13 +95,13 @@ public class UIManager : MonoBehaviour
         SetGameObject(endTurnButton, active);
     }
 
-    public void GetScreen(GameScreens screen, GameData gameData)
+    public void GetScreen(GameScreens screen, int gold)
 	{
 		switch (screen)
 		{
 			case GameScreens.FightVictoryScreen:
                 var rew1 = fightVictoryScreen.transform.Find("Reward 1").GetComponent<TextMeshProUGUI>();
-                rew1.text = $"{gameData.Gold} gold";
+                rew1.text = $"{gold} gold";
                 Instantiate(fightVictoryScreen, infoPanel.transform.parent);
                 break;
 			case GameScreens.FightDefeatScreen:

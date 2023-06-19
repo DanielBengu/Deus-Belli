@@ -76,6 +76,7 @@
     <Compile Include="Assets\Resources\Scripts\Menu\NewGameManager.cs" />
     <Compile Include="Assets\Resources\Scripts\Fight\Classes\Pathfinding.cs" />
     <Compile Include="Assets\Resources\Scripts\Fight\Unit.cs" />
+    <Compile Include="Assets\Resources\Scripts\Rogue\Classes\Merchant.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Assets\TextMesh Pro\Shaders\TMPro.cginc" />
