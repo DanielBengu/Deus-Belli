@@ -6,6 +6,7 @@ public class RogueNode : MonoBehaviour
 	RogueManager rogueManager;
 	public Level level = new();
 	public Merchant merchant;
+	public Event currentEvent;
 	public RogueTileType rogueTileType;
 	public List<RogueNode> rogueParents;
 	public List<RogueNode> rogueChilds;
@@ -33,10 +34,10 @@ public class RogueNode : MonoBehaviour
 				merchant = new(nodeSeed);
 				break;
 			case RogueTileType.Event:
+				currentEvent = new(nodeSeed);
 				break;
 			case RogueTileType.Starting:
 				break;
-
 		}
 	}
 

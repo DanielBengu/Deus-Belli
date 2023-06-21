@@ -17,7 +17,7 @@ public class StructureManager : MonoBehaviour
 
     Pathfinding pathfinding;
 
-    public GameData gameData;
+    public FightGameData gameData;
 
     public bool IsObjectMoving { get{ return actionPerformer.movement.IsObjectMoving;}}
 
@@ -33,11 +33,6 @@ public class StructureManager : MonoBehaviour
         actionPerformer.pathfinding = pathfinding;
         return mapTiles;
     }
-
-    public void SetEndTurnButton(bool active){
-        uiManager.SetEndTurnButton(active);
-    }
-
 
     public Dictionary<int, Tile> GenerateFightTiles(Dictionary<int, GameObject> tileList, FightManager manager, int topX, int y, int topZ, int XLength, int YLength)
     {
@@ -79,14 +74,14 @@ public class StructureManager : MonoBehaviour
         GameObject newTile = Instantiate(origin.gameObject, tilePosition, origin.rotation, firstNode);
         newTile.transform.localScale = new Vector3(1, 1, 1);
         RogueNode newTileScript = newTile.GetComponent<RogueNode>();
-        RogueTileType typeOfNode = GenerateRogueNodeType(currentRow, positionOnRow, maxRowOnMap, rm, nodeIndex);
+        RogueTileType typeOfNode = GenerateRogueNodeType(currentRow, maxRowOnMap, rm, nodeIndex);
         Dictionary<int, GameObject> enemyList = GenerateEnemyList(typeOfNode);
         newTileScript.SetupTile(rm, typeOfNode, currentRow, positionOnRow, nodeIndex, enemyList, nodeSeed);
 
         return newTileScript;
     }
 
-    public RogueTileType GenerateRogueNodeType(int currentRow, int positionOnRow, int maxRowOnMap, RogueManager rm, int nodeIndex)
+    public RogueTileType GenerateRogueNodeType(int currentRow, int maxRowOnMap, RogueManager rm, int nodeIndex)
 	{
 		if (currentRow == maxRowOnMap)
             return RogueTileType.Boss;
@@ -125,7 +120,6 @@ public class StructureManager : MonoBehaviour
 
     public Dictionary<int, GameObject> GenerateEnemyList(RogueTileType tileType)
 	{
-        
         Dictionary<int, GameObject> result = new();
 
         Unit sorceressUnit = sorceressPrefab.GetComponent<Unit>();
@@ -161,33 +155,11 @@ public class StructureManager : MonoBehaviour
 		}
     }
 
-    public void SetInfoPanel(bool active, Unit unit = null){
-        uiManager.SetInfoPanel(active, unit);
-    }
-
-    public void SelectTiles(List<Tile> tilelist, bool clearBeforeSelecting, TileType tileType = TileType.Default)
-    {
-        if(clearBeforeSelecting)
-            ClearSelectedTiles();
-
-        spriteManager.GenerateTileSelection(tilelist, tileType);
-    }
-
     public void ClearSelection(bool closeInfoPanel){
         if(closeInfoPanel)
             uiManager.SetInfoPanel(false);
         ClearSelectedTiles();
     }
-
-    public void ClearMerchantItem(int itemIndex, int newPlayerGoldAmount)
-	{
-        uiManager.ItemBought(itemIndex, newPlayerGoldAmount);
-	}
-
-    public void GetGameScreen(GameScreens screen, int gold)
-	{
-        uiManager.GetScreen(screen, gold);
-	}
 
     public List<Tile> FindPathToDestination(Tile targetTile, bool selectTiles){
         List<Tile> path = pathfinding.FindPathToDestination(targetTile);
@@ -208,6 +180,11 @@ public class StructureManager : MonoBehaviour
     }
 
     #region Method Forwarding
+
+    public void SetEndTurnButton(bool active)
+    {
+        uiManager.SetEndTurnButton(active);
+    }
 
     public List<Tile> CalculateMapTilesDistance(Unit startingUnit)
     {
@@ -239,6 +216,15 @@ public class StructureManager : MonoBehaviour
         return true;
 	}
 
+    public void ClearMerchantItem(int itemIndex, int newPlayerGoldAmount)
+    {
+        uiManager.ItemBought(itemIndex, newPlayerGoldAmount);
+    }
+    public void GetGameScreen(GameScreens screen, int gold)
+    {
+        uiManager.GetScreen(screen, gold);
+    }
+
     public List<Tile> GetPossibleAttacksForUnit(Unit unit, bool selectTiles)
 	{
         List<Tile> possibleAttacks = pathfinding.FindPossibleAttacks(unit);
@@ -247,6 +233,19 @@ public class StructureManager : MonoBehaviour
             SelectTiles(possibleAttacks, false);
 
         return possibleAttacks;
+    }
+
+    public void SetInfoPanel(bool active, Unit unit = null)
+    {
+        uiManager.SetInfoPanel(active, unit);
+    }
+
+    public void SelectTiles(List<Tile> tilelist, bool clearBeforeSelecting, TileType tileType = TileType.Default)
+    {
+        if (clearBeforeSelecting)
+            ClearSelectedTiles();
+
+        spriteManager.GenerateTileSelection(tilelist, tileType);
     }
 
     #endregion
@@ -259,7 +258,7 @@ public class StructureManager : MonoBehaviour
     #endregion
 }
 
-public struct GameData
+public struct FightGameData
 {
     public Dictionary<int, Tile> mapTiles;
     public List<Unit> unitsOnField;
@@ -267,7 +266,7 @@ public struct GameData
     public int Map_X_Length;
     public int Map_Y_Length;
 
-    public GameData(Dictionary<int, Tile> mapTiles, List<Unit> unitsOnField, int Map_X_Length, int Map_Y_Length)
+    public FightGameData(Dictionary<int, Tile> mapTiles, List<Unit> unitsOnField, int Map_X_Length, int Map_Y_Length)
     {
         this.mapTiles = mapTiles;
         this.unitsOnField = unitsOnField;

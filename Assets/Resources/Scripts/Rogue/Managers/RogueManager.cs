@@ -25,6 +25,7 @@ public class RogueManager : MonoBehaviour
 	public bool IsAnyUnitMoving { get { return StructureManager.IsObjectMoving; } }
 
     public bool IsGameInStandby { get { return generalManager.IsGameInStandby; } }
+    public Event CurrentEvent { get; set; }
 	public Merchant MerchantShop { get; set; }
 
 	private void Update()
@@ -278,8 +279,11 @@ public class RogueManager : MonoBehaviour
 
     public void EventChoiceClick(int choice)
 	{
-        GeneralManager fm = GameObject.Find(GeneralManager.GENERAL_MANAGER_OBJ_NAME).GetComponent<GeneralManager>();
-        fm.ReturnToRogue(RogueTileType.Event, false);
+        GeneralManager gm = GameObject.Find(GeneralManager.GENERAL_MANAGER_OBJ_NAME).GetComponent<GeneralManager>();
+
+        gm.selectedNode.currentEvent.Options[choice].OptionFunction(ref gm.runData);
+
+        gm.ReturnToRogue(RogueTileType.Event, false);
     }
 
     public void MerchantBuyClick(int objectBoughtIndex)

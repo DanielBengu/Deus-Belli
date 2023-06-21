@@ -33,7 +33,7 @@ public class GeneralManager : MonoBehaviour
     [SerializeField]
     GameObject rogueSectionPrefab;
     GameObject rogueSectionInstance;
-    RogueManager rogueManager;
+    public RogueManager rogueManager;
 
     [SerializeField]
     CameraManager cameraManager;
@@ -43,7 +43,7 @@ public class GeneralManager : MonoBehaviour
     [SerializeField]
     GameObject OptionsPrefab;
 
-    RunData runData;
+    public RunData runData;
     public RogueNode selectedNode;
 
     CurrentSection currentSection = CurrentSection.Rogue;
@@ -186,6 +186,8 @@ public class GeneralManager : MonoBehaviour
                 break;
 			case RogueTileType.Event:
                 eventSectionInstance = Instantiate(eventSectionPrefab);
+                rogueManager.StructureManager.uiManager.SetEventVariables(node.currentEvent);
+                rogueManager.CurrentEvent = node.currentEvent;
                 break;
             case RogueTileType.Merchant:
                 merchantSectionInstance = Instantiate(merchantSectionPrefab);
@@ -219,7 +221,7 @@ public class GeneralManager : MonoBehaviour
         selectedNode = null;
         SaveMapProgress(GameStatus.Current);
 
-		switch (tileTypeReturning)
+        switch (tileTypeReturning)
 		{
             case RogueTileType.Miniboss:
             case RogueTileType.Boss:
@@ -229,16 +231,17 @@ public class GeneralManager : MonoBehaviour
                 GenerateRogueSection(isDefeat);
                 break;
 			case RogueTileType.Merchant:
-                Destroy(merchantSectionInstance);
                 structureManager.uiManager.SetRogueVariables(Gold, GodSelected, runData.masterSeed);
+                Destroy(merchantSectionInstance);
                 break;
 			case RogueTileType.Event:
+                structureManager.uiManager.SetRogueVariables(Gold, GodSelected, runData.masterSeed);
                 Destroy(eventSectionInstance);
                 break;
 		}
     }
 
-    struct RunData
+    public struct RunData
     {
         public string godSelected;
         public int currentRow;

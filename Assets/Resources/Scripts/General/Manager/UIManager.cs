@@ -71,6 +71,20 @@ public class UIManager : MonoBehaviour
         currentGold.text = $"Current Gold: {availableGold}g";
     }
 
+    public void SetEventVariables(Event data)
+	{
+        Image image = GameObject.Find("Image").GetComponent<Image>();
+        image.sprite = Resources.Load<Sprite>($"Sprites/Events/{data.ImageName}");
+        TextMeshProUGUI title = GameObject.Find("Title").GetComponent<TextMeshProUGUI>();
+        title.text = data.Title;
+        TextMeshProUGUI description = GameObject.Find("Description").GetComponent<TextMeshProUGUI>();
+        description.text = data.Description;
+        TextMeshProUGUI choice1 = GameObject.Find("Choice 1 text").GetComponent<TextMeshProUGUI>();
+        choice1.text = data.Options[0].OptionDescription;
+        TextMeshProUGUI choice2 = GameObject.Find("Choice 2 text").GetComponent<TextMeshProUGUI>();
+        choice2.text = data.Options[1].OptionDescription;
+    }
+
     public void ItemBought(int itemIndex, int newPlayerGoldAmount)
 	{
         Destroy(GameObject.Find($"Obj{itemIndex + 1}"));
