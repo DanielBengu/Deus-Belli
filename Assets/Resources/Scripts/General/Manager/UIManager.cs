@@ -67,8 +67,14 @@ public class UIManager : MonoBehaviour
 
     public void SetMerchantVariables(int availableGold)
 	{
-        TextMeshProUGUI currentGold = GameObject.Find("Current Gold").GetComponent<TextMeshProUGUI>();
-        currentGold.text = $"Current Gold: {availableGold}g";
+    }
+
+    public void SetMerchantItemVariables(MerchantItem item)
+	{
+        TextMeshProUGUI itemName = GameObject.Find($"0_Name_TXT").GetComponent<TextMeshProUGUI>();
+        itemName.text = item.Name;
+        TextMeshProUGUI itemPrice = GameObject.Find($"0_Price_TXT").GetComponent<TextMeshProUGUI>();
+        itemPrice.text = $"{item.Price}g";
     }
 
     public void SetEventVariables(Event data)

@@ -1,0 +1,3 @@
+0;Male A;50
+0;Male B;100
+1;Male C;200

@@ -146,7 +146,7 @@ public class RogueManager : MonoBehaviour
 		if (nodesOnCurrentRow == previousRowNodes.Count + 1)
             maximumOffset = firstNodeInPreviousRowPosition;
         else
-            maximumOffset = firstNodeInPreviousRowPosition + 1 <= MAXIMUM_NODES ? firstNodeInPreviousRowPosition + 1 : MAXIMUM_NODES;
+            maximumOffset = firstNodeInPreviousRowPosition + 1 <= 3 ? firstNodeInPreviousRowPosition + 1 : 3;
 
         int position;
         if (previousRowNodes.Count == MAXIMUM_NODES && nodesOnCurrentRow == MINIMUM_NODES)

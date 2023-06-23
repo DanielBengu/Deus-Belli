@@ -216,10 +216,22 @@ public class StructureManager : MonoBehaviour
         return true;
 	}
 
+    public void InstantiateMerchantItems(MerchantItem[] itemList)
+	{
+        GameObject itemPrefab = Resources.Load<GameObject>($"Prefabs/Merchant/MerchantItem");
+
+		for (int i = 0; i < itemList.Length; i++)
+		{
+            Instantiate(itemPrefab, GameObject.Find("Objects").transform);
+            uiManager.SetMerchantItemVariables(itemList[i]);
+        }  
+	}
+
     public void ClearMerchantItem(int itemIndex, int newPlayerGoldAmount)
     {
         uiManager.ItemBought(itemIndex, newPlayerGoldAmount);
     }
+
     public void GetGameScreen(GameScreens screen, int gold)
     {
         uiManager.GetScreen(screen, gold);

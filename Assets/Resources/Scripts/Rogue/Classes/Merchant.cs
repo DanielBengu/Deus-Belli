@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.IO;
 using UnityEngine;
 
 public class Merchant
@@ -30,19 +31,45 @@ public class Merchant
 
 	void GenerateMerchantList(int seed)
 	{
-		Unit unit = Resources.Load<GameObject>("Prefabs/Units/Male A").GetComponent<Unit>();
-		ItemList = new MerchantItem[1];
-		ItemList[0] = new(unit, 100);
+		string[] items = GetMerchantItems();
+
+		ItemList = new MerchantItem[items.Length];
+
+		for (int i = 0; i < items.Length; i++)
+		{
+			string[] data = items[i].Split(';');
+			Unit unit = Resources.Load<GameObject>($"Prefabs/Units/{data[1]}").GetComponent<Unit>();
+			if (int.Parse(data[0]) == (int)ItemType.Unit)
+				ItemList[i] = new(unit, "Warrior", int.Parse(data[2]));
+		}
+	}
+
+	string[] GetMerchantItems()
+	{
+		return File.ReadAllLines("Assets\\Resources\\Scripts\\Rogue\\TXT\\Merchant.txt");
 	}
 }
 
 public struct MerchantItem{
 	public object Item { get; set; }
+	public string Name { get; set; }
 	public int Price { get; set; }
 
-	public MerchantItem(object item, int price)
+	public MerchantItem(object item, string name, int price)
 	{
 		Item = item;
+		Name = name;
 		Price = price;
 	}
+}
+
+enum ItemType
+{
+	Unit,
+}
+
+enum ItemPool
+{
+	Neutral,
+	Zeus
 }
