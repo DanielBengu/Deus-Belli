@@ -1,0 +1,3 @@
+Player Data is stored in this folder: Assets\Resources\Scripts\General\Player Data
+Units of player are stored in the "Unit list" file, each line represents a unit and each attribute is separated with the ";" character, in the following structure:
+Model name; Unit Name; Sprite Name; HP; Movement; Attack; Range

@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using System.Linq;
 using System;
+using System.IO;
 
 public class FightManager : MonoBehaviour
 {
@@ -18,11 +19,6 @@ public class FightManager : MonoBehaviour
     public CameraManager cameraManager;
     public StructureManager structureManager;
     AIManager aiManager;
-
-    [SerializeField]
-    GameObject warriorPrefab;
-    [SerializeField]
-    GameObject warrior2Prefab;
 
     [SerializeField]
     GameObject rogueSection;
@@ -104,14 +100,14 @@ public class FightManager : MonoBehaviour
     List<Unit> GenerateUnits(Dictionary<int, Tile> mapTiles)
     {
         List<Unit> unitList = new();
+        List<GameObject> playerUnits = GetPlayerUnits();
 
-        var terrain = GameObject.Find($"Terrain_21");
-        if(terrain != null)
-            unitList.Add(GenerateSingleUnit(warriorPrefab, terrain.GetComponent<Tile>()));
-
-        terrain = GameObject.Find($"Terrain_28");
-        if(terrain != null)
-            unitList.Add(GenerateSingleUnit(warrior2Prefab, terrain.GetComponent<Tile>()));
+		foreach (var unit in playerUnits)
+		{
+            var terrain = GameObject.Find($"Terrain_{unit.GetComponent<Unit>().startingTileNumber}");
+            if (terrain != null)
+                unitList.Add(GenerateSingleUnit(unit, terrain.GetComponent<Tile>()));
+        }
 
         foreach (var enemy in level.enemyList)
         {
@@ -120,6 +116,24 @@ public class FightManager : MonoBehaviour
         }
         return unitList;
     }
+
+    List<GameObject> GetPlayerUnits()
+	{
+        List<GameObject> playerUnits = new();
+
+        string[] units = File.ReadAllLines("Assets\\Resources\\Scripts\\General\\Player Data\\Unit list.txt");
+
+		for (int i = 0; i < units.Length; i++)
+		{
+            string[] data = units[i].Split(';');
+            GameObject unitObject = Resources.Load<GameObject>($"Prefabs/Units/{data[0]}");
+            Unit unitScript = unitObject.GetComponent<Unit>();
+            unitScript.LoadData(data);
+            playerUnits.Add(unitObject);
+		}
+
+        return playerUnits;
+	}
 
     Unit GenerateSingleUnit(GameObject unit, Tile tile)
     {
@@ -166,12 +180,13 @@ public class FightManager : MonoBehaviour
 
         if (isFightWon || isFightLost)
 		{
-            if (isFightWon) GenerateAndAddGold();
+            int goldGenerated = 0;
+            if (isFightWon) goldGenerated = GenerateAndAddGold();
             isGameOver = true;
             GeneralManager.GameStatus status = isFightWon ? GeneralManager.GameStatus.Won : GeneralManager.GameStatus.Lost;
             GameScreens screen = isFightWon ? GameScreens.FightVictoryScreen : GameScreens.FightDefeatScreen;
             generalManager.SaveMapProgress(status);
-            structureManager.GetGameScreen(screen, generalManager.Gold);
+            structureManager.GetGameScreen(screen, goldGenerated);
         }
 	}
 

@@ -1,0 +1,2 @@
+Events are stored in the Assets\Resources\Scripts\Rogue\Encounters.TXT file, each line represents a single event and every attribute is separated with the ; character, following this scheme:
+Image name (as its stored); Title of Event; Description of Event; Choice 1 text; Choice 1 function associated; Choice 2 text; Choice 2 function associated;
