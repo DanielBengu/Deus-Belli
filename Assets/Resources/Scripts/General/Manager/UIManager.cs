@@ -69,11 +69,11 @@ public class UIManager : MonoBehaviour
 	{
     }
 
-    public void SetMerchantItemVariables(MerchantItem item)
+    public void SetMerchantItemVariables(MerchantItem item, int index)
 	{
-        TextMeshProUGUI itemName = GameObject.Find($"0_Name_TXT").GetComponent<TextMeshProUGUI>();
+        TextMeshProUGUI itemName = GameObject.Find($"{index}_Name").GetComponent<TextMeshProUGUI>();
         itemName.text = item.Name;
-        TextMeshProUGUI itemPrice = GameObject.Find($"0_Price_TXT").GetComponent<TextMeshProUGUI>();
+        TextMeshProUGUI itemPrice = GameObject.Find($"{index}_Price").GetComponent<TextMeshProUGUI>();
         itemPrice.text = $"{item.Price}g";
     }
 
@@ -93,7 +93,7 @@ public class UIManager : MonoBehaviour
 
     public void ItemBought(int itemIndex, int newPlayerGoldAmount)
 	{
-        Destroy(GameObject.Find($"Item_{itemIndex}"));
+        Destroy(GameObject.Find($"{itemIndex}_Item"));
         TextMeshProUGUI currentGold = GameObject.Find("Gold Value").GetComponent<TextMeshProUGUI>();
         currentGold.text = $"{newPlayerGoldAmount}g";
     }

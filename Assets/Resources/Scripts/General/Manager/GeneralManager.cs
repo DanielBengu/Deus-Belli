@@ -115,8 +115,9 @@ public class GeneralManager : MonoBehaviour
         return new RunData(godSelected, currentRow, currentPositionInRow, masterSeed, gold);
 	}
 
-	public void SaveMapProgress(GameStatus status)
+	public void SaveGameProgress(GameStatus status)
 	{
+        PlayerPrefs.SetInt(GOLD, runData.gold);
         PlayerPrefs.SetInt(CURRENT_ROW, runData.currentRow);
         PlayerPrefs.SetInt(CURRENT_POSITION_IN_ROW, runData.currentPositionInRow);
         PlayerPrefs.SetInt(GAME_STATUS, (int)status);
@@ -220,7 +221,7 @@ public class GeneralManager : MonoBehaviour
         cameraManager.ResetCamera();
 
         selectedNode = null;
-        SaveMapProgress(GameStatus.Current);
+        SaveGameProgress(GameStatus.Current);
 
         switch (tileTypeReturning)
 		{

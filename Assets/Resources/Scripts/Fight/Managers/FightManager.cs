@@ -185,7 +185,7 @@ public class FightManager : MonoBehaviour
             isGameOver = true;
             GeneralManager.GameStatus status = isFightWon ? GeneralManager.GameStatus.Won : GeneralManager.GameStatus.Lost;
             GameScreens screen = isFightWon ? GameScreens.FightVictoryScreen : GameScreens.FightDefeatScreen;
-            generalManager.SaveMapProgress(status);
+            generalManager.SaveGameProgress(status);
             structureManager.GetGameScreen(screen, goldGenerated);
         }
 	}

@@ -221,14 +221,19 @@ public class StructureManager : MonoBehaviour
 	{
         GameObject itemPrefab = Resources.Load<GameObject>($"Prefabs/Merchant/MerchantItem");
 
-		for (int i = 0; i < itemList.Length; i++)
-		{
+        for (int i = 0; i < itemList.Length; i++)
+        {
+            int index = i;
             GameObject item = Instantiate(itemPrefab, GameObject.Find("Objects").transform);
             item.transform.position = new(item.transform.position.x + (150 * i), item.transform.position.y);
-            item.name = $"Item_{i}";
-			foreach (var child in item.transform.GetComponentsInChildren<Transform>(true))
-                child.name = $"{i}_{child.name.Split('_')[1]}";
-            uiManager.SetMerchantItemVariables(itemList[i]);
+            item.name = $"{i}_Item";
+            foreach (var child in item.transform.GetComponentsInChildren<Transform>(true)) {
+                string childName = child.name.Split('_')[1];
+                child.name = $"{i}_{childName}";
+                if (childName.Equals("Item"))
+                    child.GetComponent<Button>().onClick.AddListener(() => RogueManager.MerchantBuyClick(index));
+            }
+            uiManager.SetMerchantItemVariables(itemList[i], i);
         }  
 	}
 
