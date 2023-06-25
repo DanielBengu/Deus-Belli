@@ -286,7 +286,7 @@ public class RogueManager : MonoBehaviour
         gm.ReturnToRogue(RogueTileType.Event, false);
     }
 
-    public void MerchantBuyClick(int objectBoughtIndex)
+    public static void MerchantBuyClick(int objectBoughtIndex)
 	{
 		RogueManager rm = GameObject.Find(GeneralManager.ROGUE_MANAGER_OBJ_NAME).GetComponent<RogueManager>();
 		if (rm.MerchantShop.BuyItem(objectBoughtIndex, rm.generalManager.Gold, out int newGoldAmount))

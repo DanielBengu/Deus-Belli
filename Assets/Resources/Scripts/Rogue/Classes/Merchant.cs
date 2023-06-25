@@ -41,6 +41,8 @@ public class Merchant
 			Unit unit = Resources.Load<GameObject>($"Prefabs/Units/{data[1]}").GetComponent<Unit>();
 			if (int.Parse(data[0]) == (int)ItemType.Unit)
 				ItemList[i] = new(unit, "Warrior", int.Parse(data[2]));
+			else
+				ItemList[i] = new(new object(), "Item", int.Parse(data[2]));
 		}
 	}
 

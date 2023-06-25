@@ -192,6 +192,7 @@ public class GeneralManager : MonoBehaviour
             case RogueTileType.Merchant:
                 merchantSectionInstance = Instantiate(merchantSectionPrefab);
                 rogueManager.StructureManager.uiManager.SetMerchantVariables(runData.gold);
+                rogueManager.StructureManager.InstantiateMerchantItems(node.merchant.ItemList);
                 rogueManager.MerchantShop = node.merchant;
                 break;
 		}

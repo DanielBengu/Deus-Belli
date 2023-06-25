@@ -93,9 +93,9 @@ public class UIManager : MonoBehaviour
 
     public void ItemBought(int itemIndex, int newPlayerGoldAmount)
 	{
-        Destroy(GameObject.Find($"Obj{itemIndex + 1}"));
-        TextMeshProUGUI currentGold = GameObject.Find("Current Gold").GetComponent<TextMeshProUGUI>();
-        currentGold.text = $"Current Gold: {newPlayerGoldAmount}g";
+        Destroy(GameObject.Find($"Item_{itemIndex}"));
+        TextMeshProUGUI currentGold = GameObject.Find("Gold Value").GetComponent<TextMeshProUGUI>();
+        currentGold.text = $"{newPlayerGoldAmount}g";
     }
 
     public void SetInfoPanel(bool active, Unit unit = null){

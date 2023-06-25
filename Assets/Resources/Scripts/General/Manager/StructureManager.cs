@@ -1,6 +1,7 @@
 using System.Collections.Generic;
-using System.Linq;
 using UnityEngine;
+using UnityEngine.Events;
+using UnityEngine.UI;
 
 public class StructureManager : MonoBehaviour
 {
@@ -222,7 +223,11 @@ public class StructureManager : MonoBehaviour
 
 		for (int i = 0; i < itemList.Length; i++)
 		{
-            Instantiate(itemPrefab, GameObject.Find("Objects").transform);
+            GameObject item = Instantiate(itemPrefab, GameObject.Find("Objects").transform);
+            item.transform.position = new(item.transform.position.x + (150 * i), item.transform.position.y);
+            item.name = $"Item_{i}";
+			foreach (var child in item.transform.GetComponentsInChildren<Transform>(true))
+                child.name = $"{i}_{child.name.Split('_')[1]}";
             uiManager.SetMerchantItemVariables(itemList[i]);
         }  
 	}
