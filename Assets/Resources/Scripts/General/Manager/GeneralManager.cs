@@ -99,8 +99,12 @@ public class GeneralManager : MonoBehaviour
 
         if (IsScrollButtonDown)
 		{
-            cameraManager.UpdatePosition(rogueSectionInstance.transform);
-            rogueManager.GenerateNewNodeLines();
+            
+            if(currentSection == CurrentSection.Rogue)
+			{
+                cameraManager.UpdatePosition(rogueSectionInstance.transform);
+                rogueManager.GenerateNewNodeLines();
+            }
         }
             
     }

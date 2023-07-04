@@ -41,40 +41,25 @@ public class SpriteManager : MonoBehaviour
     string GetTileSelection(Tile tile, TileType typeSelection)
 	{
         string result = tile.gameObject.GetComponent<SpriteRenderer>().sprite.name.Split(' ')[0];
-        switch (typeSelection)
+        if(typeSelection == TileType.Default)
 		{
-			case TileType.Default:
-                if (tile.unitOnTile)
-                {
-                    if (tile.unitOnTile.GetComponent<Unit>().faction == FightManager.USER_FACTION)
-                        result += " ally";
-                    else
-                        result += " enemy";
-                }
+            if (tile.unitOnTile)
+            {
+                if (tile.unitOnTile.GetComponent<Unit>().faction == FightManager.USER_FACTION)
+                    result += " Ally";
                 else
-                {
-                    if (fightManager.UnitSelected && tile.IsPassable)
-                        result += " possible";
-                    else
-                        result += " selected";
-                }
-                break;
-			case TileType.Base:
-                result += " base";
-				break;
-			case TileType.Ally:
-                result += " ally";
-                break;
-			case TileType.Enemy:
-                result += " enemy";
-                break;
-			case TileType.Possible:
-                result += " possible";
-                break;
-			case TileType.Selected:
-                result += " selected";
-                break;
-		}
+                    result += " Enemy";
+            }
+            else
+            {
+                if (fightManager.UnitSelected && tile.IsPassable)
+                    result += " Possible";
+                else
+                    result += " Selected";
+            }
+        } else
+            result += $" {typeSelection}";
+
         return result;
 	}
 }
@@ -86,5 +71,6 @@ public enum TileType
     Ally,
     Enemy,
     Possible,
-    Selected
+    Selected,
+    Positionable,
 }

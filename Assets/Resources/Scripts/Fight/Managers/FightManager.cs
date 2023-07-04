@@ -37,10 +37,11 @@ public class FightManager : MonoBehaviour
     public bool IsShowingPath { get; set; }
     public ActionPerformed ActionInQueue { get; set; }
     public GameObject ActionTarget { get; set; }
+	public bool IsSetup { get; set; }
 
-    #endregion
+	#endregion
 
-    void Update()
+	void Update()
     {
         ManageGame();
         ManageMovements();
@@ -86,6 +87,8 @@ public class FightManager : MonoBehaviour
 
     void StartLevel(Level level)
     {
+        IsSetup = true;
+
         this.level = level;
         level.SetupTiles();
 
@@ -94,7 +97,24 @@ public class FightManager : MonoBehaviour
 
         var units = GenerateUnits(tiles);
         structureManager.gameData = new(tiles, units, level.HorizontalTiles, level.VerticalTiles);
-        
+
+        SetupUnitPosition();
+    }
+
+    void SetupUnitPosition()
+	{
+        List<Tile> tileList = new();
+		for (int i = 0; i < level.HorizontalTiles; i++)
+		{
+			for (int j = 0; j < 2; j++)
+			{
+                Tile tile = structureManager.gameData.mapTiles[(i * level.HorizontalTiles) + j];
+                if (tile.IsPassable)
+                    tileList.Add(tile);
+			}
+		}
+
+        structureManager.SelectTiles(tileList, false, TileType.Positionable);
     }
 
     List<Unit> GenerateUnits(Dictionary<int, Tile> mapTiles)
@@ -226,65 +246,84 @@ public class FightManager : MonoBehaviour
 
     void ManageClick_UnitSelected(Unit unit)
     {
-        //We selected an allied unit that has already performed his action this turn
-        if ((UnitSelected && UnitSelected.HasPerformedMainAction))
-        {
-            ResetGameState(false);
-            structureManager.SelectTiles(unit.CurrentTile.ToList(), true);
-            return;
+		if (IsSetup)
+		{
+            TileType typeOfSelection = UnitSelected ? TileType.Selected : TileType.Positionable;
+            structureManager.SelectTiles(unit.CurrentTile.ToList(), false, typeOfSelection);
         }
+		else
+		{
+            //We selected an allied unit that has already performed his action this turn
+            if ((UnitSelected && UnitSelected.HasPerformedMainAction))
+            {
+                ResetGameState(false);
+                structureManager.SelectTiles(unit.CurrentTile.ToList(), true);
+                return;
+            }
 
-        //We selected an allied unit that can still perform an action
-        if (unit.faction == USER_FACTION) {
-            ResetGameState(false);
-            structureManager.GeneratePossibleMovementForUnit(UnitSelected, true);
-            structureManager.GetPossibleAttacksForUnit(UnitSelected, true);
-            return;
+            //We selected an allied unit that can still perform an action
+            if (unit.faction == USER_FACTION)
+            {
+                ResetGameState(false);
+                structureManager.GeneratePossibleMovementForUnit(UnitSelected, true);
+                structureManager.GetPossibleAttacksForUnit(UnitSelected, true);
+                return;
+            }
+
+            ///We either selected an enemy unit and didn't select an ally to perform an attack before,
+            ///or we selected an enemy out of reach from the ally
+            if (!UnitSelected || !IsAttackPossible(UnitSelected, unit))
+            {
+                ResetGameState(true);
+                structureManager.SelectTiles(unit.CurrentTile.ToList(), true);
+                return;
+            }
+
+            //User wants to attack an enemy, we confirm the action and the path to take
+            if (!IsShowingPath)
+            {
+                AskForMovementConfirmation(unit.CurrentTile, UnitSelected.range);
+                return;
+            }
+
+            //User confirmed the action
+            QueueAttack(UnitSelected, unit);
         }
-
-        ///We either selected an enemy unit and didn't select an ally to perform an attack before,
-        ///or we selected an enemy out of reach from the ally
-        if (!UnitSelected || !IsAttackPossible(UnitSelected, unit))
-        {
-            ResetGameState(true);
-            structureManager.SelectTiles(unit.CurrentTile.ToList(), true);
-            return;
-        }
-
-        //User wants to attack an enemy, we confirm the action and the path to take
-        if (!IsShowingPath)
-        {
-            AskForMovementConfirmation(unit.CurrentTile, UnitSelected.range);
-            return;
-        }
-
-        //User confirmed the action
-        QueueAttack(UnitSelected, unit);
     }
 
     void ManageClick_EmptyTileSelected(Tile tileSelected)
     {
-        if (!UnitSelected)
-        {
+        if(IsSetup)
+		{
+
+		} 
+        else {
+            if (!UnitSelected)
+            {
+                ResetGameState(true);
+                structureManager.SelectTiles(tileSelected.ToList(), true);
+                return;
+            }
+
+            //If tile clicked is in range
+            if (UnitSelected.PossibleMovements.Contains(tileSelected))
+            {
+                if (IsShowingPath)
+                {
+                    structureManager.MoveUnit(UnitSelected, tileSelected);
+                    ResetGameState(true);
+                }
+                else
+                {
+                    AskForMovementConfirmation(tileSelected);
+                }
+                return;
+            }
+
+            //User clicked outside the range
             ResetGameState(true);
             structureManager.SelectTiles(tileSelected.ToList(), true);
-            return;
         }
-
-        //If tile clicked is in range
-        if(UnitSelected.PossibleMovements.Contains(tileSelected)){
-            if(IsShowingPath){
-                structureManager.MoveUnit(UnitSelected, tileSelected);
-                ResetGameState(true);
-            }else{
-                AskForMovementConfirmation(tileSelected);
-            }
-            return;
-        }
-
-        //User clicked outside the range
-        ResetGameState(true);
-        structureManager.SelectTiles(tileSelected.ToList(), true);
     }
 
     bool IsAttackPossible(Unit attacker, Unit defender)
