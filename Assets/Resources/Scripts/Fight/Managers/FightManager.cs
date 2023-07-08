@@ -1,7 +1,6 @@
 using System.Collections.Generic;
 using UnityEngine;
 using System.Linq;
-using System;
 using System.IO;
 
 public class FightManager : MonoBehaviour
@@ -248,6 +247,8 @@ public class FightManager : MonoBehaviour
     {
 		if (IsSetup)
 		{
+            ResetGameState(false);
+            SetupUnitPosition();
             TileType typeOfSelection = UnitSelected ? TileType.Selected : TileType.Positionable;
             structureManager.SelectTiles(unit.CurrentTile.ToList(), false, typeOfSelection);
         }
@@ -295,7 +296,19 @@ public class FightManager : MonoBehaviour
     {
         if(IsSetup)
 		{
-
+			//User wants to move a unit
+			if (UnitSelected)
+			{
+                ResetGameState(true);
+                SetupUnitPosition();
+            }
+            else
+			{
+                ResetGameState(true);
+                structureManager.ClearSelection(true);
+                SetupUnitPosition();
+                structureManager.SelectTiles(tileSelected.ToList(), false);
+            }
 		} 
         else {
             if (!UnitSelected)
@@ -372,6 +385,19 @@ public class FightManager : MonoBehaviour
         ActionInQueue = ActionPerformed.Default;
     }
 
+    void EndPhase(int faction)
+	{
+        if (IsSetup)
+		{
+            IsSetup = false;
+            List<Tile> tileList = structureManager.gameData.mapTiles.Values.ToList();
+            structureManager.SelectTiles(tileList, false, TileType.Base);
+            structureManager.UpdateFightEndPhaseButton();
+        }
+        else
+            EndTurn(faction);
+	}
+
     public void EndTurn(int faction){
         switch (faction)
         {
@@ -416,7 +442,7 @@ public class FightManager : MonoBehaviour
     //Called by "End Turn" button of UI
     public void EndTurnButton(int faction){
         FightManager fm = GameObject.Find(GeneralManager.FIGHT_MANAGER_OBJ_NAME).GetComponent<FightManager>();
-        fm.EndTurn(faction);
+        fm.EndPhase(faction);
     }
 }
 

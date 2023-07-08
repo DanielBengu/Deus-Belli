@@ -51,6 +51,12 @@ public class UIManager : MonoBehaviour
         rangeValue = infoPanel.transform.Find("Range value").gameObject.GetComponent<TextMeshProUGUI>();
         SetInfoPanel(false);
     }
+    public void SetFightEndPhaseButton()
+    {
+        TextMeshProUGUI buttonText = GameObject.Find("End Phase TEXT").GetComponent<TextMeshProUGUI>();
+        buttonText.text = $"End Turn";
+        SetInfoPanel(false);
+    }
 
     public void SetRogueVariables(int gold, string godSelected, int seed)
 	{

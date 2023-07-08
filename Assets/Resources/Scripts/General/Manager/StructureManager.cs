@@ -181,32 +181,30 @@ public class StructureManager : MonoBehaviour
     }
 
     #region Method Forwarding
-
+    public void UpdateFightEndPhaseButton()
+	{
+        uiManager.SetFightEndPhaseButton();
+    }
     public void SetEndTurnButton(bool active)
     {
         uiManager.SetEndTurnButton(active);
     }
-
     public List<Tile> CalculateMapTilesDistance(Unit startingUnit)
     {
         return pathfinding.CalculateMapTilesDistance(startingUnit);
     }
-
     public bool MovementTick()
     {
         return actionPerformer.movement.MovementTick();
     }
-
     public void MoveUnit(Unit unit, Tile targetTile)
     {
         actionPerformer.StartAction(ActionPerformed.FightMovement, unit.gameObject, targetTile.gameObject);
     }
-
     public void MoveUnit(Transform unit, RogueNode targetTile)
     {
         actionPerformer.StartAction(ActionPerformed.RogueMovement, unit.gameObject, targetTile.gameObject);
     }
-
     public bool IsAttackPossible(Unit attacker, Unit defender)
 	{
         //Unit out of movement range
@@ -216,7 +214,6 @@ public class StructureManager : MonoBehaviour
 
         return true;
 	}
-
     public void InstantiateMerchantItems(MerchantItem[] itemList)
 	{
         GameObject itemPrefab = Resources.Load<GameObject>($"Prefabs/Merchant/MerchantItem");
@@ -236,17 +233,14 @@ public class StructureManager : MonoBehaviour
             uiManager.SetMerchantItemVariables(itemList[i], i);
         }  
 	}
-
     public void ClearMerchantItem(int itemIndex, int newPlayerGoldAmount)
     {
         uiManager.ItemBought(itemIndex, newPlayerGoldAmount);
     }
-
     public void GetGameScreen(GameScreens screen, int gold)
     {
         uiManager.GetScreen(screen, gold);
     }
-
     public List<Tile> GetPossibleAttacksForUnit(Unit unit, bool selectTiles)
 	{
         List<Tile> possibleAttacks = pathfinding.FindPossibleAttacks(unit);
@@ -256,12 +250,10 @@ public class StructureManager : MonoBehaviour
 
         return possibleAttacks;
     }
-
     public void SetInfoPanel(bool active, Unit unit = null)
     {
         uiManager.SetInfoPanel(active, unit);
     }
-
     public void SelectTiles(List<Tile> tilelist, bool clearBeforeSelecting, TileType tileType = TileType.Default)
     {
         if (clearBeforeSelecting)
@@ -275,7 +267,7 @@ public class StructureManager : MonoBehaviour
     #region Private functions
 
     void ClearSelectedTiles(){
-            spriteManager.ClearMapTilesSprite();
+        spriteManager.ClearMapTilesSprite();
     }
     #endregion
 }
