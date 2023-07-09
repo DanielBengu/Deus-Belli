@@ -27,6 +27,11 @@ public class ActionPerformer
             case ActionPerformed.RogueMovement:
                 SetupRogueMovement(source.transform, target.transform);
                 break;
+            case ActionPerformed.FightTeleport:
+                var unitScriptTeleport = source.GetComponent<Unit>();
+                var targetTileTeleport = target.GetComponent<Tile>();
+                SetupFightTeleport(unitScriptTeleport, targetTileTeleport);
+                break;
             case ActionPerformed.Default:
                 break;
         }
@@ -38,6 +43,11 @@ public class ActionPerformer
         MoveUnit(source, targetTile);
         spriteManager.ClearMapTilesSprite();
     }
+
+    public void SetupFightTeleport(Unit source, Tile targetTile)
+	{
+        movement.TeleportUnit(source, targetTile);
+	}
 
     public void SetupRogueMovement(Transform source, Transform targetTile)
     {

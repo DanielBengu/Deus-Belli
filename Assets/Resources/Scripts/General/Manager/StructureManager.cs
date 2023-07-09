@@ -197,9 +197,10 @@ public class StructureManager : MonoBehaviour
     {
         return actionPerformer.movement.MovementTick();
     }
-    public void MoveUnit(Unit unit, Tile targetTile)
+    public void MoveUnit(Unit unit, Tile targetTile, bool isTeleport)
     {
-        actionPerformer.StartAction(ActionPerformed.FightMovement, unit.gameObject, targetTile.gameObject);
+        ActionPerformed action = isTeleport ? ActionPerformed.FightTeleport : ActionPerformed.FightMovement;
+        actionPerformer.StartAction(action, unit.gameObject, targetTile.gameObject);
     }
     public void MoveUnit(Transform unit, RogueNode targetTile)
     {

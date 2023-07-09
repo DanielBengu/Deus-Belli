@@ -37,6 +37,7 @@ public class FightManager : MonoBehaviour
     public ActionPerformed ActionInQueue { get; set; }
     public GameObject ActionTarget { get; set; }
 	public bool IsSetup { get; set; }
+    public int[] SetupTiles { get; set; }
 
 	#endregion
 
@@ -97,10 +98,10 @@ public class FightManager : MonoBehaviour
         var units = GenerateUnits(tiles);
         structureManager.gameData = new(tiles, units, level.HorizontalTiles, level.VerticalTiles);
 
-        SetupUnitPosition();
+        SetupTiles = SetupUnitPosition();
     }
 
-    void SetupUnitPosition()
+    int[] SetupUnitPosition()
 	{
         List<Tile> tileList = new();
 		for (int i = 0; i < level.HorizontalTiles; i++)
@@ -114,6 +115,7 @@ public class FightManager : MonoBehaviour
 		}
 
         structureManager.SelectTiles(tileList, false, TileType.Positionable);
+        return tileList.Select(t => t.tileNumber).ToArray();
     }
 
     List<Unit> GenerateUnits(Dictionary<int, Tile> mapTiles)
@@ -249,6 +251,7 @@ public class FightManager : MonoBehaviour
 		{
             ResetGameState(false);
             SetupUnitPosition();
+            bool isPositionable = !UnitSelected && SetupTiles.Contains(unit.CurrentTile.tileNumber);
             TileType typeOfSelection = UnitSelected ? TileType.Selected : TileType.Positionable;
             structureManager.SelectTiles(unit.CurrentTile.ToList(), false, typeOfSelection);
         }
@@ -299,6 +302,9 @@ public class FightManager : MonoBehaviour
 			//User wants to move a unit
 			if (UnitSelected)
 			{
+                //User clicked on an allowed tile to teleport the unit
+                if(tileSelected.unitOnTile == null && tileSelected.IsPassable && SetupTiles.Contains(tileSelected.tileNumber))
+                    structureManager.MoveUnit(UnitSelected, tileSelected, true);
                 ResetGameState(true);
                 SetupUnitPosition();
             }
@@ -323,7 +329,7 @@ public class FightManager : MonoBehaviour
             {
                 if (IsShowingPath)
                 {
-                    structureManager.MoveUnit(UnitSelected, tileSelected);
+                    structureManager.MoveUnit(UnitSelected, tileSelected, false);
                     ResetGameState(true);
                 }
                 else
@@ -366,7 +372,7 @@ public class FightManager : MonoBehaviour
         if (targetMovementTileIndex < 0) targetMovementTileIndex = 0;
         Tile targetTile = structureManager.gameData.mapTiles[path[targetMovementTileIndex].tileNumber];
 
-        structureManager.MoveUnit(UnitSelected, targetTile);
+        structureManager.MoveUnit(UnitSelected, targetTile, false);
         ActionInQueue = ActionPerformed.Attack;
         ActionTarget = defender.gameObject;
         UnitSelected = attacker;
@@ -457,6 +463,7 @@ public enum ActionPerformed
 {
     FightMovement,
     RogueMovement,
+    FightTeleport,
     Attack,
     Default,
 }

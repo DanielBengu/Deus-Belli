@@ -116,4 +116,13 @@ public class Movement
         movingUnit.transform.LookAt(nextTile, Vector3.up);
         StartObjectMovement(movingUnit.transform, nextTile);
     }
+
+    public void TeleportUnit(Unit unit, Tile tile)
+	{
+        unit.transform.position = new(tile.transform.position.x, unit.transform.position.y, tile.transform.position.z);
+
+        unit.CurrentTile.unitOnTile = null;
+        tile.unitOnTile = unit;
+        unit.CurrentTile = tile;
+    }
 }
