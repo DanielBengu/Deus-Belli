@@ -65,8 +65,7 @@ public class StructureManager : MonoBehaviour
 
     public RogueNode GenerateRogueTile(int currentRow, int positionOnRow, int maxRowOnMap, int nodeIndex, int nodeSeed, Transform origin, Transform firstNode, RogueManager rm)
 	{
-        Random.InitState(nodeSeed);
-        int randomLength = Random.Range(3, 6);
+        int randomLength = RandomManager.GetRandomValue(nodeSeed, 3, 6);
         Vector3 tilePosition = origin.position;
         float precedentRowX = firstNode.transform.position.x + (450 * (currentRow - 1));
         tilePosition.x = precedentRowX + 150 + (50 * randomLength); //sourceTile.transform.position.x + 150 + (50 * randomLength);
@@ -88,16 +87,13 @@ public class StructureManager : MonoBehaviour
             return RogueTileType.Boss;
 
         int seed = rm.seedList[RogueManager.SeedType.RogueTile];
-        Random.InitState(seed);
-
-        int minibossRow = Random.Range(3, 5);
+        int minibossRow = RandomManager.GetRandomValue(seed, 3, 5);
         if (minibossRow == currentRow)
             return RogueTileType.Miniboss;
         if (currentRow == 1)
             return RogueTileType.Fight;
 
         seed = rm.seedList[RogueManager.SeedType.RogueTile] * (nodeIndex + 1);
-        Random.InitState(seed);
 
         int weightOfFightEncounter = 6;
         int weightOffEventEncounter = 2;
@@ -114,7 +110,8 @@ public class StructureManager : MonoBehaviour
         for (int i = 0; i < weightOffMerchantEncounter; i++)
             weights[offset + i] = RogueTileType.Merchant;
 
-        RogueTileType rogueTileType = weights[Random.Range(0, weights.Length)];
+        int weightIndex = RandomManager.GetRandomValue(seed, 0, weights.Length);
+        RogueTileType rogueTileType = weights[weightIndex];
 
         return rogueTileType;
     }

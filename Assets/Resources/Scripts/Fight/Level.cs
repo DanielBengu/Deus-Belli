@@ -15,13 +15,16 @@ public class Level
     //Key represents the assigned tile number of the unit
     public Dictionary<int, GameObject> enemyList;
 
-    public void StartLevel(Dictionary<int, GameObject> enemyList)
+	public int seed;
+
+    public void StartLevel(int seed, Dictionary<int, GameObject> enemyList)
     {
-        TopLeftSquarePositionX = 400;
+		int MapSize = RandomManager.GetRandomValue(seed, 7, 8);
+		TopLeftSquarePositionX = 400;
         TopLeftSquarePositionZ = 1600;
         YPosition = 170;
-        HorizontalTiles = 7;
-        VerticalTiles = 7;
+        HorizontalTiles = MapSize;
+        VerticalTiles = MapSize;
         //tilesDict = SetupTiles();
         this.enemyList = enemyList;
     }

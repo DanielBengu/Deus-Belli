@@ -15,8 +15,7 @@ public class Event
 	{
 		string[] possibleEvents = GetPossibleEvents();
 
-		Random.InitState(seed);
-		int randomLength = Random.Range(0, possibleEvents.Length);
+		int randomLength = RandomManager.GetRandomValue(seed, 0, possibleEvents.Length);
 
 		LoadEvent(possibleEvents[randomLength]);
 

@@ -9,6 +9,7 @@ public class AIManager : MonoBehaviour
     StructureManager structureManager;
     FightManager fightManager;
     readonly Queue<Unit> unitsToCalculate = new();
+    public int seed = 0;
     
     /// <summary>
     /// Start is called on the frame when a script is enabled just before
@@ -77,7 +78,8 @@ public class AIManager : MonoBehaviour
         if (possibleAttacks.Count == 0)
             return;
 
-        Tile attackTarget = possibleAttacks[Random.Range(0, possibleAttacks.Count)]; //Attack at random possible targets
+        int randomChoice = RandomManager.GetRandomValue(seed, 0, possibleAttacks.Count);
+        Tile attackTarget = possibleAttacks[randomChoice]; //Attack at random possible targets
         Debug.Log($"AI ATTACKING TILE N.{attackTarget.tileNumber}");
         fightManager.UnitSelected = unit;
         fightManager.QueueAttack(unit, attackTarget.unitOnTile);
@@ -87,7 +89,7 @@ public class AIManager : MonoBehaviour
     {
         if (possibleMovements.Count == 0)
             return;
-        int randomInt = Random.Range(0, possibleMovements.Count);
+        int randomInt = RandomManager.GetRandomValue(seed, 0, possibleMovements.Count);
         Debug.Log($"AI MOVING TO TILE N.{possibleMovements[randomInt].tileNumber}");
         Tile destinationTile = GameObject.Find($"Terrain_{possibleMovements[randomInt].tileNumber}").GetComponent<Tile>();
         structureManager.CalculateMapTilesDistance(unit);

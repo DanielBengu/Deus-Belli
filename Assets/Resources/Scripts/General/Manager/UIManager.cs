@@ -53,7 +53,8 @@ public class UIManager : MonoBehaviour
     }
     public void SetFightEndPhaseButton()
     {
-        TextMeshProUGUI buttonText = GameObject.Find("End Phase TEXT").GetComponent<TextMeshProUGUI>();
+        endTurnButton = GameObject.Find("End Phase TEXT");
+        TextMeshProUGUI buttonText = endTurnButton.GetComponent<TextMeshProUGUI>();
         buttonText.text = $"End Turn";
         SetInfoPanel(false);
     }

@@ -60,15 +60,13 @@ public class RogueManager : MonoBehaviour
 
         generalManager.CurrentRow = currentRow;
         generalManager.CurrentPositionInRow = currentPositionOnRow;
-        Random.InitState(masterSeed);
         seedList.Add(SeedType.Master, masterSeed);
-        seedList.Add(SeedType.RogueTile, Random.Range(0, 99999));
-        seedList.Add(SeedType.MapLength, Random.Range(100000, 199999));
-        seedList.Add(SeedType.NodesOnRow, Random.Range(200000, 299999));
+        seedList.Add(SeedType.RogueTile, RandomManager.GetRandomValue(masterSeed, 0, 99999));
+        seedList.Add(SeedType.MapLength, RandomManager.GetRandomValue(masterSeed, 100000, 199999));
+        seedList.Add(SeedType.NodesOnRow, RandomManager.GetRandomValue(masterSeed, 200000, 299999));
         this.StructureManager = structureManager;
 
-        Random.InitState(seedList[SeedType.MapLength]);
-        maxNode = Random.Range(7, 9);
+        maxNode = RandomManager.GetRandomValue(seedList[SeedType.MapLength], 7, 9);
         
         GenerateMap();
         RogueNode currentNode = tileList.Find(t => t.mapRow == currentRow && t.positionInRow == currentPositionOnRow);
@@ -97,7 +95,6 @@ public class RogueManager : MonoBehaviour
 	{
         List<RogueNode> newNodes = new();
         List<RogueNode> previousRowNodes = tileList.Where(t => t.mapRow == row - 1).OrderBy(t=> t.positionInRow).ToList();
-        Random.InitState(seedList[SeedType.NodesOnRow] + row);
         int nodesOnCurrentRow;
         int nodesOnPreviousRow = previousRowNodes.Count;
         int maximumNodesPossibleForCurrentRow = nodesOnPreviousRow < MAXIMUM_NODES ? nodesOnPreviousRow + 1 : MAXIMUM_NODES;
@@ -112,7 +109,7 @@ public class RogueManager : MonoBehaviour
         else if (row == maxNode - 1)
             nodesOnCurrentRow = 2;
         else
-            nodesOnCurrentRow = Random.Range(MINIMUM_NODES, maximumNodesPossibleForCurrentRow + 1);
+            nodesOnCurrentRow = RandomManager.GetRandomValue(seedList[SeedType.NodesOnRow] + row, MINIMUM_NODES, maximumNodesPossibleForCurrentRow + 1);
 
 		for (int i = 0; i < nodesOnCurrentRow; i++)
 		{
@@ -133,7 +130,6 @@ public class RogueManager : MonoBehaviour
 	{
         int randomSeed = seedList[SeedType.NodesOnRow] * nodesOnCurrentRow * (currentRow + 1);
 
-        Random.InitState(randomSeed);
         int firstNodeInPreviousRowPosition = previousRowNodes.First().positionInRow;
 
 		int minimumOffset;
@@ -152,12 +148,11 @@ public class RogueManager : MonoBehaviour
         if (previousRowNodes.Count == MAXIMUM_NODES && nodesOnCurrentRow == MINIMUM_NODES)
             position = firstNodeInPreviousRowPosition + 1;
         else if (previousRowNodes.Count == 2 && nodesOnCurrentRow == 1)
-            position = Random.Range(firstNodeInPreviousRowPosition, firstNodeInPreviousRowPosition + 1);
+            position = RandomManager.GetRandomValue(randomSeed, firstNodeInPreviousRowPosition, firstNodeInPreviousRowPosition + 1);
         else if (nodesOnCurrentRow == 4)
             position = 0;
         else
-            position = Random.Range(minimumOffset, maximumOffset + 1);
-
+            position = RandomManager.GetRandomValue(randomSeed, minimumOffset, maximumOffset + 1);
 
 		return position;
     }
@@ -167,7 +162,7 @@ public class RogueManager : MonoBehaviour
         
         foreach (var parent in tileParents)
 		{
-            Random.InitState(seedList[SeedType.RogueTile] * parent.mapRow * parent.positionInRow);
+            int seed = seedList[SeedType.RogueTile] * parent.mapRow * parent.positionInRow;
             List<RogueNode> possibleLinks = tileChilds.Where(t =>
             (t.positionInRow == parent.positionInRow - 1) ||
             (t.positionInRow == parent.positionInRow) ||
@@ -186,7 +181,7 @@ public class RogueManager : MonoBehaviour
                 if (isParentTileFirstInRow && link.positionInRow == possibleLinks.Min(t => t.positionInRow) ||
                         isParentTileLastInRow && link.positionInRow == possibleLinks.Max(t => t.positionInRow))
                     linksToAdd.Add(link);
-                else if (!isCrossingWithPreviousParent && Random.Range(0, 2) == 1)
+                else if (!isCrossingWithPreviousParent && RandomManager.GetRandomValue(seed, 0, 2) == 1)
                     linksToAdd.Add(link);
             }
 
@@ -200,7 +195,7 @@ public class RogueManager : MonoBehaviour
         //Check for unlinked childs to force
         foreach (var node in nodes.Where(t => t.mapRow != 0 && t.rogueParents.Count == 0))
         {
-            Random.InitState(seedList[SeedType.RogueTile] * node.mapRow * node.positionInRow);
+            int seed = seedList[SeedType.RogueTile] * node.mapRow * node.positionInRow;
             List<RogueNode> possibleChoices = nodes.Where(t => t.mapRow == node.mapRow - 1 &&
             ((t.positionInRow == node.positionInRow - 1) ||
             (t.positionInRow == node.positionInRow) ||
@@ -217,7 +212,7 @@ public class RogueManager : MonoBehaviour
                     tempChoices.Add(parent);
             }
 
-            int randomChoice = Random.Range(tempChoices.Min(t => t.positionInRow), tempChoices.Max(t => t.positionInRow) + 1);
+            int randomChoice = RandomManager.GetRandomValue(seed, tempChoices.Min(t => t.positionInRow), tempChoices.Max(t => t.positionInRow) + 1);
             RogueNode parentToLink = possibleChoices.Find(t => t.positionInRow == randomChoice);
             parentToLink.rogueChilds.Add(node);
             node.rogueParents.Add(parentToLink);
@@ -226,7 +221,7 @@ public class RogueManager : MonoBehaviour
         //Check for unlinked parents to force
         foreach (var node in nodes.Where(t => t.mapRow != maxNode && t.rogueChilds.Count == 0))
         {
-            Random.InitState(seedList[SeedType.RogueTile] * node.mapRow * node.positionInRow);
+            int seed = seedList[SeedType.RogueTile] * node.mapRow * node.positionInRow;
             List<RogueNode> possibleChoices = nodes.Where(t =>  t.mapRow == node.mapRow + 1 &&
             ((t.positionInRow == node.positionInRow - 1) ||
             (t.positionInRow == node.positionInRow) ||
@@ -243,7 +238,7 @@ public class RogueManager : MonoBehaviour
                     tempChoices.Add(child);
             }
 
-            int randomChoice = Random.Range(tempChoices.Min(t => t.positionInRow), tempChoices.Max(t => t.positionInRow) + 1);
+            int randomChoice = RandomManager.GetRandomValue(seed, tempChoices.Min(t => t.positionInRow), tempChoices.Max(t => t.positionInRow) + 1);
             RogueNode childToLink = possibleChoices.Find(t => t.positionInRow == randomChoice);
             childToLink.rogueParents.Add(node);
             node.rogueChilds.Add(childToLink);
@@ -338,5 +333,6 @@ public class RogueManager : MonoBehaviour
         RogueTile, //Specific data for each node (e.g. Type of node)
         MapLength,
         NodesOnRow, //How much nodes we need to generate in each row and position offset
+        EnemyAI,
     }
 }

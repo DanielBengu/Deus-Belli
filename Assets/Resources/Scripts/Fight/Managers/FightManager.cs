@@ -78,7 +78,11 @@ public class FightManager : MonoBehaviour
     public void Setup(Level level)
 	{
         Debug.Log("START FIGHT MANAGER SETUP");
+
+        this.level = level;
+
         aiManager = GetComponent<AIManager>();
+        aiManager.seed = level.seed;
 
         StartLevel(level);
 
@@ -89,7 +93,6 @@ public class FightManager : MonoBehaviour
     {
         IsSetup = true;
 
-        this.level = level;
         level.SetupTiles();
 
         // Setup the terrain based on the level information
@@ -251,9 +254,9 @@ public class FightManager : MonoBehaviour
 		{
             ResetGameState(false);
             SetupUnitPosition();
-            bool isPositionable = !UnitSelected && SetupTiles.Contains(unit.CurrentTile.tileNumber);
-            TileType typeOfSelection = UnitSelected ? TileType.Selected : TileType.Positionable;
-            structureManager.SelectTiles(unit.CurrentTile.ToList(), false, typeOfSelection);
+            if (unit.faction == ENEMY_FACTION)
+                UnitSelected = null;
+            structureManager.SelectTiles(unit.CurrentTile.ToList(), false, TileType.Selected);
         }
 		else
 		{
