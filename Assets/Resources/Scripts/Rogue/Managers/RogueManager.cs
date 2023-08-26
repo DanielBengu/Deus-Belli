@@ -276,7 +276,20 @@ public class RogueManager : MonoBehaviour
 	{
         GeneralManager gm = GameObject.Find(GeneralManager.GENERAL_MANAGER_OBJ_NAME).GetComponent<GeneralManager>();
 
-        gm.selectedNode.currentEvent.Options[choice].OptionFunction(ref gm.runData);
+        EventOption eventOption = gm.selectedNode.currentEvent.Options[choice];
+
+        foreach (var func in eventOption.OptionFunction)
+        {
+            EventEntity entity = new()
+            {
+                runData = gm.runData,
+                objToAdd = func.objToAdd,
+                objToAddEnum = func.objToAddEnum
+            };
+
+            func.funcToCall(ref entity);
+            gm.runData = entity.runData;
+        }
 
         gm.ReturnToRogue(RogueTileType.Event, false);
     }

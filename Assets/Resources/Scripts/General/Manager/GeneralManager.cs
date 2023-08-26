@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -67,7 +68,7 @@ public class GeneralManager : MonoBehaviour
             string godSelected = PlayerPrefs.GetString(GOD_SELECTED_PP);
             int optionalSeed = PlayerPrefs.GetInt(SEED);
             int masterSeed = optionalSeed > 0 ? optionalSeed : Math.Abs(Guid.NewGuid().GetHashCode());
-            runData = new RunData(godSelected, 0, 1, masterSeed, 0);
+            runData = new RunData(godSelected, 0, 1, masterSeed, 0, new());
 
             PlayerPrefs.SetInt(SEED, masterSeed);
             PlayerPrefs.SetInt(GOLD, 0);
@@ -116,7 +117,7 @@ public class GeneralManager : MonoBehaviour
         int currentRow = PlayerPrefs.GetInt(CURRENT_ROW);
         int currentPositionInRow = PlayerPrefs.GetInt(CURRENT_POSITION_IN_ROW);
         int gold = PlayerPrefs.GetInt(GOLD);
-        return new RunData(godSelected, currentRow, currentPositionInRow, masterSeed, gold);
+        return new RunData(godSelected, currentRow, currentPositionInRow, masterSeed, gold, new());
 	}
 
 	public void SaveGameProgress(GameStatus status)
@@ -169,7 +170,7 @@ public class GeneralManager : MonoBehaviour
 
     void DestroyRogueSection()
     {
-        runData = new(GodSelected, CurrentRow, CurrentPositionInRow, rogueManager.seedList[RogueManager.SeedType.Master], Gold);
+        runData = new(GodSelected, CurrentRow, CurrentPositionInRow, rogueManager.seedList[RogueManager.SeedType.Master], Gold, new());
         Destroy(rogueSectionInstance);
     }
 
@@ -255,14 +256,16 @@ public class GeneralManager : MonoBehaviour
         public int masterSeed;
 
         public int gold;
+        public List<GameObject> unitList;
 
-        public RunData(string godSelected,int currentRow, int currentPositionInRow, int masterSeed, int gold)
+        public RunData(string godSelected,int currentRow, int currentPositionInRow, int masterSeed, int gold, List<GameObject> unitList)
         {
             this.godSelected = godSelected;
             this.currentRow = currentRow;
             this.currentPositionInRow = currentPositionInRow;
             this.masterSeed = masterSeed;
             this.gold = gold;
+            this.unitList = unitList;
         }
     }
 

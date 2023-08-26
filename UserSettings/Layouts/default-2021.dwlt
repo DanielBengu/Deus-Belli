@@ -189,8 +189,8 @@ MonoBehaviour:
     y: 0
     width: 185
     height: 773
-  m_MinSize: {x: 201, y: 221}
-  m_MaxSize: {x: 4001, y: 4021}
+  m_MinSize: {x: 200, y: 200}
+  m_MaxSize: {x: 4000, y: 4000}
   m_ActualView: {fileID: 13}
   m_Panes:
   - {fileID: 13}
@@ -403,9 +403,9 @@ MonoBehaviour:
   m_SceneHierarchy:
     m_TreeViewState:
       scrollPos: {x: 0, y: 0}
-      m_SelectedIDs: c8aefeff
+      m_SelectedIDs: 
       m_LastClickedID: 0
-      m_ExpandedIDs: 46affeff4aaffeff92c0feff96c0fefffc95ffff3298ffff22fbffff
+      m_ExpandedIDs: 769affff2afbffff
       m_RenameOverlay:
         m_UserAcceptedRename: 0
         m_Name: 
@@ -710,9 +710,9 @@ MonoBehaviour:
   m_PlayAudio: 0
   m_AudioPlay: 0
   m_Position:
-    m_Target: {x: 1308.5283, y: -775.0453, z: 2223.588}
+    m_Target: {x: 405.85684, y: -204.84529, z: 2521.215}
     speed: 2
-    m_Value: {x: 1308.5283, y: -775.0453, z: 2223.588}
+    m_Value: {x: 405.85684, y: -204.84529, z: 2521.215}
   m_RenderMode: 0
   m_CameraMode:
     drawMode: 0
@@ -759,13 +759,13 @@ MonoBehaviour:
     m_GridAxis: 1
     m_gridOpacity: 0.5
   m_Rotation:
-    m_Target: {x: 0.21298209, y: -0.040719695, z: 0.008896893, w: 0.976191}
+    m_Target: {x: 0.22029747, y: -0.04065183, z: 0.009202093, w: 0.9745661}
     speed: 2
-    m_Value: {x: 0.21297704, y: -0.04071873, z: 0.0088966815, w: 0.9761678}
+    m_Value: {x: 0.22029227, y: -0.04065087, z: 0.009201876, w: 0.9745431}
   m_Size:
-    m_Target: 1785.0878
+    m_Target: 1158.3105
     speed: 2
-    m_Value: 1785.0878
+    m_Value: 1158.3105
   m_Ortho:
     m_Target: 0
     speed: 2
@@ -977,22 +977,22 @@ MonoBehaviour:
     m_SkipHidden: 1
     m_SearchArea: 1
     m_Folders:
-    - Assets/Resources/Scripts/General/Extensions
+    - Assets/Resources/Scripts/Rogue
     m_Globs: []
     m_OriginalText: 
   m_ViewMode: 1
   m_StartGridSize: 16
   m_LastFolders:
-  - Assets/Resources/Scripts/General/Extensions
+  - Assets/Resources/Scripts/Rogue
   m_LastFoldersGridSize: 16
   m_LastProjectPath: C:\Users\Daniel\The God Cup
   m_LockTracker:
     m_IsLocked: 0
   m_FolderTreeState:
-    scrollPos: {x: 0, y: 339}
-    m_SelectedIDs: 7abb0000
-    m_LastClickedID: 47994
-    m_ExpandedIDs: 000000009e810000a0810000a2810000a4810000a6810000a8810000aa810000ac810000ae810000b0810000b2810000b4810000b6810000b8810000ba810000bc810000be810000c0810000c2810000c48100005483000000ca9a3b
+    scrollPos: {x: 0, y: 371}
+    m_SelectedIDs: be810000
+    m_LastClickedID: 33214
+    m_ExpandedIDs: 000000009c8100009e810000a0810000a2810000a4810000a6810000a8810000aa810000ac810000ae810000b0810000b2810000b4810000b6810000b8810000ba810000bc810000be810000c0810000c28100005283000000ca9a3b
     m_RenameOverlay:
       m_UserAcceptedRename: 0
       m_Name: 
@@ -1020,7 +1020,7 @@ MonoBehaviour:
     scrollPos: {x: 0, y: 0}
     m_SelectedIDs: 
     m_LastClickedID: 0
-    m_ExpandedIDs: 000000009e810000a0810000a2810000a4810000a6810000a8810000aa810000ac810000ae810000b0810000b2810000b4810000b6810000b8810000ba810000bc810000be810000c0810000c2810000c4810000
+    m_ExpandedIDs: 000000009c8100009e810000a0810000a2810000a4810000a6810000a8810000aa810000ac810000ae810000b0810000b2810000b4810000b6810000b8810000ba810000bc810000be810000c0810000c2810000
     m_RenameOverlay:
       m_UserAcceptedRename: 0
       m_Name: 
@@ -1045,24 +1045,24 @@ MonoBehaviour:
       m_Icon: {fileID: 0}
       m_ResourceFile: 
   m_ListAreaState:
-    m_SelectedInstanceIDs: 7ebb0000
-    m_LastClickedInstanceID: 47998
+    m_SelectedInstanceIDs: 
+    m_LastClickedInstanceID: 0
     m_HadKeyboardFocusLastEvent: 1
     m_ExpandedInstanceIDs: c62300009c5e0000025e00008a880000e2920000029b0000248e00000000000052cb0000a46e0000
     m_RenameOverlay:
       m_UserAcceptedRename: 0
-      m_Name: RandomExtension
-      m_OriginalName: RandomExtension
+      m_Name: 
+      m_OriginalName: 
       m_EditFieldRect:
         serializedVersion: 2
         x: 0
         y: 0
         width: 0
         height: 0
-      m_UserData: 47998
+      m_UserData: 0
       m_IsWaitingForDelay: 0
       m_IsRenaming: 0
-      m_OriginalEventType: 0
+      m_OriginalEventType: 11
       m_IsRenamingFilename: 1
       m_ClientGUIView: {fileID: 10}
     m_CreateAssetUtility:
