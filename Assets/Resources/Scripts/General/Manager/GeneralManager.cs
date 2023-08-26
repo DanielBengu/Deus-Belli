@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.IO;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -126,6 +127,17 @@ public class GeneralManager : MonoBehaviour
         PlayerPrefs.SetInt(CURRENT_ROW, runData.currentRow);
         PlayerPrefs.SetInt(CURRENT_POSITION_IN_ROW, runData.currentPositionInRow);
         PlayerPrefs.SetInt(GAME_STATUS, (int)status);
+        OverwriteUnitsData(runData.unitList);
+    }
+
+    public void OverwriteUnitsData(List<Unit> unitList)
+	{
+        string[] unitLines = new string[unitList.Count];
+		for (int i = 0; i < unitLines.Length; i++)
+		{
+            unitLines[i] = $"";
+		}
+        File.WriteAllLines("Assets\\Resources\\Scripts\\General\\Player Data\\Unit list.txt", unitLines);
     }
 
     void ManageKeysDown()
@@ -256,9 +268,9 @@ public class GeneralManager : MonoBehaviour
         public int masterSeed;
 
         public int gold;
-        public List<GameObject> unitList;
+        public List<Unit> unitList;
 
-        public RunData(string godSelected,int currentRow, int currentPositionInRow, int masterSeed, int gold, List<GameObject> unitList)
+        public RunData(string godSelected,int currentRow, int currentPositionInRow, int masterSeed, int gold, List<Unit> unitList)
         {
             this.godSelected = godSelected;
             this.currentRow = currentRow;

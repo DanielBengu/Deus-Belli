@@ -44,19 +44,31 @@ public class Event
 		ImageName = data[0];
 		Title = data[1];
 		Description = data[2];
-		string[] eventParse = data[4].Split(',');
-		char typeOfEvent = eventParse[0][0];
-		object eventValue = GetEventValue(typeOfEvent, eventParse[1].Remove(0, 1));
-		EventFunction func = new(GetTypeOfObject(typeOfEvent), eventValue, GetFunction(GetEvent(typeOfEvent)));
+		string[] eventParse1 = data[4].Split(',');
+		List<EventFunction> funcList1 = new();
+		for (int i = 0; i < eventParse1.Length; i++)
+		{
+			char typeOfEvent = eventParse1[i][0];
+			object eventValue = GetEventValue(typeOfEvent, eventParse1[i].Remove(0, 1));
+			funcList1.Add(new(GetTypeOfObject(typeOfEvent), eventValue, GetFunction(GetEvent(typeOfEvent))));
+		}
+		string[] eventParse2 = data[6].Split(',');
+		List<EventFunction> funcList2 = new();
+		for (int i = 0; i < eventParse2.Length; i++)
+		{
+			char typeOfEvent = eventParse2[i][0];
+			object eventValue = GetEventValue(typeOfEvent, eventParse2[i].Remove(0, 1));
+			funcList1.Add(new(GetTypeOfObject(typeOfEvent), eventValue, GetFunction(GetEvent(typeOfEvent))));
+		}
 		EventOption option1 = new(this)
 		{
 			OptionDescription = data[3],
-			OptionFunction = new() { func },
+			OptionFunction = funcList1,
 		};
 		EventOption option2 = new(this)
 		{
 			OptionDescription = data[5],
-			OptionFunction = new() { func },
+			OptionFunction = funcList2,
 		};
 		Options = new() { option1, option2 };
 	}
@@ -85,14 +97,14 @@ public class Event
 		return typeOfEvent switch
 		{
 			'g' => value,
-			'u' => 2,
+			'u' => ConvertDataToUnit(value),
 			_ => 0,
 		};
 	}
 
 	Unit ConvertDataToUnit(string data)
 	{
-		return null;
+		return Resources.Load<GameObject>($"Prefabs/Units/{data}").GetComponent<Unit>();
 	}
 
 	ObjectToAdd GetTypeOfObject(char type)
