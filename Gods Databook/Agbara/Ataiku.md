@@ -1,6 +1,7 @@
 # Ataiku
 
 ![image_hgpa4t4U_1678293548677_raw (1)](https://user-images.githubusercontent.com/38065137/228360956-8abf9d4e-ad35-47d0-818a-78e55b340ce4.jpg)
+Blame me for try
 
 ## Description
 
