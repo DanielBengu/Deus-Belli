@@ -412,6 +412,7 @@ GameObject:
   - component: {fileID: 1412221415}
   - component: {fileID: 1412221417}
   - component: {fileID: 1412221416}
+  - component: {fileID: 1412221418}
   m_Layer: 0
   m_Name: General Manager
   m_TagString: Untagged
@@ -435,8 +436,10 @@ MonoBehaviour:
   merchantSectionPrefab: {fileID: 6117302773034099411, guid: 9879b1d9b99b4be4aa37af125e2f2287, type: 3}
   fightSectionPrefab: {fileID: 1278397633198017817, guid: e3f7b2171804fe64ea5b30f32f1c89d1, type: 3}
   rogueSectionPrefab: {fileID: 6871625446447118757, guid: 4607e3baf5a716c449103d259bf51fc4, type: 3}
+  rogueManager: {fileID: 0}
   cameraManager: {fileID: 519420033}
   structureManager: {fileID: 1412221415}
+  fileManager: {fileID: 0}
   OptionsPrefab: {fileID: 7649992450677276450, guid: d7e1925e215cef34882fedb7bf94467a, type: 3}
   selectedNode: {fileID: 0}
 --- !u!4 &1412221414
@@ -496,6 +499,18 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   fightManager: {fileID: 0}
+--- !u!114 &1412221418
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1412221412}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6849c322e673cb64cafde9a626e8e416, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1616851528
 GameObject:
   m_ObjectHideFlags: 0

@@ -29,6 +29,7 @@ public class Event
 				eventEntity.runData.gold += Convert.ToInt32(eventEntity.objToAdd);
 				break;
 			case ObjectToAdd.Unit:
+				FileManager.SaveUnits((List<GameObject>)eventEntity.objToAdd);
 				break;
 		}
 	}
@@ -97,14 +98,9 @@ public class Event
 		return typeOfEvent switch
 		{
 			'g' => value,
-			'u' => ConvertDataToUnit(value),
+			'u' => FileManager.GetUnits(FileManager.DataSource.Custom, value.Split(';')),
 			_ => 0,
 		};
-	}
-
-	Unit ConvertDataToUnit(string data)
-	{
-		return Resources.Load<GameObject>($"Prefabs/Units/{data}").GetComponent<Unit>();
 	}
 
 	ObjectToAdd GetTypeOfObject(char type)

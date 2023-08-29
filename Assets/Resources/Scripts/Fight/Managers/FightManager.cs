@@ -124,7 +124,7 @@ public class FightManager : MonoBehaviour
     List<Unit> GenerateUnits(Dictionary<int, Tile> mapTiles)
     {
         List<Unit> unitList = new();
-        List<GameObject> playerUnits = GetPlayerUnits();
+        List<GameObject> playerUnits = generalManager.PlayerUnits;
 
 		foreach (var unit in playerUnits)
 		{
@@ -140,24 +140,6 @@ public class FightManager : MonoBehaviour
         }
         return unitList;
     }
-
-    List<GameObject> GetPlayerUnits()
-	{
-        List<GameObject> playerUnits = new();
-
-        string[] units = File.ReadAllLines("Assets\\Resources\\Scripts\\General\\Player Data\\Unit list.txt");
-
-		for (int i = 0; i < units.Length; i++)
-		{
-            string[] data = units[i].Split(';');
-            GameObject unitObject = Resources.Load<GameObject>($"Prefabs/Units/{data[0]}");
-            Unit unitScript = unitObject.GetComponent<Unit>();
-            unitScript.LoadData(data);
-            playerUnits.Add(unitObject);
-		}
-
-        return playerUnits;
-	}
 
     Unit GenerateSingleUnit(GameObject unit, Tile tile)
     {

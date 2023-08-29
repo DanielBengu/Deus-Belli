@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -41,6 +42,8 @@ public class GeneralManager : MonoBehaviour
     CameraManager cameraManager;
     [SerializeField]
     StructureManager structureManager;
+    [SerializeField]
+    FileManager fileManager;
 
     [SerializeField]
     GameObject OptionsPrefab;
@@ -57,6 +60,7 @@ public class GeneralManager : MonoBehaviour
     public string GodSelected { get { return runData.godSelected; } set { runData.godSelected = value; } }
 	public int CurrentRow { get { return runData.currentRow; } set { runData.currentRow = value; } }
 	public int CurrentPositionInRow { get { return runData.currentPositionInRow; } set { runData.currentPositionInRow = value; } }
+    public List<GameObject> PlayerUnits { get { return FileManager.GetUnits(FileManager.DataSource.PlayerUnits); } }
 
 
 	private void Start()
@@ -127,17 +131,7 @@ public class GeneralManager : MonoBehaviour
         PlayerPrefs.SetInt(CURRENT_ROW, runData.currentRow);
         PlayerPrefs.SetInt(CURRENT_POSITION_IN_ROW, runData.currentPositionInRow);
         PlayerPrefs.SetInt(GAME_STATUS, (int)status);
-        OverwriteUnitsData(runData.unitList);
-    }
-
-    public void OverwriteUnitsData(List<Unit> unitList)
-	{
-        string[] unitLines = new string[unitList.Count];
-		for (int i = 0; i < unitLines.Length; i++)
-		{
-            unitLines[i] = $"";
-		}
-        File.WriteAllLines("Assets\\Resources\\Scripts\\General\\Player Data\\Unit list.txt", unitLines);
+        FileManager.SaveUnits(runData.unitList.Select(u => u.gameObject).ToList());
     }
 
     void ManageKeysDown()

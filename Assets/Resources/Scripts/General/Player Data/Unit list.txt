@@ -1,2 +1,0 @@
-Male A;bob guerriero;Warrior_Artwork_XIV;10;4;2;1;21
-Male B;Arker;Warrior_Artwork_XIV;6;3;2;2;28
