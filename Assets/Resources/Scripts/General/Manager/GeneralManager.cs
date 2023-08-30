@@ -60,7 +60,7 @@ public class GeneralManager : MonoBehaviour
     public string GodSelected { get { return runData.godSelected; } set { runData.godSelected = value; } }
 	public int CurrentRow { get { return runData.currentRow; } set { runData.currentRow = value; } }
 	public int CurrentPositionInRow { get { return runData.currentPositionInRow; } set { runData.currentPositionInRow = value; } }
-    public List<GameObject> PlayerUnits { get { return FileManager.GetUnits(FileManager.DataSource.PlayerUnits); } }
+    public List<Unit> PlayerUnits { get { return runData.unitList; } }
 
 
 	private void Start()
@@ -73,7 +73,8 @@ public class GeneralManager : MonoBehaviour
             string godSelected = PlayerPrefs.GetString(GOD_SELECTED_PP);
             int optionalSeed = PlayerPrefs.GetInt(SEED);
             int masterSeed = optionalSeed > 0 ? optionalSeed : Math.Abs(Guid.NewGuid().GetHashCode());
-            runData = new RunData(godSelected, 0, 1, masterSeed, 0, new());
+            List<Unit> startingUnits = FileManager.GetUnits(FileManager.DataSource.PlayerUnits);
+            runData = new RunData(godSelected, 0, 1, masterSeed, 0, startingUnits);
 
             PlayerPrefs.SetInt(SEED, masterSeed);
             PlayerPrefs.SetInt(GOLD, 0);
@@ -122,7 +123,8 @@ public class GeneralManager : MonoBehaviour
         int currentRow = PlayerPrefs.GetInt(CURRENT_ROW);
         int currentPositionInRow = PlayerPrefs.GetInt(CURRENT_POSITION_IN_ROW);
         int gold = PlayerPrefs.GetInt(GOLD);
-        return new RunData(godSelected, currentRow, currentPositionInRow, masterSeed, gold, new());
+        List<Unit> unitList = FileManager.GetUnits(FileManager.DataSource.PlayerUnits);
+        return new RunData(godSelected, currentRow, currentPositionInRow, masterSeed, gold, unitList);
 	}
 
 	public void SaveGameProgress(GameStatus status)
@@ -176,7 +178,7 @@ public class GeneralManager : MonoBehaviour
 
     void DestroyRogueSection()
     {
-        runData = new(GodSelected, CurrentRow, CurrentPositionInRow, rogueManager.seedList[RogueManager.SeedType.Master], Gold, new());
+        runData = new(GodSelected, CurrentRow, CurrentPositionInRow, rogueManager.seedList[RogueManager.SeedType.Master], Gold, PlayerUnits);
         Destroy(rogueSectionInstance);
     }
 

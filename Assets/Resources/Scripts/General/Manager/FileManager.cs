@@ -6,9 +6,9 @@ using UnityEngine;
 public class FileManager : MonoBehaviour
 {
 	const string PLAYER_UNITS_PATH = "Assets\\Resources\\Scripts\\General\\Player Data\\Unit list.txt";
-	public static List<GameObject> GetUnits(DataSource source, string[] CustomData = null)
+	public static List<Unit> GetUnits(DataSource source, string[] CustomData = null)
 	{
-		List<GameObject> playerUnits = new();
+		List<Unit> playerUnits = new();
 		string[] units;
 
 		switch (source)
@@ -25,11 +25,17 @@ public class FileManager : MonoBehaviour
 
 		for (int i = 0; i < units.Length; i++)
 		{
-			string[] data = units[i].Split('#');
-			GameObject unitObject = Resources.Load<GameObject>($"Prefabs/Units/{data[0]}");
-			Unit unitScript = unitObject.GetComponent<Unit>();
-			unitScript.LoadData(data);
-			playerUnits.Add(unitObject);
+			try
+			{
+				string[] data = units[i].Split('#');
+				GameObject unitObject = Resources.Load<GameObject>($"Prefabs/Units/{data[0]}");
+				Unit unitScript = unitObject.GetComponent<Unit>();
+				unitScript.LoadData(data);
+				playerUnits.Add(unitScript);
+			}
+			catch
+			{
+			}
 		}
 
 		return playerUnits;
@@ -40,7 +46,8 @@ public class FileManager : MonoBehaviour
 		List<string> dataLines = new();
 		foreach (var item in units)
 		{
-			dataLines.Add($"");
+			Unit unitScript = item.GetComponent<Unit>();
+			dataLines.Add($"{item.name.Substring(0, 6)}#{unitScript.unitName}#{unitScript.unitImage.name}#{unitScript.hpMax}#{unitScript.movementMax}#{unitScript.attack}#{unitScript.range}#{unitScript.startingTileNumber}");
 		}
 		File.WriteAllLines(PLAYER_UNITS_PATH, dataLines);
 	}

@@ -124,7 +124,7 @@ public class FightManager : MonoBehaviour
     List<Unit> GenerateUnits(Dictionary<int, Tile> mapTiles)
     {
         List<Unit> unitList = new();
-        List<GameObject> playerUnits = generalManager.PlayerUnits;
+        List<GameObject> playerUnits = generalManager.PlayerUnits.Select(u => u.gameObject).ToList();
 
 		foreach (var unit in playerUnits)
 		{

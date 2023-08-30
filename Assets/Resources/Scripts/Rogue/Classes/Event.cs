@@ -59,7 +59,7 @@ public class Event
 		{
 			char typeOfEvent = eventParse2[i][0];
 			object eventValue = GetEventValue(typeOfEvent, eventParse2[i].Remove(0, 1));
-			funcList1.Add(new(GetTypeOfObject(typeOfEvent), eventValue, GetFunction(GetEvent(typeOfEvent))));
+			funcList2.Add(new(GetTypeOfObject(typeOfEvent), eventValue, GetFunction(GetEvent(typeOfEvent))));
 		}
 		EventOption option1 = new(this)
 		{
