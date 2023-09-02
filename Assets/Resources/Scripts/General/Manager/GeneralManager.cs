@@ -133,7 +133,7 @@ public class GeneralManager : MonoBehaviour
         PlayerPrefs.SetInt(CURRENT_ROW, runData.currentRow);
         PlayerPrefs.SetInt(CURRENT_POSITION_IN_ROW, runData.currentPositionInRow);
         PlayerPrefs.SetInt(GAME_STATUS, (int)status);
-        FileManager.SaveUnits(runData.unitList.Select(u => u.gameObject).ToList());
+        FileManager.SaveUnits(runData.unitList.Select(u => u.gameObject).ToList(), true);
     }
 
     void ManageKeysDown()

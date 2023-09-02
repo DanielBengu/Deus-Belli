@@ -41,7 +41,7 @@ public class FileManager : MonoBehaviour
 		return playerUnits;
 	}
 
-	public static void SaveUnits(List<GameObject> units)
+	public static void SaveUnits(List<GameObject> units, bool overwriteCurrentList)
 	{
 		List<string> dataLines = new();
 		foreach (var item in units)
@@ -49,7 +49,12 @@ public class FileManager : MonoBehaviour
 			Unit unitScript = item.GetComponent<Unit>();
 			dataLines.Add($"{item.name.Substring(0, 6)}#{unitScript.unitName}#{unitScript.unitImage.name}#{unitScript.hpMax}#{unitScript.movementMax}#{unitScript.attack}#{unitScript.range}#{unitScript.startingTileNumber}");
 		}
-		File.WriteAllLines(PLAYER_UNITS_PATH, dataLines);
+
+		if (overwriteCurrentList)
+			File.WriteAllLines(PLAYER_UNITS_PATH, dataLines);
+		else
+			File.AppendAllLines(PLAYER_UNITS_PATH, dataLines);
+		
 	}
 
 	public enum DataSource

@@ -19,7 +19,7 @@ MonoBehaviour:
     width: 1858
     height: 1037
   m_ShowMode: 4
-  m_Title: Scene
+  m_Title: Game
   m_RootView: {fileID: 2}
   m_MinSize: {x: 875, y: 371}
   m_MaxSize: {x: 10000, y: 10000}
@@ -403,9 +403,9 @@ MonoBehaviour:
   m_SceneHierarchy:
     m_TreeViewState:
       scrollPos: {x: 0, y: 0}
-      m_SelectedIDs: 685e0000
-      m_LastClickedID: 24168
-      m_ExpandedIDs: 86b1ffff2afbffff405e0000
+      m_SelectedIDs: 2e0f0000
+      m_LastClickedID: 0
+      m_ExpandedIDs: 2afbffff
       m_RenameOverlay:
         m_UserAcceptedRename: 0
         m_Name: 
@@ -710,9 +710,9 @@ MonoBehaviour:
   m_PlayAudio: 0
   m_AudioPlay: 0
   m_Position:
-    m_Target: {x: 405.85684, y: -204.84529, z: 2521.215}
+    m_Target: {x: 583.00323, y: -202.61816, z: 2536.6743}
     speed: 2
-    m_Value: {x: 405.85684, y: -204.84529, z: 2521.215}
+    m_Value: {x: 583.00323, y: -202.61816, z: 2536.6743}
   m_RenderMode: 0
   m_CameraMode:
     drawMode: 0
@@ -759,9 +759,9 @@ MonoBehaviour:
     m_GridAxis: 1
     m_gridOpacity: 0.5
   m_Rotation:
-    m_Target: {x: 0.22029747, y: -0.04065183, z: 0.009202093, w: 0.9745661}
+    m_Target: {x: 0.21598203, y: -0.03191143, z: 0.00707488, w: 0.9758733}
     speed: 2
-    m_Value: {x: 0.22029227, y: -0.04065087, z: 0.009201876, w: 0.9745431}
+    m_Value: {x: 0.21597715, y: -0.031910706, z: 0.0070747198, w: 0.9758512}
   m_Size:
     m_Target: 1158.3105
     speed: 2
@@ -977,22 +977,22 @@ MonoBehaviour:
     m_SkipHidden: 1
     m_SearchArea: 1
     m_Folders:
-    - Assets/Resources/Scripts
+    - Assets/Resources/Scripts/Rogue
     m_Globs: []
     m_OriginalText: 
   m_ViewMode: 1
   m_StartGridSize: 16
   m_LastFolders:
-  - Assets/Resources/Scripts
+  - Assets/Resources/Scripts/Rogue
   m_LastFoldersGridSize: 16
   m_LastProjectPath: C:\Users\Daniel\The God Cup
   m_LockTracker:
     m_IsLocked: 0
   m_FolderTreeState:
-    scrollPos: {x: 0, y: 339}
-    m_SelectedIDs: 42990000
-    m_LastClickedID: 39234
-    m_ExpandedIDs: 00000000a2810000a4810000a6810000a8810000aa810000ac810000ae810000b0810000b2810000b4810000b6810000b8810000ba810000bc810000be810000c0810000c2810000c4810000c6810000c88100004299000000ca9a3b
+    scrollPos: {x: 0, y: 371}
+    m_SelectedIDs: c4810000
+    m_LastClickedID: 33220
+    m_ExpandedIDs: 00000000a2810000a4810000a6810000a8810000aa810000ac810000ae810000b0810000b2810000b4810000b6810000b8810000ba810000bc810000be810000c0810000c2810000c4810000c6810000c88100005883000000ca9a3b
     m_RenameOverlay:
       m_UserAcceptedRename: 0
       m_Name: 
@@ -1051,18 +1051,18 @@ MonoBehaviour:
     m_ExpandedInstanceIDs: c62300009c5e0000025e00008a880000e2920000029b0000248e00000000000052cb0000a46e0000
     m_RenameOverlay:
       m_UserAcceptedRename: 0
-      m_Name: Unit list
-      m_OriginalName: Unit list
+      m_Name: 
+      m_OriginalName: 
       m_EditFieldRect:
         serializedVersion: 2
         x: 0
         y: 0
         width: 0
         height: 0
-      m_UserData: 33276
+      m_UserData: 0
       m_IsWaitingForDelay: 0
       m_IsRenaming: 0
-      m_OriginalEventType: 0
+      m_OriginalEventType: 11
       m_IsRenamingFilename: 1
       m_ClientGUIView: {fileID: 10}
     m_CreateAssetUtility:

@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using UnityEngine;
 using static GeneralManager;
 
@@ -29,7 +30,8 @@ public class Event
 				eventEntity.runData.gold += Convert.ToInt32(eventEntity.objToAdd);
 				break;
 			case ObjectToAdd.Unit:
-				FileManager.SaveUnits((List<GameObject>)eventEntity.objToAdd);
+				List<GameObject> unitList = ((List<Unit>)eventEntity.objToAdd).Select(u => u.gameObject).ToList();
+				FileManager.SaveUnits(unitList, false);
 				break;
 		}
 	}
