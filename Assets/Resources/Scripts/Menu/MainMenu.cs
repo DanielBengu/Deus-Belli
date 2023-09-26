@@ -10,14 +10,14 @@ public class MainMenu: MonoBehaviour
     [SerializeField]
     GameObject NewGamePrefab;
     [SerializeField]
-    Button ContinueButton;
+    Button ContinueText;
     [SerializeField]
     TextMeshProUGUI ContinueInfoText;
 
     private void Start()
 	{
         bool isRunOngoing = PlayerPrefs.GetInt(GeneralManager.ONGOING_RUN) != 0;
-        ContinueButton.interactable = isRunOngoing;
+        ContinueText.interactable = isRunOngoing;
         ContinueInfoText.text = isRunOngoing ? GetContinueInfoText() : string.Empty;
     }
 
