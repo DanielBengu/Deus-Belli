@@ -8,13 +8,6 @@ using UnityEngine.UI;
 public class NewGameManager : MonoBehaviour
 {
     [SerializeField]
-    GameObject ZeusPrefab;
-    [SerializeField]
-    GameObject PoseidonPrefab;
-    [SerializeField]
-    GameObject HadesPrefab;
-
-    [SerializeField]
     Button startButton;
     [SerializeField]
     TMP_InputField seedInputField;
@@ -23,6 +16,13 @@ public class NewGameManager : MonoBehaviour
     TextMeshProUGUI godData;
     [SerializeField]
     Image godImage;
+
+    [SerializeField]
+    GameObject ReligionsPrefab;
+    [SerializeField]
+    TextMeshProUGUI ReligionSelectedText;
+    [SerializeField]
+    GameObject GodsPrefab;
 
     private string godSelected;
 
@@ -36,7 +36,15 @@ public class NewGameManager : MonoBehaviour
         return ((Gods)god).ToString();
 	}
 
-    public void UpdateCharacterData(int god)
+    public void SelectReligion(int religionSelected)
+    {
+        ReligionSelectedText.gameObject.SetActive(true);
+        ReligionSelectedText.text = religionSelected.ToString();
+        ReligionsPrefab.SetActive(false);
+        Instantiate(GodsPrefab, transform);
+    }
+
+    public void SelectGod(int god)
 	{
         string godName = GetGodName(god);
         godSelected = godName;
@@ -51,9 +59,10 @@ public class NewGameManager : MonoBehaviour
 
         godImage.sprite = Resources.Load<Sprite>($"Sprites/Gods/{godName}");
     }
-
-    public void StartGame(){
-        if(godSelected != null){
+    public void StartGame()
+    {
+        if (godSelected != null)
+        {
             int seed = seedInputField.text == string.Empty ? 0 : int.Parse(seedInputField.text);
             PlayerPrefs.SetInt(GeneralManager.SEED, seed);
             PlayerPrefs.SetString(GeneralManager.GOD_SELECTED_PP, godSelected);
