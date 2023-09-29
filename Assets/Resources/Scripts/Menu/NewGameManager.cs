@@ -20,7 +20,7 @@ public class NewGameManager : MonoBehaviour
     [SerializeField]
     GameObject ReligionsPrefab;
     [SerializeField]
-    TextMeshProUGUI ReligionSelectedText;
+    GameObject ReligionSelectedText;
     [SerializeField]
     GameObject GodsPrefab;
 
@@ -31,15 +31,15 @@ public class NewGameManager : MonoBehaviour
         startButton.enabled = seedInputField.text.Length == 0 || seedInputField.text.Length > 2;
 	}
 
-    string GetGodName(int god)
+    static string GetGodName(int god)
 	{
         return ((Gods)god).ToString();
 	}
 
     public void SelectReligion(int religionSelected)
     {
-        ReligionSelectedText.gameObject.SetActive(true);
-        ReligionSelectedText.text = religionSelected.ToString();
+        ReligionSelectedText.SetActive(true);
+        ReligionSelectedText.transform.GetChild(0).GetComponent<TextMeshProUGUI>().text = ((Religions)religionSelected).ToString();
         ReligionsPrefab.SetActive(false);
         Instantiate(GodsPrefab, transform);
     }
@@ -76,5 +76,13 @@ public class NewGameManager : MonoBehaviour
         Zeus,
         Poseidon,
         Hades
+	}
+
+    public enum Religions
+	{
+        Alpha,
+        Beta,
+        Charlie,
+        Delta
 	}
 }

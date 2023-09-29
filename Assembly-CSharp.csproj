@@ -83,6 +83,7 @@
     <Compile Include="Assets\Resources\Scripts\Fight\Classes\Pathfinding.cs" />
     <Compile Include="Assets\Resources\Scripts\Menu\TextMenu.cs" />
     <Compile Include="Assets\Resources\Scripts\Fight\Unit.cs" />
+    <Compile Include="Assets\Resources\Scripts\Menu\CharactersButtonScript.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Assets\TextMesh Pro\Shaders\TMPro.cginc" />

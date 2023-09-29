@@ -271,6 +271,9 @@ public class RogueManager : MonoBehaviour
         if (!generalManager.IsGameInStandby)
             EndRun(1);
 	}
+    public void UnitsCheckClick()
+    {
+    }
 
     public void EventChoiceClick(int choice)
 	{
