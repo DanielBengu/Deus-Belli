@@ -66,6 +66,7 @@
     <Compile Include="Assets\Resources\Scripts\Rogue\RogueNode.cs" />
     <Compile Include="Assets\Resources\Scripts\Fight\Classes\AnimationPerformer.cs" />
     <Compile Include="Assets\Resources\Scripts\Fight\Level.cs" />
+    <Compile Include="Assets\Resources\Scripts\Menu\CharactersButtonScript.cs" />
     <Compile Include="Assets\Resources\Scripts\General\Manager\GeneralManager.cs" />
     <Compile Include="Assets\Resources\Scripts\Rogue\Classes\Merchant.cs" />
     <Compile Include="Assets\Resources\Scripts\Rogue\Classes\EventOption.cs" />
@@ -83,7 +84,6 @@
     <Compile Include="Assets\Resources\Scripts\Fight\Classes\Pathfinding.cs" />
     <Compile Include="Assets\Resources\Scripts\Menu\TextMenu.cs" />
     <Compile Include="Assets\Resources\Scripts\Fight\Unit.cs" />
-    <Compile Include="Assets\Resources\Scripts\Menu\CharactersButtonScript.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Assets\TextMesh Pro\Shaders\TMPro.cginc" />
@@ -114,6 +114,7 @@
     <None Include="Assets\TextMesh Pro\Shaders\TMP_Bitmap-Mobile.shader" />
     <None Include="Assets\TextMesh Pro\Fonts\LiberationSans - OFL.txt" />
     <None Include="Assets\TextMesh Pro\Shaders\TMP_SDF-Mobile.shader" />
+    <None Include="Assets\Resources\TXT\Gods\Agbara\Ataiku.txt" />
     <None Include="Assets\TextMesh Pro\Shaders\TMP_Sprite.shader" />
   </ItemGroup>
   <ItemGroup>

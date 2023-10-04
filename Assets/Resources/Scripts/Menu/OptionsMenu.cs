@@ -1,3 +1,4 @@
+using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -8,9 +9,7 @@ public class OptionsMenu : MonoBehaviour
     [SerializeField]
     GameObject MainPrefab;
     [SerializeField]
-    GameObject VideoSettingsPrefab;
-    [SerializeField]
-    GameObject SoundSettingsPrefab;
+    TextMeshProUGUI SeedText;
 
     string optionSelected;
     string currentScene;
@@ -21,15 +20,12 @@ public class OptionsMenu : MonoBehaviour
             GameObject abandonRunButton = GameObject.Find("Abandon RUN");
             abandonRunButton.SetActive(false);
         }
+        SeedText.text = PlayerPrefs.GetInt(GeneralManager.SEED).ToString();
     }
 
     void Update(){
-        if(Input.anyKeyDown){
-            if (Input.GetKeyDown(KeyCode.Escape))
-            {
-                Back();
-            }
-        }
+        if(Input.anyKeyDown && Input.GetKeyDown(KeyCode.Escape))
+            Back();
     }
 
     void Back(){
@@ -46,22 +42,6 @@ public class OptionsMenu : MonoBehaviour
         }
 
         Destroy(OptionsPrefab);
-    }
-
-    void VideoOptions(){
-        DestroySubOption();
-            
-        GameObject videoSettings = Instantiate(VideoSettingsPrefab,new Vector3(600, 250, 0),Quaternion.identity);
-        videoSettings.name = "Video";
-        optionSelected = "Video";
-    }
-
-    void SoundOptions(){
-        DestroySubOption();
-
-        GameObject soundSettings = Instantiate(SoundSettingsPrefab,new Vector3(600, 250, 0),Quaternion.identity);
-        soundSettings.name = "Sound";
-        optionSelected = "Sound";
     }
 
     void DestroySubOption(){

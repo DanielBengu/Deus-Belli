@@ -51,6 +51,8 @@ public class GeneralManager : MonoBehaviour
     public RunData runData;
     public RogueNode selectedNode;
 
+    Transform rogueMovableObjects;
+
     CurrentSection currentSection = CurrentSection.Rogue;
 
     public bool IsScrollButtonDown { get; set; }
@@ -109,7 +111,7 @@ public class GeneralManager : MonoBehaviour
             
             if(currentSection == CurrentSection.Rogue)
 			{
-                cameraManager.UpdatePosition(rogueSectionInstance.transform);
+                cameraManager.UpdatePosition(rogueSectionInstance.transform.GetChild(0));
                 rogueManager.GenerateNewNodeLines();
             }
         }

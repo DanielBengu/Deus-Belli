@@ -68,8 +68,6 @@ public class UIManager : MonoBehaviour
         rogueGold.text = gold.ToString();
         TextMeshProUGUI rogueGod = GameObject.Find("God Text").GetComponent<TextMeshProUGUI>();
         rogueGod.text = godSelected;
-        TextMeshProUGUI rogueSeed = GameObject.Find("Seed Value").GetComponent<TextMeshProUGUI>();
-        rogueSeed.text = seed.ToString();
     }
 
     public void SetMerchantVariables(int availableGold)
