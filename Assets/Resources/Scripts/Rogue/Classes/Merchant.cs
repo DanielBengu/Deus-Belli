@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.IO;
 using UnityEngine;
@@ -29,7 +30,7 @@ public class Merchant
 		return true;
 	}
 
-	void GenerateMerchantList(int seed)
+	void GenerateMerchantList()
 	{
 		string[] items = GetMerchantItems();
 
@@ -44,6 +45,25 @@ public class Merchant
 			else
 				ItemList[i] = new(new object(), "Item", int.Parse(data[2]));
 		}
+	}
+
+	void GenerateMerchantList(int seed)
+	{
+		ItemList = new MerchantItem[8];
+
+		for (int i = 0; i < ItemList.Length; i++)
+		{
+			int itemSeed = RandomManager.GetRandomValue(seed * (i + 1), seed, seed * 4);
+			ItemList[i] = GenerateMerchantItem(itemSeed);
+		}
+	}
+
+	MerchantItem GenerateMerchantItem(int seed)
+	{
+		int enumLength = Enum.GetValues(typeof(UnitsArchive.Units)).Length;
+		int unitType = RandomManager.GetRandomValue(seed, 0, enumLength);
+		Unit unit = UnitsArchive.GetUnit((UnitsArchive.Units)unitType).GetComponent<Unit>();
+		return new(unit, unit.name, 50);
 	}
 
 	string[] GetMerchantItems()
@@ -68,6 +88,7 @@ public struct MerchantItem{
 enum ItemType
 {
 	Unit,
+	Relic
 }
 
 enum ItemPool
