@@ -75,7 +75,8 @@ public class StructureManager : MonoBehaviour
         newTile.transform.localScale = new Vector3(1, 1, 1);
         RogueNode newTileScript = newTile.GetComponent<RogueNode>();
         RogueTileType typeOfNode = GenerateRogueNodeType(currentRow, maxRowOnMap, rm, nodeIndex);
-        Dictionary<int, GameObject> enemyList = GenerateEnemyList(typeOfNode);
+        int productionPoints = rm.GenerateProductionPoints();
+        Dictionary<int, GameObject> enemyList = GenerateEnemyList(typeOfNode, productionPoints);
         newTileScript.SetupTile(rm, typeOfNode, currentRow, positionOnRow, nodeIndex, enemyList, nodeSeed);
 
         return newTileScript;
@@ -116,7 +117,7 @@ public class StructureManager : MonoBehaviour
         return rogueTileType;
     }
 
-    public Dictionary<int, GameObject> GenerateEnemyList(RogueTileType tileType)
+    public Dictionary<int, GameObject> GenerateEnemyList(RogueTileType tileType, int productionPoints)
 	{
         Dictionary<int, GameObject> result = new();
 

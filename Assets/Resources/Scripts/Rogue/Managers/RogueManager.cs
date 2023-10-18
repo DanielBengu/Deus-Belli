@@ -313,6 +313,11 @@ public class RogueManager : MonoBehaviour
         fm.ReturnToRogue(RogueTileType.Merchant, false);
     }
 
+    public int GenerateProductionPoints()
+	{
+        return 0;
+	}
+
     public void EndRun(int runType)
 	{
         RunEndType runEndType = (RunEndType)runType;
