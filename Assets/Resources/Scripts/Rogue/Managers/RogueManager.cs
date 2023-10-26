@@ -8,7 +8,7 @@ public class RogueManager : MonoBehaviour
     const int MINIMUM_NODES = 2;
     const int MAXIMUM_NODES = 4;
 
-    GeneralManager generalManager;
+    public GeneralManager generalManager;
     public StructureManager StructureManager { get; set; }
 
     public RogueNode origin;
@@ -76,7 +76,7 @@ public class RogueManager : MonoBehaviour
 	void GenerateMap()
 	{
         RogueNode originTile = origin;
-        originTile.SetupTile(this, RogueTileType.Starting, originTile.mapRow, originTile.positionInRow, 0, new(), 0);
+        originTile.SetupTile(this, RogueTileType.Starting, originTile.mapRow, originTile.positionInRow, 0, 0);
         tileList.Add(originTile);
 
         for (int i = 1; i <= maxNode; i++)
@@ -312,11 +312,6 @@ public class RogueManager : MonoBehaviour
         GeneralManager fm = GameObject.Find(GeneralManager.GENERAL_MANAGER_OBJ_NAME).GetComponent<GeneralManager>();
         fm.ReturnToRogue(RogueTileType.Merchant, false);
     }
-
-    public int GenerateProductionPoints()
-	{
-        return 0;
-	}
 
     public void EndRun(int runType)
 	{

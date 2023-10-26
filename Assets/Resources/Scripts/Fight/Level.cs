@@ -17,7 +17,7 @@ public class Level
 
 	public int seed;
 
-    public void StartLevel(int seed, Dictionary<int, GameObject> enemyList)
+    public void StartLevel(int seed, RogueTileType tileType, int currentRow, int difficulty)
     {
 		int MapSize = RandomManager.GetRandomValue(seed, 7, 8);
 		TopLeftSquarePositionX = 400;
@@ -26,7 +26,7 @@ public class Level
         HorizontalTiles = MapSize;
         VerticalTiles = MapSize;
         //tilesDict = SetupTiles();
-        this.enemyList = enemyList;
+        SetupEnemies(tileType, currentRow, difficulty);
     }
 
 	public void SetupTiles()
@@ -57,5 +57,26 @@ public class Level
 			tilesDict.Add(i, tileObject);
 		}
 		this.tilesDict = tilesDict;
+	}
+
+	public void SetupEnemies(RogueTileType tileType, int currentRow, int difficulty)
+	{
+		Dictionary<int, GameObject> result = new();
+
+		Unit sorceressUnit = Resources.Load<GameObject>($"Prefabs/Units/Sorceress").GetComponent<Unit>();
+		Unit orcUnit = Resources.Load<GameObject>($"Prefabs/Units/Ork").GetComponent<Unit>();
+		Unit dragonUnit = Resources.Load<GameObject>($"Prefabs/Units/Sorceress").GetComponent<Unit>();
+		sorceressUnit.faction = 1;
+		orcUnit.faction = 1;
+		dragonUnit.faction = 1;
+
+		if (tileType == RogueTileType.Fight)
+			result.Add(9, sorceressUnit.gameObject);
+		else if (tileType == RogueTileType.Miniboss)
+			result.Add(9, orcUnit.gameObject);
+		else if (tileType == RogueTileType.Boss)
+			result.Add(9, dragonUnit.gameObject);
+
+		enemyList = result;
 	}
 }

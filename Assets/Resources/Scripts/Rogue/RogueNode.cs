@@ -15,7 +15,7 @@ public class RogueNode : MonoBehaviour
 	public int nodeIndex;
 	public int nodeSeed;
 
-	public void SetupTile(RogueManager rm, RogueTileType tileType, int mapRow, int positionInRow, int nodeIndex, Dictionary<int, GameObject> enemyList, int nodeSeed)
+	public void SetupTile(RogueManager rm, RogueTileType tileType, int mapRow, int positionInRow, int nodeIndex, int nodeSeed)
 	{
 		rogueManager = rm;
 		rogueTileType = tileType;
@@ -30,7 +30,7 @@ public class RogueNode : MonoBehaviour
 			case RogueTileType.Boss:
 			case RogueTileType.Miniboss:
 			case RogueTileType.Fight:
-				level.StartLevel(nodeSeed, enemyList);
+				level.StartLevel(nodeSeed, tileType, mapRow, rm.generalManager.Difficulty);
 				break;
 			case RogueTileType.Merchant:
 				merchant = new(nodeSeed);

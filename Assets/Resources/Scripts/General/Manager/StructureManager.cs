@@ -75,9 +75,7 @@ public class StructureManager : MonoBehaviour
         newTile.transform.localScale = new Vector3(1, 1, 1);
         RogueNode newTileScript = newTile.GetComponent<RogueNode>();
         RogueTileType typeOfNode = GenerateRogueNodeType(currentRow, maxRowOnMap, rm, nodeIndex);
-        int productionPoints = rm.GenerateProductionPoints();
-        Dictionary<int, GameObject> enemyList = GenerateEnemyList(typeOfNode, productionPoints);
-        newTileScript.SetupTile(rm, typeOfNode, currentRow, positionOnRow, nodeIndex, enemyList, nodeSeed);
+        newTileScript.SetupTile(rm, typeOfNode, currentRow, positionOnRow, nodeIndex, nodeSeed);
 
         return newTileScript;
     }
@@ -116,27 +114,6 @@ public class StructureManager : MonoBehaviour
 
         return rogueTileType;
     }
-
-    public Dictionary<int, GameObject> GenerateEnemyList(RogueTileType tileType, int productionPoints)
-	{
-        Dictionary<int, GameObject> result = new();
-
-        Unit sorceressUnit = sorceressPrefab.GetComponent<Unit>();
-        Unit orcUnit = orcPrefab.GetComponent<Unit>();
-        Unit dragonUnit = dragonPrefab.GetComponent<Unit>();
-        sorceressUnit.faction = 1;
-        orcUnit.faction = 1;
-        dragonUnit.faction = 1;
-
-        if (tileType == RogueTileType.Fight)
-            result.Add(9, sorceressUnit.gameObject);
-        else if (tileType == RogueTileType.Miniboss)
-            result.Add(9, orcUnit.gameObject);
-        else if (tileType == RogueTileType.Boss)
-            result.Add(9, dragonUnit.gameObject);
-
-        return result;
-	}
 
     public void GenerateRogueLine(List<RogueNode> tileList)
 	{

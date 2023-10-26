@@ -14,6 +14,7 @@ public class GeneralManager : MonoBehaviour
     public const string GAME_STATUS = "GameStatus";
     public const string SEED = "Seed";
     public const string GOLD = "Gold";
+    public const string DIFFICULTY = "Difficulty";
 
     public const int SCROLL_WHEEL_BUTTON = 2;
     public const string FIGHT_MANAGER_OBJ_NAME = "Fight Manager";
@@ -62,6 +63,7 @@ public class GeneralManager : MonoBehaviour
     public string GodSelected { get { return runData.godSelected; } set { runData.godSelected = value; } }
 	public int CurrentRow { get { return runData.currentRow; } set { runData.currentRow = value; } }
 	public int CurrentPositionInRow { get { return runData.currentPositionInRow; } set { runData.currentPositionInRow = value; } }
+	public int Difficulty { get { return runData.difficulty; } set { runData.difficulty = value; } }
     public List<Unit> PlayerUnits { get { return runData.unitList; } }
 
 
@@ -75,14 +77,16 @@ public class GeneralManager : MonoBehaviour
             string godSelected = PlayerPrefs.GetString(GOD_SELECTED_PP);
             int optionalSeed = PlayerPrefs.GetInt(SEED);
             int masterSeed = optionalSeed > 0 ? optionalSeed : Math.Abs(Guid.NewGuid().GetHashCode());
+            int difficulty = 1;
             List<Unit> startingUnits = FileManager.GetUnits(FileManager.DataSource.PlayerUnits);
-            runData = new RunData(godSelected, 0, 1, masterSeed, 0, startingUnits);
+            runData = new RunData(godSelected, 0, 1, masterSeed, 0, startingUnits, difficulty);
 
             PlayerPrefs.SetInt(SEED, masterSeed);
             PlayerPrefs.SetInt(GOLD, 0);
             PlayerPrefs.SetInt(CURRENT_ROW, 0);
             PlayerPrefs.SetInt(CURRENT_POSITION_IN_ROW, 1);
             PlayerPrefs.SetInt(ONGOING_RUN, 1);
+            PlayerPrefs.SetInt(DIFFICULTY, difficulty);
         }
 
         GenerateRogueSection(false);
@@ -125,8 +129,9 @@ public class GeneralManager : MonoBehaviour
         int currentRow = PlayerPrefs.GetInt(CURRENT_ROW);
         int currentPositionInRow = PlayerPrefs.GetInt(CURRENT_POSITION_IN_ROW);
         int gold = PlayerPrefs.GetInt(GOLD);
+        int difficulty = PlayerPrefs.GetInt(DIFFICULTY);
         List<Unit> unitList = FileManager.GetUnits(FileManager.DataSource.PlayerUnits);
-        return new RunData(godSelected, currentRow, currentPositionInRow, masterSeed, gold, unitList);
+        return new RunData(godSelected, currentRow, currentPositionInRow, masterSeed, gold, unitList, difficulty);
 	}
 
 	public void SaveGameProgress(GameStatus status)
@@ -180,7 +185,7 @@ public class GeneralManager : MonoBehaviour
 
     void DestroyRogueSection()
     {
-        runData = new(GodSelected, CurrentRow, CurrentPositionInRow, rogueManager.seedList[RogueManager.SeedType.Master], Gold, PlayerUnits);
+        runData = new(GodSelected, CurrentRow, CurrentPositionInRow, rogueManager.seedList[RogueManager.SeedType.Master], Gold, PlayerUnits, Difficulty);
         Destroy(rogueSectionInstance);
     }
 
@@ -264,11 +269,12 @@ public class GeneralManager : MonoBehaviour
         public int currentRow;
         public int currentPositionInRow;
         public int masterSeed;
+        public int difficulty;
 
         public int gold;
         public List<Unit> unitList;
 
-        public RunData(string godSelected,int currentRow, int currentPositionInRow, int masterSeed, int gold, List<Unit> unitList)
+        public RunData(string godSelected,int currentRow, int currentPositionInRow, int masterSeed, int gold, List<Unit> unitList, int difficulty)
         {
             this.godSelected = godSelected;
             this.currentRow = currentRow;
@@ -276,6 +282,7 @@ public class GeneralManager : MonoBehaviour
             this.masterSeed = masterSeed;
             this.gold = gold;
             this.unitList = unitList;
+            this.difficulty = difficulty;
         }
     }
 
