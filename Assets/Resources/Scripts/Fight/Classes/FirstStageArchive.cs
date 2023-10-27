@@ -7,7 +7,7 @@ public class FirstStageArchive
 	//Always available
 	public static List<string> ENEMIES_AV = new()
 	{
-		"Sorceress",
+		"Bandit Lord",
 	};
 
 	//Difficulty 5 required
