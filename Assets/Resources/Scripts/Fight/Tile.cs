@@ -50,8 +50,8 @@ public class Tile : MonoBehaviour, IComparable<Tile>
 
     //Necessary for tile comparement during dijkstra calculations
     public int CompareTo(Tile other){
-        if(this.tentativeCost < other.tentativeCost) return -1;
-        if(this.tentativeCost == other.tentativeCost) return 0;
+        if(tentativeCost < other.tentativeCost) return -1;
+        if(tentativeCost == other.tentativeCost) return 0;
         return 1;
     }
 

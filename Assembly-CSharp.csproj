@@ -60,6 +60,7 @@
     <Compile Include="Assets\Resources\Scripts\General\Entity\EventEntity.cs" />
     <Compile Include="Assets\Resources\Scripts\General\Manager\FileManager.cs" />
     <Compile Include="Assets\Resources\Scripts\General\Extensions\RandomExtension.cs" />
+    <Compile Include="Assets\BasicBandit\DemoSceneBasicBandit\Scripts\ButtonFunction.cs" />
     <Compile Include="Assets\Resources\Scripts\Fight\Managers\FightManager.cs" />
     <Compile Include="Assets\Resources\Scripts\Rogue\Classes\Event.cs" />
     <Compile Include="Assets\Resources\Scripts\UnitsArchive.cs" />
@@ -78,20 +79,19 @@
     <Compile Include="Assets\Resources\Scripts\Fight\Managers\AIManager.cs" />
     <Compile Include="Assets\Resources\Scripts\Menu\OptionsMenu.cs" />
     <Compile Include="Assets\Resources\Scripts\Fight\Classes\Movement.cs" />
+    <Compile Include="Assets\Resources\Scripts\GodsArchive\BanditLord.cs" />
+    <Compile Include="Assets\Resources\Scripts\GodsArchive\InterfacesAndClasses\IGod.cs" />
     <Compile Include="Assets\Resources\Scripts\Fight\Tile.cs" />
     <Compile Include="Assets\Resources\Scripts\Rogue\Managers\RogueManager.cs" />
     <Compile Include="Assets\Cartoon Heroes\Scripts\SetCharacter\SetCharacter.cs" />
     <Compile Include="Assets\Resources\Scripts\Fight\Classes\FirstStageArchive.cs" />
+    <Compile Include="Assets\Resources\Scripts\GodsArchive\InterfacesAndClasses\Encounter.cs" />
     <Compile Include="Assets\Resources\Scripts\Menu\NewGameManager.cs" />
     <Compile Include="Assets\Resources\Scripts\Fight\Classes\Pathfinding.cs" />
-    <Compile Include="Assets\Resources\Scripts\Menu\TextMenu.cs" />
-    <Compile Include="Assets\Resources\Scripts\Fight\Unit.cs" />
-    <Compile Include="Assets\Resources\Scripts\GodsArchive\BanditLord.cs" />
-    <Compile Include="Assets\Resources\Scripts\GodsArchive\InterfacesAndClasses\IGod.cs" />
-    <Compile Include="Assets\Resources\Scripts\GodsArchive\InterfacesAndClasses\Encounter.cs" />
-    <Compile Include="Assets\BasicBandit\DemoSceneBasicBandit\Scripts\ButtonFunction.cs" />
     <Compile Include="Assets\BasicBandit\DemoSceneBasicBandit\Scripts\MovementCamera.cs" />
+    <Compile Include="Assets\Resources\Scripts\Menu\TextMenu.cs" />
     <Compile Include="Assets\C&amp;C_Pack\Goblin_rouge\Script\Goblin_ro_ctrl.cs" />
+    <Compile Include="Assets\Resources\Scripts\Fight\Unit.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Assets\TextMesh Pro\Shaders\TMPro.cginc" />

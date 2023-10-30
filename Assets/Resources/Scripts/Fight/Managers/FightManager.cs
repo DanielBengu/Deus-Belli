@@ -93,12 +93,12 @@ public class FightManager : MonoBehaviour
     {
         IsSetup = true;
 
-        level.SetupTiles();
+        level.GenerateTerrain();
 
         // Setup the terrain based on the level information
         var tiles = structureManager.SetupFightSection(level.tilesDict, this, level.TopLeftSquarePositionX, level.YPosition, level.TopLeftSquarePositionZ, level.HorizontalTiles, level.VerticalTiles);
 
-        var units = GenerateUnits(tiles);
+        var units = GenerateUnits(tiles, level.VerticalTiles, level.seed);
         structureManager.gameData = new(tiles, units, level.HorizontalTiles, level.VerticalTiles);
 
         SetupTiles = SetupUnitPosition();
@@ -121,23 +121,52 @@ public class FightManager : MonoBehaviour
         return tileList.Select(t => t.tileNumber).ToArray();
     }
 
-    List<Unit> GenerateUnits(Dictionary<int, Tile> mapTiles)
+    List<Unit> GenerateUnits(Dictionary<int, Tile> mapTiles, int VerticalTiles, int seed)
     {
         List<Unit> unitList = new();
-        List<GameObject> playerUnits = generalManager.PlayerUnits.Select(u => u.gameObject).ToList();
-
-		foreach (var unit in playerUnits)
+        GameObject[] playerUnits = generalManager.PlayerUnits.Select(u => u.gameObject).ToArray();
+        List<int> alreadyOccupiedTiles = new();
+		for (int i = 0; i < playerUnits.Length; i++)
 		{
-            var terrain = GameObject.Find($"Terrain_{unit.GetComponent<Unit>().startingTileNumber}");
-            if (terrain != null)
-                unitList.Add(GenerateSingleUnit(unit, terrain.GetComponent<Tile>()));
+            GameObject unit = playerUnits[i];
+            //First part of the where clause removes unavailable terrain (like mountains), the second selects all the tiles of the first two columns of the game
+            int[] possiblePlayerStartingUnits = mapTiles.Where(k => 
+            (k.Value.IsPassable && !alreadyOccupiedTiles.Contains(k.Key)) && 
+            (k.Key % VerticalTiles == 0 || k.Key % VerticalTiles == 1)).Select(k => k.Key).ToArray();
+
+            Tile unitTile = null;
+            bool exitClause = true;
+            while (exitClause)
+            {
+                int startingTile = RandomManager.GetRandomValue(seed * (i + 1), 0, possiblePlayerStartingUnits.Length);
+                unitTile = GameObject.Find($"Terrain_{possiblePlayerStartingUnits[startingTile]}").GetComponent<Tile>();
+                alreadyOccupiedTiles.Add(unitTile.tileNumber);
+                unitList.Add(GenerateSingleUnit(unit, unitTile));
+                exitClause = !(unitTile != null && unitTile.IsPassable && possiblePlayerStartingUnits.Length > 0);
+            }
         }
 
-        foreach (var enemy in level.enemyList)
+        GameObject[] enemyUnits = level.enemyList.Values.ToArray();
+        for (int i = 0; i < enemyUnits.Length; i++)
         {
-            Tile tile = mapTiles[enemy.Key];
-            unitList.Add(GenerateSingleUnit(enemy.Value, tile));
+            GameObject unit = enemyUnits[i];
+            //First part of the where clause removes unavailable terrain (like mountains), the second selects all the tiles of the last two columns of the game
+            int[] possiblePlayerStartingUnits = mapTiles.Where(k =>
+            (k.Value.IsPassable && !alreadyOccupiedTiles.Contains(k.Key)) &&
+            (k.Key % VerticalTiles == VerticalTiles - 1 || k.Key % VerticalTiles == VerticalTiles - 2)).Select(k => k.Key).ToArray();
+
+            Tile unitTile = null;
+            bool exitClause = true;
+            while (exitClause)
+            {
+                int startingTile = RandomManager.GetRandomValue(seed * (i + 1), 0, possiblePlayerStartingUnits.Length);
+                unitTile = GameObject.Find($"Terrain_{possiblePlayerStartingUnits[startingTile]}").GetComponent<Tile>();
+                alreadyOccupiedTiles.Add(unitTile.tileNumber);
+                unitList.Add(GenerateSingleUnit(unit, unitTile));
+                exitClause = !(unitTile != null && unitTile.IsPassable && possiblePlayerStartingUnits.Length > 0);
+            }
         }
+
         return unitList;
     }
 

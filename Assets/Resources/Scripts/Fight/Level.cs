@@ -16,24 +16,26 @@ public class Level
     public Dictionary<int, GameObject> enemyList;
 
 	public int seed;
+	public IGod enemyGod;
 
-    public void StartLevel(int seed, RogueTileType tileType, int currentRow, int difficulty)
+    public void StartLevel(int seed, RogueTileType tileType, int currentRow, int difficulty, IGod enemyGod)
     {
-		int MapSize = RandomManager.GetRandomValue(seed, 7, 8);
+		this.seed = seed;
+		int mapSize = RandomManager.GetRandomValue(seed, 10, 10);
 		TopLeftSquarePositionX = 400;
         TopLeftSquarePositionZ = 1600;
         YPosition = 170;
-        HorizontalTiles = MapSize;
-        VerticalTiles = MapSize;
+        HorizontalTiles = mapSize;
+        VerticalTiles = mapSize;
+		this.enemyGod = enemyGod;
         //tilesDict = SetupTiles();
         SetupEnemies(tileType, currentRow, difficulty);
     }
 
-	public void SetupTiles()
+	public void GenerateTerrain()
 	{
-		Dictionary<int, GameObject> tilesDict = new();
+		Dictionary<int, GameObject> result = new();
 		GameObject tilePrefab = Resources.Load<GameObject>($"Prefabs/Fight/Tile");
-		Sprite darkGrassMountain = Resources.Load<Sprite>($"Sprites/Terrain/dark_grass_mountain base");
 		Sprite darkGrass = Resources.Load<Sprite>($"Sprites/Terrain/dark_grass base");
 
 		for (int i = 0; i < HorizontalTiles * VerticalTiles; i++)
@@ -41,41 +43,43 @@ public class Level
 			GameObject tileObject = Object.Instantiate(tilePrefab);
 			tileObject.name = $"Terrain_{i}";
 			SpriteRenderer spriteRenderer = tileObject.GetComponent<SpriteRenderer>();
-
-			if (i == 7 || i == 20 || i == 17 || i == 16 || i == 24 || i == 31 || i == 32)
-			{
-				spriteRenderer.sprite = darkGrassMountain;
-				Tile tileScript = tileObject.GetComponent<Tile>();
-				tileScript.IsPassable = false;
-				tileScript.MovementCost = 10;
-			}
-			else
-			{
-				spriteRenderer.sprite = darkGrass;
-			}
-
-			tilesDict.Add(i, tileObject);
+			spriteRenderer.sprite = darkGrass;
+			result.Add(i, tileObject);
 		}
-		this.tilesDict = tilesDict;
+		this.tilesDict = GenerateObstacles(result);
+	}
+
+	public Dictionary<int, GameObject> GenerateObstacles(Dictionary<int, GameObject> baseTerrain)
+	{
+		Sprite darkGrassMountain = Resources.Load<Sprite>($"Sprites/Terrain/dark_grass_mountain base");
+		int numberOfMountains = RandomManager.GetRandomValue(seed, 0, 10);
+		
+		for (int i = 0; i < numberOfMountains; i++)
+		{
+			int mountainSeed = seed * (i + 1);
+			int tileToChange = RandomManager.GetRandomValue(mountainSeed, 0, HorizontalTiles * VerticalTiles);
+
+			GameObject tile = baseTerrain[tileToChange];
+			tile.GetComponent<SpriteRenderer>().sprite = darkGrassMountain;
+			Tile tileScript = tile.GetComponent<Tile>();
+			tileScript.IsPassable = false;
+			tileScript.MovementCost = 10;
+		}
+
+		return baseTerrain;
 	}
 
 	public void SetupEnemies(RogueTileType tileType, int currentRow, int difficulty)
 	{
 		Dictionary<int, GameObject> result = new();
+		Encounter encounter = enemyGod.Encounters[RandomManager.GetRandomValue(seed, 0, enemyGod.Encounters.Length)];
 
-		Unit sorceressUnit = Resources.Load<GameObject>($"Prefabs/Units/Sorceress").GetComponent<Unit>();
-		Unit orcUnit = Resources.Load<GameObject>($"Prefabs/Units/Ork").GetComponent<Unit>();
-		Unit dragonUnit = Resources.Load<GameObject>($"Prefabs/Units/Sorceress").GetComponent<Unit>();
-		sorceressUnit.faction = 1;
-		orcUnit.faction = 1;
-		dragonUnit.faction = 1;
-
-		if (tileType == RogueTileType.Fight)
-			result.Add(9, sorceressUnit.gameObject);
-		else if (tileType == RogueTileType.Miniboss)
-			result.Add(9, orcUnit.gameObject);
-		else if (tileType == RogueTileType.Boss)
-			result.Add(9, dragonUnit.gameObject);
+		for (int i = 0; i < encounter.units.Length; i++)
+		{
+			Unit enemy = encounter.units[i];
+			enemy.faction = 1;
+			result.Add(encounter.positions[i], enemy.gameObject);
+		}
 
 		enemyList = result;
 	}

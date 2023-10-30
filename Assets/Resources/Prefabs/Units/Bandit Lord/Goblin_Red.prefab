@@ -1556,6 +1556,7 @@ GameObject:
   - component: {fileID: 9507038}
   - component: {fileID: 14348168}
   - component: {fileID: 11400180}
+  - component: {fileID: -51559288326955251}
   m_Layer: 0
   m_Name: Goblin_Red
   m_TagString: Untagged
@@ -1572,7 +1573,7 @@ Transform:
   m_GameObject: {fileID: 150878}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: -3.33, y: -0.009, z: -3.66}
-  m_LocalScale: {x: 0.5, y: 0.5, z: 0.5}
+  m_LocalScale: {x: 30, y: 30, z: 30}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 496032}
@@ -1591,7 +1592,7 @@ Animator:
   m_GameObject: {fileID: 150878}
   m_Enabled: 1
   m_Avatar: {fileID: 9000000, guid: 741f73214c8e59045b42ebac4be91444, type: 3}
-  m_Controller: {fileID: 9100000, guid: 83107c796bf2ec348afb5e040bea51c8, type: 2}
+  m_Controller: {fileID: 9100000, guid: 10467595b60e5494795c4466d57b8b46, type: 2}
   m_CullingMode: 1
   m_UpdateMode: 0
   m_ApplyRootMotion: 0
@@ -1627,7 +1628,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 150878}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 107e70a78028fcf4abe107cab565e94c, type: 3}
   m_Name: 
@@ -1636,6 +1637,29 @@ MonoBehaviour:
   runSpeed: 1.7
   turnSpeed: 90
   gravity: 20
+--- !u!114 &-51559288326955251
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 150878}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 32f75263af4039848bdcbfad0a330509, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  unitName: Doblin
+  unitImage: {fileID: 0}
+  prefab: {fileID: 0}
+  startingTileNumber: 0
+  hpMax: 2
+  hpCurrent: 2
+  movementMax: 5
+  movementCurrent: 5
+  attack: 3
+  faction: 1
+  range: 1
 --- !u!1 &150940
 GameObject:
   m_ObjectHideFlags: 0
