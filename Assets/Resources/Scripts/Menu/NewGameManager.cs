@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -25,28 +26,47 @@ public class NewGameManager : MonoBehaviour
     GameObject GodsPrefab;
 
     private string godSelected;
+    private IReligion religionSelected;
 
 	private void Update()
 	{
         startButton.enabled = seedInputField.text.Length == 0 || seedInputField.text.Length > 2;
 	}
 
-    static string GetGodName(int god)
-	{
-        return ((Gods)god).ToString();
-	}
-
-    public void SelectReligion(int religionSelected)
+    public void SelectReligion(int religion)
     {
+        religionSelected = LoadReligion(religion);
         ReligionSelectedText.SetActive(true);
-        ReligionSelectedText.transform.GetChild(0).GetComponent<TextMeshProUGUI>().text = ((Religions)religionSelected).ToString();
+        ReligionSelectedText.transform.GetChild(0).GetComponent<TextMeshProUGUI>().text = religionSelected.Name;
         ReligionsPrefab.SetActive(false);
         Instantiate(GodsPrefab, transform);
+        LoadGods(religionSelected);
+    }
+
+    public IReligion LoadReligion(int religion)
+	{
+		switch (religion)
+		{
+            case 0:
+                return new Agbara();
+            default:
+                return new Agbara();
+		}
+	}
+    
+    public void LoadGods(IReligion religionSelected)
+	{
+        string[] playableGods = religionSelected.PlayableGods.Select(g => g.Name).ToArray();
+
+		GameObject.Find("Character A Text").GetComponent<TextMeshProUGUI>().text = playableGods[0];
+        GameObject.Find("Character B Text").GetComponent<TextMeshProUGUI>().text = playableGods[1];
+        GameObject.Find("Character C Text").GetComponent<TextMeshProUGUI>().text = playableGods[2];
+        GameObject.Find("Character D Text").GetComponent<TextMeshProUGUI>().text = playableGods[3];
     }
 
     public void SelectGod(int god)
 	{
-        string godName = GetGodName(god);
+        string godName = religionSelected.PlayableGods[god].Name;
         godSelected = godName;
         godData.text = $"{godName}";
 
@@ -57,7 +77,7 @@ public class NewGameManager : MonoBehaviour
             godImage.color = currentColor;
         }
 
-        godImage.sprite = Resources.Load<Sprite>($"Sprites/Gods/{godName}");
+        godImage.sprite = Resources.Load<Sprite>($"Sprites/Gods/{religionSelected.Name}/{godName}");
     }
     public void StartGame()
     {
@@ -71,16 +91,9 @@ public class NewGameManager : MonoBehaviour
         }
     }
 
-    public enum Gods
-	{
-        Zeus,
-        Poseidon,
-        Hades
-	}
-
     public enum Religions
 	{
-        Alpha,
+        Agbara,
         Beta,
         Charlie,
         Delta
