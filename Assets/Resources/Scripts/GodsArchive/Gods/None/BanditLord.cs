@@ -1,9 +1,17 @@
+using System.Collections.Generic;
+using UnityEngine;
+
 public class BanditLord : IGod
 {
+	static string _name;
+	static IReligion _religion;
+	static Dictionary<string, Unit> _unitsDict;
+
 	public BanditLord()
 	{
-		Name = GetType().Name;
-		unitsDict = new()
+		_name = GetType().Name;
+		_religion = null;
+		_unitsDict = new()
 		{
 			{ "Bandit", GetUnit("Bandit") },
 			{ "Goblin_Green", GetUnit("Goblin_Green") },
@@ -12,18 +20,31 @@ public class BanditLord : IGod
 		};
 	}
 
-	public new Encounter[] Encounters { get { return new Encounter[2] {
+	public Encounter[] Encounters { get { return new Encounter[2] {
 		new() 
 		{ 
 			EnemyGod = this, 
-			units = new Unit[2] { unitsDict["Bandit"], unitsDict["Bandit"] },
+			units = new Unit[2] { _unitsDict["Bandit"], _unitsDict["Bandit"] },
 			positions = new int[2] { 0, 1 } 
 		},
 		new()
 		{
 			EnemyGod = this,
-			units = new Unit[3] { unitsDict["Goblin_Red"], unitsDict["Goblin_Green"], unitsDict["Goblin_Yellow"] },
+			units = new Unit[3] { _unitsDict["Goblin_Red"], _unitsDict["Goblin_Green"], _unitsDict["Goblin_Yellow"] },
 			positions = new int[3] { 0, 1, 2 }
 		},
 	};}}
+
+	public Unit GetUnit(string unitName)
+	{
+		return Resources.Load<GameObject>($"Prefabs/Units/{_religion}/{_name}/{unitName}").GetComponent<Unit>();
+	}
+	public string GetName()
+	{
+		return _name;
+	}
+	public IReligion GetReligion()
+	{
+		return _religion;
+	}
 }

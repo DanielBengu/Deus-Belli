@@ -52,15 +52,13 @@ public class GeneralManager : MonoBehaviour
     public RunData runData;
     public RogueNode selectedNode;
 
-    Transform rogueMovableObjects;
-
     CurrentSection currentSection = CurrentSection.Rogue;
 
     public bool IsScrollButtonDown { get; set; }
     public bool IsOptionOpen { get; set; }
     public bool IsGameInStandby { get { return IsGameInStandbyMethod(); } }
 	public int Gold { get { return runData.gold; } set { runData.gold = value; } }
-    public string GodSelected { get { return runData.godSelected; } set { runData.godSelected = value; } }
+    public IGod GodSelected { get { return runData.godSelected; } set { runData.godSelected = value; } }
 	public int CurrentRow { get { return runData.currentRow; } set { runData.currentRow = value; } }
 	public int CurrentPositionInRow { get { return runData.currentPositionInRow; } set { runData.currentPositionInRow = value; } }
 	public int Difficulty { get { return runData.difficulty; } set { runData.difficulty = value; } }
@@ -75,11 +73,12 @@ public class GeneralManager : MonoBehaviour
 		else
 		{
             string godSelected = PlayerPrefs.GetString(GOD_SELECTED_PP);
+            IGod god = LoadGodFromName(godSelected);
             int optionalSeed = PlayerPrefs.GetInt(SEED);
             int masterSeed = optionalSeed > 0 ? optionalSeed : Math.Abs(Guid.NewGuid().GetHashCode());
             int difficulty = 1;
             List<Unit> startingUnits = FileManager.GetUnits(FileManager.DataSource.PlayerUnits);
-            runData = new RunData(godSelected, 0, 1, masterSeed, 0, startingUnits, difficulty);
+            runData = new RunData(god, 0, 1, masterSeed, 0, startingUnits, difficulty);
 
             PlayerPrefs.SetInt(SEED, masterSeed);
             PlayerPrefs.SetInt(GOLD, 0);
@@ -126,12 +125,13 @@ public class GeneralManager : MonoBehaviour
 	{
         int masterSeed = PlayerPrefs.GetInt(SEED);
         string godSelected = PlayerPrefs.GetString(GOD_SELECTED_PP);
+        IGod god = LoadGodFromName(godSelected);
         int currentRow = PlayerPrefs.GetInt(CURRENT_ROW);
         int currentPositionInRow = PlayerPrefs.GetInt(CURRENT_POSITION_IN_ROW);
         int gold = PlayerPrefs.GetInt(GOLD);
         int difficulty = PlayerPrefs.GetInt(DIFFICULTY);
         List<Unit> unitList = FileManager.GetUnits(FileManager.DataSource.PlayerUnits);
-        return new RunData(godSelected, currentRow, currentPositionInRow, masterSeed, gold, unitList, difficulty);
+        return new RunData(god, currentRow, currentPositionInRow, masterSeed, gold, unitList, difficulty);
 	}
 
 	public void SaveGameProgress(GameStatus status)
@@ -142,6 +142,17 @@ public class GeneralManager : MonoBehaviour
         PlayerPrefs.SetInt(GAME_STATUS, (int)status);
         FileManager.SaveUnits(runData.unitList.Select(u => u.gameObject).ToList(), true);
     }
+
+    public IGod LoadGodFromName(string name)
+	{
+		return name switch
+		{
+			"Ataiku" => new Ataiku(),
+			"Omi" => new Omi(),
+			"Bandit Lord" => new BanditLord(),
+			_ => new Ataiku(),
+		};
+	}
 
     void ManageKeysDown()
 	{
@@ -201,7 +212,7 @@ public class GeneralManager : MonoBehaviour
                 fightManager.structureManager = structureManager;
                 fightManager.cameraManager = cameraManager;
                 fightManager.generalManager = this;
-                fightManager.structureManager.uiManager.SetFightVariables();
+                fightManager.structureManager.uiManager.SetFightVariables(GodSelected);
                 fightManager.structureManager.spriteManager.fightManager = fightManager;
                 fightManager.Setup(node.level);
                 break;
@@ -224,7 +235,7 @@ public class GeneralManager : MonoBehaviour
         rogueSectionInstance = Instantiate(rogueSectionPrefab);
         rogueManager = GameObject.Find(ROGUE_MANAGER_OBJ_NAME).GetComponent<RogueManager>();
         rogueManager.SetupRogue(structureManager, runData.currentRow, runData.currentPositionInRow, runData.masterSeed);
-        rogueManager.StructureManager.uiManager.SetRogueVariables(Gold, GodSelected, runData.masterSeed);
+        rogueManager.StructureManager.uiManager.SetRogueVariables(Gold, GodSelected.GetName(), runData.masterSeed);
         currentSection = CurrentSection.Rogue;
 
         rogueManager.IsRunCompleted(isDefeat);
@@ -253,11 +264,11 @@ public class GeneralManager : MonoBehaviour
                 GenerateRogueSection(isDefeat);
                 break;
 			case RogueTileType.Merchant:
-                structureManager.uiManager.SetRogueVariables(Gold, GodSelected, runData.masterSeed);
+                structureManager.uiManager.SetRogueVariables(Gold, GodSelected.GetName(), runData.masterSeed);
                 Destroy(merchantSectionInstance);
                 break;
 			case RogueTileType.Event:
-                structureManager.uiManager.SetRogueVariables(Gold, GodSelected, runData.masterSeed);
+                structureManager.uiManager.SetRogueVariables(Gold, GodSelected.GetName(), runData.masterSeed);
                 Destroy(eventSectionInstance);
                 break;
 		}
@@ -265,7 +276,7 @@ public class GeneralManager : MonoBehaviour
 
     public struct RunData
     {
-        public string godSelected;
+        public IGod godSelected;
         public int currentRow;
         public int currentPositionInRow;
         public int masterSeed;
@@ -274,7 +285,7 @@ public class GeneralManager : MonoBehaviour
         public int gold;
         public List<Unit> unitList;
 
-        public RunData(string godSelected,int currentRow, int currentPositionInRow, int masterSeed, int gold, List<Unit> unitList, int difficulty)
+        public RunData(IGod godSelected,int currentRow, int currentPositionInRow, int masterSeed, int gold, List<Unit> unitList, int difficulty)
         {
             this.godSelected = godSelected;
             this.currentRow = currentRow;

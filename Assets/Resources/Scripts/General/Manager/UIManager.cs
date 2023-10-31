@@ -29,13 +29,14 @@ public class UIManager : MonoBehaviour
         TextMeshProUGUI rangeValue;
     #endregion
 
-	public void SetFightVariables(){
-        string godSelected = PlayerPrefs.GetString(GeneralManager.GOD_SELECTED_PP, "");
+	public void SetFightVariables(IGod god){
+        string godSelected = god.GetName();
+        string religionSelected = god.GetReligion().Name;
         Title = GameObject.Find("GOD_RUN").GetComponent<TextMeshProUGUI>();
         Title.text = $"{godSelected} Run";
 
         GodImage = GameObject.Find("God").GetComponent<Image>();
-        GodImage.sprite = Resources.Load<Sprite>($"Sprites/Gods/{godSelected}");
+        GodImage.sprite = Resources.Load<Sprite>($"Sprites/Gods/{religionSelected}/{godSelected}");
 
         infoPanel = GameObject.Find("Info");
         endTurnButton = GameObject.Find("End Turn Button");

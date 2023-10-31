@@ -1,22 +1,14 @@
 using System.Collections.Generic;
-using UnityEngine;
-
-public abstract class IGod
+public interface IGod
 {
-	public string Name { get; set; }
-	public IReligion Religion { get; set; }
+	public static string Name;
+	public static IReligion Religion;
 	public Encounter[] Encounters { get; }
 
 	//We preload all possible units so that we don't have to do it everytime we need to call a specific one. If this takes too much time consider using lazy loading instead
-	public Dictionary<string, Unit> unitsDict;
+	public static Dictionary<string, Unit> unitsDict;
 
-	public IGod()
-	{
-		Religion = null;
-	}
-
-	public Unit GetUnit(string unitName)
-	{
-		return Resources.Load<GameObject>($"Prefabs/Units/{Religion}/{Name}/{unitName}").GetComponent<Unit>();
-	}
+	public Unit GetUnit(string unitName);
+	public string GetName();
+	public IReligion GetReligion();
 }
