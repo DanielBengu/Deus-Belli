@@ -52,12 +52,23 @@ public class FightManager : MonoBehaviour
 
     void ManageMovements(){
         // If an object is being moved, check if it has finished moving
-        if (structureManager.MovementTick())
-        {
-            if(ActionInQueue == ActionPerformed.Attack)
-                structureManager.actionPerformer.StartAction(ActionPerformed.Attack, UnitSelected.gameObject, ActionTarget.GetComponent<Unit>().CurrentTile.gameObject);
+        int finishedMoving = structureManager.MovementTick();
 
-            ResetGameState(true);
+        switch (ActionInQueue)
+		{
+			case ActionPerformed.FightMovement:
+				break;
+			case ActionPerformed.Attack:
+                if(finishedMoving != 0)
+				{
+                    structureManager.actionPerformer.StartAction(ActionPerformed.Attack, UnitSelected.gameObject, ActionTarget.GetComponent<Unit>().CurrentTile.gameObject);
+                    ResetGameState(true);
+                }
+                return;
+            case ActionPerformed.Default:
+                return;
+			default:
+                return;
         }    
     }
 
@@ -437,7 +448,10 @@ public class FightManager : MonoBehaviour
     public void DisableFightSection()
 	{
 		foreach (var tile in structureManager.gameData.mapTiles.Values)
+		{
+            Destroy(tile.model3D);
             Destroy(tile.gameObject);
+        }   
 
 		foreach (var unit in structureManager.gameData.unitsOnField)
             Destroy(unit.gameObject);

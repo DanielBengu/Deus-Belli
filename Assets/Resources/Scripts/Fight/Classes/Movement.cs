@@ -22,10 +22,10 @@ public class Movement
     //List of steps necessary to go from point A to B
     public List<Transform> movementSteps = new();
 
-    public bool MovementTick()
+    public int MovementTick()
     {
         if (!IsObjectMoving)
-            return false;
+            return -1;
 
         float distanceCovered = (Time.time - startTime) * speed;
         float fractionOfJourney = distanceCovered / journeyLength;
@@ -43,11 +43,10 @@ public class Movement
             {
                 IsObjectMoving = false;
                 AnimationPerformer.PerformAnimation(Animation.Idle, objectMovingTransform.gameObject);
-                return true;
+                return 1;
             }
         }
-
-        return false;
+        return 0;
     }
 
     public bool StartObjectMovement(Transform starting, Transform target)

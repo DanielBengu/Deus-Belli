@@ -15,6 +15,7 @@ public class Tile : MonoBehaviour, IComparable<Tile>
     #endregion
 
     public Unit unitOnTile;
+    public GameObject model3D = null;
 
     FightManager manager;
 

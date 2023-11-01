@@ -254,8 +254,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   movementSpeed: 50
-  xMin: 0
-  xMax: 3000
+  xMin: -1500
+  xMax: -200
   yMin: 500
   yMax: 1400
   minDistance: 1

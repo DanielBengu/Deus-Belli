@@ -22,8 +22,8 @@ public class Level
     {
 		this.seed = seed;
 		int mapSize = RandomManager.GetRandomValue(seed, 10, 10);
-		TopLeftSquarePositionX = 400;
-        TopLeftSquarePositionZ = 1600;
+		TopLeftSquarePositionX = 250;
+        TopLeftSquarePositionZ = 1800;
         YPosition = 170;
         HorizontalTiles = mapSize;
         VerticalTiles = mapSize;
@@ -52,6 +52,7 @@ public class Level
 	public Dictionary<int, GameObject> GenerateObstacles(Dictionary<int, GameObject> baseTerrain)
 	{
 		Sprite darkGrassMountain = Resources.Load<Sprite>($"Sprites/Terrain/dark_grass_mountain base");
+		GameObject mountainModel3D = Resources.Load<GameObject>($"Prefabs/Fight/Objects/Mountain");
 		int numberOfMountains = RandomManager.GetRandomValue(seed, 0, 10);
 		
 		for (int i = 0; i < numberOfMountains; i++)
@@ -62,6 +63,7 @@ public class Level
 			GameObject tile = baseTerrain[tileToChange];
 			tile.GetComponent<SpriteRenderer>().sprite = darkGrassMountain;
 			Tile tileScript = tile.GetComponent<Tile>();
+			tileScript.model3D = mountainModel3D;
 			tileScript.IsPassable = false;
 			tileScript.MovementCost = 10;
 		}

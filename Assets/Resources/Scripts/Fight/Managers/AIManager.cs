@@ -89,7 +89,9 @@ public class AIManager : MonoBehaviour
     {
         if (possibleMovements.Count == 0)
             return;
-        int randomInt = RandomManager.GetRandomValue(seed, 0, possibleMovements.Count);
+
+        //Enemy AI Randomness is NOT based on run seed and performs casually every time, even if 2 players do the same things
+        int randomInt = Random.Range(0, possibleMovements.Count);
         Debug.Log($"AI MOVING TO TILE N.{possibleMovements[randomInt].tileNumber}");
         Tile destinationTile = GameObject.Find($"Terrain_{possibleMovements[randomInt].tileNumber}").GetComponent<Tile>();
         structureManager.CalculateMapTilesDistance(unit);

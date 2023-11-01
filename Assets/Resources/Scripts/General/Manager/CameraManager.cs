@@ -7,8 +7,8 @@ public class CameraManager : MonoBehaviour
     public float movementSpeed;
     public float xMin;
     public float xMax;
-    public float yMin;
-    public float yMax;
+    /*public float yMin;
+    public float yMax;*/
     // The minimum and maximum scroll distances
     public float minDistance = 1f;
     public float maxDistance = 10f;
@@ -36,8 +36,9 @@ public class CameraManager : MonoBehaviour
         position.x += moveHorizontal * movementSpeed;
         //position.z += moveVertical * movementSpeed;
 
-        /*position.x = Mathf.Clamp(position.x, xMin, xMax);
-        position.z = Mathf.Clamp(position.z, yMin, yMax);*/
+        position.x = Mathf.Clamp(position.x, xMin, xMax);
+        
+        //position.z = Mathf.Clamp(position.z, yMin, yMax);*/
 
         rogueInstance.position = position;
     }

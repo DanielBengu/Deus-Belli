@@ -51,6 +51,8 @@ public class StructureManager : MonoBehaviour
 
                     tileScript.SetupManager(manager);
                     tileScript.tileNumber = x + (i * XLength);
+                    
+                    LoadObstacle(tileScript);
 
                     float angle = 90f;
                     Vector3 rotation = new(angle, 0f, 0f);
@@ -62,6 +64,15 @@ public class StructureManager : MonoBehaviour
         Debug.Log("END TILE GENERATION");
         return mapTiles;
     }
+
+    public void LoadObstacle(Tile tile)
+	{
+        if (tile.model3D == null)
+            return;
+
+        tile.model3D.transform.position = tile.transform.position;
+        Instantiate(tile.model3D);
+	}
 
     public RogueNode GenerateRogueTile(int currentRow, int positionOnRow, int maxRowOnMap, int nodeIndex, int nodeSeed, Transform origin, Transform firstNode, RogueManager rm)
 	{
@@ -168,12 +179,15 @@ public class StructureManager : MonoBehaviour
     {
         return pathfinding.CalculateMapTilesDistance(startingUnit);
     }
-    public bool MovementTick()
+    // -1 if nothing was queued for movement, 0 if object is still moving, 1 if object is done moving
+    public int MovementTick()
     {
         return actionPerformer.movement.MovementTick();
     }
     public void MoveUnit(Unit unit, Tile targetTile, bool isTeleport)
     {
+        if (unit.CurrentTile.tileNumber == targetTile.tileNumber)
+            return;
         ActionPerformed action = isTeleport ? ActionPerformed.FightTeleport : ActionPerformed.FightMovement;
         actionPerformer.StartAction(action, unit.gameObject, targetTile.gameObject);
     }

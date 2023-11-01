@@ -30,8 +30,7 @@ public class RogueManager : MonoBehaviour
 
 	private void Update()
 	{
-        bool isPlayerMovementFinished = StructureManager.MovementTick();
-        if (isPlayerMovementFinished)
+        if (StructureManager.MovementTick() == 1)
             StartEncounter();
     }
 
