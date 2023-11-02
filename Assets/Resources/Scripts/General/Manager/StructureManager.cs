@@ -54,9 +54,9 @@ public class StructureManager : MonoBehaviour
                     
                     LoadObstacle(tileScript);
 
-                    float angle = 90f;
+                    /*float angle = 90f;
                     Vector3 rotation = new(angle, 0f, 0f);
-                    tile.transform.rotation = Quaternion.Euler(rotation);
+                    tile.transform.rotation = Quaternion.Euler(rotation);*/
                     mapTiles.Add(tileScript.tileNumber, tileScript);
                 #endregion
             }

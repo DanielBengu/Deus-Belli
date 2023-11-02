@@ -10,7 +10,6 @@ public class UIManager : MonoBehaviour
     const string rogueDefeatScreenPrefabName = "Rogue Defeat";
 
     TextMeshProUGUI Title;
-    Image GodImage;
 
     GameObject rogueCanvas;
     GameObject infoPanel;
@@ -35,14 +34,10 @@ public class UIManager : MonoBehaviour
         Title = GameObject.Find("GOD_RUN").GetComponent<TextMeshProUGUI>();
         Title.text = $"{godSelected} Run";
 
-        GodImage = GameObject.Find("God").GetComponent<Image>();
-        GodImage.sprite = Resources.Load<Sprite>($"Sprites/Gods/{religionSelected}/{godSelected}");
-
         infoPanel = GameObject.Find("Info");
         endTurnButton = GameObject.Find("End Turn Button");
         fightVictoryScreen = Resources.Load<GameObject>($"Prefabs/Fight/{fightVictoryScreenPrefabName}");
         fightDefeatScreen = Resources.Load<GameObject>($"Prefabs/Fight/{fightDefeatScreenPrefabName}");
-
 
         unitImage = infoPanel.transform.Find("Image").gameObject.GetComponent<Image>();
         nameText = infoPanel.transform.Find("Unit title").gameObject.GetComponent<TextMeshProUGUI>();

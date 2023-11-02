@@ -14,22 +14,22 @@ public class SpriteManager : MonoBehaviour
 
     public void GenerateTileSelection(List<Tile> tilesToSelect, TileType typeSelection = TileType.Default)
     {
-        foreach (var tile in tilesToSelect)
+       /* foreach (var tile in tilesToSelect)
         {
             string spriteName = GetTileSelection(tile, typeSelection);
             Sprite sprite = Resources.Load<Sprite>($"Sprites/Terrain/{spriteName}");
             ChangeObjectSprite(tile.gameObject, sprite);
-        }
+        }*/
     }
 
     public void ClearMapTilesSprite()
     {
-        foreach (var tile in structureManager.gameData.mapTiles.Values)
+        /*foreach (var tile in structureManager.gameData.mapTiles.Values)
         {
             string spriteName = tile.GetComponent<SpriteRenderer>().sprite.name;
             Sprite newSprite = Resources.Load<Sprite>($"Sprites/Terrain/{spriteName.Split(' ')[0] + " base"}");
             ChangeObjectSprite(tile.gameObject, newSprite);
-        }
+        }*/
     }
 
     void ChangeObjectSprite(GameObject obj, Sprite sprite)

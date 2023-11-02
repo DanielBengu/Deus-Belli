@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public class Level
@@ -34,41 +35,33 @@ public class Level
 
 	public void GenerateTerrain()
 	{
-		Dictionary<int, GameObject> result = new();
-		GameObject tilePrefab = Resources.Load<GameObject>($"Prefabs/Fight/Tile");
-		Sprite darkGrass = Resources.Load<Sprite>($"Sprites/Terrain/dark_grass base");
-
-		for (int i = 0; i < HorizontalTiles * VerticalTiles; i++)
-		{
-			GameObject tileObject = Object.Instantiate(tilePrefab);
-			tileObject.name = $"Terrain_{i}";
-			SpriteRenderer spriteRenderer = tileObject.GetComponent<SpriteRenderer>();
-			spriteRenderer.sprite = darkGrass;
-			result.Add(i, tileObject);
-		}
-		this.tilesDict = GenerateObstacles(result);
-	}
-
-	public Dictionary<int, GameObject> GenerateObstacles(Dictionary<int, GameObject> baseTerrain)
-	{
-		Sprite darkGrassMountain = Resources.Load<Sprite>($"Sprites/Terrain/dark_grass_mountain base");
-		GameObject mountainModel3D = Resources.Load<GameObject>($"Prefabs/Fight/Objects/Mountain");
-		int numberOfMountains = RandomManager.GetRandomValue(seed, 0, 10);
-		
-		for (int i = 0; i < numberOfMountains; i++)
+		int[] mountains = new int[RandomManager.GetRandomValue(seed, 0, 10)];
+		for (int i = 0; i < mountains.Length; i++)
 		{
 			int mountainSeed = seed * (i + 1);
-			int tileToChange = RandomManager.GetRandomValue(mountainSeed, 0, HorizontalTiles * VerticalTiles);
-
-			GameObject tile = baseTerrain[tileToChange];
-			tile.GetComponent<SpriteRenderer>().sprite = darkGrassMountain;
-			Tile tileScript = tile.GetComponent<Tile>();
-			tileScript.model3D = mountainModel3D;
-			tileScript.IsPassable = false;
-			tileScript.MovementCost = 10;
+			mountains[i] = RandomManager.GetRandomValue(mountainSeed, 0, HorizontalTiles * VerticalTiles);
 		}
+		for (int i = 0; i < HorizontalTiles * VerticalTiles; i++)
+		{
+			if (mountains.Contains(i))
+			{
+				GameObject objectToSpawn = ObjectsManager.GetRandomObject(seed * 12 * (i + 1), ObjectsManager.TypeOfObstacle.SingleTile, ObjectsManager.MapTheme.Plains);
+				GameObject tileObject = Object.Instantiate(objectToSpawn);
+				Tile tileScript = tileObject.GetComponent<Tile>();
 
-		return baseTerrain;
+				tileObject.name = $"Terrain_{i}";
+				tileScript.IsPassable = false;
+				tileScript.MovementCost = 9;
+				tilesDict.Add(i, tileObject);
+			}
+			else
+			{
+				GameObject objectToSpawn = ObjectsManager.GetRandomObject(seed * 12 / (i + 1), ObjectsManager.TypeOfObstacle.Terrain, ObjectsManager.MapTheme.Plains);
+				GameObject tileObject = Object.Instantiate(objectToSpawn);
+				tileObject.name = $"Terrain_{i}";
+				tilesDict.Add(i, tileObject);
+			}
+		}
 	}
 
 	public void SetupEnemies(RogueTileType tileType, int currentRow, int difficulty)
