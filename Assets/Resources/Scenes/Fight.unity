@@ -254,10 +254,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   movementSpeed: 50
-  xMin: -1500
-  xMax: -200
-  yMin: 500
-  yMax: 1400
+  xMinFight: -2000
+  xMaxFight: 1000
+  xMinRogue: -1500
+  xMaxRogue: -200
   minDistance: 1
   maxDistance: 10
   scrollSpeed: 10

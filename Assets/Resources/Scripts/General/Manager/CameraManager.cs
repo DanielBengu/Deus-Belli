@@ -1,20 +1,20 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class CameraManager : MonoBehaviour
 {
     public float movementSpeed;
-    public float xMin;
-    public float xMax;
-    /*public float yMin;
-    public float yMax;*/
+    public float xMinFight;
+    public float xMaxFight;
+    public float xMinRogue;
+    public float xMaxRogue;
     // The minimum and maximum scroll distances
     public float minDistance = 1f;
     public float maxDistance = 10f;
 
     // The current scroll distance
     private float distance = 5f;
+
+    private float speedMod = 10.0f;//a speed modifier
 
     public float scrollSpeed;
 
@@ -28,19 +28,25 @@ public class CameraManager : MonoBehaviour
     Vector3 cameraPositionOnFocus = new(670, 690, 650);
     Quaternion rotationOnFocus = Quaternion.Euler(40, 0, 0);
     
-    public void UpdatePosition(Transform rogueInstance){
-        float moveHorizontal = Input.GetAxis("Mouse X");
-        //float moveVertical = Input.GetAxis("Mouse Y");
-
-        Vector3 position = rogueInstance.position;
-        position.x += moveHorizontal * movementSpeed;
-        //position.z += moveVertical * movementSpeed;
-
-        position.x = Mathf.Clamp(position.x, xMin, xMax);
+    public void UpdatePosition(Transform objectToMove, GeneralManager.CurrentSection section )
+    {
+        float xMin = section == GeneralManager.CurrentSection.Fight ? xMinFight : xMinRogue;
+        float xMax = section == GeneralManager.CurrentSection.Fight ? xMaxFight : xMaxRogue;
         
-        //position.z = Mathf.Clamp(position.z, yMin, yMax);*/
+        if (section == GeneralManager.CurrentSection.Fight && Input.GetMouseButton(FightManager.RIGHT_MOUSE_BUTTON))
+		{
+            float moveHorizontal = Input.GetAxis("Mouse X");
+            transform.RotateAround(objectToMove.position, new Vector3(0.0f, moveHorizontal, 0.0f), 20 * Time.deltaTime * speedMod);
+        }else if(section == GeneralManager.CurrentSection.Rogue)
+		{
+            float moveHorizontal = Input.GetAxis("Mouse X");
 
-        rogueInstance.position = position;
+            Vector3 position = objectToMove.position;
+            position.x += moveHorizontal * movementSpeed;
+
+            position.x = Mathf.Clamp(position.x, xMin, xMax);
+            objectToMove.position = position;
+        } 
     }
 
     public void ResetCamera()

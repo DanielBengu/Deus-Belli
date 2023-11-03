@@ -114,11 +114,19 @@ public class GeneralManager : MonoBehaviour
             
             if(currentSection == CurrentSection.Rogue)
 			{
-                cameraManager.UpdatePosition(rogueSectionInstance.transform.GetChild(0));
+                cameraManager.UpdatePosition(rogueSectionInstance.transform.GetChild(0), currentSection);
                 rogueManager.GenerateNewNodeLines();
             }
         }
-            
+
+        if(currentSection == CurrentSection.Fight)
+        {
+            //We search for the tile in the center of the game
+            int centralTile = (fightManager.level.VerticalTiles / 2 * fightManager.level.HorizontalTiles) + (fightManager.level.HorizontalTiles / 2) - 1;
+            Transform target = GameObject.Find($"Terrain_{centralTile}").transform;
+            cameraManager.UpdatePosition(target, currentSection);
+        }
+
     }
 
     RunData LoadRunData()

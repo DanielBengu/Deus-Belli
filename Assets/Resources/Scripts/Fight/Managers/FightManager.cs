@@ -22,7 +22,7 @@ public class FightManager : MonoBehaviour
     [SerializeField]
     GameObject rogueSection;
 
-    Level level;
+    public Level level;
 
     public bool isGameOver = false;
         
@@ -41,13 +41,34 @@ public class FightManager : MonoBehaviour
 
 	#endregion
 
+	#region Update Methods
+
 	void Update()
     {
         ManageGame();
         ManageMovements();
         ManageInputs();
     }
-    
+
+    void ManageGame()
+    {
+        bool isFightWon = !isGameOver && structureManager.gameData.unitsOnField.Count(u => u.faction == ENEMY_FACTION) == 0;
+        bool isFightLost = !isGameOver && structureManager.gameData.unitsOnField.Count(u => u.faction == USER_FACTION) == 0;
+
+        if (isFightWon || isFightLost)
+        {
+            int goldGenerated = 0;
+            if (isFightWon) goldGenerated = GenerateAndAddGold();
+            isGameOver = true;
+            GeneralManager.GameStatus status = isFightWon ? GeneralManager.GameStatus.Won : GeneralManager.GameStatus.Lost;
+            GameScreens screen = isFightWon ? GameScreens.FightVictoryScreen : GameScreens.FightDefeatScreen;
+            generalManager.SaveGameProgress(status);
+            structureManager.GetGameScreen(screen, goldGenerated);
+        }
+    }
+
+    #endregion
+
     #region Key Input Management
 
     void ManageMovements(){
@@ -218,23 +239,6 @@ public class FightManager : MonoBehaviour
         structureManager.SetEndTurnButton(false);
         aiManager.StartAITurn();
     }
-
-    void ManageGame()
-	{
-        bool isFightWon = !isGameOver && structureManager.gameData.unitsOnField.Count(u => u.faction == ENEMY_FACTION) == 0;
-        bool isFightLost = !isGameOver && structureManager.gameData.unitsOnField.Count(u => u.faction == USER_FACTION) == 0;
-
-        if (isFightWon || isFightLost)
-		{
-            int goldGenerated = 0;
-            if (isFightWon) goldGenerated = GenerateAndAddGold();
-            isGameOver = true;
-            GeneralManager.GameStatus status = isFightWon ? GeneralManager.GameStatus.Won : GeneralManager.GameStatus.Lost;
-            GameScreens screen = isFightWon ? GameScreens.FightVictoryScreen : GameScreens.FightDefeatScreen;
-            generalManager.SaveGameProgress(status);
-            structureManager.GetGameScreen(screen, goldGenerated);
-        }
-	}
 
     int GenerateAndAddGold()
 	{
