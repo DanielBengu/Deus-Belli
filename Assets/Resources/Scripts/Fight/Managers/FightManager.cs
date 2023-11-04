@@ -31,7 +31,6 @@ public class FightManager : MonoBehaviour
 
 	//public bool IsCameraFocused { get{return cameraManager.GetCameraFocusStatus();} set{cameraManager.SetCameraFocusStatus(value);} }
 	public bool IsAnyUnitMoving { get{return structureManager.IsObjectMoving;}}
-    public int CurrentTurn { get; set; }
     public bool IsGameInStandby { get{return generalManager.IsGameInStandby;}}
     public bool IsShowingPath { get; set; }
     public ActionPerformed ActionInQueue { get; set; }
@@ -39,6 +38,8 @@ public class FightManager : MonoBehaviour
 	public bool IsSetup { get; set; }
     public int[] SetupTiles { get; set; }
 
+    public int CurrentTurnCount { get; set; }
+    public List<Unit> UnitsOnField { get { return structureManager.gameData.unitsOnField; } }
 	#endregion
 
 	#region Update Methods
@@ -52,8 +53,8 @@ public class FightManager : MonoBehaviour
 
     void ManageGame()
     {
-        bool isFightWon = !isGameOver && structureManager.gameData.unitsOnField.Count(u => u.faction == ENEMY_FACTION) == 0;
-        bool isFightLost = !isGameOver && structureManager.gameData.unitsOnField.Count(u => u.faction == USER_FACTION) == 0;
+        bool isFightWon = !isGameOver && UnitsOnField.Count(u => u.faction == ENEMY_FACTION) == 0;
+        bool isFightLost = !isGameOver && UnitsOnField.Count(u => u.faction == USER_FACTION) == 0;
 
         if (isFightWon || isFightLost)
         {
@@ -87,7 +88,6 @@ public class FightManager : MonoBehaviour
                 }
                 return;
             case ActionPerformed.Default:
-                return;
 			default:
                 return;
         }    
@@ -155,6 +155,7 @@ public class FightManager : MonoBehaviour
 
     List<Unit> GenerateUnits(Dictionary<int, Tile> mapTiles, int VerticalTiles, int seed)
     {
+        Transform unitsParent = GameObject.Find("Fight Units").transform;
         List<Unit> unitList = new();
         GameObject[] playerUnits = generalManager.PlayerUnits.Select(u => u.gameObject).ToArray();
         List<int> alreadyOccupiedTiles = new();
@@ -173,7 +174,7 @@ public class FightManager : MonoBehaviour
                 int startingTile = RandomManager.GetRandomValue(seed * (i + 1), 0, possiblePlayerStartingUnits.Length);
                 unitTile = GameObject.Find($"Terrain_{possiblePlayerStartingUnits[startingTile]}").GetComponent<Tile>();
                 alreadyOccupiedTiles.Add(unitTile.tileNumber);
-                unitList.Add(GenerateSingleUnit(unit, unitTile));
+                unitList.Add(GenerateSingleUnit(unit, unitTile, unitsParent));
                 exitClause = !(unitTile != null && unitTile.IsPassable && possiblePlayerStartingUnits.Length > 0);
             }
         }
@@ -194,7 +195,7 @@ public class FightManager : MonoBehaviour
                 int startingTile = RandomManager.GetRandomValue(seed * (i + 1), 0, possiblePlayerStartingUnits.Length);
                 unitTile = GameObject.Find($"Terrain_{possiblePlayerStartingUnits[startingTile]}").GetComponent<Tile>();
                 alreadyOccupiedTiles.Add(unitTile.tileNumber);
-                unitList.Add(GenerateSingleUnit(unit, unitTile));
+                unitList.Add(GenerateSingleUnit(unit, unitTile, unitsParent));
                 exitClause = !(unitTile != null && unitTile.IsPassable && possiblePlayerStartingUnits.Length > 0);
             }
         }
@@ -202,10 +203,10 @@ public class FightManager : MonoBehaviour
         return unitList;
     }
 
-    Unit GenerateSingleUnit(GameObject unit, Tile tile)
+    Unit GenerateSingleUnit(GameObject unit, Tile tile, Transform parent)
     {
         Quaternion rotation = new(0, 180, 0, 0);
-        var unitGenerated = Instantiate(unit, tile.transform.position, rotation);
+        var unitGenerated = Instantiate(unit, tile.transform.position, rotation, parent);
         var unitScript = unitGenerated.GetComponent<Unit>();
 
         unitScript.SetupManager(this);
@@ -223,10 +224,10 @@ public class FightManager : MonoBehaviour
 
     void StartUserTurn()
     {
-        CurrentTurn = USER_FACTION;
+        CurrentTurnCount = USER_FACTION;
         ResetGameState(true);
         structureManager.SetEndTurnButton(true);
-        foreach (var unit in structureManager.gameData.unitsOnField.Where(u => u.faction == USER_FACTION))
+        foreach (var unit in UnitsOnField.Where(u => u.faction == USER_FACTION))
         {
             unit.movementCurrent = unit.movementMax;
             unit.HasPerformedMainAction = false;
@@ -234,7 +235,7 @@ public class FightManager : MonoBehaviour
     }
 
     void EndUserTurn(){
-        CurrentTurn = ENEMY_FACTION;
+        CurrentTurnCount = ENEMY_FACTION;
         ResetGameState(true);
         structureManager.SetEndTurnButton(false);
         aiManager.StartAITurn();
@@ -457,7 +458,7 @@ public class FightManager : MonoBehaviour
             Destroy(tile.gameObject);
         }   
 
-		foreach (var unit in structureManager.gameData.unitsOnField)
+		foreach (var unit in UnitsOnField)
             Destroy(unit.gameObject);
     }
     public void ReturnToRogueButton(bool isDefeat)
@@ -482,6 +483,16 @@ public class FightManager : MonoBehaviour
         FightManager fm = GameObject.Find(GeneralManager.FIGHT_MANAGER_OBJ_NAME).GetComponent<FightManager>();
         fm.EndPhase(faction);
     }
+
+    public void MakeUnitTakeDamage()
+	{
+        structureManager.actionPerformer.StartTakeDamageAnimation();
+	}
+
+    public bool IsAnyUnitNotIdle()
+	{
+        return true;
+	}
 }
 
 public enum ObjectClickedEnum{

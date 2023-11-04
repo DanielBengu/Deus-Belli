@@ -4001,6 +4001,7 @@ GameObject:
   - component: {fileID: 95152126842411956}
   - component: {fileID: 114707137662788328}
   - component: {fileID: 1833179862527344850}
+  - component: {fileID: -2700960119922953492}
   m_Layer: 0
   m_Name: Female B
   m_TagString: Untagged
@@ -4106,6 +4107,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   unitName: Charlie
   unitImage: {fileID: 21300000, guid: 0866b720585eada4e9e526b74df4e632, type: 3}
+  prefab: {fileID: 0}
+  startingTileNumber: 0
   hpMax: 3
   hpCurrent: 3
   movementMax: 3
@@ -4113,6 +4116,19 @@ MonoBehaviour:
   attack: 3
   faction: 1
   range: 2
+--- !u!65 &-2700960119922953492
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1896801731341158}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 1.1054275, y: 1.7124661, z: 0.39949736}
+  m_Center: {x: 0.05271446, y: 0.8320329, z: -0.012896976}
 --- !u!1 &1897974537148550
 GameObject:
   m_ObjectHideFlags: 0

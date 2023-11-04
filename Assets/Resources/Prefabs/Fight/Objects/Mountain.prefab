@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 2631254705330034779}
   - component: {fileID: 4577034113271871887}
   - component: {fileID: 1361763869215255447}
-  m_Layer: 0
+  m_Layer: 2
   m_Name: Mountain
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -94,7 +94,7 @@ MeshCollider:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4577034113271871886}
   m_Material: {fileID: 0}
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_Enabled: 1
   serializedVersion: 4
   m_Convex: 1

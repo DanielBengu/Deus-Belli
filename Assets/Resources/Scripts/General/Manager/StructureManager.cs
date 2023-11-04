@@ -37,6 +37,7 @@ public class StructureManager : MonoBehaviour
 
     public Dictionary<int, Tile> GenerateFightTiles(Dictionary<int, GameObject> tileList, FightManager manager, int topX, int y, int topZ, int XLength, int YLength)
     {
+        Transform objectsParent = GameObject.Find("Fight Objects").transform;
         Dictionary<int, Tile> mapTiles = new();
         Debug.Log("START TILE GENERATION");
         for(int i=0;i< YLength;i++)
@@ -52,7 +53,7 @@ public class StructureManager : MonoBehaviour
                     tileScript.SetupManager(manager);
                     tileScript.tileNumber = x + (i * XLength);
                     
-                    LoadObstacle(tileScript);
+                    LoadObstacle(tileScript, objectsParent);
 
                     /*float angle = 90f;
                     Vector3 rotation = new(angle, 0f, 0f);
@@ -65,13 +66,13 @@ public class StructureManager : MonoBehaviour
         return mapTiles;
     }
 
-    public void LoadObstacle(Tile tile)
+    public void LoadObstacle(Tile tile, Transform parent)
 	{
         if (tile.model3D == null)
             return;
 
         tile.model3D.transform.position = tile.transform.position;
-        Instantiate(tile.model3D);
+        Instantiate(tile.model3D, parent);
 	}
 
     public RogueNode GenerateRogueTile(int currentRow, int positionOnRow, int maxRowOnMap, int nodeIndex, int nodeSeed, Transform origin, Transform firstNode, RogueManager rm)

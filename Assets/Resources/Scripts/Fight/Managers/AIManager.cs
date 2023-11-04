@@ -10,6 +10,7 @@ public class AIManager : MonoBehaviour
     FightManager fightManager;
     readonly Queue<Unit> unitsToCalculate = new();
     public int seed = 0;
+    public Unit currentUnitTurn;
     
     /// <summary>
     /// Start is called on the frame when a script is enabled just before
@@ -22,20 +23,21 @@ public class AIManager : MonoBehaviour
     }
 
     void Update(){
-        if(fightManager.CurrentTurn == FightManager.USER_FACTION || fightManager.IsAnyUnitMoving)
+        if(fightManager.CurrentTurnCount == FightManager.USER_FACTION || fightManager.IsAnyUnitMoving)
             return;
 
         if(unitsToCalculate.Count > 0){
-            CalculateTurnForUnit(unitsToCalculate.Dequeue());
+            currentUnitTurn = unitsToCalculate.Dequeue();
+            CalculateTurnForUnit(currentUnitTurn);
         }else{
-            Debug.Log($"END AI TURN FOR FACTION {fightManager.CurrentTurn}");
-            fightManager.EndTurn(fightManager.CurrentTurn);
+            Debug.Log($"END AI TURN FOR FACTION {fightManager.CurrentTurnCount}");
+            fightManager.EndTurn(fightManager.CurrentTurnCount);
         }
     }
 
     public void StartAITurn(){
-        Debug.Log($"START AI TURN FOR FACTION {fightManager.CurrentTurn}");
-        foreach (var unit in structureManager.gameData.unitsOnField.Where(u => u.faction == fightManager.CurrentTurn))
+        Debug.Log($"START AI TURN FOR FACTION {fightManager.CurrentTurnCount}");
+        foreach (var unit in structureManager.gameData.unitsOnField.Where(u => u.faction == fightManager.CurrentTurnCount))
         {
             unit.movementCurrent = unit.movementMax;
             unitsToCalculate.Enqueue(unit);

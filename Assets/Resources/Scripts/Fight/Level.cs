@@ -35,6 +35,7 @@ public class Level
 
 	public void GenerateTerrain()
 	{
+		Transform objectsParent = GameObject.Find("Fight Objects").transform;
 		int[] mountains = new int[RandomManager.GetRandomValue(seed, 0, 10)];
 		for (int i = 0; i < mountains.Length; i++)
 		{
@@ -46,7 +47,7 @@ public class Level
 			if (mountains.Contains(i))
 			{
 				GameObject objectToSpawn = ObjectsManager.GetRandomObject(seed * 12 * (i + 1), ObjectsManager.TypeOfObstacle.SingleTile, ObjectsManager.MapTheme.Plains);
-				GameObject tileObject = Object.Instantiate(objectToSpawn);
+				GameObject tileObject = Object.Instantiate(objectToSpawn, objectsParent);
 				Tile tileScript = tileObject.GetComponent<Tile>();
 
 				tileObject.name = $"Terrain_{i}";
@@ -57,7 +58,7 @@ public class Level
 			else
 			{
 				GameObject objectToSpawn = ObjectsManager.GetRandomObject(seed * 12 / (i + 1), ObjectsManager.TypeOfObstacle.Terrain, ObjectsManager.MapTheme.Plains);
-				GameObject tileObject = Object.Instantiate(objectToSpawn);
+				GameObject tileObject = Object.Instantiate(objectToSpawn, objectsParent);
 				tileObject.name = $"Terrain_{i}";
 				tilesDict.Add(i, tileObject);
 			}

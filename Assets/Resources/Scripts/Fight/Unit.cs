@@ -17,8 +17,13 @@ public class Unit : MonoBehaviour
 
     public List<Tile> PossibleMovements { get { return GetPossibleMovements(); } }
 
+    public void OnMouseDown()
+    {
+        CurrentTile.OnMouseDown();
+    }
+
     #region Stats
-        public int hpMax;
+    public int hpMax;
         public int hpCurrent;
         public float movementMax;
         public float movementCurrent;
@@ -56,4 +61,9 @@ public class Unit : MonoBehaviour
         range = int.Parse(data[6]);
         startingTileNumber = int.Parse(data[7]);
     }
+
+    public void StartDamageForOpponent()
+	{
+        fightManager.MakeUnitTakeDamage();
+	}
 }

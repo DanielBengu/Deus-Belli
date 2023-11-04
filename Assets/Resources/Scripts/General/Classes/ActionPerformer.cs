@@ -10,6 +10,13 @@ public class ActionPerformer
     public Pathfinding pathfinding;
     public Movement movement;
 
+    public Unit enemyInQueueForAnimation;
+
+    public bool IsUnitNotIdle(Unit unit)
+	{
+        return false;
+    }
+
     public void StartAction(ActionPerformed action, GameObject source, GameObject target)
     {
         switch (action)
@@ -68,15 +75,13 @@ public class ActionPerformer
 
     void Attack(Unit attacker, Unit defender)
     {
+        enemyInQueueForAnimation = defender;
         defender.transform.LookAt(attacker.CurrentTile.transform, Vector3.up);
         attacker.transform.LookAt(defender.CurrentTile.transform, Vector3.up);
 
         AnimationPerformer.PerformAnimation(Animation.Attack, attacker.gameObject);
-        AnimationPerformer.PerformAnimation(Animation.TakeDamage, defender.gameObject);
-
+        
         defender.hpCurrent -= attacker.attack;
-        if (defender.hpCurrent <= 0)
-            KillUnit(defender);
     }
 
     void KillUnit(Unit unitToKill)
@@ -89,5 +94,13 @@ public class ActionPerformer
     {
         unit.movementCurrent -= movementToRemove;
         if (unit.movementCurrent < 0) unit.movementCurrent = 0;
+    }
+
+    public void StartTakeDamageAnimation()
+	{
+        if (enemyInQueueForAnimation.hpCurrent <= 0)
+            KillUnit(enemyInQueueForAnimation);
+        else
+            AnimationPerformer.PerformAnimation(Animation.TakeDamage, enemyInQueueForAnimation.gameObject);
     }
 }
