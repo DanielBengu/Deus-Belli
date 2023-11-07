@@ -21,20 +21,32 @@ public class Tile : MonoBehaviour, IComparable<Tile>
 
     public int tileNumber;
 
+    public bool isEdit;
+
     public void OnMouseDown()
     {
+		if (isEdit)
+		{
+            MapEditorManager editor = GameObject.Find("Map Editor").GetComponent<MapEditorManager>();
+            editor.ChangeTile(this);
+            return;
+		}
+
         ObjectClickedEnum objClicked;
         GameObject objectToManage;
-        if(manager.IsGameInStandby)
+        if (manager.IsGameInStandby)
             return;
 
-        if(unitOnTile){
-            if(unitOnTile.faction == FightManager.USER_FACTION)
+        if (unitOnTile)
+        {
+            if (unitOnTile.faction == FightManager.USER_FACTION)
                 manager.UnitSelected = unitOnTile.GetComponent<Unit>();
             objClicked = ObjectClickedEnum.UnitTile;
             objectToManage = unitOnTile.gameObject;
-            
-        }else{
+
+        }
+        else
+        {
             objClicked = ObjectClickedEnum.EmptyTile;
             objectToManage = gameObject;
         }

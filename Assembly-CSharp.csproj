@@ -74,6 +74,7 @@
     <Compile Include="Assets\Resources_moved\Scripts\Fight\Level.cs" />
     <Compile Include="Assets\Resources_moved\Scripts\Menu\CharactersButtonScript.cs" />
     <Compile Include="Assets\Resources_moved\Scripts\General\Manager\ObjectsManager.cs" />
+    <Compile Include="Assets\MapEditorManager.cs" />
     <Compile Include="Assets\Resources_moved\Scripts\General\Manager\GeneralManager.cs" />
     <Compile Include="Assets\Resources_moved\Scripts\Rogue\Classes\Merchant.cs" />
     <Compile Include="Assets\Resources_moved\Scripts\GodsArchive\Gods\Agbara\Ataiku.cs" />

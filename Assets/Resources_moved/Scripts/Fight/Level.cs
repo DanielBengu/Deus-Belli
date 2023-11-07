@@ -33,14 +33,14 @@ public class Level
         SetupEnemies(tileType, currentRow, difficulty);
     }
 
-	// if isBasic is true then the map generated will be a basic map with only grass
-	public void GenerateTerrain(bool isBasic, Transform objectsParent)
+	// if isEdit is true then the map generated will be a basic map with only grass
+	public void GenerateTerrain(bool isEdit, Transform objectsParent)
 	{
 		int[] mountains = new int[RandomManager.GetRandomValue(seed, 0, 10)];
 		for (int i = 0; i < mountains.Length; i++)
 		{
 			int mountainSeed = seed * (i + 1);
-			mountains[i] = isBasic ? -1 : RandomManager.GetRandomValue(mountainSeed, 0, HorizontalTiles * VerticalTiles);
+			mountains[i] = isEdit ? -1 : RandomManager.GetRandomValue(mountainSeed, 0, HorizontalTiles * VerticalTiles);
 		}
 		for (int i = 0; i < HorizontalTiles * VerticalTiles; i++)
 		{
@@ -52,14 +52,17 @@ public class Level
 
 				tileObject.name = $"Terrain_{i}";
 				tileScript.IsPassable = false;
-				tileScript.MovementCost = 9;
+				tileScript.isEdit = true;
 				tilesDict.Add(i, tileObject);
 			}
 			else
 			{
 				GameObject objectToSpawn = ObjectsManager.GetRandomObject(seed * 12 / (i + 1), ObjectsManager.TypeOfObstacle.Terrain, ObjectsManager.MapTheme.Plains);
 				GameObject tileObject = Object.Instantiate(objectToSpawn, objectsParent);
+				Tile tileScript = tileObject.GetComponent<Tile>();
+
 				tileObject.name = $"Terrain_{i}";
+				tileScript.isEdit = true;
 				tilesDict.Add(i, tileObject);
 			}
 		}
