@@ -5,13 +5,6 @@ using UnityEngine.UI;
 
 public class StructureManager : MonoBehaviour
 {
-    [SerializeField]
-    GameObject sorceressPrefab;
-    [SerializeField]
-    GameObject orcPrefab;
-    [SerializeField]
-    GameObject dragonPrefab;
-
     public UIManager uiManager;
     public SpriteManager spriteManager;
     public ActionPerformer actionPerformer;
@@ -29,15 +22,15 @@ public class StructureManager : MonoBehaviour
 
 	public Dictionary<int, Tile> SetupFightSection(Dictionary<int, GameObject> tileList, FightManager manager, int topX, int y, int topZ, int X_Length, int Y_Length)
 	{
-        var mapTiles = GenerateFightTiles(tileList, manager, topX, y, topZ, X_Length, Y_Length);
+        Transform objectsParent = GameObject.Find("Fight Objects").transform;
+        var mapTiles = GenerateFightTiles(tileList, manager, objectsParent, topX, y, topZ, X_Length, Y_Length);
         pathfinding = new(mapTiles, X_Length, Y_Length);
         actionPerformer.pathfinding = pathfinding;
         return mapTiles;
     }
 
-    public Dictionary<int, Tile> GenerateFightTiles(Dictionary<int, GameObject> tileList, FightManager manager, int topX, int y, int topZ, int XLength, int YLength)
+    public Dictionary<int, Tile> GenerateFightTiles(Dictionary<int, GameObject> tileList, FightManager manager, Transform objectsParent, int topX, int y, int topZ, int XLength, int YLength)
     {
-        Transform objectsParent = GameObject.Find("Fight Objects").transform;
         Dictionary<int, Tile> mapTiles = new();
         Debug.Log("START TILE GENERATION");
         for(int i=0;i< YLength;i++)
@@ -204,7 +197,7 @@ public class StructureManager : MonoBehaviour
 	}
     public void InstantiateMerchantItems(MerchantItem[] itemList)
 	{
-        GameObject itemPrefab = Resources.Load<GameObject>($"Prefabs/Merchant/MerchantItem");
+        GameObject itemPrefab = AddressablesManager.LoadResource<GameObject>(AddressablesManager.TypeOfResource.Prefab, "MerchantItem");
 
         for (int i = 0; i < itemList.Length; i++)
         {

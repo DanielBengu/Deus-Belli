@@ -15,6 +15,6 @@ public static class UnitsArchive
 	public static GameObject GetUnit(Units unit)
 	{
 		string unitPrefabName = unit.ToString().Replace('_', ' ');
-		return Resources.Load<GameObject>($"Prefabs/Units/{unitPrefabName}");
+		return AddressablesManager.LoadResource<GameObject>(AddressablesManager.TypeOfResource.Units, unitPrefabName);
 	}
 }

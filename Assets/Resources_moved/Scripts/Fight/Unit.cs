@@ -54,7 +54,7 @@ public class Unit : MonoBehaviour
     public void LoadData(string[] data)
 	{
         unitName = data[1];
-        unitImage = Resources.Load<Sprite>($"Sprites/Units/{data[2]}");
+        unitImage = AddressablesManager.LoadResource<Sprite>(AddressablesManager.TypeOfResource.Sprite, data[2]);
         hpMax = int.Parse(data[3]);
         movementMax = int.Parse(data[4]);
         attack = int.Parse(data[5]);

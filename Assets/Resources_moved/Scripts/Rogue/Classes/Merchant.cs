@@ -39,7 +39,7 @@ public class Merchant
 		for (int i = 0; i < items.Length; i++)
 		{
 			string[] data = items[i].Split(';');
-			Unit unit = Resources.Load<GameObject>($"Prefabs/Units/{data[1]}").GetComponent<Unit>();
+			Unit unit = AddressablesManager.LoadResource<GameObject>(AddressablesManager.TypeOfResource.Prefab, data[1]).GetComponent<Unit>();
 			if (int.Parse(data[0]) == (int)ItemType.Unit)
 				ItemList[i] = new(unit, "Warrior", int.Parse(data[2]));
 			else
@@ -68,7 +68,7 @@ public class Merchant
 
 	string[] GetMerchantItems()
 	{
-		return File.ReadAllLines("Assets\\Resources\\Scripts\\Rogue\\TXT\\Merchant.txt");
+		return File.ReadAllLines("Assets\\Resources_moved\\Scripts\\Rogue\\TXT\\Merchant.txt");
 	}
 }
 

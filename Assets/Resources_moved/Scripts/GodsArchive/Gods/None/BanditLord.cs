@@ -37,7 +37,7 @@ public class BanditLord : IGod
 
 	public Unit GetUnit(string unitName)
 	{
-		return Resources.Load<GameObject>($"Prefabs/Units/{_religion}/{_name}/{unitName}").GetComponent<Unit>();
+		return AddressablesManager.LoadResource<GameObject>(AddressablesManager.TypeOfResource.Units, unitName).GetComponent<Unit>();
 	}
 	public string GetName()
 	{

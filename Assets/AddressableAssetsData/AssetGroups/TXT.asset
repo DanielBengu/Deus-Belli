@@ -18,7 +18,15 @@ MonoBehaviour:
   m_GUID: d71f5c89192500241862c4daf3a0d7b7
   m_SerializeEntries:
   - m_GUID: 7d76cc544dfb3794ebb43d83fe27c9b7
-    m_Address: Unit list
+    m_Address: TXT/Unit list
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+  - m_GUID: e42a76aa92812854c84e25eb321d7184
+    m_Address: TXT/Encounters
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+  - m_GUID: e72b85ea295633f48983d239777243c3
+    m_Address: TXT/Merchant
     m_ReadOnly: 0
     m_SerializedLabels: []
   m_ReadOnly: 0

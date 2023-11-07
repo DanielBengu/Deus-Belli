@@ -1,0 +1,33 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bbb281ee3bf0b054c82ac2347e9e782c, type: 3}
+  m_Name: Rogue Assets
+  m_EditorClassIdentifier: 
+  m_GroupName: Rogue Assets
+  m_Data:
+    m_SerializedData: []
+  m_GUID: bd21cc919c850ea438e07278092a01be
+  m_SerializeEntries:
+  - m_GUID: 15333752f732b0b4ea7fe706574287fd
+    m_Address: Prefab/Rogue Victory
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+  - m_GUID: 30270fdf984194449b9b1ce91ff8bd68
+    m_Address: Prefab/Rogue Defeat
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+  m_ReadOnly: 0
+  m_Settings: {fileID: 11400000, guid: 42fa5884c9964964993dbdd708fbd850, type: 2}
+  m_SchemaSet:
+    m_Schemas:
+    - {fileID: 11400000, guid: e17682b544a3dfc408b010b15434800a, type: 2}
+    - {fileID: 11400000, guid: 264ef87bc5cdeae4f8f414c562572f3c, type: 2}

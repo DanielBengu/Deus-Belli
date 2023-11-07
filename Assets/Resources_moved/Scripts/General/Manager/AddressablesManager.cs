@@ -6,14 +6,6 @@ using UnityEngine.ResourceManagement.AsyncOperations;
 
 public static class AddressablesManager
 {
-	public static Dictionary<TypeOfResource, string> addressablesNames = new()
-	{
-		{ TypeOfResource.Scenes, "Scenes" },
-		{ TypeOfResource.TXT, "TXT" },
-		{ TypeOfResource.Units, "Units" },
-		{ TypeOfResource.Terrains, "Terrains" },
-	};
-
 	static T AddressableLoad<T>(string path)
 	{
 		AsyncOperationHandle<T> opHandle = Addressables.LoadAssetAsync<T>(path);
@@ -22,7 +14,7 @@ public static class AddressablesManager
 
 	public static T LoadResource<T>(TypeOfResource resource, string name)
 	{
-		string path = $"{addressablesNames[resource]}/{name}";
+		string path = $"{resource}/{name}";
 		return AddressableLoad<T>(path);
 	}
 
@@ -32,5 +24,7 @@ public static class AddressablesManager
 		TXT,
 		Units,
 		Terrains,
+		Sprite,
+		Prefab
 	}
 }

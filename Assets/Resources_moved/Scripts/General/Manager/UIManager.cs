@@ -36,8 +36,8 @@ public class UIManager : MonoBehaviour
 
         infoPanel = GameObject.Find("Info");
         endTurnButton = GameObject.Find("End Turn Button");
-        fightVictoryScreen = Resources.Load<GameObject>($"Prefabs/Fight/{fightVictoryScreenPrefabName}");
-        fightDefeatScreen = Resources.Load<GameObject>($"Prefabs/Fight/{fightDefeatScreenPrefabName}");
+        fightVictoryScreen = AddressablesManager.LoadResource<GameObject>(AddressablesManager.TypeOfResource.Prefab, "Fight Victory");
+        fightDefeatScreen = AddressablesManager.LoadResource<GameObject>(AddressablesManager.TypeOfResource.Prefab, "Fight Defeat");
 
         unitImage = infoPanel.transform.Find("Image").gameObject.GetComponent<Image>();
         nameText = infoPanel.transform.Find("Unit title").gameObject.GetComponent<TextMeshProUGUI>();
@@ -58,8 +58,8 @@ public class UIManager : MonoBehaviour
     public void SetRogueVariables(int gold, string godSelected, int seed)
 	{
         rogueCanvas = GameObject.Find("RogueCanvas");
-        rogueVictoryScreen = Resources.Load<GameObject>($"Prefabs/Rogue/Children/{rogueVictoryScreenPrefabName}");
-        rogueDefeatScreen = Resources.Load<GameObject>($"Prefabs/Rogue/Children/{rogueDefeatScreenPrefabName}");
+        rogueVictoryScreen = AddressablesManager.LoadResource<GameObject>(AddressablesManager.TypeOfResource.Prefab, "Rogue Victory");
+        rogueDefeatScreen = AddressablesManager.LoadResource<GameObject>(AddressablesManager.TypeOfResource.Prefab, "Fight Defeat");
         TextMeshProUGUI rogueGold = GameObject.Find("Gold Value").GetComponent<TextMeshProUGUI>();
         rogueGold.text = gold.ToString();
         TextMeshProUGUI rogueGod = GameObject.Find("God Text").GetComponent<TextMeshProUGUI>();
@@ -81,7 +81,7 @@ public class UIManager : MonoBehaviour
     public void SetEventVariables(Event data)
 	{
         Image image = GameObject.Find("Image").GetComponent<Image>();
-        image.sprite = Resources.Load<Sprite>($"Sprites/Events/{data.ImageName}");
+        image.sprite = AddressablesManager.LoadResource<Sprite>(AddressablesManager.TypeOfResource.Sprite, data.ImageName);
         TextMeshProUGUI title = GameObject.Find("Title").GetComponent<TextMeshProUGUI>();
         title.text = data.Title;
         TextMeshProUGUI description = GameObject.Find("Description").GetComponent<TextMeshProUGUI>();

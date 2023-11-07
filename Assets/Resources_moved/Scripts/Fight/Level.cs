@@ -33,14 +33,14 @@ public class Level
         SetupEnemies(tileType, currentRow, difficulty);
     }
 
-	public void GenerateTerrain()
+	// if isBasic is true then the map generated will be a basic map with only grass
+	public void GenerateTerrain(bool isBasic, Transform objectsParent)
 	{
-		Transform objectsParent = GameObject.Find("Fight Objects").transform;
 		int[] mountains = new int[RandomManager.GetRandomValue(seed, 0, 10)];
 		for (int i = 0; i < mountains.Length; i++)
 		{
 			int mountainSeed = seed * (i + 1);
-			mountains[i] = RandomManager.GetRandomValue(mountainSeed, 0, HorizontalTiles * VerticalTiles);
+			mountains[i] = isBasic ? -1 : RandomManager.GetRandomValue(mountainSeed, 0, HorizontalTiles * VerticalTiles);
 		}
 		for (int i = 0; i < HorizontalTiles * VerticalTiles; i++)
 		{

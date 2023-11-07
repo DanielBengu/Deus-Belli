@@ -125,7 +125,8 @@ public class FightManager : MonoBehaviour
     {
         IsSetup = true;
 
-        level.GenerateTerrain();
+        Transform objectsParent = GameObject.Find("Fight Objects").transform;
+        level.GenerateTerrain(false, objectsParent);
 
         // Setup the terrain based on the level information
         var tiles = structureManager.SetupFightSection(level.tilesDict, this, level.TopLeftSquarePositionX, level.YPosition, level.TopLeftSquarePositionZ, level.HorizontalTiles, level.VerticalTiles);

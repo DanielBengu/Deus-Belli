@@ -77,7 +77,7 @@ public class NewGameManager : MonoBehaviour
             godImage.color = currentColor;
         }
 
-        godImage.sprite = Resources.Load<Sprite>($"Sprites/Gods/{religionSelected.Name}/{godName}");
+        godImage.sprite = AddressablesManager.LoadResource<Sprite>(AddressablesManager.TypeOfResource.Sprite, godName);
     }
     public void StartGame()
     {

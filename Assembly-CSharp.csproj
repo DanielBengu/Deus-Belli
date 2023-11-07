@@ -88,6 +88,7 @@
     <Compile Include="Assets\Resources_moved\Scripts\Menu\OptionsMenu.cs" />
     <Compile Include="Assets\Resources_moved\Scripts\Fight\Classes\Movement.cs" />
     <Compile Include="Assets\Resources_moved\Scripts\GodsArchive\Gods\None\BanditLord.cs" />
+    <Compile Include="Assets\Resources_moved\Scripts\General\Manager\AddressablesManager.cs" />
     <Compile Include="Assets\Resources_moved\Scripts\GodsArchive\InterfacesAndClasses\IGod.cs" />
     <Compile Include="Assets\Resources_moved\Scripts\Fight\Tile.cs" />
     <Compile Include="Assets\Resources_moved\Scripts\Fight\Managers\TurnManager.cs" />
@@ -102,7 +103,6 @@
     <Compile Include="Assets\Resources_moved\Scripts\Menu\TextMenu.cs" />
     <Compile Include="Assets\C&amp;C_Pack\Goblin_rouge\Script\Goblin_ro_ctrl.cs" />
     <Compile Include="Assets\Resources_moved\Scripts\Fight\Unit.cs" />
-    <Compile Include="Assets\Resources_moved\Scripts\General\Manager\AddressablesManager.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Assets\TextMesh Pro\Shaders\TMPro.cginc" />
