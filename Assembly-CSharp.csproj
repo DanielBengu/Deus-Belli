@@ -56,60 +56,65 @@
     <Analyzer Include="C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\Common7\IDE\Extensions\Microsoft\Visual Studio Tools for Unity\Analyzers\Microsoft.Unity.Analyzers.dll" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Assets\Resources\Scripts\General\Manager\SpriteManager.cs" />
-    <Compile Include="Assets\Resources\Scripts\General\Entity\EventEntity.cs" />
-    <Compile Include="Assets\Resources\Scripts\GodsArchive\InterfacesAndClasses\IReligion.cs" />
-    <Compile Include="Assets\Resources\Scripts\General\Manager\FileManager.cs" />
-    <Compile Include="Assets\Resources\Scripts\GodsArchive\Religions\Agbara.cs" />
-    <Compile Include="Assets\Resources\Scripts\General\Extensions\RandomExtension.cs" />
+    <Compile Include="Assets\Resources_moved\Scripts\General\Manager\SpriteManager.cs" />
+    <Compile Include="Assets\Resources_moved\Scripts\General\Entity\EventEntity.cs" />
+    <Compile Include="Assets\Resources_moved\Scripts\GodsArchive\InterfacesAndClasses\IReligion.cs" />
+    <Compile Include="Assets\Resources_moved\Scripts\General\Manager\FileManager.cs" />
+    <Compile Include="Assets\Resources_moved\Scripts\GodsArchive\Religions\Agbara.cs" />
+    <Compile Include="Assets\InitManager.cs" />
+    <Compile Include="Assets\Resources_moved\Scripts\General\Extensions\RandomExtension.cs" />
     <Compile Include="Assets\BasicBandit\DemoSceneBasicBandit\Scripts\ButtonFunction.cs" />
-    <Compile Include="Assets\Resources\Scripts\Fight\Managers\FightManager.cs" />
-    <Compile Include="Assets\Resources\Scripts\GodsArchive\Gods\Agbara\Omi.cs" />
-    <Compile Include="Assets\Resources\Scripts\Rogue\Classes\Event.cs" />
-    <Compile Include="Assets\Resources\Scripts\UnitsArchive.cs" />
-    <Compile Include="Assets\Resources\Scripts\Menu\MainMenu.cs" />
-    <Compile Include="Assets\Resources\Scripts\Rogue\RogueNode.cs" />
-    <Compile Include="Assets\Resources\Scripts\Fight\Classes\AnimationPerformer.cs" />
-    <Compile Include="Assets\Resources\Scripts\Fight\Level.cs" />
-    <Compile Include="Assets\Resources\Scripts\Menu\CharactersButtonScript.cs" />
-    <Compile Include="Assets\Resources\Scripts\General\Manager\ObjectsManager.cs" />
-    <Compile Include="Assets\Resources\Scripts\General\Manager\GeneralManager.cs" />
-    <Compile Include="Assets\Resources\Scripts\Rogue\Classes\Merchant.cs" />
-    <Compile Include="Assets\Resources\Scripts\GodsArchive\Gods\Agbara\Ataiku.cs" />
-    <Compile Include="Assets\Resources\Scripts\Rogue\Classes\EventOption.cs" />
-    <Compile Include="Assets\Resources\Scripts\General\Manager\UIManager.cs" />
-    <Compile Include="Assets\Resources\Scripts\General\Manager\StructureManager.cs" />
-    <Compile Include="Assets\Resources\Scripts\General\Manager\CameraManager.cs" />
-    <Compile Include="Assets\Resources\Scripts\General\Classes\ActionPerformer.cs" />
-    <Compile Include="Assets\Resources\Scripts\Fight\Managers\AIManager.cs" />
-    <Compile Include="Assets\Resources\Scripts\Menu\OptionsMenu.cs" />
-    <Compile Include="Assets\Resources\Scripts\Fight\Classes\Movement.cs" />
-    <Compile Include="Assets\Resources\Scripts\GodsArchive\Gods\None\BanditLord.cs" />
-    <Compile Include="Assets\Resources\Scripts\GodsArchive\InterfacesAndClasses\IGod.cs" />
-    <Compile Include="Assets\Resources\Scripts\Fight\Tile.cs" />
-    <Compile Include="Assets\Resources\Scripts\Rogue\Managers\RogueManager.cs" />
+    <Compile Include="Assets\Resources_moved\Scripts\Fight\Managers\FightManager.cs" />
+    <Compile Include="Assets\Resources_moved\Scripts\GodsArchive\Gods\Agbara\Omi.cs" />
+    <Compile Include="Assets\Resources_moved\Scripts\Rogue\Classes\Event.cs" />
+    <Compile Include="Assets\Resources_moved\Scripts\UnitsArchive.cs" />
+    <Compile Include="Assets\Resources_moved\Scripts\Menu\MainMenu.cs" />
+    <Compile Include="Assets\Resources_moved\Scripts\Rogue\RogueNode.cs" />
+    <Compile Include="Assets\Resources_moved\Scripts\Fight\Classes\AnimationPerformer.cs" />
+    <Compile Include="Assets\Resources_moved\Scripts\Fight\Level.cs" />
+    <Compile Include="Assets\Resources_moved\Scripts\Menu\CharactersButtonScript.cs" />
+    <Compile Include="Assets\Resources_moved\Scripts\General\Manager\ObjectsManager.cs" />
+    <Compile Include="Assets\Resources_moved\Scripts\General\Manager\GeneralManager.cs" />
+    <Compile Include="Assets\Resources_moved\Scripts\Rogue\Classes\Merchant.cs" />
+    <Compile Include="Assets\Resources_moved\Scripts\GodsArchive\Gods\Agbara\Ataiku.cs" />
+    <Compile Include="Assets\Resources_moved\Scripts\Rogue\Classes\EventOption.cs" />
+    <Compile Include="Assets\Resources_moved\Scripts\General\Manager\UIManager.cs" />
+    <Compile Include="Assets\Resources_moved\Scripts\General\Manager\StructureManager.cs" />
+    <Compile Include="Assets\Resources_moved\Scripts\TerrainArchive\TerrainArchive.cs" />
+    <Compile Include="Assets\Resources_moved\Scripts\General\Manager\CameraManager.cs" />
+    <Compile Include="Assets\Resources_moved\Scripts\General\Classes\ActionPerformer.cs" />
+    <Compile Include="Assets\Resources_moved\Scripts\Fight\Managers\AIManager.cs" />
+    <Compile Include="Assets\Resources_moved\Scripts\General\Manager\ScenesManager.cs" />
+    <Compile Include="Assets\Resources_moved\Scripts\Menu\OptionsMenu.cs" />
+    <Compile Include="Assets\Resources_moved\Scripts\Fight\Classes\Movement.cs" />
+    <Compile Include="Assets\Resources_moved\Scripts\GodsArchive\Gods\None\BanditLord.cs" />
+    <Compile Include="Assets\Resources_moved\Scripts\GodsArchive\InterfacesAndClasses\IGod.cs" />
+    <Compile Include="Assets\Resources_moved\Scripts\Fight\Tile.cs" />
+    <Compile Include="Assets\Resources_moved\Scripts\Fight\Managers\TurnManager.cs" />
+    <Compile Include="Assets\Resources_moved\Scripts\Rogue\Managers\RogueManager.cs" />
     <Compile Include="Assets\Cartoon Heroes\Scripts\SetCharacter\SetCharacter.cs" />
-    <Compile Include="Assets\Resources\Scripts\Fight\Classes\FirstStageArchive.cs" />
-    <Compile Include="Assets\Resources\Scripts\GodsArchive\InterfacesAndClasses\Encounter.cs" />
-    <Compile Include="Assets\Resources\Scripts\Menu\NewGameManager.cs" />
-    <Compile Include="Assets\Resources\Scripts\Fight\Classes\Pathfinding.cs" />
+    <Compile Include="Assets\Resources_moved\Scripts\Fight\Classes\FirstStageArchive.cs" />
+    <Compile Include="Assets\Resources_moved\Scripts\GodsArchive\InterfacesAndClasses\Encounter.cs" />
+    <Compile Include="Assets\Resources_moved\Scripts\Menu\NewGameManager.cs" />
+    <Compile Include="Assets\Resources_moved\Scripts\Custom Creator\CustomCreatorManager.cs" />
+    <Compile Include="Assets\Resources_moved\Scripts\Fight\Classes\Pathfinding.cs" />
     <Compile Include="Assets\BasicBandit\DemoSceneBasicBandit\Scripts\MovementCamera.cs" />
-    <Compile Include="Assets\Resources\Scripts\Menu\TextMenu.cs" />
+    <Compile Include="Assets\Resources_moved\Scripts\Menu\TextMenu.cs" />
     <Compile Include="Assets\C&amp;C_Pack\Goblin_rouge\Script\Goblin_ro_ctrl.cs" />
-    <Compile Include="Assets\Resources\Scripts\Fight\Unit.cs" />
-    <Compile Include="Assets\Resources\Scripts\Fight\Managers\TurnManager.cs" />
+    <Compile Include="Assets\Resources_moved\Scripts\Fight\Unit.cs" />
+    <Compile Include="Assets\Resources_moved\Scripts\General\Manager\AddressablesManager.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Assets\TextMesh Pro\Shaders\TMPro.cginc" />
     <None Include="Assets\TextMesh Pro\Shaders\TMP_SDF-Mobile Overlay.shader" />
     <None Include="Assets\TextMesh Pro\Shaders\TMP_Bitmap.shader" />
-    <None Include="Assets\Resources\Sprites\Objects\Tables\Brass Marble Table\Brass Table\MAXFILES.TXT" />
+    <None Include="Assets\Resources_moved\Sprites\Objects\Tables\Brass Marble Table\Brass Table\MAXFILES.TXT" />
     <None Include="Assets\TextMesh Pro\Shaders\TMPro_Mobile.cginc" />
     <None Include="Assets\TextMesh Pro\Shaders\TMP_SDF SSD.shader" />
-    <None Include="Assets\Resources\Scripts\Rogue\TXT\Encounters.txt" />
+    <None Include="Assets\Resources_moved\Scripts\Rogue\TXT\Encounters.txt" />
     <None Include="Assets\TextMesh Pro\Shaders\TMP_SDF-Surface-Mobile.shader" />
     <None Include="Assets\Ideas\Character selection.txt" />
-    <None Include="Assets\Resources\Scripts\Rogue\TXT\Merchant.txt" />
+    <None Include="Assets\Resources_moved\Scripts\Rogue\TXT\Merchant.txt" />
     <None Include="Assets\TextMesh Pro\Shaders\TMP_SDF-Surface.shader" />
     <None Include="Assets\TextMesh Pro\Sprites\EmojiOne Attribution.txt" />
     <None Include="Assets\TextMesh Pro\Shaders\TMP_Bitmap-Custom-Atlas.shader" />
@@ -124,7 +129,7 @@
     <None Include="Assets\TextMesh Pro\Shaders\TMP_SDF-Mobile Masking.shader" />
     <None Include="Assets\Ork berserker\materials\Standard_Two_Sided .shader" />
     <None Include="Assets\Documentation\Player Data.txt" />
-    <None Include="Assets\Resources\Scripts\General\Player Data\Unit list.txt" />
+    <None Include="Assets\Resources_moved\Scripts\General\Player Data\Unit list.txt" />
     <None Include="Assets\Documentation\Events Management.txt" />
     <None Include="Assets\TextMesh Pro\Shaders\TMP_SDF Overlay.shader" />
     <None Include="Assets\TextMesh Pro\Shaders\TMP_Bitmap-Mobile.shader" />
@@ -786,8 +791,14 @@
     <Reference Include="Unity.2D.Tilemap.Editor">
       <HintPath>Library\ScriptAssemblies\Unity.2D.Tilemap.Editor.dll</HintPath>
     </Reference>
+    <Reference Include="UnityEditor.CacheServer">
+      <HintPath>Library\ScriptAssemblies\UnityEditor.CacheServer.dll</HintPath>
+    </Reference>
     <Reference Include="PsdPlugin">
       <HintPath>Library\ScriptAssemblies\PsdPlugin.dll</HintPath>
+    </Reference>
+    <Reference Include="Unity.Addressables">
+      <HintPath>Library\ScriptAssemblies\Unity.Addressables.dll</HintPath>
     </Reference>
     <Reference Include="Unity.TextMeshPro.Editor">
       <HintPath>Library\ScriptAssemblies\Unity.TextMeshPro.Editor.dll</HintPath>
@@ -822,11 +833,8 @@
     <Reference Include="Unity.2D.Path.Editor">
       <HintPath>Library\ScriptAssemblies\Unity.2D.Path.Editor.dll</HintPath>
     </Reference>
-    <Reference Include="Unity.2D.Psdimporter.Editor">
-      <HintPath>Library\ScriptAssemblies\Unity.2D.Psdimporter.Editor.dll</HintPath>
-    </Reference>
-    <Reference Include="com.rlabrecque.steamworks.net.editor">
-      <HintPath>Library\ScriptAssemblies\com.rlabrecque.steamworks.net.editor.dll</HintPath>
+    <Reference Include="Unity.ResourceManager">
+      <HintPath>Library\ScriptAssemblies\Unity.ResourceManager.dll</HintPath>
     </Reference>
     <Reference Include="Unity.VisualScripting.Flow">
       <HintPath>Library\ScriptAssemblies\Unity.VisualScripting.Flow.dll</HintPath>
@@ -840,14 +848,17 @@
     <Reference Include="Unity.Rider.Editor">
       <HintPath>Library\ScriptAssemblies\Unity.Rider.Editor.dll</HintPath>
     </Reference>
-    <Reference Include="Unity.InternalAPIEditorBridge.001">
-      <HintPath>Library\ScriptAssemblies\Unity.InternalAPIEditorBridge.001.dll</HintPath>
+    <Reference Include="Unity.2D.Psdimporter.Editor">
+      <HintPath>Library\ScriptAssemblies\Unity.2D.Psdimporter.Editor.dll</HintPath>
     </Reference>
     <Reference Include="UnityEngine.UI">
       <HintPath>Library\ScriptAssemblies\UnityEngine.UI.dll</HintPath>
     </Reference>
     <Reference Include="Unity.2D.Tilemap.Extras.Editor">
       <HintPath>Library\ScriptAssemblies\Unity.2D.Tilemap.Extras.Editor.dll</HintPath>
+    </Reference>
+    <Reference Include="com.rlabrecque.steamworks.net.editor">
+      <HintPath>Library\ScriptAssemblies\com.rlabrecque.steamworks.net.editor.dll</HintPath>
     </Reference>
     <Reference Include="com.rlabrecque.steamworks.net">
       <HintPath>Library\ScriptAssemblies\com.rlabrecque.steamworks.net.dll</HintPath>
@@ -867,6 +878,9 @@
     <Reference Include="Unity.VisualScripting.Shared.Editor">
       <HintPath>Library\ScriptAssemblies\Unity.VisualScripting.Shared.Editor.dll</HintPath>
     </Reference>
+    <Reference Include="Unity.InternalAPIEditorBridge.001">
+      <HintPath>Library\ScriptAssemblies\Unity.InternalAPIEditorBridge.001.dll</HintPath>
+    </Reference>
     <Reference Include="Unity.2D.Animation.Runtime">
       <HintPath>Library\ScriptAssemblies\Unity.2D.Animation.Runtime.dll</HintPath>
     </Reference>
@@ -882,8 +896,17 @@
     <Reference Include="Unity.2D.Common.Runtime">
       <HintPath>Library\ScriptAssemblies\Unity.2D.Common.Runtime.dll</HintPath>
     </Reference>
+    <Reference Include="Unity.ScriptableBuildPipeline">
+      <HintPath>Library\ScriptAssemblies\Unity.ScriptableBuildPipeline.dll</HintPath>
+    </Reference>
     <Reference Include="Unity.2D.SpriteShape.Editor">
       <HintPath>Library\ScriptAssemblies\Unity.2D.SpriteShape.Editor.dll</HintPath>
+    </Reference>
+    <Reference Include="Unity.Addressables.Editor">
+      <HintPath>Library\ScriptAssemblies\Unity.Addressables.Editor.dll</HintPath>
+    </Reference>
+    <Reference Include="Unity.ScriptableBuildPipeline.Editor">
+      <HintPath>Library\ScriptAssemblies\Unity.ScriptableBuildPipeline.Editor.dll</HintPath>
     </Reference>
     <Reference Include="Unity.2D.Common.Editor">
       <HintPath>Library\ScriptAssemblies\Unity.2D.Common.Editor.dll</HintPath>
