@@ -1645,6 +1645,10 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 7098754608342989373, guid: 7348325941643ff4b8f4a79327fc79f4, type: 3}
     - target: {fileID: 6697232111626821328, guid: 472fbc23a87eba042b353f4aed17999c, type: 3}
+      propertyPath: mapLoadPreviewParent
+      value: 
+      objectReference: {fileID: 7681462611010738823}
+    - target: {fileID: 6697232111626821328, guid: 472fbc23a87eba042b353f4aed17999c, type: 3}
       propertyPath: mapLoadContentViewPort
       value: 
       objectReference: {fileID: 1946386290}
@@ -1697,5 +1701,10 @@ PrefabInstance:
 --- !u!1 &7681462611010738822 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 1568699258879383536, guid: 472fbc23a87eba042b353f4aed17999c, type: 3}
+  m_PrefabInstance: {fileID: 7681462611010738821}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &7681462611010738823 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 4745609029004718221, guid: 472fbc23a87eba042b353f4aed17999c, type: 3}
   m_PrefabInstance: {fileID: 7681462611010738821}
   m_PrefabAsset: {fileID: 0}

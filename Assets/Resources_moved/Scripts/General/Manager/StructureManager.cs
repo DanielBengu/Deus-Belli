@@ -45,11 +45,6 @@ public class StructureManager : MonoBehaviour
 
                     tileScript.SetupManager(manager);
                     tileScript.tileNumber = x + (i * XLength);
-                    
-
-                    /*float angle = 90f;
-                    Vector3 rotation = new(angle, 0f, 0f);
-                    tile.transform.rotation = Quaternion.Euler(rotation);*/
                     mapTiles.Add(tileScript.tileNumber, tileScript);
                 #endregion
             }

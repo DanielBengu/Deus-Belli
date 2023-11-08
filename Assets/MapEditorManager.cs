@@ -20,6 +20,9 @@ public class MapEditorManager : MonoBehaviour
 	[SerializeField] GameObject mapLoadPanel;
 	[SerializeField] GameObject mapLoadContentViewPort;
 	[SerializeField] GameObject mapLoadViewPortLine;
+	[SerializeField] Transform mapLoadPreviewParent;
+
+	CustomCreatorManager manager;
 
 	string mapArchivePath;
 
@@ -30,13 +33,13 @@ public class MapEditorManager : MonoBehaviour
 	public int mapRows;
 
 	bool isMapLoadActive = false;
-
 	List<TextMeshProUGUI> mapsList = new();
 
 	private void Start()
 	{
 		currentCarousel = carousel0;
 		mapArchivePath = AddressablesManager.LoadPath(AddressablesManager.TypeOfResource.TXT, CUSTOM_MAP_ARCHIVE);
+		manager = GameObject.Find("Manager").GetComponent<CustomCreatorManager>();
 	}
 
 	public void ItemFromCarouselSelected(int item)
@@ -101,11 +104,13 @@ public class MapEditorManager : MonoBehaviour
 		{
 			using (StreamWriter writer = File.AppendText(mapArchivePath))
 			{
-				writer.Write($"{mapRows};{mapColumns};");
+				writer.Write($"{mapRows};{mapColumns}#");
 				for (int i = 0; i < tileParents.childCount; i++)
 				{
 					Tile tile = GameObject.Find($"Terrain_{i}").GetComponent<Tile>();
-					writer.Write(tile.modelName + ";");
+					writer.Write(tile.modelName);
+					if (i != tileParents.childCount - 1)
+						writer.Write(";");
 				}
 				writer.WriteLine();
 			}
@@ -142,8 +147,16 @@ public class MapEditorManager : MonoBehaviour
 			TextMeshProUGUI text = line.GetComponent<TextMeshProUGUI>();
 			text.text = "Map " + (i + 1);
 
+			MapLineScript lineScript = line.GetComponent<MapLineScript>();
+			lineScript.map = maps[i];
+
 			mapsList.Add(text);
 		}
+	}
+
+	public void LoadCustomMap(string map)
+	{
+		manager.LoadCustomMap(map, mapLoadPreviewParent);
 	}
 
 	#endregion

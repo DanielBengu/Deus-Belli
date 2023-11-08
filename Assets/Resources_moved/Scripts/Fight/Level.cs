@@ -62,6 +62,23 @@ public class Level
 			}
 		}
 	}
+	public void GenerateTerrain(bool isEdit, Transform objectsParent, string[] customMap)
+	{
+		List<GameObject> models = new();
+		//We load onto the list all the different objects we need for this custom map, beforehand
+		for (int i = 0; i < customMap.Length; i++)
+			if (!models.Any(m => m.name.Equals(customMap[i])))
+				models.Add(ObjectsManager.GetObject(customMap[i]));
+
+		for (int i = 0; i < HorizontalTiles * VerticalTiles; i++)
+		{
+			GameObject objectToSpawn = models.First(m => m.name == customMap[i]);
+			GameObject tileObject = Object.Instantiate(objectToSpawn, objectsParent);
+
+			LoadTile(tileObject, $"Terrain_{i}", objectToSpawn.name, isEdit, true);
+			tilesDict.Add(i, tileObject);
+		}
+	}
 
 	void LoadTile(GameObject tile, string name, string modelName, bool isEdit, bool isPassable)
 	{

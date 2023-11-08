@@ -1,3 +1,4 @@
+using System.Linq;
 using UnityEngine;
 
 public class CustomCreatorManager : MonoBehaviour
@@ -41,6 +42,20 @@ public class CustomCreatorManager : MonoBehaviour
 		{
 			Destroy(mapObjects.GetChild(i).gameObject);
 		}
+	}
+
+	public void LoadCustomMap(string map, Transform parent)
+	{
+		string[] mapData = map.Split('#')[0].Split(';');
+		string[] mapLayout = map.Split('#')[1].Split(';');
+
+		int mapRows = int.Parse(mapData[0]);
+		int mapColumns = int.Parse(mapData[1]);
+
+		Level level = new();
+		level.StartLevel(0, RogueTileType.Fight, 0, 0, new Ataiku(), mapRows);
+		level.GenerateTerrain(true, parent, mapLayout);
+		_structureManager.GenerateFightTiles(level.tilesDict, null, mapObjects, level.TopLeftSquarePositionX, level.YPosition, level.TopLeftSquarePositionZ, mapRows, mapColumns);
 	}
 
 	#endregion

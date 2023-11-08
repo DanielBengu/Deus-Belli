@@ -3,13 +3,15 @@ using UnityEngine;
 
 public static class ObjectsManager
 {
-	public static readonly Model3D[] model3DArchive = new Model3D[5]
+	public static readonly Model3D[] model3DArchive = new Model3D[7]
 	{
 		new(AddressablesManager.LoadResource<GameObject>(AddressablesManager.TypeOfResource.Terrains, "Grass1"), TypeOfObstacle.Terrain, MapTheme.Plains),
 		new(AddressablesManager.LoadResource<GameObject>(AddressablesManager.TypeOfResource.Terrains, "Grass2"), TypeOfObstacle.Terrain, MapTheme.Plains),
+		new(AddressablesManager.LoadResource<GameObject>(AddressablesManager.TypeOfResource.Terrains, "GrassPath"), TypeOfObstacle.Terrain, MapTheme.Plains),
 		new(AddressablesManager.LoadResource<GameObject>(AddressablesManager.TypeOfResource.Terrains, "Mountain"), TypeOfObstacle.SingleTile, MapTheme.Plains),
 		new(AddressablesManager.LoadResource<GameObject>(AddressablesManager.TypeOfResource.Terrains, "Tree"), TypeOfObstacle.SingleTile, MapTheme.Plains),
 		new(AddressablesManager.LoadResource<GameObject>(AddressablesManager.TypeOfResource.Terrains, "BirchTree"), TypeOfObstacle.SingleTile, MapTheme.Plains),
+		new(AddressablesManager.LoadResource<GameObject>(AddressablesManager.TypeOfResource.Terrains, "PineTree"), TypeOfObstacle.SingleTile, MapTheme.Plains),
 	};
 
 	public static GameObject GetRandomObject(int seed, TypeOfObstacle obstacleType, MapTheme theme)
@@ -17,6 +19,11 @@ public static class ObjectsManager
 		Model3D[] validObjects = model3DArchive.Where(m => m.obstacleType == obstacleType && m.theme == theme).ToArray();
 		int index = RandomManager.GetRandomValue(seed, 0, validObjects.Length);
 		return validObjects[index].model;
+	}
+
+	public static GameObject GetObject(string objectName)
+	{
+		return model3DArchive.Where(m => m.model.name == objectName).First().model;
 	}
 
 	public struct Model3D
