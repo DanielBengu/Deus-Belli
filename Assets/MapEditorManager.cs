@@ -14,8 +14,8 @@ public class MapEditorManager : MonoBehaviour
 	[SerializeField] Transform tileParents;
 
 	Image currentCarousel;
-
 	GameObject itemSelected;
+	
 
 	private void Start()
 	{
@@ -35,7 +35,7 @@ public class MapEditorManager : MonoBehaviour
 				break;
 			case 1:
 				currentCarousel = carousel1;
-				itemSelected = AddressablesManager.LoadResource<GameObject>(AddressablesManager.TypeOfResource.Terrains, "Grass2");
+				itemSelected = AddressablesManager.LoadResource<GameObject>(AddressablesManager.TypeOfResource.Terrains, "PineTree");
 				break;
 			case 2:
 				currentCarousel = carousel2;

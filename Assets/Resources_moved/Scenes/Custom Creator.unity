@@ -1346,6 +1346,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d64d677bf23d42c499e991a8d7ca33e5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  mapCanvas: {fileID: 7681462611010738822}
+  mapObjects: {fileID: 1093841906}
 --- !u!4 &1763008039
 Transform:
   m_ObjectHideFlags: 0
@@ -1586,6 +1588,14 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 51286162017444576, guid: 472fbc23a87eba042b353f4aed17999c, type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 21300000, guid: 476e222d4ee1f25479a4a70290960e65, type: 3}
+    - target: {fileID: 1568699258879383536, guid: 472fbc23a87eba042b353f4aed17999c, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 2672922205918342323, guid: 472fbc23a87eba042b353f4aed17999c, type: 3}
       propertyPath: m_Name
       value: Map Editor
@@ -1640,3 +1650,8 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 472fbc23a87eba042b353f4aed17999c, type: 3}
+--- !u!1 &7681462611010738822 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 1568699258879383536, guid: 472fbc23a87eba042b353f4aed17999c, type: 3}
+  m_PrefabInstance: {fileID: 7681462611010738821}
+  m_PrefabAsset: {fileID: 0}

@@ -41,6 +41,10 @@ MonoBehaviour:
     m_Address: Terrains/Tree
     m_ReadOnly: 0
     m_SerializedLabels: []
+  - m_GUID: 7914a034d62081b4b86603a4cc2a24f9
+    m_Address: Terrains/PineTree
+    m_ReadOnly: 0
+    m_SerializedLabels: []
   m_ReadOnly: 0
   m_Settings: {fileID: 11400000, guid: 42fa5884c9964964993dbdd708fbd850, type: 2}
   m_SchemaSet:
