@@ -109,6 +109,7 @@
     <None Include="Assets\TextMesh Pro\Shaders\TMPro.cginc" />
     <None Include="Assets\TextMesh Pro\Shaders\TMP_SDF-Mobile Overlay.shader" />
     <None Include="Assets\TextMesh Pro\Shaders\TMP_Bitmap.shader" />
+    <None Include="Assets\Resources_moved\Scripts\Custom Creator\CustomMapsArchive.txt" />
     <None Include="Assets\Resources_moved\Sprites\Objects\Tables\Brass Marble Table\Brass Table\MAXFILES.TXT" />
     <None Include="Assets\TextMesh Pro\Shaders\TMPro_Mobile.cginc" />
     <None Include="Assets\TextMesh Pro\Shaders\TMP_SDF SSD.shader" />

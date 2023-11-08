@@ -15,13 +15,13 @@ public class Tile : MonoBehaviour, IComparable<Tile>
     #endregion
 
     public Unit unitOnTile;
-    public GameObject model3D;
 
     FightManager manager;
 
     public int tileNumber;
 
     public bool isEdit;
+    public string modelName;
 
     public void OnMouseDown()
     {

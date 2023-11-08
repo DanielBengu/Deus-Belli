@@ -46,7 +46,6 @@ public class StructureManager : MonoBehaviour
                     tileScript.SetupManager(manager);
                     tileScript.tileNumber = x + (i * XLength);
                     
-                    LoadObstacle(tileScript, objectsParent);
 
                     /*float angle = 90f;
                     Vector3 rotation = new(angle, 0f, 0f);
@@ -58,15 +57,6 @@ public class StructureManager : MonoBehaviour
         Debug.Log("END TILE GENERATION");
         return mapTiles;
     }
-
-    public void LoadObstacle(Tile tile, Transform parent)
-	{
-        if (tile.model3D == null)
-            return;
-
-        tile.model3D.transform.position = tile.transform.position;
-        Instantiate(tile.model3D, parent);
-	}
 
     public RogueNode GenerateRogueTile(int currentRow, int positionOnRow, int maxRowOnMap, int nodeIndex, int nodeSeed, Transform origin, Transform firstNode, RogueManager rm)
 	{

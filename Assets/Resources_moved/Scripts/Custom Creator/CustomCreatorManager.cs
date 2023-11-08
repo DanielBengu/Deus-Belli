@@ -1,12 +1,13 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.SceneManagement;
 
 public class CustomCreatorManager : MonoBehaviour
 {
 	[SerializeField] GameObject mapCanvas;
 	[SerializeField] Transform mapObjects;
+
+	[SerializeField] MapEditorManager _mapEditorManager;
+	[SerializeField] int mapRows;
+	[SerializeField] int mapColumns;
 
 	StructureManager _structureManager;
 	public void Start()
@@ -18,16 +19,19 @@ public class CustomCreatorManager : MonoBehaviour
         ScenesManager.LoadSceneAsync(ScenesManager.Scenes.MainMenu);
     }
 
-    public void LoadBaseLevel()
+	#region Map Editor
+	public void LoadBaseLevel()
 	{
 		CleanupUnitEditor();
 
 		mapCanvas.SetActive(true);
 		Level baseLevel = new();
 
-		baseLevel.StartLevel(0, RogueTileType.Fight, 0, 0, new Ataiku());
+		baseLevel.StartLevel(0, RogueTileType.Fight, 0, 0, new Ataiku(), mapRows);
 		baseLevel.GenerateTerrain(true, mapObjects);
-		_structureManager.GenerateFightTiles(baseLevel.tilesDict, null, mapObjects, baseLevel.TopLeftSquarePositionX, baseLevel.YPosition, baseLevel.TopLeftSquarePositionZ, 10, 10);
+		_structureManager.GenerateFightTiles(baseLevel.tilesDict, null, mapObjects, baseLevel.TopLeftSquarePositionX, baseLevel.YPosition, baseLevel.TopLeftSquarePositionZ, mapRows, mapColumns);
+		_mapEditorManager.mapRows = mapRows;
+		_mapEditorManager.mapColumns = mapColumns;
 	}
 
 	void CleanupMapEditor()
@@ -39,6 +43,9 @@ public class CustomCreatorManager : MonoBehaviour
 		}
 	}
 
+	#endregion
+
+	#region Unit Editor
 	public void LoadBaseUnit()
 	{
 		CleanupMapEditor();
@@ -48,4 +55,7 @@ public class CustomCreatorManager : MonoBehaviour
 	{
 		mapCanvas.SetActive(false);
 	}
+
+	#endregion
+
 }

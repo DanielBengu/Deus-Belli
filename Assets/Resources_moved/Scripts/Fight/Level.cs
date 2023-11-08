@@ -19,10 +19,10 @@ public class Level
 	public int seed;
 	public IGod enemyGod;
 
-    public void StartLevel(int seed, RogueTileType tileType, int currentRow, int difficulty, IGod enemyGod)
+    public void StartLevel(int seed, RogueTileType tileType, int currentRow, int difficulty, IGod enemyGod, int customSize = -1)
     {
 		this.seed = seed;
-		int mapSize = RandomManager.GetRandomValue(seed, 10, 10);
+		int mapSize = customSize == -1 ? RandomManager.GetRandomValue(seed, 10, 10) : customSize;
 		TopLeftSquarePositionX = 250;
         TopLeftSquarePositionZ = 1800;
         YPosition = 170;
@@ -48,24 +48,29 @@ public class Level
 			{
 				GameObject objectToSpawn = ObjectsManager.GetRandomObject(seed * 12 * (i + 1), ObjectsManager.TypeOfObstacle.SingleTile, ObjectsManager.MapTheme.Plains);
 				GameObject tileObject = Object.Instantiate(objectToSpawn, objectsParent);
-				Tile tileScript = tileObject.GetComponent<Tile>();
 
-				tileObject.name = $"Terrain_{i}";
-				tileScript.IsPassable = false;
-				tileScript.isEdit = true;
+				LoadTile(tileObject, $"Terrain_{i}", objectToSpawn.name, isEdit, false);
 				tilesDict.Add(i, tileObject);
 			}
 			else
 			{
 				GameObject objectToSpawn = ObjectsManager.GetRandomObject(seed * 12 / (i + 1), ObjectsManager.TypeOfObstacle.Terrain, ObjectsManager.MapTheme.Plains);
 				GameObject tileObject = Object.Instantiate(objectToSpawn, objectsParent);
-				Tile tileScript = tileObject.GetComponent<Tile>();
 
-				tileObject.name = $"Terrain_{i}";
-				tileScript.isEdit = true;
+				LoadTile(tileObject, $"Terrain_{i}", objectToSpawn.name, isEdit, true);
 				tilesDict.Add(i, tileObject);
 			}
 		}
+	}
+
+	void LoadTile(GameObject tile, string name, string modelName, bool isEdit, bool isPassable)
+	{
+		tile.name = name;
+
+		Tile script = tile.GetComponent<Tile>();
+		script.modelName = modelName;
+		script.isEdit = isEdit;
+		script.IsPassable = isPassable;
 	}
 
 	public void SetupEnemies(RogueTileType tileType, int currentRow, int difficulty)

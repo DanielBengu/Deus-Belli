@@ -455,7 +455,6 @@ public class FightManager : MonoBehaviour
 	{
 		foreach (var tile in structureManager.gameData.mapTiles.Values)
 		{
-            Destroy(tile.model3D);
             Destroy(tile.gameObject);
         }   
 

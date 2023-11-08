@@ -123,6 +123,11 @@ NavMeshSettings:
     debug:
       m_Flags: 0
   m_NavMeshData: {fileID: 0}
+--- !u!1 &307134202 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 5765692571993077393, guid: 472fbc23a87eba042b353f4aed17999c, type: 3}
+  m_PrefabInstance: {fileID: 7681462611010738821}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &635675809
 GameObject:
   m_ObjectHideFlags: 0
@@ -260,6 +265,17 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 635675809}
   m_CullTransparentMesh: 1
+--- !u!114 &815976838 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 6697232111626821328, guid: 472fbc23a87eba042b353f4aed17999c, type: 3}
+  m_PrefabInstance: {fileID: 7681462611010738821}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ec7ae4a0d02414048bd4d12b706f509a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &816850733
 GameObject:
   m_ObjectHideFlags: 0
@@ -1348,6 +1364,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   mapCanvas: {fileID: 7681462611010738822}
   mapObjects: {fileID: 1093841906}
+  _mapEditorManager: {fileID: 815976838}
+  mapRows: 10
+  mapColumns: 10
 --- !u!4 &1763008039
 Transform:
   m_ObjectHideFlags: 0
@@ -1497,6 +1516,11 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1792522882}
   m_CullTransparentMesh: 1
+--- !u!1 &1946386290 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 1303442494958292410, guid: 472fbc23a87eba042b353f4aed17999c, type: 3}
+  m_PrefabInstance: {fileID: 7681462611010738821}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &2099367221
 GameObject:
   m_ObjectHideFlags: 0
@@ -1601,9 +1625,29 @@ PrefabInstance:
       value: Map Editor
       objectReference: {fileID: 0}
     - target: {fileID: 6697232111626821328, guid: 472fbc23a87eba042b353f4aed17999c, type: 3}
+      propertyPath: mapRows
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 6697232111626821328, guid: 472fbc23a87eba042b353f4aed17999c, type: 3}
+      propertyPath: mapColumns
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 6697232111626821328, guid: 472fbc23a87eba042b353f4aed17999c, type: 3}
       propertyPath: tileParents
       value: 
       objectReference: {fileID: 1093841906}
+    - target: {fileID: 6697232111626821328, guid: 472fbc23a87eba042b353f4aed17999c, type: 3}
+      propertyPath: mapLoadPanel
+      value: 
+      objectReference: {fileID: 307134202}
+    - target: {fileID: 6697232111626821328, guid: 472fbc23a87eba042b353f4aed17999c, type: 3}
+      propertyPath: mapLoadViewPortLine
+      value: 
+      objectReference: {fileID: 7098754608342989373, guid: 7348325941643ff4b8f4a79327fc79f4, type: 3}
+    - target: {fileID: 6697232111626821328, guid: 472fbc23a87eba042b353f4aed17999c, type: 3}
+      propertyPath: mapLoadContentViewPort
+      value: 
+      objectReference: {fileID: 1946386290}
     - target: {fileID: 7158206701361327135, guid: 472fbc23a87eba042b353f4aed17999c, type: 3}
       propertyPath: m_RootOrder
       value: 3
