@@ -17,6 +17,8 @@ public class MapEditorManager : MonoBehaviour
 	[SerializeField] Image carousel5;
 	[SerializeField] Transform tileParents;
 
+	[SerializeField] GameObject mainCanvas;
+	[SerializeField] GameObject mapCreatorSection;
 	[SerializeField] GameObject mapLoadPanel;
 	[SerializeField] GameObject mapLoadContentViewPort;
 	[SerializeField] GameObject mapLoadViewPortLine;
@@ -29,6 +31,7 @@ public class MapEditorManager : MonoBehaviour
 	Image currentCarousel;
 	GameObject itemSelected;
 
+	public string mapSelected = string.Empty;
 	public int mapColumns;
 	public int mapRows;
 
@@ -95,6 +98,12 @@ public class MapEditorManager : MonoBehaviour
 		Destroy(tile.gameObject);
 	}
 
+	public void SetActiveMain(bool active)
+	{
+		mainCanvas.SetActive(active);
+		mapCreatorSection.SetActive(active);
+	}
+
 	public void SaveMap()
 	{
 		if (isMapLoadActive)
@@ -127,9 +136,28 @@ public class MapEditorManager : MonoBehaviour
 		if (isMapLoadActive)
 			return;
 
+		ClearMap(tileParents);
 		isMapLoadActive = true;
+		SetActiveMain(false);
 		mapLoadPanel.SetActive(true);
 		StartupLoad();
+	}
+
+	public void BackFromLoadMap(bool loadBaseLevel)
+	{
+		mapSelected = string.Empty;
+		ClearMap(mapLoadPreviewParent);
+		SetActiveMain(true);
+		isMapLoadActive = false;
+		mapLoadPanel.SetActive(false);
+		if(loadBaseLevel)
+			manager.LoadBaseLevel();
+	}
+
+	public void EditCustomMap()
+	{
+		LoadCustomMap(false);
+		BackFromLoadMap(false);
 	}
 
 	#region Load Map Section
@@ -154,9 +182,17 @@ public class MapEditorManager : MonoBehaviour
 		}
 	}
 
-	public void LoadCustomMap(string map)
+	public void LoadCustomMap(bool isPreview)
 	{
-		manager.LoadCustomMap(map, mapLoadPreviewParent);
+		Transform parent = isPreview ? mapLoadPreviewParent : tileParents;
+		ClearMap(parent);
+		manager.LoadCustomMap(mapSelected, parent, isPreview);
+	}
+
+	void ClearMap(Transform parent)
+	{
+		for (int i = 0; i < parent.childCount; i++)
+			Destroy(parent.GetChild(i).gameObject);
 	}
 
 	#endregion

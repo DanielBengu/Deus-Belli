@@ -17,6 +17,7 @@ public class MapLineScript : MonoBehaviour, IPointerClickHandler
 
 	public void OnPointerClick(PointerEventData eventData)
     {
-		manager.LoadCustomMap(map);
+		manager.mapSelected = map;
+		manager.LoadCustomMap(true);
 	}
 }

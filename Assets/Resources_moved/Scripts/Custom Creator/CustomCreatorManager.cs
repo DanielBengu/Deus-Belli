@@ -44,7 +44,7 @@ public class CustomCreatorManager : MonoBehaviour
 		}
 	}
 
-	public void LoadCustomMap(string map, Transform parent)
+	public void LoadCustomMap(string map, Transform parent, bool isPreview)
 	{
 		string[] mapData = map.Split('#')[0].Split(';');
 		string[] mapLayout = map.Split('#')[1].Split(';');
@@ -55,7 +55,8 @@ public class CustomCreatorManager : MonoBehaviour
 		Level level = new();
 		level.StartLevel(0, RogueTileType.Fight, 0, 0, new Ataiku(), mapRows);
 		level.GenerateTerrain(true, parent, mapLayout);
-		_structureManager.GenerateFightTiles(level.tilesDict, null, mapObjects, level.TopLeftSquarePositionX, level.YPosition, level.TopLeftSquarePositionZ, mapRows, mapColumns);
+		int xPositionForMap = isPreview ? 800 : level.TopLeftSquarePositionX;
+		_structureManager.GenerateFightTiles(level.tilesDict, null, mapObjects, xPositionForMap, level.YPosition, level.TopLeftSquarePositionZ, mapRows, mapColumns);
 	}
 
 	#endregion

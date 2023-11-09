@@ -103,8 +103,8 @@
     <Compile Include="Assets\BasicBandit\DemoSceneBasicBandit\Scripts\MovementCamera.cs" />
     <Compile Include="Assets\Resources_moved\Scripts\Menu\TextMenu.cs" />
     <Compile Include="Assets\C&amp;C_Pack\Goblin_rouge\Script\Goblin_ro_ctrl.cs" />
-    <Compile Include="Assets\Resources_moved\Scripts\Fight\Unit.cs" />
     <Compile Include="Assets\MapLineScript.cs" />
+    <Compile Include="Assets\Resources_moved\Scripts\Fight\Unit.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Assets\TextMesh Pro\Shaders\TMPro.cginc" />
