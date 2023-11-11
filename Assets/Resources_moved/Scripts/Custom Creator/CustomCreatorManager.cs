@@ -10,13 +10,16 @@ public class CustomCreatorManager : MonoBehaviour
 	[SerializeField] int mapRows;
 	[SerializeField] int mapColumns;
 
+	public CameraManager cameraManager;
 	StructureManager _structureManager;
 	public void Start()
 	{
 		_structureManager = GameObject.Find("StructureManager").GetComponent<StructureManager>();
 	}
-	public static void BackButton()
+	public void BackButton()
 	{
+		if (_mapEditorManager.IsStandby(MapEditorManager.CustomSection.Initial))
+			return;
         ScenesManager.LoadSceneAsync(ScenesManager.Scenes.MainMenu);
     }
 

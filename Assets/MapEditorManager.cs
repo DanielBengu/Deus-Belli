@@ -22,6 +22,8 @@ public class MapEditorManager : MonoBehaviour
 	[SerializeField] GameObject mapLoadPanel;
 	[SerializeField] GameObject mapLoadContentViewPort;
 	[SerializeField] GameObject mapLoadViewPortLine;
+	[SerializeField] Button editMapButton;
+	[SerializeField] GameObject insertNamePanel;
 	[SerializeField] Transform mapLoadPreviewParent;
 
 	CustomCreatorManager manager;
@@ -36,18 +38,39 @@ public class MapEditorManager : MonoBehaviour
 	public int mapRows;
 
 	bool isMapLoadActive = false;
+	bool isAskingForInput = false;
 	List<TextMeshProUGUI> mapsList = new();
 
-	private void Start()
+	void Start()
 	{
 		currentCarousel = carousel0;
 		mapArchivePath = AddressablesManager.LoadPath(AddressablesManager.TypeOfResource.TXT, CUSTOM_MAP_ARCHIVE);
 		manager = GameObject.Find("Manager").GetComponent<CustomCreatorManager>();
 	}
+	void Update()
+	{
+		if (!isMapLoadActive)
+			return;
+
+		manager.cameraManager.UpdatePositionOrRotation(mapLoadPreviewParent, GeneralManager.CurrentSection.Custom);
+	}
+
+	public bool IsStandby(CustomSection section)
+	{
+		return section switch
+		{
+			CustomSection.Initial => isMapLoadActive || isAskingForInput,
+			CustomSection.Edit_Custom_Map => isMapLoadActive || isAskingForInput,
+			CustomSection.Load_Custom_Map => isAskingForInput,
+			CustomSection.Ask_For_Input => false,
+			CustomSection.Edit_Custom_Unit => isAskingForInput,
+			_ => false,
+		};
+	}
 
 	public void ItemFromCarouselSelected(int item)
 	{
-		if (isMapLoadActive)
+		if (IsStandby(CustomSection.Edit_Custom_Map))
 			return;
 
 		//First we reset back the selection
@@ -85,7 +108,7 @@ public class MapEditorManager : MonoBehaviour
 
 	public void ChangeTile(Tile tile)
 	{
-		if (isMapLoadActive)
+		if (IsStandby(CustomSection.Edit_Custom_Map))
 			return;
 
 		GameObject newTile = Instantiate(itemSelected, tileParents);
@@ -98,15 +121,35 @@ public class MapEditorManager : MonoBehaviour
 		Destroy(tile.gameObject);
 	}
 
-	public void SetActiveMain(bool active)
+	public void SetActiveTrueSection(CustomSection section)
 	{
-		mainCanvas.SetActive(active);
-		mapCreatorSection.SetActive(active);
+		mapCreatorSection.SetActive(false);
+		mapLoadPanel.SetActive(false);
+		insertNamePanel.SetActive(false);
+
+		switch (section)
+		{
+			case CustomSection.Initial:
+				break;
+			case CustomSection.Edit_Custom_Map:
+				mapCreatorSection.SetActive(true);
+				break;
+			case CustomSection.Load_Custom_Map:
+				mapLoadPanel.SetActive(true);
+				break;
+			case CustomSection.Ask_For_Input:
+				insertNamePanel.SetActive(false);
+				break;
+			case CustomSection.Edit_Custom_Unit:
+				break;
+			default:
+				break;
+		}
 	}
 
 	public void SaveMap()
 	{
-		if (isMapLoadActive)
+		if (IsStandby(CustomSection.Edit_Custom_Map))
 			return;
 
 		try
@@ -133,21 +176,23 @@ public class MapEditorManager : MonoBehaviour
 
 	public void LoadMap()
 	{
-		if (isMapLoadActive)
+		if (IsStandby(CustomSection.Edit_Custom_Map))
 			return;
 
 		ClearMap(tileParents);
 		isMapLoadActive = true;
-		SetActiveMain(false);
-		mapLoadPanel.SetActive(true);
+		SetActiveTrueSection(CustomSection.Load_Custom_Map);
 		StartupLoad();
 	}
 
 	public void BackFromLoadMap(bool loadBaseLevel)
 	{
+		if (IsStandby(CustomSection.Load_Custom_Map))
+			return;
+
 		mapSelected = string.Empty;
 		ClearMap(mapLoadPreviewParent);
-		SetActiveMain(true);
+		SetActiveTrueSection(CustomSection.Edit_Custom_Map);
 		isMapLoadActive = false;
 		mapLoadPanel.SetActive(false);
 		if(loadBaseLevel)
@@ -156,6 +201,9 @@ public class MapEditorManager : MonoBehaviour
 
 	public void EditCustomMap()
 	{
+		if (IsStandby(CustomSection.Load_Custom_Map))
+			return;
+
 		LoadCustomMap(false);
 		BackFromLoadMap(false);
 	}
@@ -182,6 +230,13 @@ public class MapEditorManager : MonoBehaviour
 		}
 	}
 
+	public void MapSelected(string map)
+	{
+		editMapButton.interactable = true;
+		mapSelected = map;
+		LoadCustomMap(true);
+	}
+
 	public void LoadCustomMap(bool isPreview)
 	{
 		Transform parent = isPreview ? mapLoadPreviewParent : tileParents;
@@ -195,5 +250,22 @@ public class MapEditorManager : MonoBehaviour
 			Destroy(parent.GetChild(i).gameObject);
 	}
 
+	public void AskForName()
+	{
+		if (IsStandby(CustomSection.Load_Custom_Map))
+			return;
+
+		SetActiveTrueSection(CustomSection.Ask_For_Input);
+	}
+
 	#endregion
+
+	public enum CustomSection
+	{
+		Initial,
+		Edit_Custom_Map,
+		Load_Custom_Map,
+		Ask_For_Input,
+		Edit_Custom_Unit,
+	}
 }

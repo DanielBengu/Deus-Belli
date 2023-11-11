@@ -2,9 +2,7 @@ using UnityEngine;
 
 public class CameraManager : MonoBehaviour
 {
-    public float movementSpeed;
-    public float xMinFight;
-    public float xMaxFight;
+    public float movementSpeed = 50f;
     public float xMinRogue;
     public float xMaxRogue;
     // The minimum and maximum scroll distances
@@ -16,7 +14,7 @@ public class CameraManager : MonoBehaviour
 
     private float speedMod = 10.0f;//a speed modifier
 
-    public float scrollSpeed;
+    public float scrollSpeed = 10f;
 
     bool isOutOfFocus = false;
 
@@ -28,25 +26,37 @@ public class CameraManager : MonoBehaviour
     Vector3 cameraPositionOnFocus = new(670, 690, 650);
     Quaternion rotationOnFocus = Quaternion.Euler(40, 0, 0);
     
-    public void UpdatePosition(Transform objectToMove, GeneralManager.CurrentSection section )
+    public void UpdatePositionOrRotation(Transform objectToMove, GeneralManager.CurrentSection section)
     {
-        float xMin = section == GeneralManager.CurrentSection.Fight ? xMinFight : xMinRogue;
-        float xMax = section == GeneralManager.CurrentSection.Fight ? xMaxFight : xMaxRogue;
-        
-        if (section == GeneralManager.CurrentSection.Fight && Input.GetMouseButton(FightManager.RIGHT_MOUSE_BUTTON))
+        switch (section)
 		{
-            float moveHorizontal = Input.GetAxis("Mouse X");
-            transform.RotateAround(objectToMove.position, new Vector3(0.0f, moveHorizontal, 0.0f), 20 * Time.deltaTime * speedMod);
-        }else if(section == GeneralManager.CurrentSection.Rogue)
-		{
-            float moveHorizontal = Input.GetAxis("Mouse X");
+			case GeneralManager.CurrentSection.Fight:
+                if (!Input.GetMouseButton(FightManager.RIGHT_MOUSE_BUTTON))
+                    return;
+                float moveHorizontalFight = Input.GetAxis("Mouse X");
+                transform.RotateAround(objectToMove.position, new Vector3(0.0f, moveHorizontalFight, 0.0f), 20 * Time.deltaTime * speedMod);
+                break;
+			case GeneralManager.CurrentSection.Rogue:
+                float xMin = xMinRogue;
+                float xMax = xMaxRogue;
 
-            Vector3 position = objectToMove.position;
-            position.x += moveHorizontal * movementSpeed;
+                float moveHorizontalRogue = Input.GetAxis("Mouse X");
 
-            position.x = Mathf.Clamp(position.x, xMin, xMax);
-            objectToMove.position = position;
-        } 
+                Vector3 position = objectToMove.position;
+                position.x += moveHorizontalRogue * movementSpeed;
+
+                position.x = Mathf.Clamp(position.x, xMin, xMax);
+                objectToMove.position = position;
+                break;
+			case GeneralManager.CurrentSection.Custom:
+                /*float rotateHorizontalCustom = Input.GetAxis("Mouse X");
+                float rotateVerticalCustom = Input.GetAxis("Mouse Y");
+
+                objectToMove.RotateAround(new Vector3(0f, rotateHorizontalCustom, 0f), 20 * Time.deltaTime * speedMod);*/
+                break;
+			default:
+				break;
+		}
     }
 
     public void ResetCamera()
