@@ -410,7 +410,7 @@ RectTransform:
   - {fileID: 1792522883}
   - {fileID: 455006434}
   m_Father: {fileID: 0}
-  m_RootOrder: 3
+  m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
@@ -509,7 +509,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 0
+  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 50, y: -30, z: 0}
 --- !u!1 &994335529
 GameObject:
@@ -577,7 +577,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 2
+  m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!4 &1093841906 stripped
 Transform:
@@ -686,7 +686,7 @@ Transform:
   m_Children:
   - {fileID: 2099367222}
   m_Father: {fileID: 0}
-  m_RootOrder: 5
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 53.52, y: 0, z: 0}
 --- !u!1 &1214210377
 GameObject:
@@ -1382,7 +1382,6 @@ GameObject:
   m_Component:
   - component: {fileID: 1763008039}
   - component: {fileID: 1763008038}
-  - component: {fileID: 1763008040}
   m_Layer: 0
   m_Name: Manager
   m_TagString: Untagged
@@ -1407,7 +1406,7 @@ MonoBehaviour:
   _mapEditorManager: {fileID: 815976838}
   mapRows: 10
   mapColumns: 10
-  cameraManager: {fileID: 1763008040}
+  cameraManager: {fileID: 1208688668}
 --- !u!4 &1763008039
 Transform:
   m_ObjectHideFlags: 0
@@ -1421,26 +1420,8 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 1
+  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1763008040
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1763008037}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 66e44b4b68caf5c448a334ee6906f145, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  movementSpeed: 0
-  xMinRogue: 0
-  xMaxRogue: 0
-  minDistance: 1
-  maxDistance: 10
-  scrollSpeed: 0
 --- !u!1 &1792522882
 GameObject:
   m_ObjectHideFlags: 0
@@ -1725,7 +1706,7 @@ PrefabInstance:
       objectReference: {fileID: 1946386290}
     - target: {fileID: 7158206701361327135, guid: 472fbc23a87eba042b353f4aed17999c, type: 3}
       propertyPath: m_RootOrder
-      value: 4
+      value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 7158206701361327135, guid: 472fbc23a87eba042b353f4aed17999c, type: 3}
       propertyPath: m_LocalPosition.x

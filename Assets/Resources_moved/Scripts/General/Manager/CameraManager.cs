@@ -2,17 +2,17 @@ using UnityEngine;
 
 public class CameraManager : MonoBehaviour
 {
-    public float movementSpeed = 50f;
-    public float xMinRogue;
-    public float xMaxRogue;
+    public static float movementSpeed = 50f;
+    public static float xMinRogue;
+    public static float xMaxRogue;
     // The minimum and maximum scroll distances
     public float minDistance = 1f;
     public float maxDistance = 10f;
 
     // The current scroll distance
-    private float distance = 5f;
+    private float distance = 50f;
 
-    private float speedMod = 10.0f;//a speed modifier
+    private static float speedMod = 10.0f;//a speed modifier
 
     public float scrollSpeed = 10f;
 
@@ -26,15 +26,15 @@ public class CameraManager : MonoBehaviour
     Vector3 cameraPositionOnFocus = new(670, 690, 650);
     Quaternion rotationOnFocus = Quaternion.Euler(40, 0, 0);
     
-    public void UpdatePositionOrRotation(Transform objectToMove, GeneralManager.CurrentSection section)
+    public static void UpdatePositionOrRotation(Transform objectToMove, GeneralManager.CurrentSection section, Transform objectRotator = null)
     {
         switch (section)
 		{
 			case GeneralManager.CurrentSection.Fight:
-                if (!Input.GetMouseButton(FightManager.RIGHT_MOUSE_BUTTON))
+                if (!Input.GetMouseButton(FightManager.RIGHT_MOUSE_BUTTON) || objectRotator == null)
                     return;
                 float moveHorizontalFight = Input.GetAxis("Mouse X");
-                transform.RotateAround(objectToMove.position, new Vector3(0.0f, moveHorizontalFight, 0.0f), 20 * Time.deltaTime * speedMod);
+                objectToMove.RotateAround(objectRotator.position, new Vector3(0.0f, moveHorizontalFight, 0.0f), 20 * Time.deltaTime * speedMod);
                 break;
 			case GeneralManager.CurrentSection.Rogue:
                 float xMin = xMinRogue;
@@ -49,10 +49,23 @@ public class CameraManager : MonoBehaviour
                 objectToMove.position = position;
                 break;
 			case GeneralManager.CurrentSection.Custom:
-                /*float rotateHorizontalCustom = Input.GetAxis("Mouse X");
-                float rotateVerticalCustom = Input.GetAxis("Mouse Y");
+                if (!Input.GetMouseButton(FightManager.RIGHT_MOUSE_BUTTON) || objectRotator == null)
+                    return;
+                float moveHorizontalFightX = Input.GetAxis("Mouse X");
+                float moveHorizontalFightY = Input.GetAxis("Mouse Y");
 
-                objectToMove.RotateAround(new Vector3(0f, rotateHorizontalCustom, 0f), 20 * Time.deltaTime * speedMod);*/
+                float rotationAmount = moveHorizontalFightX * speedMod * Time.deltaTime * 10f;
+
+                // Convert negative rotation to positive
+                float adjustedRotationAmount = rotationAmount < 0f ? rotationAmount + 360f : rotationAmount;
+                objectToMove.Rotate(Vector3.up, adjustedRotationAmount);
+                objectToMove.Rotate(Vector3.right, moveHorizontalFightY * speedMod * Time.deltaTime * 10f);
+                //objectToMove.Rotate(new Vector3(moveHorizontalFightY, moveHorizontalFightX, 0.0f), adjustedRotationAmount);
+
+                // Clamp the rotation to the specified range
+                float clampedRotation = Mathf.Clamp(objectToMove.eulerAngles.x, -10f, 30f);
+                objectToMove.eulerAngles = new Vector3(clampedRotation, objectToMove.eulerAngles.y, objectToMove.eulerAngles.z);
+
                 break;
 			default:
 				break;

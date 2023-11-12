@@ -25,8 +25,10 @@ public class MapEditorManager : MonoBehaviour
 	[SerializeField] Button editMapButton;
 	[SerializeField] GameObject insertNamePanel;
 	[SerializeField] Transform mapLoadPreviewParent;
+	[SerializeField] Transform mainCamera;
 
 	CustomCreatorManager manager;
+	public Transform rotator;
 
 	string mapArchivePath;
 
@@ -37,8 +39,7 @@ public class MapEditorManager : MonoBehaviour
 	public int mapColumns;
 	public int mapRows;
 
-	bool isMapLoadActive = false;
-	bool isAskingForInput = false;
+	public CustomSection currentSection;
 	List<TextMeshProUGUI> mapsList = new();
 
 	void Start()
@@ -46,24 +47,25 @@ public class MapEditorManager : MonoBehaviour
 		currentCarousel = carousel0;
 		mapArchivePath = AddressablesManager.LoadPath(AddressablesManager.TypeOfResource.TXT, CUSTOM_MAP_ARCHIVE);
 		manager = GameObject.Find("Manager").GetComponent<CustomCreatorManager>();
+		currentSection = CustomSection.Initial;
 	}
 	void Update()
 	{
-		if (!isMapLoadActive)
+		if (!(currentSection == CustomSection.Edit_Custom_Map || currentSection == CustomSection.Load_Custom_Map))
 			return;
-
-		manager.cameraManager.UpdatePositionOrRotation(mapLoadPreviewParent, GeneralManager.CurrentSection.Custom);
+		if(currentSection == CustomSection.Edit_Custom_Map)
+			CameraManager.UpdatePositionOrRotation(rotator, GeneralManager.CurrentSection.Custom, rotator);
 	}
 
 	public bool IsStandby(CustomSection section)
 	{
 		return section switch
 		{
-			CustomSection.Initial => isMapLoadActive || isAskingForInput,
-			CustomSection.Edit_Custom_Map => isMapLoadActive || isAskingForInput,
-			CustomSection.Load_Custom_Map => isAskingForInput,
+			CustomSection.Initial => currentSection == CustomSection.Load_Custom_Map || currentSection == CustomSection.Ask_For_Input,
+			CustomSection.Edit_Custom_Map => currentSection == CustomSection.Load_Custom_Map || currentSection == CustomSection.Ask_For_Input,
+			CustomSection.Load_Custom_Map => currentSection == CustomSection.Ask_For_Input,
 			CustomSection.Ask_For_Input => false,
-			CustomSection.Edit_Custom_Unit => isAskingForInput,
+			CustomSection.Edit_Custom_Unit => currentSection == CustomSection.Ask_For_Input,
 			_ => false,
 		};
 	}
@@ -156,6 +158,8 @@ public class MapEditorManager : MonoBehaviour
 		{
 			using (StreamWriter writer = File.AppendText(mapArchivePath))
 			{
+				//The first part indicates the name of the custom map
+				writer.Write($"Map1-");
 				writer.Write($"{mapRows};{mapColumns}#");
 				for (int i = 0; i < tileParents.childCount; i++)
 				{
@@ -180,7 +184,7 @@ public class MapEditorManager : MonoBehaviour
 			return;
 
 		ClearMap(tileParents);
-		isMapLoadActive = true;
+		currentSection = CustomSection.Load_Custom_Map;
 		SetActiveTrueSection(CustomSection.Load_Custom_Map);
 		StartupLoad();
 	}
@@ -193,7 +197,7 @@ public class MapEditorManager : MonoBehaviour
 		mapSelected = string.Empty;
 		ClearMap(mapLoadPreviewParent);
 		SetActiveTrueSection(CustomSection.Edit_Custom_Map);
-		isMapLoadActive = false;
+		currentSection = CustomSection.Edit_Custom_Map;
 		mapLoadPanel.SetActive(false);
 		if(loadBaseLevel)
 			manager.LoadBaseLevel();
@@ -203,7 +207,7 @@ public class MapEditorManager : MonoBehaviour
 	{
 		if (IsStandby(CustomSection.Load_Custom_Map))
 			return;
-
+		currentSection = CustomSection.Edit_Custom_Map;
 		LoadCustomMap(false);
 		BackFromLoadMap(false);
 	}
@@ -215,13 +219,14 @@ public class MapEditorManager : MonoBehaviour
 		string[] maps = File.ReadAllLines(mapArchivePath);
 		for (int i = 0; i < maps.Length; i++)
 		{
+			string mapName = maps[i].Split('-')[0];
 			Vector3 spawnPosition = new(90, -20 * (i + 1), 0);
 			GameObject line = Instantiate(mapLoadViewPortLine, mapLoadContentViewPort.transform);
 			line.transform.localPosition = spawnPosition;
-			line.name = "MapLine " + i;
+			line.name = mapName;
 
 			TextMeshProUGUI text = line.GetComponent<TextMeshProUGUI>();
-			text.text = "Map " + (i + 1);
+			text.text = mapName;
 
 			MapLineScript lineScript = line.GetComponent<MapLineScript>();
 			lineScript.map = maps[i];
@@ -234,7 +239,7 @@ public class MapEditorManager : MonoBehaviour
 	{
 		editMapButton.interactable = true;
 		mapSelected = map;
-		LoadCustomMap(true);
+		LoadCustomMap(false);
 	}
 
 	public void LoadCustomMap(bool isPreview)
@@ -255,6 +260,7 @@ public class MapEditorManager : MonoBehaviour
 		if (IsStandby(CustomSection.Load_Custom_Map))
 			return;
 
+		currentSection = CustomSection.Ask_For_Input;
 		SetActiveTrueSection(CustomSection.Ask_For_Input);
 	}
 
