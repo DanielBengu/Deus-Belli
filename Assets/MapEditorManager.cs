@@ -1,20 +1,20 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
+using System.Threading.Tasks;
 using TMPro;
 using UnityEngine;
+using UnityEngine.AddressableAssets;
+using UnityEngine.ResourceManagement.AsyncOperations;
+using UnityEngine.ResourceManagement.ResourceLocations;
 using UnityEngine.UI;
 
 public class MapEditorManager : MonoBehaviour
 {
 	static readonly string CUSTOM_MAP_ARCHIVE = "CustomMapArchive";
+	readonly Image[] carouselList;
+	Image currentCarousel;
 
-	[SerializeField] Image carousel0;
-	[SerializeField] Image carousel1;
-	[SerializeField] Image carousel2;
-	[SerializeField] Image carousel3;
-	[SerializeField] Image carousel4;
-	[SerializeField] Image carousel5;
 	[SerializeField] Transform tileParents;
 
 	[SerializeField] GameObject mainCanvas;
@@ -31,8 +31,6 @@ public class MapEditorManager : MonoBehaviour
 	public Transform rotator;
 
 	string mapArchivePath;
-
-	Image currentCarousel;
 	GameObject itemSelected;
 
 	public string mapSelected = string.Empty;
@@ -44,7 +42,11 @@ public class MapEditorManager : MonoBehaviour
 
 	void Start()
 	{
-		currentCarousel = carousel0;
+		int carouselCount = GameObject.Find("Carousel items").transform.childCount;
+		for (int i = 0; i < carouselCount; i++)
+			carouselList[i] = GameObject.Find($"Carousel {i}").GetComponent<Image>();
+
+		currentCarousel = carouselList[0];
 		mapArchivePath = AddressablesManager.LoadPath(AddressablesManager.TypeOfResource.TXT, CUSTOM_MAP_ARCHIVE);
 		manager = GameObject.Find("Manager").GetComponent<CustomCreatorManager>();
 		currentSection = CustomSection.Initial;
@@ -75,42 +77,13 @@ public class MapEditorManager : MonoBehaviour
 		if (IsStandby(CustomSection.Edit_Custom_Map))
 			return;
 
-		//First we reset back the selection
-		currentCarousel.color = new Color(255, 255, 255);
-
-		switch (item)
-		{
-			case 0:
-				currentCarousel = carousel0;
-				itemSelected = AddressablesManager.LoadResource<GameObject>(AddressablesManager.TypeOfResource.Terrains, "Grass1");
-				break;
-			case 1:
-				currentCarousel = carousel1;
-				itemSelected = AddressablesManager.LoadResource<GameObject>(AddressablesManager.TypeOfResource.Terrains, "PineTree");
-				break;
-			case 2:
-				currentCarousel = carousel2;
-				itemSelected = AddressablesManager.LoadResource<GameObject>(AddressablesManager.TypeOfResource.Terrains, "GrassPath");
-				break;
-			case 3:
-				currentCarousel = carousel3;
-				itemSelected = AddressablesManager.LoadResource<GameObject>(AddressablesManager.TypeOfResource.Terrains, "Mountain");
-				break;
-			case 4:
-				currentCarousel = carousel4;
-				itemSelected = AddressablesManager.LoadResource<GameObject>(AddressablesManager.TypeOfResource.Terrains, "Tree");
-				break;
-			case 5:
-				currentCarousel = carousel5;
-				itemSelected = AddressablesManager.LoadResource<GameObject>(AddressablesManager.TypeOfResource.Terrains, "BirchTree");
-				break;
-		}
-		currentCarousel.color = new Color(170, 170, 170);
+		//carouselList[item] = 
+		itemSelected = AddressablesManager.LoadResource<GameObject>(AddressablesManager.TypeOfResource.Terrains, "BirchTree");
 	}
 
 	public void ChangeTile(Tile tile)
 	{
-		if (IsStandby(CustomSection.Edit_Custom_Map))
+		if (IsStandby(CustomSection.Edit_Custom_Map) || Input.GetMouseButton(FightManager.RIGHT_MOUSE_BUTTON))
 			return;
 
 		GameObject newTile = Instantiate(itemSelected, tileParents);

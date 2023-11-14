@@ -12,7 +12,7 @@ public class CameraManager : MonoBehaviour
     // The current scroll distance
     private float distance = 50f;
 
-    private static float speedMod = 10.0f;//a speed modifier
+    private static float speedMod = 30.0f;//a speed modifier
 
     public float scrollSpeed = 10f;
 
@@ -51,21 +51,11 @@ public class CameraManager : MonoBehaviour
 			case GeneralManager.CurrentSection.Custom:
                 if (!Input.GetMouseButton(FightManager.RIGHT_MOUSE_BUTTON) || objectRotator == null)
                     return;
-                float moveHorizontalFightX = Input.GetAxis("Mouse X");
-                float moveHorizontalFightY = Input.GetAxis("Mouse Y");
-
-                float rotationAmount = moveHorizontalFightX * speedMod * Time.deltaTime * 10f;
-
-                // Convert negative rotation to positive
-                float adjustedRotationAmount = rotationAmount < 0f ? rotationAmount + 360f : rotationAmount;
-                objectToMove.Rotate(Vector3.up, adjustedRotationAmount);
-                objectToMove.Rotate(Vector3.right, moveHorizontalFightY * speedMod * Time.deltaTime * 10f);
-                //objectToMove.Rotate(new Vector3(moveHorizontalFightY, moveHorizontalFightX, 0.0f), adjustedRotationAmount);
-
-                // Clamp the rotation to the specified range
-                float clampedRotation = Mathf.Clamp(objectToMove.eulerAngles.x, -10f, 30f);
-                objectToMove.eulerAngles = new Vector3(clampedRotation, objectToMove.eulerAngles.y, objectToMove.eulerAngles.z);
-
+                float moveHorizontalCustom = Input.GetAxis("Mouse X");
+                //float moveVerticalCustom = Input.GetAxis("Mouse Y");
+                //objectToMove.RotateAround(objectRotator.position, new Vector3(moveVerticalCustom, moveHorizontalCustom, 0.0f), 20 * Time.deltaTime * speedMod);
+                //objectToMove.Rotate(Vector3.right, moveVerticalCustom * 20 * speedMod * Time.deltaTime, Space.Self);
+                objectToMove.Rotate(Vector3.up, moveHorizontalCustom * 20 * speedMod * Time.deltaTime, Space.World);
                 break;
 			default:
 				break;

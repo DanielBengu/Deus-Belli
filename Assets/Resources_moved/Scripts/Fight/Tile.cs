@@ -25,6 +25,7 @@ public class Tile : MonoBehaviour, IComparable<Tile>
 
     public void OnMouseDown()
     {
+        //We are on the custom map editor
 		if (isEdit)
 		{
             MapEditorManager editor = GameObject.Find("Map Editor").GetComponent<MapEditorManager>();
@@ -32,6 +33,7 @@ public class Tile : MonoBehaviour, IComparable<Tile>
             return;
 		}
 
+        //We are on the fight section
         ObjectClickedEnum objClicked;
         GameObject objectToManage;
         if (manager.IsGameInStandby)
