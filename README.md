@@ -32,6 +32,7 @@ Omi, the Queen of Agbara and the wife of Ataiku, is a strong deity that controls
 
 Oshun is Omi’s champion, a human water priestess that was chosen by the god when she once ventured with a party into the wastelands and survived an attack from Aini, the demon of siccity an death. After becoming her champion Oshun amplified her water powers and now can control it like the god to create the same armor and weapons, and to attack enemies.
 
+-----------------------------------scemo ki legge xd123
 
 ### Teriba: 
 
