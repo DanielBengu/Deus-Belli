@@ -1,8 +1,10 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Threading.Tasks;
 using TMPro;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
 using UnityEngine.ResourceManagement.AsyncOperations;
@@ -12,7 +14,8 @@ using UnityEngine.UI;
 public class MapEditorManager : MonoBehaviour
 {
 	static readonly string CUSTOM_MAP_ARCHIVE = "CustomMapArchive";
-	readonly Image[] carouselList;
+	Image[] carouselList = null;
+	GameObject[] objectsList;
 	Image currentCarousel;
 
 	[SerializeField] Transform tileParents;
@@ -26,6 +29,7 @@ public class MapEditorManager : MonoBehaviour
 	[SerializeField] GameObject insertNamePanel;
 	[SerializeField] Transform mapLoadPreviewParent;
 	[SerializeField] Transform mainCamera;
+	[SerializeField] GameObject carouselItems;
 
 	CustomCreatorManager manager;
 	public Transform rotator;
@@ -42,11 +46,6 @@ public class MapEditorManager : MonoBehaviour
 
 	void Start()
 	{
-		int carouselCount = GameObject.Find("Carousel items").transform.childCount;
-		for (int i = 0; i < carouselCount; i++)
-			carouselList[i] = GameObject.Find($"Carousel {i}").GetComponent<Image>();
-
-		currentCarousel = carouselList[0];
 		mapArchivePath = AddressablesManager.LoadPath(AddressablesManager.TypeOfResource.TXT, CUSTOM_MAP_ARCHIVE);
 		manager = GameObject.Find("Manager").GetComponent<CustomCreatorManager>();
 		currentSection = CustomSection.Initial;
@@ -56,7 +55,42 @@ public class MapEditorManager : MonoBehaviour
 		if (!(currentSection == CustomSection.Edit_Custom_Map || currentSection == CustomSection.Load_Custom_Map))
 			return;
 		if(currentSection == CustomSection.Edit_Custom_Map)
-			CameraManager.UpdatePositionOrRotation(rotator, GeneralManager.CurrentSection.Custom, rotator);
+			CameraManager.UpdatePositionOrRotation(rotator, GeneralManager.CurrentSection.Custom, new(200f, 1200f));
+	}
+
+	//We set the objects from which the carousel fills
+	void SetObjects()
+	{
+		AsyncOperationHandle<IList<GameObject>> loadOp = Addressables.LoadAssetsAsync<GameObject>("Terrains", null, true);
+
+		// Wait for the operation to complete
+		loadOp.WaitForCompletion();
+
+		if (loadOp.Status == AsyncOperationStatus.Succeeded)
+			objectsList = loadOp.Result.ToArray();
+		else
+			Debug.LogError($"Failed to load prefabs. Error: {loadOp.OperationException}");
+
+		Addressables.Release(loadOp);
+	}
+
+	public void SetCarousel()
+	{
+		SetObjects();
+
+		int carouselCount = carouselItems.transform.childCount;
+		carouselList = new Image[carouselCount];
+		for (int i = 0; i < carouselCount; i++)
+		{
+			if (objectsList.Length <= i)
+				break;
+			Image carouseilImage = carouselItems.transform.GetChild(i).GetComponent<Image>();
+			carouseilImage.sprite = AddressablesManager.LoadResource<Sprite>(AddressablesManager.TypeOfResource.Sprite, objectsList[i].name);
+			carouselList[i] = carouseilImage;
+		}
+
+		currentCarousel = carouselList[0];
+		itemSelected = objectsList[0];
 	}
 
 	public bool IsStandby(CustomSection section)
@@ -77,13 +111,12 @@ public class MapEditorManager : MonoBehaviour
 		if (IsStandby(CustomSection.Edit_Custom_Map))
 			return;
 
-		//carouselList[item] = 
-		itemSelected = AddressablesManager.LoadResource<GameObject>(AddressablesManager.TypeOfResource.Terrains, "BirchTree");
+		itemSelected = ObjectsManager.GetObject(carouselList[item].sprite.name);
 	}
 
 	public void ChangeTile(Tile tile)
 	{
-		if (IsStandby(CustomSection.Edit_Custom_Map) || Input.GetMouseButton(FightManager.RIGHT_MOUSE_BUTTON))
+		if (IsStandby(CustomSection.Edit_Custom_Map) || Input.GetMouseButton((int)MouseButton.Middle))
 			return;
 
 		GameObject newTile = Instantiate(itemSelected, tileParents);

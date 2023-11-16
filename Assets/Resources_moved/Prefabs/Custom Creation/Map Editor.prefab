@@ -161,8 +161,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 426896216854937775}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -667, y: -91, z: 0}
-  m_LocalScale: {x: 2, y: 2, z: 1}
+  m_LocalPosition: {x: -348, y: 0, z: 0}
+  m_LocalScale: {x: 1.5, y: 1.5, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 6965195591820266274}
@@ -422,7 +422,7 @@ MonoBehaviour:
     m_SelectedTrigger: Selected
     m_DisabledTrigger: Disabled
   m_Interactable: 1
-  m_TargetGraphic: {fileID: 7150929399992524651}
+  m_TargetGraphic: {fileID: 4680417463664993960}
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
@@ -860,7 +860,7 @@ MonoBehaviour:
     m_SelectedTrigger: Selected
     m_DisabledTrigger: Disabled
   m_Interactable: 1
-  m_TargetGraphic: {fileID: 7150929399992524651}
+  m_TargetGraphic: {fileID: 5081582446082323061}
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
@@ -1073,7 +1073,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 334.79712, y: -526.45026}
+  m_AnchoredPosition: {x: 331.8, y: -527}
   m_SizeDelta: {x: 160, y: 30}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &8672044654264966092
@@ -1287,7 +1287,7 @@ MonoBehaviour:
     m_SelectedTrigger: Selected
     m_DisabledTrigger: Disabled
   m_Interactable: 1
-  m_TargetGraphic: {fileID: 7150929399992524651}
+  m_TargetGraphic: {fileID: 5304437673108105434}
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
@@ -1486,12 +1486,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ec7ae4a0d02414048bd4d12b706f509a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  carousel0: {fileID: 7150929399992524651}
-  carousel1: {fileID: 4837730741800752505}
-  carousel2: {fileID: 8475981528270528883}
-  carousel3: {fileID: 0}
-  carousel4: {fileID: 0}
-  carousel5: {fileID: 0}
   tileParents: {fileID: 0}
   mainCanvas: {fileID: 0}
   mapCreatorSection: {fileID: 0}
@@ -1502,6 +1496,7 @@ MonoBehaviour:
   insertNamePanel: {fileID: 0}
   mapLoadPreviewParent: {fileID: 0}
   mainCamera: {fileID: 0}
+  carouselItems: {fileID: 4975780721712404868}
   rotator: {fileID: 1256883192649201586}
   mapSelected: 
   mapColumns: 0
@@ -1624,7 +1619,7 @@ MonoBehaviour:
     m_SelectedTrigger: Selected
     m_DisabledTrigger: Disabled
   m_Interactable: 1
-  m_TargetGraphic: {fileID: 7150929399992524651}
+  m_TargetGraphic: {fileID: 6464037335636467852}
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
@@ -1932,7 +1927,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 588.99713, y: -526.45026}
+  m_AnchoredPosition: {x: 586, y: -527}
   m_SizeDelta: {x: 160, y: 30}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &63500323210039211
@@ -2146,7 +2141,7 @@ MonoBehaviour:
     m_SelectedTrigger: Selected
     m_DisabledTrigger: Disabled
   m_Interactable: 1
-  m_TargetGraphic: {fileID: 7150929399992524651}
+  m_TargetGraphic: {fileID: 8475981528270528883}
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
@@ -2279,7 +2274,7 @@ MonoBehaviour:
     m_SelectedTrigger: Selected
     m_DisabledTrigger: Disabled
   m_Interactable: 1
-  m_TargetGraphic: {fileID: 7150929399992524651}
+  m_TargetGraphic: {fileID: 3433250849721746765}
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
@@ -2412,7 +2407,7 @@ MonoBehaviour:
     m_SelectedTrigger: Selected
     m_DisabledTrigger: Disabled
   m_Interactable: 1
-  m_TargetGraphic: {fileID: 7150929399992524651}
+  m_TargetGraphic: {fileID: 4700783874489002048}
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
@@ -2856,7 +2851,7 @@ MonoBehaviour:
     m_SelectedTrigger: Selected
     m_DisabledTrigger: Disabled
   m_Interactable: 1
-  m_TargetGraphic: {fileID: 7150929399992524651}
+  m_TargetGraphic: {fileID: 3139719808658456454}
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
@@ -2989,7 +2984,7 @@ MonoBehaviour:
     m_SelectedTrigger: Selected
     m_DisabledTrigger: Disabled
   m_Interactable: 1
-  m_TargetGraphic: {fileID: 7150929399992524651}
+  m_TargetGraphic: {fileID: 2047156368579118164}
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
@@ -3255,7 +3250,7 @@ MonoBehaviour:
     m_SelectedTrigger: Selected
     m_DisabledTrigger: Disabled
   m_Interactable: 1
-  m_TargetGraphic: {fileID: 7150929399992524651}
+  m_TargetGraphic: {fileID: 5204613769573909701}
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
@@ -3388,7 +3383,7 @@ MonoBehaviour:
     m_SelectedTrigger: Selected
     m_DisabledTrigger: Disabled
   m_Interactable: 1
-  m_TargetGraphic: {fileID: 7150929399992524651}
+  m_TargetGraphic: {fileID: 6668121409670489905}
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
@@ -3521,7 +3516,7 @@ MonoBehaviour:
     m_SelectedTrigger: Selected
     m_DisabledTrigger: Disabled
   m_Interactable: 1
-  m_TargetGraphic: {fileID: 7150929399992524651}
+  m_TargetGraphic: {fileID: 2951824655440848218}
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
@@ -3700,7 +3695,7 @@ MonoBehaviour:
     m_SelectedTrigger: Selected
     m_DisabledTrigger: Disabled
   m_Interactable: 1
-  m_TargetGraphic: {fileID: 7150929399992524651}
+  m_TargetGraphic: {fileID: 5801508210880452950}
   m_OnClick:
     m_PersistentCalls:
       m_Calls:

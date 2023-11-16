@@ -16,7 +16,7 @@ public class RogueManager : MonoBehaviour
 	public readonly List<RogueNode> tileList = new();
 
     public Transform playerUnitTransform;
-
+    static readonly int MAP_LENGTH = 10;
     int maxNode;
     public Dictionary<SeedType, int> seedList = new();
 
@@ -63,10 +63,10 @@ public class RogueManager : MonoBehaviour
         seedList.Add(SeedType.RogueTile, RandomManager.GetRandomValue(masterSeed, 0, 99999));
         seedList.Add(SeedType.MapLength, RandomManager.GetRandomValue(masterSeed, 100000, 199999));
         seedList.Add(SeedType.NodesOnRow, RandomManager.GetRandomValue(masterSeed, 200000, 299999));
-        this.StructureManager = structureManager;
+        StructureManager = structureManager;
 
-        maxNode = RandomManager.GetRandomValue(seedList[SeedType.MapLength], 7, 9);
-        
+        maxNode = MAP_LENGTH; //RandomManager.GetRandomValue(seedList[SeedType.MapLength], 7, 9);
+
         GenerateMap();
         RogueNode currentNode = tileList.Find(t => t.mapRow == currentRow && t.positionInRow == currentPositionOnRow);
         playerUnitTransform.position = new Vector3(currentNode.transform.position.x, playerUnitTransform.position.y, currentNode.transform.position.z);
@@ -89,6 +89,12 @@ public class RogueManager : MonoBehaviour
 
         GenerateNewNodeLines();
     }
+
+    public float[] GetCameraClamp()
+	{
+        float maxX = tileList.Last().mapRow * -275;
+        return new[] { maxX, -400f };
+	}
 
     void CreateRowOfNodes(int row, int maxRowOfMap, Transform firstNode)
 	{

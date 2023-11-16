@@ -253,11 +253,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 66e44b4b68caf5c448a334ee6906f145, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  movementSpeed: 50
-  xMinFight: -2000
-  xMaxFight: 1000
-  xMinRogue: -1500
-  xMaxRogue: -200
   minDistance: 1
   maxDistance: 10
   scrollSpeed: 10
@@ -469,9 +464,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d8bbb9aea8e2a904ebd0c3bcaba5afb2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  sorceressPrefab: {fileID: 1253013051146282, guid: 3c202d9019a613349804c8f1726919c8, type: 3}
-  orcPrefab: {fileID: 1186413494234004, guid: 629436ade9810844791296bd0506f056, type: 3}
-  dragonPrefab: {fileID: 971994670, guid: 67635bec777649d4dafd5182ffae25f7, type: 3}
   uiManager: {fileID: 1412221416}
   spriteManager: {fileID: 1412221417}
 --- !u!114 &1412221416
@@ -664,7 +656,7 @@ SpriteRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_Sprite: {fileID: 21300000, guid: b794f6c8bf084ad45bacd747476c874e, type: 3}
-  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_Color: {r: 0.3584906, g: 0.3584906, b: 0.3584906, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0

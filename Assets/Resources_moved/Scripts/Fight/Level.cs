@@ -36,30 +36,13 @@ public class Level
 	// if isEdit is true then the map generated will be a basic map with only grass
 	public void GenerateTerrain(bool isEdit, Transform objectsParent)
 	{
-		int[] mountains = new int[RandomManager.GetRandomValue(seed, 0, 10)];
-		for (int i = 0; i < mountains.Length; i++)
-		{
-			int mountainSeed = seed * (i + 1);
-			mountains[i] = isEdit ? -1 : RandomManager.GetRandomValue(mountainSeed, 0, HorizontalTiles * VerticalTiles);
-		}
 		for (int i = 0; i < HorizontalTiles * VerticalTiles; i++)
 		{
-			if (mountains.Contains(i))
-			{
-				GameObject objectToSpawn = ObjectsManager.GetRandomObject(seed * 12 * (i + 1), ObjectsManager.TypeOfObstacle.SingleTile, ObjectsManager.MapTheme.Plains);
-				GameObject tileObject = Object.Instantiate(objectToSpawn, objectsParent);
-
-				LoadTile(tileObject, $"Terrain_{i}", objectToSpawn.name, isEdit, false);
-				tilesDict.Add(i, tileObject);
-			}
-			else
-			{
 				GameObject objectToSpawn = ObjectsManager.GetRandomObject(seed * 12 / (i + 1), ObjectsManager.TypeOfObstacle.Terrain, ObjectsManager.MapTheme.Plains);
 				GameObject tileObject = Object.Instantiate(objectToSpawn, objectsParent);
 
 				LoadTile(tileObject, $"Terrain_{i}", objectToSpawn.name, isEdit, true);
 				tilesDict.Add(i, tileObject);
-			}
 		}
 	}
 	public void GenerateTerrain(bool isEdit, Transform objectsParent, string[] customMap)

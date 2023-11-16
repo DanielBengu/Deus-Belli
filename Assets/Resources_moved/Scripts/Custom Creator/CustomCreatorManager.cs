@@ -42,6 +42,7 @@ public class CustomCreatorManager : MonoBehaviour
 		//We find the exact center of this new board
 		_mapEditorManager.rotator.position = new((topLeftTile.position.x + bottomRightTile.position.x) / 2, topLeftTile.position.y, (topLeftTile.position.z + bottomRightTile.position.z) / 2);
 		mapObjects.parent = _mapEditorManager.rotator;
+		_mapEditorManager.SetCarousel();
 	}
 
 	void CleanupMapEditor()

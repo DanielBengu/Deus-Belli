@@ -1,10 +1,9 @@
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class CameraManager : MonoBehaviour
 {
     public static float movementSpeed = 50f;
-    public static float xMinRogue;
-    public static float xMaxRogue;
     // The minimum and maximum scroll distances
     public float minDistance = 1f;
     public float maxDistance = 10f;
@@ -26,40 +25,49 @@ public class CameraManager : MonoBehaviour
     Vector3 cameraPositionOnFocus = new(670, 690, 650);
     Quaternion rotationOnFocus = Quaternion.Euler(40, 0, 0);
     
-    public static void UpdatePositionOrRotation(Transform objectToMove, GeneralManager.CurrentSection section, Transform objectRotator = null)
+    public static void UpdatePositionOrRotation(Transform objectToMove, GeneralManager.CurrentSection section, CameraMovementOptions options = null)
     {
         switch (section)
 		{
 			case GeneralManager.CurrentSection.Fight:
-                if (!Input.GetMouseButton(FightManager.RIGHT_MOUSE_BUTTON) || objectRotator == null)
-                    return;
-                float moveHorizontalFight = Input.GetAxis("Mouse X");
-                objectToMove.RotateAround(objectRotator.position, new Vector3(0.0f, moveHorizontalFight, 0.0f), 20 * Time.deltaTime * speedMod);
+                if (Input.GetMouseButton((int)MouseButton.Right))
+                RotateItem(objectToMove);
                 break;
 			case GeneralManager.CurrentSection.Rogue:
-                float xMin = xMinRogue;
-                float xMax = xMaxRogue;
-
-                float moveHorizontalRogue = Input.GetAxis("Mouse X");
-
-                Vector3 position = objectToMove.position;
-                position.x += moveHorizontalRogue * movementSpeed;
-
-                position.x = Mathf.Clamp(position.x, xMin, xMax);
-                objectToMove.position = position;
+                MoveItem(objectToMove, options);
                 break;
 			case GeneralManager.CurrentSection.Custom:
-                if (!Input.GetMouseButton(FightManager.RIGHT_MOUSE_BUTTON) || objectRotator == null)
+                if (Input.GetMouseButton((int)MouseButton.Right))
+                    RotateItem(objectToMove);
+                else if (Input.GetMouseButton((int)MouseButton.Middle))
+                    MoveItem(objectToMove, options);
+                else
                     return;
-                float moveHorizontalCustom = Input.GetAxis("Mouse X");
-                //float moveVerticalCustom = Input.GetAxis("Mouse Y");
-                //objectToMove.RotateAround(objectRotator.position, new Vector3(moveVerticalCustom, moveHorizontalCustom, 0.0f), 20 * Time.deltaTime * speedMod);
-                //objectToMove.Rotate(Vector3.right, moveVerticalCustom * 20 * speedMod * Time.deltaTime, Space.Self);
-                objectToMove.Rotate(Vector3.up, moveHorizontalCustom * 20 * speedMod * Time.deltaTime, Space.World);
                 break;
 			default:
 				break;
 		}
+    }
+
+    static void MoveItem(Transform objectToMove, CameraMovementOptions options)
+	{
+        float[] clampValues = options.GetMovementClamp();
+        float xMin = clampValues[0];
+        float xMax = clampValues[1];
+
+        float moveHorizontalRogue = Input.GetAxis("Mouse X");
+
+        Vector3 position = objectToMove.position;
+        position.x += moveHorizontalRogue * movementSpeed;
+
+        position.x = Mathf.Clamp(position.x, xMin, xMax);
+        objectToMove.position = position;
+    }
+
+    static void RotateItem(Transform objectToMove)
+	{
+        float moveHorizontalCustom = Input.GetAxis("Mouse X");
+        objectToMove.Rotate(Vector3.up, moveHorizontalCustom * 20 * speedMod * Time.deltaTime, Space.World);
     }
 
     public void ResetCamera()
@@ -119,4 +127,56 @@ public class CameraManager : MonoBehaviour
     public Transform GetCameraPosition(){
         return transform;
     }
+}
+
+public class CameraMovementOptions
+{
+    float _minMovementValue = -1;
+    float _maxMovementValue = -1;
+    Transform _objectRotator = null;
+
+    #region Constructors
+    public CameraMovementOptions(float minClamp, float maxClamp)
+    {
+        _minMovementValue = minClamp;
+        _maxMovementValue = maxClamp;
+    }
+
+    public CameraMovementOptions(Transform rotator)
+    {
+        _objectRotator = rotator;
+    }
+
+    public CameraMovementOptions(float minClamp, float maxClamp, Transform rotator)
+    {
+        _minMovementValue = minClamp;
+        _maxMovementValue = maxClamp;
+        _objectRotator = rotator;
+    }
+    #endregion
+
+    #region Setters
+    public void SetMovementClamp(float minValue, float maxValue)
+    {
+        _minMovementValue = minValue;
+        _maxMovementValue = maxValue;
+    }
+
+    public void SetObjectRotator(Transform rotator)
+    {
+        _objectRotator = rotator;
+    }
+    #endregion
+
+    #region Getters
+    public float[] GetMovementClamp()
+    {
+        return new[] { _minMovementValue, _maxMovementValue };
+    }
+
+    public Transform GetRotator()
+    {
+        return _objectRotator;
+    }
+    #endregion
 }

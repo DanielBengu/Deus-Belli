@@ -10,9 +10,9 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: e5d17a21594effb4e9591490b009e7aa, type: 3}
-  m_Name: Sprite_Gods_BundledAssetGroupSchema
+  m_Name: Sprite Units_BundledAssetGroupSchema
   m_EditorClassIdentifier: 
-  m_Group: {fileID: 11400000, guid: 87962b1c6d5a5f548900fd1808865f3c, type: 2}
+  m_Group: {fileID: 11400000, guid: 5c064cebe8fa27a4f90fdaecaea01bb7, type: 2}
   m_InternalBundleIdMode: 1
   m_Compression: 1
   m_IncludeAddressInCatalog: 1

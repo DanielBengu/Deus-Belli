@@ -1,5 +1,8 @@
+using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using UnityEngine.AddressableAssets;
+using UnityEngine.ResourceManagement.AsyncOperations;
 
 public static class ObjectsManager
 {
@@ -14,16 +17,35 @@ public static class ObjectsManager
 		new(AddressablesManager.LoadResource<GameObject>(AddressablesManager.TypeOfResource.Terrains, "PineTree"), TypeOfObstacle.SingleTile, MapTheme.Plains),
 	};
 
+	public static GameObject[] LoadObjects()
+	{
+		GameObject[] result = null;
+		AsyncOperationHandle<IList<GameObject>> loadOp = Addressables.LoadAssetsAsync<GameObject>("Terrains", null, true);
+
+		// Wait for the operation to complete
+		loadOp.WaitForCompletion();
+
+		if (loadOp.Status == AsyncOperationStatus.Succeeded)
+			result = loadOp.Result.ToArray();
+		else
+			Debug.LogError($"Failed to load prefabs. Error: {loadOp.OperationException}");
+
+		Addressables.Release(loadOp);
+		return result;
+	}
+
 	public static GameObject GetRandomObject(int seed, TypeOfObstacle obstacleType, MapTheme theme)
 	{
-		Model3D[] validObjects = model3DArchive.Where(m => m.obstacleType == obstacleType && m.theme == theme).ToArray();
-		int index = RandomManager.GetRandomValue(seed, 0, validObjects.Length);
-		return validObjects[index].model;
+		GameObject[] objList = LoadObjects();
+		//Model3D[] validObjects = model3DArchive.Where(m => m.obstacleType == obstacleType && m.theme == theme).ToArray();
+		int index = RandomManager.GetRandomValue(seed, 0, objList.Length);
+		return objList[index];
 	}
 
 	public static GameObject GetObject(string objectName)
 	{
-		return model3DArchive.Where(m => m.model.name == objectName).First().model;
+		GameObject[] objList = LoadObjects();
+		return objList.Where(m => m.name == objectName).First();
 	}
 
 	public struct Model3D

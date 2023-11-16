@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class Tile : MonoBehaviour, IComparable<Tile>
@@ -58,7 +59,8 @@ public class Tile : MonoBehaviour, IComparable<Tile>
 
     //Workaround to manage right click like we do for the left click in OnMouseDown()
     void OnMouseOver () {
-        if(Input.GetMouseButtonDown(FightManager.RIGHT_MOUSE_BUTTON)){
+        if(Input.GetMouseButtonDown((int)MouseButton.Middle))
+        {
             //manager.ManageClick(ObjectClickedEnum.RightClickOnField, gameObject);
         }
     }

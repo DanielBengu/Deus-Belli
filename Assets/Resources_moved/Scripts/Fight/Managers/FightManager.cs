@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using System.Linq;
 using System.IO;
+using Unity.VisualScripting;
 
 public class FightManager : MonoBehaviour
 {
@@ -9,8 +10,6 @@ public class FightManager : MonoBehaviour
 
     public const int USER_FACTION = 0;
     public const int ENEMY_FACTION = 1;
-    public const int LEFT_MOUSE_BUTTON = 1;
-    public const int RIGHT_MOUSE_BUTTON = 1;
     //private const int UNIT_MOVEMENT_SPEED = 800;
 
     #region Fields
@@ -18,6 +17,9 @@ public class FightManager : MonoBehaviour
     public CameraManager cameraManager;
     public StructureManager structureManager;
     AIManager aiManager;
+
+    public Transform fightObjects;
+    public Transform fightObjectsRotator;
 
     [SerializeField]
     GameObject rogueSection;
@@ -100,7 +102,7 @@ public class FightManager : MonoBehaviour
 
     //Method that manages the press of a key (only for the frame it is clicked)
     void ManageKeysDown(){
-        if (Input.GetMouseButtonDown(RIGHT_MOUSE_BUTTON))
+        if (Input.GetMouseButtonDown((int)MouseButton.Middle))
             ResetGameState(true);
     }
     #endregion
@@ -125,11 +127,17 @@ public class FightManager : MonoBehaviour
     {
         IsSetup = true;
 
-        Transform objectsParent = GameObject.Find("Fight Objects").transform;
-        level.GenerateTerrain(false, objectsParent);
+        level.GenerateTerrain(false, null);
 
         // Setup the terrain based on the level information
         var tiles = structureManager.SetupFightSection(level.tilesDict, this, level.TopLeftSquarePositionX, level.YPosition, level.TopLeftSquarePositionZ, level.HorizontalTiles, level.VerticalTiles);
+
+        Transform lastTile = tiles[level.VerticalTiles * level.HorizontalTiles - 1].transform;
+        float rotatorX = (tiles[0].transform.position.x + lastTile.position.x) / 2;
+        float rotatorZ = (tiles[0].transform.position.z + lastTile.position.z) / 2;
+        fightObjects.transform.position = new Vector3(rotatorX, fightObjectsRotator.transform.position.y, rotatorZ);
+		for (int i = 0; i < tiles.Count; i++)
+            tiles[i].transform.parent = fightObjects;
 
         var units = GenerateUnits(tiles, level.VerticalTiles, level.seed);
         structureManager.gameData = new(tiles, units, level.HorizontalTiles, level.VerticalTiles);

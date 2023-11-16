@@ -10,44 +10,44 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: bbb281ee3bf0b054c82ac2347e9e782c, type: 3}
-  m_Name: Terrains
+  m_Name: Sprite Terrains
   m_EditorClassIdentifier: 
-  m_GroupName: Terrains
+  m_GroupName: Sprite Terrains
   m_Data:
     m_SerializedData: []
-  m_GUID: 87cf73c9b16b37d4c8c870ff43c40d5b
+  m_GUID: 3d10c09294b72d54692aebd60d0a4fa7
   m_SerializeEntries:
-  - m_GUID: 80f769ea57b55684b92fa9a2638fe87c
-    m_Address: Terrains
+  - m_GUID: 4191196d5cf1cfa49bdfdb829eb8ee95
+    m_Address: Sprite/BirchTree
     m_ReadOnly: 0
     m_SerializedLabels: []
-  - m_GUID: 638cad1328606a043ba6907bcfc8dff5
-    m_Address: Terrains
+  - m_GUID: 7afda94b6dad7b640938197c55b95aa3
+    m_Address: Sprite/Grass1
     m_ReadOnly: 0
     m_SerializedLabels: []
-  - m_GUID: 7809dc9331c05c4418bbf92c2805bacd
-    m_Address: Terrains
+  - m_GUID: a457a8c10fddd6e4784f7781b51b9e11
+    m_Address: Sprite/Grass2
     m_ReadOnly: 0
     m_SerializedLabels: []
-  - m_GUID: ca77371fc3eef2c49a298cd33bf103c3
-    m_Address: Terrains
+  - m_GUID: bc22d7461bc60a4478aacd0e46e1eb9a
+    m_Address: Sprite/GrassPath
     m_ReadOnly: 0
     m_SerializedLabels: []
-  - m_GUID: 1db8f79c490383041a31299f12c12e36
-    m_Address: Terrains
+  - m_GUID: 239c26634bd0a0d48a4df26828a8a2ff
+    m_Address: Sprite/Mountain
     m_ReadOnly: 0
     m_SerializedLabels: []
-  - m_GUID: d315bfc834d901a4dba4ae8d5465e318
-    m_Address: Terrains
+  - m_GUID: 476e222d4ee1f25479a4a70290960e65
+    m_Address: Sprite/PineTree
     m_ReadOnly: 0
     m_SerializedLabels: []
-  - m_GUID: 7914a034d62081b4b86603a4cc2a24f9
-    m_Address: Terrains
+  - m_GUID: 687ea2ddfef33164480d8134934f90c7
+    m_Address: Sprite/Tree
     m_ReadOnly: 0
     m_SerializedLabels: []
   m_ReadOnly: 0
   m_Settings: {fileID: 11400000, guid: 42fa5884c9964964993dbdd708fbd850, type: 2}
   m_SchemaSet:
     m_Schemas:
-    - {fileID: 11400000, guid: d9e9fa8234e5b694595ef52ea642a366, type: 2}
-    - {fileID: 11400000, guid: a668159a1376bde4eb2e441ff3294098, type: 2}
+    - {fileID: 11400000, guid: a5a8b0c5063d07a40b977e10164e3836, type: 2}
+    - {fileID: 11400000, guid: 011d309803ffa1a49a596ae178c33c7a, type: 2}

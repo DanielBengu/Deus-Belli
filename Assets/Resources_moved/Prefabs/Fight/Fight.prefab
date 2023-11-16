@@ -23,13 +23,13 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 109968430224112842}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 1112233308450854397}
-  m_RootOrder: 3
+  m_Father: {fileID: 6762853138826753393}
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1278397633198017817
 GameObject:
@@ -62,9 +62,40 @@ Transform:
   - {fileID: 5163413614816806110}
   - {fileID: 9056584785044048640}
   - {fileID: 6762853138826753393}
-  - {fileID: 4431706579095934379}
+  - {fileID: 2956381804550443922}
   m_Father: {fileID: 0}
   m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &2455385732298385776
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 2956381804550443922}
+  m_Layer: 0
+  m_Name: Fight rotator
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &2956381804550443922
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2455385732298385776}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1112233308450854397}
+  m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &5524343795923527158
 GameObject:
@@ -93,7 +124,8 @@ Transform:
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
-  m_Children: []
+  m_Children:
+  - {fileID: 4431706579095934379}
   m_Father: {fileID: 1112233308450854397}
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -217,6 +249,10 @@ PrefabInstance:
       value: 640
       objectReference: {fileID: 0}
     - target: {fileID: 6106894816546113674, guid: 99d4b6185d8babd4b8b8caab0b5d7561, type: 3}
+      propertyPath: fightObjects
+      value: 
+      objectReference: {fileID: 6762853138826753393}
+    - target: {fileID: 6106894816546113674, guid: 99d4b6185d8babd4b8b8caab0b5d7561, type: 3}
       propertyPath: isOutOfFocus
       value: 1
       objectReference: {fileID: 0}
@@ -256,6 +292,10 @@ PrefabInstance:
       propertyPath: cameraTransform
       value: 
       objectReference: {fileID: 0}
+    - target: {fileID: 6106894816546113674, guid: 99d4b6185d8babd4b8b8caab0b5d7561, type: 3}
+      propertyPath: fightObjectsRotator
+      value: 
+      objectReference: {fileID: 2956381804550443922}
     - target: {fileID: 6106894816546113674, guid: 99d4b6185d8babd4b8b8caab0b5d7561, type: 3}
       propertyPath: TopLeftSquarePositionX
       value: 400
