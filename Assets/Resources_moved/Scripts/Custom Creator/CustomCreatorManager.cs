@@ -26,6 +26,9 @@ public class CustomCreatorManager : MonoBehaviour
 	#region Map Editor
 	public void LoadBaseLevel()
 	{
+		if (mapObjects.childCount > 0)
+			return;
+
 		CleanupUnitEditor();
 
 		mapCanvas.SetActive(true);

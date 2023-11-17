@@ -6,17 +6,6 @@ using UnityEngine.ResourceManagement.AsyncOperations;
 
 public static class ObjectsManager
 {
-	public static readonly Model3D[] model3DArchive = new Model3D[7]
-	{
-		new(AddressablesManager.LoadResource<GameObject>(AddressablesManager.TypeOfResource.Terrains, "Grass1"), TypeOfObstacle.Terrain, MapTheme.Plains),
-		new(AddressablesManager.LoadResource<GameObject>(AddressablesManager.TypeOfResource.Terrains, "Grass2"), TypeOfObstacle.Terrain, MapTheme.Plains),
-		new(AddressablesManager.LoadResource<GameObject>(AddressablesManager.TypeOfResource.Terrains, "GrassPath"), TypeOfObstacle.Terrain, MapTheme.Plains),
-		new(AddressablesManager.LoadResource<GameObject>(AddressablesManager.TypeOfResource.Terrains, "Mountain"), TypeOfObstacle.SingleTile, MapTheme.Plains),
-		new(AddressablesManager.LoadResource<GameObject>(AddressablesManager.TypeOfResource.Terrains, "Tree"), TypeOfObstacle.SingleTile, MapTheme.Plains),
-		new(AddressablesManager.LoadResource<GameObject>(AddressablesManager.TypeOfResource.Terrains, "BirchTree"), TypeOfObstacle.SingleTile, MapTheme.Plains),
-		new(AddressablesManager.LoadResource<GameObject>(AddressablesManager.TypeOfResource.Terrains, "PineTree"), TypeOfObstacle.SingleTile, MapTheme.Plains),
-	};
-
 	public static GameObject[] LoadObjects()
 	{
 		GameObject[] result = null;

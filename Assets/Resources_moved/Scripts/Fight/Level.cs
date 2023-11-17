@@ -38,11 +38,11 @@ public class Level
 	{
 		for (int i = 0; i < HorizontalTiles * VerticalTiles; i++)
 		{
-				GameObject objectToSpawn = ObjectsManager.GetRandomObject(seed * 12 / (i + 1), ObjectsManager.TypeOfObstacle.Terrain, ObjectsManager.MapTheme.Plains);
-				GameObject tileObject = Object.Instantiate(objectToSpawn, objectsParent);
+			GameObject objectToSpawn = ObjectsManager.GetObject("Grass1");
+			GameObject tileObject = Object.Instantiate(objectToSpawn, objectsParent);
 
-				LoadTile(tileObject, $"Terrain_{i}", objectToSpawn.name, isEdit, true);
-				tilesDict.Add(i, tileObject);
+			LoadTile(tileObject, $"Terrain_{i}", objectToSpawn.name, isEdit, true);
+			tilesDict.Add(i, tileObject);
 		}
 	}
 	public void GenerateTerrain(bool isEdit, Transform objectsParent, string[] customMap)
