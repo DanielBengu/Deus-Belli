@@ -48,6 +48,8 @@ public class GeneralManager : MonoBehaviour
 
     [SerializeField]
     GameObject OptionsPrefab;
+    [SerializeField]
+    Transform OptionsParent;
 
     public RunData runData;
     public RogueNode selectedNode;
@@ -170,7 +172,9 @@ public class GeneralManager : MonoBehaviour
         {
 			if (!IsOptionOpen)
 			{
-                MainMenu.GeneratePrefab(OptionsPrefab, "Options");
+                Transform options = GameObject.Find("OptionsSection").transform;
+                GameObject Options = Instantiate(OptionsPrefab, options);
+                Options.name = "Options";
                 IsOptionOpen = true;
             }
         } else

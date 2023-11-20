@@ -33,7 +33,7 @@ public class Movement
             objectMovingTransform.position = Vector3.Lerp(startingPosition, targetPosition, fractionOfJourney);
 
         //Unit arrived at destination
-        if (objectMovingTransform.position == targetPosition)
+        if (Vector3.Distance(objectMovingTransform.position, targetPosition) < 0.001f)
         {
             if (movementSteps.Count > 0)
             {

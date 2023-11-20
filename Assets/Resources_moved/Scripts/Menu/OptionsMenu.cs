@@ -5,8 +5,6 @@ using UnityEngine.SceneManagement;
 public class OptionsMenu : MonoBehaviour
 {
     [SerializeField]
-    GameObject OptionsPrefab;
-    [SerializeField]
     GameObject MainPrefab;
     [SerializeField]
     TextMeshProUGUI SeedText;
@@ -28,30 +26,20 @@ public class OptionsMenu : MonoBehaviour
             Back();
     }
 
-    void Back(){
-        DestroySubOption();
-
+    public void Back(){
         if(currentScene == "Main Menu"){
             GameObject mainScene = Instantiate(MainPrefab,new Vector3(600, 250, 0),Quaternion.identity);
             mainScene.name = "Main";
+            return;
         }
 
-        if(currentScene == "Fight"){
-            GeneralManager generalManager = GameObject.Find(GeneralManager.GENERAL_MANAGER_OBJ_NAME).GetComponent<GeneralManager>();
-            generalManager.IsOptionOpen = false;
-        }
-
-        Destroy(OptionsPrefab);
+        GeneralManager generalManager = GameObject.Find(GeneralManager.GENERAL_MANAGER_OBJ_NAME).GetComponent<GeneralManager>();
+        generalManager.IsOptionOpen = false;
+        
+        Destroy(this.gameObject);
     }
 
-    void DestroySubOption(){
-        if(optionSelected != null){
-            GameObject subOption = GameObject.Find(optionSelected);
-            Destroy(subOption);
-        }
-    }
-
-    void AbandonRun(){
+    public void AbandonRun(){
         GeneralManager.CloseRun();
     }
 

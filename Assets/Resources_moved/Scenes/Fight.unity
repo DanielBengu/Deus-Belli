@@ -435,7 +435,8 @@ MonoBehaviour:
   cameraManager: {fileID: 519420033}
   structureManager: {fileID: 1412221415}
   fileManager: {fileID: 0}
-  OptionsPrefab: {fileID: 7649992450677276450, guid: d7e1925e215cef34882fedb7bf94467a, type: 3}
+  OptionsPrefab: {fileID: 1339626058413363848, guid: 71fe3856afc4d8f4280cae4bfbfe0bf6, type: 3}
+  OptionsParent: {fileID: 0}
   selectedNode: {fileID: 0}
 --- !u!4 &1412221414
 Transform:
