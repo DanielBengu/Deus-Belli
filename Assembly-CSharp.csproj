@@ -57,90 +57,145 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Assets\Resources_moved\Scripts\General\Manager\SpriteManager.cs" />
-    <Compile Include="Assets\Resources_moved\Scripts\General\Entity\EventEntity.cs" />
-    <Compile Include="Assets\Resources_moved\Scripts\GodsArchive\InterfacesAndClasses\IReligion.cs" />
     <Compile Include="Assets\Resources_moved\Scripts\General\Manager\FileManager.cs" />
     <Compile Include="Assets\Resources_moved\Scripts\GodsArchive\Religions\Agbara.cs" />
     <Compile Include="Assets\InitManager.cs" />
     <Compile Include="Assets\Resources_moved\Scripts\General\Extensions\RandomExtension.cs" />
-    <Compile Include="Assets\BasicBandit\DemoSceneBasicBandit\Scripts\ButtonFunction.cs" />
     <Compile Include="Assets\Resources_moved\Scripts\Fight\Managers\FightManager.cs" />
     <Compile Include="Assets\Resources_moved\Scripts\GodsArchive\Gods\Agbara\Omi.cs" />
-    <Compile Include="Assets\Resources_moved\Scripts\Rogue\Classes\Event.cs" />
     <Compile Include="Assets\Resources_moved\Scripts\UnitsArchive.cs" />
+    <Compile Include="Assets\Resources_moved\Scripts\Fight\Classes\AnimationPerformer.cs" />
+    <Compile Include="Assets\Resources_moved\Scripts\Menu\CharactersButtonScript.cs" />
+    <Compile Include="Assets\MapEditorManager.cs" />
+    <Compile Include="Assets\Resources_moved\Scripts\General\Manager\UIManager.cs" />
+    <Compile Include="Assets\Resources_moved\Scripts\General\Manager\StructureManager.cs" />
+    <Compile Include="Assets\Resources_moved\Scripts\General\Manager\CameraManager.cs" />
+    <Compile Include="Assets\Resources_moved\Scripts\Fight\Classes\Movement.cs" />
+    <Compile Include="Assets\Cartoon Heroes\Scripts\SetCharacter\SetCharacter.cs" />
+    <Compile Include="Assets\Resources_moved\Scripts\Fight\Classes\FirstStageArchive.cs" />
+    <Compile Include="Assets\BasicBandit\DemoSceneBasicBandit\Scripts\MovementCamera.cs" />
+    <Compile Include="Assets\C&amp;C_Pack\Goblin_rouge\Script\Goblin_ro_ctrl.cs" />
+    <Compile Include="Assets\MapLineScript.cs" />
+    <Compile Include="Assets\Resources_moved\Scripts\Fight\Unit.cs" />
+    <Compile Include="Assets\Resources_moved\Scripts\General\Entity\EventEntity.cs" />
+    <Compile Include="Assets\Resources_moved\Scripts\GodsArchive\InterfacesAndClasses\IReligion.cs" />
+    <Compile Include="Assets\BasicBandit\DemoSceneBasicBandit\Scripts\ButtonFunction.cs" />
+    <Compile Include="Assets\Resources_moved\Scripts\Rogue\Classes\Event.cs" />
     <Compile Include="Assets\Resources_moved\Scripts\Menu\MainMenu.cs" />
     <Compile Include="Assets\Resources_moved\Scripts\Rogue\RogueNode.cs" />
-    <Compile Include="Assets\Resources_moved\Scripts\Fight\Classes\AnimationPerformer.cs" />
     <Compile Include="Assets\Resources_moved\Scripts\Fight\Level.cs" />
-    <Compile Include="Assets\Resources_moved\Scripts\Menu\CharactersButtonScript.cs" />
     <Compile Include="Assets\Resources_moved\Scripts\General\Manager\ObjectsManager.cs" />
-    <Compile Include="Assets\MapEditorManager.cs" />
     <Compile Include="Assets\Resources_moved\Scripts\General\Manager\GeneralManager.cs" />
     <Compile Include="Assets\Resources_moved\Scripts\Rogue\Classes\Merchant.cs" />
     <Compile Include="Assets\Resources_moved\Scripts\GodsArchive\Gods\Agbara\Ataiku.cs" />
     <Compile Include="Assets\Resources_moved\Scripts\Rogue\Classes\EventOption.cs" />
-    <Compile Include="Assets\Resources_moved\Scripts\General\Manager\UIManager.cs" />
-    <Compile Include="Assets\Resources_moved\Scripts\General\Manager\StructureManager.cs" />
     <Compile Include="Assets\Resources_moved\Scripts\TerrainArchive\TerrainArchive.cs" />
-    <Compile Include="Assets\Resources_moved\Scripts\General\Manager\CameraManager.cs" />
     <Compile Include="Assets\Resources_moved\Scripts\General\Classes\ActionPerformer.cs" />
     <Compile Include="Assets\Resources_moved\Scripts\Fight\Managers\AIManager.cs" />
     <Compile Include="Assets\Resources_moved\Scripts\General\Manager\ScenesManager.cs" />
     <Compile Include="Assets\Resources_moved\Scripts\Menu\OptionsMenu.cs" />
-    <Compile Include="Assets\Resources_moved\Scripts\Fight\Classes\Movement.cs" />
     <Compile Include="Assets\Resources_moved\Scripts\GodsArchive\Gods\None\BanditLord.cs" />
     <Compile Include="Assets\Resources_moved\Scripts\General\Manager\AddressablesManager.cs" />
     <Compile Include="Assets\Resources_moved\Scripts\GodsArchive\InterfacesAndClasses\IGod.cs" />
     <Compile Include="Assets\Resources_moved\Scripts\Fight\Tile.cs" />
     <Compile Include="Assets\Resources_moved\Scripts\Fight\Managers\TurnManager.cs" />
     <Compile Include="Assets\Resources_moved\Scripts\Rogue\Managers\RogueManager.cs" />
-    <Compile Include="Assets\Cartoon Heroes\Scripts\SetCharacter\SetCharacter.cs" />
-    <Compile Include="Assets\Resources_moved\Scripts\Fight\Classes\FirstStageArchive.cs" />
     <Compile Include="Assets\Resources_moved\Scripts\GodsArchive\InterfacesAndClasses\Encounter.cs" />
     <Compile Include="Assets\Resources_moved\Scripts\Menu\NewGameManager.cs" />
     <Compile Include="Assets\Resources_moved\Scripts\Custom Creator\CustomCreatorManager.cs" />
     <Compile Include="Assets\Resources_moved\Scripts\Fight\Classes\Pathfinding.cs" />
-    <Compile Include="Assets\BasicBandit\DemoSceneBasicBandit\Scripts\MovementCamera.cs" />
     <Compile Include="Assets\Resources_moved\Scripts\Menu\TextMenu.cs" />
-    <Compile Include="Assets\C&amp;C_Pack\Goblin_rouge\Script\Goblin_ro_ctrl.cs" />
-    <Compile Include="Assets\MapLineScript.cs" />
-    <Compile Include="Assets\Resources_moved\Scripts\Fight\Unit.cs" />
+    <Compile Include="Assets\Polyart\PolyartStudio\SharedResources\Scripts\Tools\WaterReflection.cs" />
+    <Compile Include="Assets\Polyart\PolyartStudio\SharedResources\CritiasFoliage\Code\FoliageWindTreeWind.cs" />
+    <Compile Include="Assets\Polyart\PolyartStudio\SharedResources\CritiasFoliage\Examples\ExampleRuntimeTreeRemover.cs" />
+    <Compile Include="Assets\Polyart\PolyartStudio\SharedResources\CritiasFoliage\Code\FoliagePainterRuntime.cs" />
+    <Compile Include="Assets\Polyart\PolyartStudio\SharedResources\CritiasFoliage\Code\FoliageWindTreeUtilities.cs" />
+    <Compile Include="Assets\Polyart\PolyartStudio\SharedResources\Scripts\Tools\FoliageInteractor.cs" />
+    <Compile Include="Assets\Polyart\PolyartStudio\SharedResources\Scripts\Gameplay\Character\FirstPersonController_Dreamscape.cs" />
+    <Compile Include="Assets\Polyart\PolyartStudio\SharedResources\CritiasFoliage\Code\FoliageData.cs" />
+    <Compile Include="Assets\Polyart\PolyartStudio\SharedResources\CritiasFoliage\Code\FoliageType.cs" />
+    <Compile Include="Assets\Polyart\PolyartStudio\SharedResources\Scripts\Misc\Cull_Lights.cs" />
+    <Compile Include="Assets\Polyart\PolyartStudio\SharedResources\Scripts\Gameplay\Character\TestInteractable.cs" />
+    <Compile Include="Assets\Polyart\PolyartStudio\SharedResources\Scripts\Tools\NatureManager.cs" />
+    <Compile Include="Assets\Polyart\PolyartStudio\SharedResources\Scripts\Misc\Flythrough.cs" />
+    <Compile Include="Assets\Polyart\PolyartStudio\SharedResources\CritiasFoliage\Code\FoliagePainter.cs" />
+    <Compile Include="Assets\Polyart\PolyartStudio\SharedResources\Scripts\Misc\SmoothMouseLook.cs" />
+    <Compile Include="Assets\Polyart\PolyartStudio\SharedResources\CritiasFoliage\Code\FoliageDataSerializer.cs" />
+    <Compile Include="Assets\Polyart\PolyartStudio\SharedResources\CritiasFoliage\Code\FoliageUtilities.cs" />
+    <Compile Include="Assets\Polyart\PolyartStudio\SharedResources\CritiasFoliage\Examples\ExampleRuntimeSettings.cs" />
+    <Compile Include="Assets\Polyart\PolyartStudio\SharedResources\CritiasFoliage\Code\FoliageTerrainListener.cs" />
+    <Compile Include="Assets\Polyart\PolyartStudio\SharedResources\CritiasFoliage\Code\FoliagePainterEditTime.cs" />
+    <Compile Include="Assets\Polyart\PolyartStudio\SharedResources\Scripts\Misc\FPS_Counter.cs" />
+    <Compile Include="Assets\Polyart\PolyartStudio\SharedResources\CritiasFoliage\Code\Foliage.cs" />
+    <Compile Include="Assets\Polyart\PolyartStudio\SharedResources\CritiasFoliage\Code\FoliageRenderer.cs" />
+    <Compile Include="Assets\Polyart\PolyartStudio\SharedResources\CritiasFoliage\Code\FoliageInstance.cs" />
+    <Compile Include="Assets\Polyart\PolyartStudio\SharedResources\CritiasFoliage\Code\FoliageTerrainUtilities.cs" />
+    <Compile Include="Assets\Polyart\PolyartStudio\SharedResources\Scripts\Gameplay\Character\Interactable_Dreamscape.cs" />
+    <Compile Include="Assets\Polyart\PolyartStudio\SharedResources\CritiasFoliage\Code\FoliageCell.cs" />
+    <Compile Include="Assets\Polyart\PolyartStudio\SharedResources\CritiasFoliage\Code\FoliageCaching.cs" />
+    <Compile Include="Assets\Polyart\PolyartStudio\SharedResources\CritiasFoliage\Code\FoliageDataRuntime.cs" />
+    <Compile Include="Assets\Polyart\PolyartStudio\SharedResources\CritiasFoliage\Code\FoliageColliders.cs" />
+    <Compile Include="Assets\Polyart\PolyartStudio\SharedResources\CritiasFoliage\Code\FoliageColliderData.cs" />
+    <Compile Include="Assets\Polyart\PolyartStudio\SharedResources\CritiasFoliage\Examples\ExampleRuntimeTreeAdder.cs" />
+    <Compile Include="Assets\Polyart\PolyartStudio\SharedResources\Scripts\Gameplay\MillRotate.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Assets\TextMesh Pro\Shaders\TMPro.cginc" />
+    <None Include="Assets\Polyart\PolyartStudio\SharedResources\Shaders\Foliage\PA_Grass.shader" />
     <None Include="Assets\TextMesh Pro\Shaders\TMP_SDF-Mobile Overlay.shader" />
+    <None Include="Assets\Polyart\PolyartStudio\SharedResources\Shaders\Foliage\PA_TreeWind_CustomLighting.shader" />
+    <None Include="Assets\Polyart\PolyartStudio\SharedResources\Shaders\Terrain\PA_Planet.shader" />
+    <None Include="Assets\Polyart\PolyartStudio\SharedResources\Shaders\Foliage\PA_TreeWind.shader" />
     <None Include="Assets\TextMesh Pro\Shaders\TMP_Bitmap.shader" />
+    <None Include="Assets\Polyart\PolyartStudio\SharedResources\Shaders\Props\PA_SurfaceORM_Cutout.shader" />
     <None Include="Assets\Resources_moved\Scripts\Custom Creator\CustomMapsArchive.txt" />
+    <None Include="Assets\Polyart\PolyartStudio\SharedResources\Shaders\Water\PA_Water_River.shader" />
     <None Include="Assets\Resources_moved\Sprites\Objects\Tables\Brass Marble Table\Brass Table\MAXFILES.TXT" />
+    <None Include="Assets\Polyart\PolyartStudio\DreamscapeTower\Readme.txt" />
     <None Include="Assets\TextMesh Pro\Shaders\TMPro_Mobile.cginc" />
     <None Include="Assets\TextMesh Pro\Shaders\TMP_SDF SSD.shader" />
     <None Include="Assets\Resources_moved\Scripts\Rogue\TXT\Encounters.txt" />
     <None Include="Assets\TextMesh Pro\Shaders\TMP_SDF-Surface-Mobile.shader" />
+    <None Include="Assets\Polyart\PolyartStudio\SharedResources\Shaders\Terrain\PA_RockDetail.shader" />
+    <None Include="Assets\Polyart\PolyartStudio\SharedResources\Shaders\Effects\PA_Wingflap.shader" />
+    <None Include="Assets\Polyart\PolyartStudio\SharedResources\Shaders\Foliage\PA_FoliageBillboard.shader" />
     <None Include="Assets\Ideas\Character selection.txt" />
+    <None Include="Assets\Polyart\PolyartStudio\SharedResources\Shaders\Utility\PA_Grid.shader" />
+    <None Include="Assets\Polyart\PolyartStudio\SharedResources\Shaders\Foliage\PA_GrassOld.shader" />
     <None Include="Assets\Resources_moved\Scripts\Rogue\TXT\Merchant.txt" />
     <None Include="Assets\TextMesh Pro\Shaders\TMP_SDF-Surface.shader" />
+    <None Include="Assets\Polyart\PolyartStudio\SharedResources\Shaders\Terrain\PA_Pebbles.shader" />
     <None Include="Assets\TextMesh Pro\Sprites\EmojiOne Attribution.txt" />
     <None Include="Assets\TextMesh Pro\Shaders\TMP_Bitmap-Custom-Atlas.shader" />
+    <None Include="Assets\Polyart\PolyartStudio\SharedResources\Shaders\Props\PA_Trims.shader" />
     <None Include="Assets\TextMesh Pro\Shaders\TMP_SDF.shader" />
+    <None Include="Assets\Polyart\PolyartStudio\SharedResources\Shaders\Props\PA_TilingPOM.shader" />
     <None Include="Assets\TextMesh Pro\Shaders\TMP_SDF-Mobile SSD.shader" />
     <None Include="Assets\Resources\Materials\Mask OneZLess.shader" />
     <None Include="Assets\TextMesh Pro\Resources\LineBreaking Leading Characters.txt" />
     <None Include="Assets\TextMesh Pro\Shaders\TMPro_Properties.cginc" />
+    <None Include="Assets\Polyart\PolyartStudio\SharedResources\Shaders\Props\PA_SurfaceORM.shader" />
     <None Include="Assets\TextMesh Pro\Shaders\TMPro_Surface.cginc" />
     <None Include="Assets\greyRoadStudio\LowPolyTreePack\readme.txt" />
+    <None Include="Assets\Polyart\PolyartStudio\SharedResources\Shaders\Foliage\PA_OtherFoliage.shader" />
+    <None Include="Assets\Polyart\PolyartStudio\SharedResources\Shaders\Effects\PA_CloudCard.shader" />
     <None Include="Assets\TextMesh Pro\Resources\LineBreaking Following Characters.txt" />
     <None Include="Assets\Resources\Materials\Diffuse NotEqualOne.shader" />
     <None Include="Assets\TextMesh Pro\Shaders\TMP_SDF-Mobile Masking.shader" />
     <None Include="Assets\Ork berserker\materials\Standard_Two_Sided .shader" />
     <None Include="Assets\Documentation\Player Data.txt" />
+    <None Include="Assets\Polyart\PolyartStudio\SharedResources\Shaders\Effects\PA_CloudShader.shader" />
     <None Include="Assets\Resources_moved\Scripts\General\Player Data\Unit list.txt" />
     <None Include="Assets\Documentation\Events Management.txt" />
+    <None Include="Assets\Polyart\PolyartStudio\SharedResources\Shaders\Water\PA_Water_Lake.shader" />
     <None Include="Assets\TextMesh Pro\Shaders\TMP_SDF Overlay.shader" />
     <None Include="Assets\TextMesh Pro\Shaders\TMP_Bitmap-Mobile.shader" />
     <None Include="Assets\TextMesh Pro\Fonts\LiberationSans - OFL.txt" />
     <None Include="Assets\C&amp;C_Pack\Goblin_rouge\readme.txt" />
     <None Include="Assets\TextMesh Pro\Shaders\TMP_SDF-Mobile.shader" />
     <None Include="Assets\Resources\TXT\Gods\Agbara\Ataiku.txt" />
+    <None Include="Assets\Polyart\PolyartStudio\SharedResources\Shaders\Terrain\PA_DistantTerrain.shader" />
+    <None Include="Assets\Polyart\PolyartStudio\SharedResources\Shaders\Foliage\PA_TreeWind_Deferred.shader" />
     <None Include="Assets\TextMesh Pro\Shaders\TMP_Sprite.shader" />
   </ItemGroup>
   <ItemGroup>
@@ -390,20 +445,17 @@
     <Reference Include="UnityEditor.UnityConnectModule">
       <HintPath>C:\Program Files\Unity\Hub\Editor\2021.3.22f1\Editor\Data\Managed\UnityEngine\UnityEditor.UnityConnectModule.dll</HintPath>
     </Reference>
-    <Reference Include="Unity.Burst.Unsafe">
-      <HintPath>Library\PackageCache\com.unity.burst@1.6.6\Unity.Burst.Unsafe.dll</HintPath>
-    </Reference>
     <Reference Include="Unity.Burst.Cecil.Mdb">
-      <HintPath>Library\PackageCache\com.unity.burst@1.6.6\Unity.Burst.CodeGen\Unity.Burst.Cecil.Mdb.dll</HintPath>
+      <HintPath>Library\PackageCache\com.unity.burst@1.8.2\Unity.Burst.CodeGen\Unity.Burst.Cecil.Mdb.dll</HintPath>
     </Reference>
     <Reference Include="Unity.Burst.Cecil.Pdb">
-      <HintPath>Library\PackageCache\com.unity.burst@1.6.6\Unity.Burst.CodeGen\Unity.Burst.Cecil.Pdb.dll</HintPath>
+      <HintPath>Library\PackageCache\com.unity.burst@1.8.2\Unity.Burst.CodeGen\Unity.Burst.Cecil.Pdb.dll</HintPath>
     </Reference>
     <Reference Include="Unity.Burst.Cecil">
-      <HintPath>Library\PackageCache\com.unity.burst@1.6.6\Unity.Burst.CodeGen\Unity.Burst.Cecil.dll</HintPath>
+      <HintPath>Library\PackageCache\com.unity.burst@1.8.2\Unity.Burst.CodeGen\Unity.Burst.Cecil.dll</HintPath>
     </Reference>
     <Reference Include="Unity.Burst.Cecil.Rocks">
-      <HintPath>Library\PackageCache\com.unity.burst@1.6.6\Unity.Burst.CodeGen\Unity.Burst.Cecil.Rocks.dll</HintPath>
+      <HintPath>Library\PackageCache\com.unity.burst@1.8.2\Unity.Burst.CodeGen\Unity.Burst.Cecil.Rocks.dll</HintPath>
     </Reference>
     <Reference Include="Unity.VisualScripting.Antlr3.Runtime">
       <HintPath>Library\PackageCache\com.unity.visualscripting@1.8.0\Runtime\VisualScripting.Flow\Dependencies\NCalc\Unity.VisualScripting.Antlr3.Runtime.dll</HintPath>
@@ -774,15 +826,6 @@
     <Reference Include="System.Xml.Serialization">
       <HintPath>C:\Program Files\Unity\Hub\Editor\2021.3.22f1\Editor\Data\NetStandard\compat\2.1.0\shims\netfx\System.Xml.Serialization.dll</HintPath>
     </Reference>
-    <Reference Include="Unity.VisualScripting.Flow.Editor">
-      <HintPath>Library\ScriptAssemblies\Unity.VisualScripting.Flow.Editor.dll</HintPath>
-    </Reference>
-    <Reference Include="Unity.2D.Tilemap.Extras">
-      <HintPath>Library\ScriptAssemblies\Unity.2D.Tilemap.Extras.dll</HintPath>
-    </Reference>
-    <Reference Include="Unity.2D.Animation.Editor">
-      <HintPath>Library\ScriptAssemblies\Unity.2D.Animation.Editor.dll</HintPath>
-    </Reference>
     <Reference Include="Unity.InternalAPIEngineBridge.001">
       <HintPath>Library\ScriptAssemblies\Unity.InternalAPIEngineBridge.001.dll</HintPath>
     </Reference>
@@ -792,8 +835,8 @@
     <Reference Include="Unity.2D.PixelPerfect">
       <HintPath>Library\ScriptAssemblies\Unity.2D.PixelPerfect.dll</HintPath>
     </Reference>
-    <Reference Include="Unity.2D.Tilemap.Editor">
-      <HintPath>Library\ScriptAssemblies\Unity.2D.Tilemap.Editor.dll</HintPath>
+    <Reference Include="Unity.RenderPipelines.Universal.Shaders">
+      <HintPath>Library\ScriptAssemblies\Unity.RenderPipelines.Universal.Shaders.dll</HintPath>
     </Reference>
     <Reference Include="UnityEditor.CacheServer">
       <HintPath>Library\ScriptAssemblies\UnityEditor.CacheServer.dll</HintPath>
@@ -807,6 +850,72 @@
     <Reference Include="Unity.TextMeshPro.Editor">
       <HintPath>Library\ScriptAssemblies\Unity.TextMeshPro.Editor.dll</HintPath>
     </Reference>
+    <Reference Include="Unity.VisualScripting.State.Editor">
+      <HintPath>Library\ScriptAssemblies\Unity.VisualScripting.State.Editor.dll</HintPath>
+    </Reference>
+    <Reference Include="Unity.Searcher.Editor">
+      <HintPath>Library\ScriptAssemblies\Unity.Searcher.Editor.dll</HintPath>
+    </Reference>
+    <Reference Include="Unity.2D.IK.Editor">
+      <HintPath>Library\ScriptAssemblies\Unity.2D.IK.Editor.dll</HintPath>
+    </Reference>
+    <Reference Include="Unity.2D.Path.Editor">
+      <HintPath>Library\ScriptAssemblies\Unity.2D.Path.Editor.dll</HintPath>
+    </Reference>
+    <Reference Include="com.rlabrecque.steamworks.net.editor">
+      <HintPath>Library\ScriptAssemblies\com.rlabrecque.steamworks.net.editor.dll</HintPath>
+    </Reference>
+    <Reference Include="UnityEditor.UI">
+      <HintPath>Library\ScriptAssemblies\UnityEditor.UI.dll</HintPath>
+    </Reference>
+    <Reference Include="Unity.VisualScripting.SettingsProvider.Editor">
+      <HintPath>Library\ScriptAssemblies\Unity.VisualScripting.SettingsProvider.Editor.dll</HintPath>
+    </Reference>
+    <Reference Include="Unity.Rider.Editor">
+      <HintPath>Library\ScriptAssemblies\Unity.Rider.Editor.dll</HintPath>
+    </Reference>
+    <Reference Include="Unity.RenderPipelines.Core.ShaderLibrary">
+      <HintPath>Library\ScriptAssemblies\Unity.RenderPipelines.Core.ShaderLibrary.dll</HintPath>
+    </Reference>
+    <Reference Include="UnityEngine.UI">
+      <HintPath>Library\ScriptAssemblies\UnityEngine.UI.dll</HintPath>
+    </Reference>
+    <Reference Include="Unity.2D.IK.Runtime">
+      <HintPath>Library\ScriptAssemblies\Unity.2D.IK.Runtime.dll</HintPath>
+    </Reference>
+    <Reference Include="Unity.ShaderGraph.Editor">
+      <HintPath>Library\ScriptAssemblies\Unity.ShaderGraph.Editor.dll</HintPath>
+    </Reference>
+    <Reference Include="Unity.RenderPipeline.Universal.ShaderLibrary">
+      <HintPath>Library\ScriptAssemblies\Unity.RenderPipeline.Universal.ShaderLibrary.dll</HintPath>
+    </Reference>
+    <Reference Include="Unity.Mathematics.Editor">
+      <HintPath>Library\ScriptAssemblies\Unity.Mathematics.Editor.dll</HintPath>
+    </Reference>
+    <Reference Include="Unity.Addressables.Editor">
+      <HintPath>Library\ScriptAssemblies\Unity.Addressables.Editor.dll</HintPath>
+    </Reference>
+    <Reference Include="Unity.2D.Common.Editor">
+      <HintPath>Library\ScriptAssemblies\Unity.2D.Common.Editor.dll</HintPath>
+    </Reference>
+    <Reference Include="Unity.VisualScripting.Flow.Editor">
+      <HintPath>Library\ScriptAssemblies\Unity.VisualScripting.Flow.Editor.dll</HintPath>
+    </Reference>
+    <Reference Include="Unity.2D.Tilemap.Extras">
+      <HintPath>Library\ScriptAssemblies\Unity.2D.Tilemap.Extras.dll</HintPath>
+    </Reference>
+    <Reference Include="Unity.2D.Animation.Editor">
+      <HintPath>Library\ScriptAssemblies\Unity.2D.Animation.Editor.dll</HintPath>
+    </Reference>
+    <Reference Include="Unity.2D.Tilemap.Editor">
+      <HintPath>Library\ScriptAssemblies\Unity.2D.Tilemap.Editor.dll</HintPath>
+    </Reference>
+    <Reference Include="Unity.RenderPipelines.Universal.Runtime">
+      <HintPath>Library\ScriptAssemblies\Unity.RenderPipelines.Universal.Runtime.dll</HintPath>
+    </Reference>
+    <Reference Include="PPv2URPConverters">
+      <HintPath>Library\ScriptAssemblies\PPv2URPConverters.dll</HintPath>
+    </Reference>
     <Reference Include="Unity.VisualStudio.Editor">
       <HintPath>Library\ScriptAssemblies\Unity.VisualStudio.Editor.dll</HintPath>
     </Reference>
@@ -819,23 +928,20 @@
     <Reference Include="Unity.TextMeshPro">
       <HintPath>Library\ScriptAssemblies\Unity.TextMeshPro.dll</HintPath>
     </Reference>
-    <Reference Include="Unity.VisualScripting.State.Editor">
-      <HintPath>Library\ScriptAssemblies\Unity.VisualScripting.State.Editor.dll</HintPath>
-    </Reference>
     <Reference Include="Unity.Burst.Editor">
       <HintPath>Library\ScriptAssemblies\Unity.Burst.Editor.dll</HintPath>
-    </Reference>
-    <Reference Include="Unity.2D.IK.Editor">
-      <HintPath>Library\ScriptAssemblies\Unity.2D.IK.Editor.dll</HintPath>
     </Reference>
     <Reference Include="Unity.2D.Sprite.Editor">
       <HintPath>Library\ScriptAssemblies\Unity.2D.Sprite.Editor.dll</HintPath>
     </Reference>
-    <Reference Include="Unity.VisualScripting.SettingsProvider.Editor">
-      <HintPath>Library\ScriptAssemblies\Unity.VisualScripting.SettingsProvider.Editor.dll</HintPath>
+    <Reference Include="Unity.2D.Psdimporter.Editor">
+      <HintPath>Library\ScriptAssemblies\Unity.2D.Psdimporter.Editor.dll</HintPath>
     </Reference>
-    <Reference Include="Unity.2D.Path.Editor">
-      <HintPath>Library\ScriptAssemblies\Unity.2D.Path.Editor.dll</HintPath>
+    <Reference Include="Unity.InternalAPIEditorBridge.001">
+      <HintPath>Library\ScriptAssemblies\Unity.InternalAPIEditorBridge.001.dll</HintPath>
+    </Reference>
+    <Reference Include="Unity.RenderPipelines.Core.Runtime">
+      <HintPath>Library\ScriptAssemblies\Unity.RenderPipelines.Core.Runtime.dll</HintPath>
     </Reference>
     <Reference Include="Unity.ResourceManager">
       <HintPath>Library\ScriptAssemblies\Unity.ResourceManager.dll</HintPath>
@@ -843,26 +949,14 @@
     <Reference Include="Unity.Postprocessing.Editor">
       <HintPath>Library\ScriptAssemblies\Unity.Postprocessing.Editor.dll</HintPath>
     </Reference>
-    <Reference Include="UnityEditor.UI">
-      <HintPath>Library\ScriptAssemblies\UnityEditor.UI.dll</HintPath>
+    <Reference Include="Unity.VisualScripting.Flow">
+      <HintPath>Library\ScriptAssemblies\Unity.VisualScripting.Flow.dll</HintPath>
     </Reference>
     <Reference Include="Unity.PlasticSCM.Editor">
       <HintPath>Library\ScriptAssemblies\Unity.PlasticSCM.Editor.dll</HintPath>
     </Reference>
-    <Reference Include="Unity.Rider.Editor">
-      <HintPath>Library\ScriptAssemblies\Unity.Rider.Editor.dll</HintPath>
-    </Reference>
-    <Reference Include="Unity.2D.Psdimporter.Editor">
-      <HintPath>Library\ScriptAssemblies\Unity.2D.Psdimporter.Editor.dll</HintPath>
-    </Reference>
-    <Reference Include="UnityEngine.UI">
-      <HintPath>Library\ScriptAssemblies\UnityEngine.UI.dll</HintPath>
-    </Reference>
     <Reference Include="Unity.2D.Tilemap.Extras.Editor">
       <HintPath>Library\ScriptAssemblies\Unity.2D.Tilemap.Extras.Editor.dll</HintPath>
-    </Reference>
-    <Reference Include="Unity.VisualScripting.Flow">
-      <HintPath>Library\ScriptAssemblies\Unity.VisualScripting.Flow.dll</HintPath>
     </Reference>
     <Reference Include="com.rlabrecque.steamworks.net">
       <HintPath>Library\ScriptAssemblies\com.rlabrecque.steamworks.net.dll</HintPath>
@@ -870,14 +964,8 @@
     <Reference Include="Unity.VisualScripting.Core">
       <HintPath>Library\ScriptAssemblies\Unity.VisualScripting.Core.dll</HintPath>
     </Reference>
-    <Reference Include="com.rlabrecque.steamworks.net.editor">
-      <HintPath>Library\ScriptAssemblies\com.rlabrecque.steamworks.net.editor.dll</HintPath>
-    </Reference>
     <Reference Include="Unity.Mathematics">
       <HintPath>Library\ScriptAssemblies\Unity.Mathematics.dll</HintPath>
-    </Reference>
-    <Reference Include="Unity.2D.IK.Runtime">
-      <HintPath>Library\ScriptAssemblies\Unity.2D.IK.Runtime.dll</HintPath>
     </Reference>
     <Reference Include="Unity.Burst">
       <HintPath>Library\ScriptAssemblies\Unity.Burst.dll</HintPath>
@@ -885,11 +973,11 @@
     <Reference Include="Unity.Postprocessing.Runtime">
       <HintPath>Library\ScriptAssemblies\Unity.Postprocessing.Runtime.dll</HintPath>
     </Reference>
+    <Reference Include="Unity.RenderPipelines.Universal.Editor">
+      <HintPath>Library\ScriptAssemblies\Unity.RenderPipelines.Universal.Editor.dll</HintPath>
+    </Reference>
     <Reference Include="Unity.VisualScripting.Shared.Editor">
       <HintPath>Library\ScriptAssemblies\Unity.VisualScripting.Shared.Editor.dll</HintPath>
-    </Reference>
-    <Reference Include="Unity.InternalAPIEditorBridge.001">
-      <HintPath>Library\ScriptAssemblies\Unity.InternalAPIEditorBridge.001.dll</HintPath>
     </Reference>
     <Reference Include="Unity.2D.Animation.Runtime">
       <HintPath>Library\ScriptAssemblies\Unity.2D.Animation.Runtime.dll</HintPath>
@@ -900,8 +988,8 @@
     <Reference Include="Unity.Timeline.Editor">
       <HintPath>Library\ScriptAssemblies\Unity.Timeline.Editor.dll</HintPath>
     </Reference>
-    <Reference Include="Unity.Mathematics.Editor">
-      <HintPath>Library\ScriptAssemblies\Unity.Mathematics.Editor.dll</HintPath>
+    <Reference Include="Unity.RenderPipelines.ShaderGraph.ShaderGraphLibrary">
+      <HintPath>Library\ScriptAssemblies\Unity.RenderPipelines.ShaderGraph.ShaderGraphLibrary.dll</HintPath>
     </Reference>
     <Reference Include="Unity.2D.Common.Runtime">
       <HintPath>Library\ScriptAssemblies\Unity.2D.Common.Runtime.dll</HintPath>
@@ -912,14 +1000,11 @@
     <Reference Include="Unity.2D.SpriteShape.Editor">
       <HintPath>Library\ScriptAssemblies\Unity.2D.SpriteShape.Editor.dll</HintPath>
     </Reference>
-    <Reference Include="Unity.Addressables.Editor">
-      <HintPath>Library\ScriptAssemblies\Unity.Addressables.Editor.dll</HintPath>
-    </Reference>
     <Reference Include="Unity.ScriptableBuildPipeline.Editor">
       <HintPath>Library\ScriptAssemblies\Unity.ScriptableBuildPipeline.Editor.dll</HintPath>
     </Reference>
-    <Reference Include="Unity.2D.Common.Editor">
-      <HintPath>Library\ScriptAssemblies\Unity.2D.Common.Editor.dll</HintPath>
+    <Reference Include="Unity.RenderPipelines.Core.Editor">
+      <HintPath>Library\ScriptAssemblies\Unity.RenderPipelines.Core.Editor.dll</HintPath>
     </Reference>
     <Reference Include="Unity.2D.SpriteShape.Runtime">
       <HintPath>Library\ScriptAssemblies\Unity.2D.SpriteShape.Runtime.dll</HintPath>
