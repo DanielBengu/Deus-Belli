@@ -6,7 +6,7 @@ public class RogueNode : MonoBehaviour
 	RogueManager rogueManager;
 	public Level level = new();
 	public Merchant merchant;
-	public Event currentEvent;
+	public DB_Event currentEvent;
 	public RogueTileType rogueTileType;
 	public List<RogueNode> rogueParents;
 	public List<RogueNode> rogueChilds;

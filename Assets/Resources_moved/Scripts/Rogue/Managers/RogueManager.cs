@@ -25,7 +25,7 @@ public class RogueManager : MonoBehaviour
 	public bool IsAnyUnitMoving { get { return StructureManager.IsObjectMoving; } }
 
     public bool IsGameInStandby { get { return generalManager.IsGameInStandby; } }
-    public Event CurrentEvent { get; set; }
+    public DB_Event CurrentEvent { get; set; }
 	public Merchant MerchantShop { get; set; }
 
 	private void Update()

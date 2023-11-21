@@ -5,7 +5,7 @@ using System.Linq;
 using UnityEngine;
 using static GeneralManager;
 
-public class Event
+public class DB_Event
 {
 	
 	public string Title { get; set; }
@@ -13,7 +13,7 @@ public class Event
 	public string ImageName { get; set; }
 	public List<EventOption> Options { get; set; }
 
-	public Event(int seed)
+	public DB_Event(int seed)
 	{
 		string[] possibleEvents = GetPossibleEvents();
 

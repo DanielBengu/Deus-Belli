@@ -78,7 +78,7 @@ public class UIManager : MonoBehaviour
         itemPrice.text = $"{item.Price}g";
     }
 
-    public void SetEventVariables(Event data)
+    public void SetEventVariables(DB_Event data)
 	{
         Image image = GameObject.Find("Image").GetComponent<Image>();
         image.sprite = AddressablesManager.LoadResource<Sprite>(AddressablesManager.TypeOfResource.Sprite, data.ImageName);
