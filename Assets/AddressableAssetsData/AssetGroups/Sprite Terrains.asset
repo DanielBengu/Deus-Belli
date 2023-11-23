@@ -45,6 +45,10 @@ MonoBehaviour:
     m_Address: Sprite/Tree
     m_ReadOnly: 0
     m_SerializedLabels: []
+  - m_GUID: 15737292a0942074187229eb70067517
+    m_Address: Sprite/Cliff
+    m_ReadOnly: 0
+    m_SerializedLabels: []
   m_ReadOnly: 0
   m_Settings: {fileID: 11400000, guid: 42fa5884c9964964993dbdd708fbd850, type: 2}
   m_SchemaSet:

@@ -45,6 +45,10 @@ MonoBehaviour:
     m_Address: Terrains
     m_ReadOnly: 0
     m_SerializedLabels: []
+  - m_GUID: e344f0778d097b14e9e34847643a9671
+    m_Address: Terrains
+    m_ReadOnly: 0
+    m_SerializedLabels: []
   m_ReadOnly: 0
   m_Settings: {fileID: 11400000, guid: 42fa5884c9964964993dbdd708fbd850, type: 2}
   m_SchemaSet:

@@ -949,6 +949,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   unitName: Dixie
   unitImage: {fileID: 21300000, guid: 0866b720585eada4e9e526b74df4e632, type: 3}
+  prefab: {fileID: 0}
+  startingTileNumber: 0
   hpMax: 7
   hpCurrent: 7
   movementMax: 3

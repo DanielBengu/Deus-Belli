@@ -16,8 +16,8 @@ Shader "Polyart/Dreamscape/URP/Tree Wind Custom Lighting"
 		[Header(WIND RUSTLE)][Toggle(_USEGLOBALWINDSETTINGS_ON)] _UseGlobalWindSettings("Use Global Wind Settings?", Float) = 0
 		[HideInInspector][SingleLineTexture]_NoiseTexture("NoiseTexture", 2D) = "white" {}
 		_WindScrollSpeed("Wind Scroll Speed", Range( 0 , 0.5)) = 0.05
-		[Header(TRUNK)][Toggle(_TRUNKMATERIAL_ON)] _TrunkMaterial("Trunk Material?", Float) = 0
 		_WindJitterSpeed("Wind Jitter Speed", Range( 0 , 0.5)) = 0.05
+		[Header(TRUNK)][Toggle(_TRUNKMATERIAL_ON)] _TrunkMaterial("Trunk Material?", Float) = 0
 		_WindOffsetIntensity("Wind Offset Intensity", Range( 0 , 1)) = 1
 		_WindRustleSize("Wind Rustle Size", Range( 0 , 0.2)) = 0.035
 		[Header(WIND SWAY)][Toggle(_USESGLOBALWINDSETTINGS_ON)] _UsesGlobalWindSettings("Uses Global Wind Settings?", Float) = 0
@@ -27,7 +27,8 @@ Shader "Polyart/Dreamscape/URP/Tree Wind Custom Lighting"
 		[Header(Lighting Settings)][Space(5)]_LightOffset("Light Offset", Range( 0 , 1)) = 0
 		_DirectLightInt("Direct Light Int", Range( 1 , 10)) = 1
 		_IndirectLightningIntensity("Indirect Lightning Intensity", Range( 1 , 10)) = 1
-		[ASEEnd]_SubsurfaceIntensity("Subsurface Intensity", Range( 0 , 100)) = 10
+		_SubsurfaceIntensity("Subsurface Intensity", Range( 0 , 100)) = 10
+		[ASEEnd]_SubsurfaceFadeDistance("Subsurface Fade Distance", Float) = 200
 
 
 		//_TessPhongStrength( "Tess Phong Strength", Range( 0, 1 ) ) = 0.5
@@ -269,19 +270,20 @@ Shader "Polyart/Dreamscape/URP/Tree Wind Custom Lighting"
 			float4 _FoliageColorTop;
 			float4 _FoliageColorBottom;
 			float2 _WindSwayDirection;
+			float _SubsurfaceIntensity;
 			float _DirectLightInt;
 			float _LightOffset;
 			float _IndirectLightningIntensity;
 			float _FoliageSize;
 			float _GradientFallout;
-			float _GradientOffset;
 			float _WindScrollSpeed;
+			float _SubsurfaceFadeDistance;
 			float _WIndSwayFrequency;
 			float _WIndSwayIntensity;
 			float _WindOffsetIntensity;
 			float _WindJitterSpeed;
 			float _WindRustleSize;
-			float _SubsurfaceIntensity;
+			float _GradientOffset;
 			float _MaskClipValue;
 			#ifdef ASE_TESSELLATION
 				float _TessPhongStrength;
@@ -562,7 +564,9 @@ Shader "Polyart/Dreamscape/URP/Tree Wind Custom Lighting"
 				ase_worldViewDir = SafeNormalize( ase_worldViewDir );
 				float dotResult11_g90 = dot( SafeNormalize(_MainLightPosition.xyz) , ase_worldViewDir );
 				float dotResult4_g90 = dot( SafeNormalize(_MainLightPosition.xyz) , normalizedWorldNormal );
-				float4 vSubsurface322 = saturate( ( ( (( dotResult11_g90 * -1.0 )*1.0 + -0.25) * ( ( ( (dotResult4_g90*1.0 + 1.0) * ase_lightAtten ) * _MainLightColor * vFoliageColor172 ) * 0.235 ) ) * _SubsurfaceIntensity ) );
+				float clampResult9_g95 = clamp( pow( ( distance( WorldPosition , _WorldSpaceCameraPos ) / _SubsurfaceFadeDistance ) , 2.0 ) , 0.0 , 1.0 );
+				float lerpResult402 = lerp( _SubsurfaceIntensity , 0.0 , clampResult9_g95);
+				float4 vSubsurface322 = saturate( ( ( (( dotResult11_g90 * -1.0 )*1.0 + -0.25) * ( ( ( (dotResult4_g90*1.0 + 1.0) * ase_lightAtten ) * _MainLightColor * vFoliageColor172 ) * 0.235 ) ) * lerpResult402 ) );
 				
 				float vFoliageOpacity173 = tex2DNode124.a;
 				
@@ -663,19 +667,20 @@ Shader "Polyart/Dreamscape/URP/Tree Wind Custom Lighting"
 			float4 _FoliageColorTop;
 			float4 _FoliageColorBottom;
 			float2 _WindSwayDirection;
+			float _SubsurfaceIntensity;
 			float _DirectLightInt;
 			float _LightOffset;
 			float _IndirectLightningIntensity;
 			float _FoliageSize;
 			float _GradientFallout;
-			float _GradientOffset;
 			float _WindScrollSpeed;
+			float _SubsurfaceFadeDistance;
 			float _WIndSwayFrequency;
 			float _WIndSwayIntensity;
 			float _WindOffsetIntensity;
 			float _WindJitterSpeed;
 			float _WindRustleSize;
-			float _SubsurfaceIntensity;
+			float _GradientOffset;
 			float _MaskClipValue;
 			#ifdef ASE_TESSELLATION
 				float _TessPhongStrength;
@@ -1001,19 +1006,20 @@ Shader "Polyart/Dreamscape/URP/Tree Wind Custom Lighting"
 			float4 _FoliageColorTop;
 			float4 _FoliageColorBottom;
 			float2 _WindSwayDirection;
+			float _SubsurfaceIntensity;
 			float _DirectLightInt;
 			float _LightOffset;
 			float _IndirectLightningIntensity;
 			float _FoliageSize;
 			float _GradientFallout;
-			float _GradientOffset;
 			float _WindScrollSpeed;
+			float _SubsurfaceFadeDistance;
 			float _WIndSwayFrequency;
 			float _WIndSwayIntensity;
 			float _WindOffsetIntensity;
 			float _WindJitterSpeed;
 			float _WindRustleSize;
-			float _SubsurfaceIntensity;
+			float _GradientOffset;
 			float _MaskClipValue;
 			#ifdef ASE_TESSELLATION
 				float _TessPhongStrength;
@@ -1313,19 +1319,20 @@ Shader "Polyart/Dreamscape/URP/Tree Wind Custom Lighting"
 			float4 _FoliageColorTop;
 			float4 _FoliageColorBottom;
 			float2 _WindSwayDirection;
+			float _SubsurfaceIntensity;
 			float _DirectLightInt;
 			float _LightOffset;
 			float _IndirectLightningIntensity;
 			float _FoliageSize;
 			float _GradientFallout;
-			float _GradientOffset;
 			float _WindScrollSpeed;
+			float _SubsurfaceFadeDistance;
 			float _WIndSwayFrequency;
 			float _WIndSwayIntensity;
 			float _WindOffsetIntensity;
 			float _WindJitterSpeed;
 			float _WindRustleSize;
-			float _SubsurfaceIntensity;
+			float _GradientOffset;
 			float _MaskClipValue;
 			#ifdef ASE_TESSELLATION
 				float _TessPhongStrength;
@@ -1610,19 +1617,20 @@ Shader "Polyart/Dreamscape/URP/Tree Wind Custom Lighting"
 			float4 _FoliageColorTop;
 			float4 _FoliageColorBottom;
 			float2 _WindSwayDirection;
+			float _SubsurfaceIntensity;
 			float _DirectLightInt;
 			float _LightOffset;
 			float _IndirectLightningIntensity;
 			float _FoliageSize;
 			float _GradientFallout;
-			float _GradientOffset;
 			float _WindScrollSpeed;
+			float _SubsurfaceFadeDistance;
 			float _WIndSwayFrequency;
 			float _WIndSwayIntensity;
 			float _WindOffsetIntensity;
 			float _WindJitterSpeed;
 			float _WindRustleSize;
-			float _SubsurfaceIntensity;
+			float _GradientOffset;
 			float _MaskClipValue;
 			#ifdef ASE_TESSELLATION
 				float _TessPhongStrength;
@@ -1912,19 +1920,20 @@ Shader "Polyart/Dreamscape/URP/Tree Wind Custom Lighting"
 			float4 _FoliageColorTop;
 			float4 _FoliageColorBottom;
 			float2 _WindSwayDirection;
+			float _SubsurfaceIntensity;
 			float _DirectLightInt;
 			float _LightOffset;
 			float _IndirectLightningIntensity;
 			float _FoliageSize;
 			float _GradientFallout;
-			float _GradientOffset;
 			float _WindScrollSpeed;
+			float _SubsurfaceFadeDistance;
 			float _WIndSwayFrequency;
 			float _WIndSwayIntensity;
 			float _WindOffsetIntensity;
 			float _WindJitterSpeed;
 			float _WindRustleSize;
-			float _SubsurfaceIntensity;
+			float _GradientOffset;
 			float _MaskClipValue;
 			#ifdef ASE_TESSELLATION
 				float _TessPhongStrength;
@@ -2219,19 +2228,20 @@ Shader "Polyart/Dreamscape/URP/Tree Wind Custom Lighting"
 			float4 _FoliageColorTop;
 			float4 _FoliageColorBottom;
 			float2 _WindSwayDirection;
+			float _SubsurfaceIntensity;
 			float _DirectLightInt;
 			float _LightOffset;
 			float _IndirectLightningIntensity;
 			float _FoliageSize;
 			float _GradientFallout;
-			float _GradientOffset;
 			float _WindScrollSpeed;
+			float _SubsurfaceFadeDistance;
 			float _WIndSwayFrequency;
 			float _WIndSwayIntensity;
 			float _WindOffsetIntensity;
 			float _WindJitterSpeed;
 			float _WindRustleSize;
-			float _SubsurfaceIntensity;
+			float _GradientOffset;
 			float _MaskClipValue;
 			#ifdef ASE_TESSELLATION
 				float _TessPhongStrength;
@@ -2476,7 +2486,7 @@ Node;AmplifyShaderEditor.SamplerNode;124;-2448.591,-2185.154;Inherit;True;Proper
 Node;AmplifyShaderEditor.LerpOp;115;-2669.975,-2319.941;Inherit;False;3;0;COLOR;0,0,0,0;False;1;COLOR;0,0,0,0;False;2;FLOAT;0;False;1;COLOR;0
 Node;AmplifyShaderEditor.SimpleMultiplyOpNode;125;-2104.469,-2320.945;Inherit;False;2;2;0;COLOR;0,0,0,0;False;1;COLOR;0,0,0,0;False;1;COLOR;0
 Node;AmplifyShaderEditor.RegisterLocalVarNode;172;-1890.849,-2326.3;Inherit;False;vFoliageColor;-1;True;1;0;COLOR;0,0,0,0;False;1;COLOR;0
-Node;AmplifyShaderEditor.CommentaryNode;259;-3522.616,-862.6478;Inherit;False;958.9546;897.2181;;15;312;325;300;283;298;310;323;303;322;324;307;279;296;297;301;Custom Lighting;1,1,1,1;0;0
+Node;AmplifyShaderEditor.CommentaryNode;259;-3522.616,-862.6478;Inherit;False;958.9546;897.2181;;14;312;325;300;283;298;310;323;303;322;324;307;279;297;301;Custom Lighting;1,1,1,1;0;0
 Node;AmplifyShaderEditor.CommentaryNode;122;-1209.571,1348.299;Inherit;False;1580.315;688.4131;Wind;12;194;212;116;100;246;77;101;104;102;252;256;257;;1,1,1,1;0;0
 Node;AmplifyShaderEditor.GetLocalVarNode;297;-3449.756,-446.9383;Inherit;False;172;vFoliageColor;1;0;OBJECT;;False;1;COLOR;0
 Node;AmplifyShaderEditor.RangedFloatNode;256;-1021.847,1545.175;Inherit;False;Property;_WindRustleSize;Wind Rustle Size;15;0;Create;True;0;0;0;False;0;False;0.035;0;0;0.2;0;1;FLOAT;0
@@ -2491,7 +2501,6 @@ Node;AmplifyShaderEditor.RangedFloatNode;303;-3288.529,-363.8424;Inherit;False;P
 Node;AmplifyShaderEditor.FunctionNode;257;-710.6141,1493.55;Inherit;False;PA_SF_WindRustleNoise;9;;87;7733c52bc6ce2e94b9c81cb72dee5854;0;4;18;FLOAT;0;False;33;FLOAT;1;False;35;FLOAT;0.035;False;19;FLOAT;0;False;1;COLOR;0
 Node;AmplifyShaderEditor.GetLocalVarNode;298;-3418.625,-248.9114;Inherit;False;172;vFoliageColor;1;0;OBJECT;;False;1;COLOR;0
 Node;AmplifyShaderEditor.GetLocalVarNode;279;-3458.255,-766.8471;Inherit;False;172;vFoliageColor;1;0;OBJECT;;False;1;COLOR;0
-Node;AmplifyShaderEditor.RangedFloatNode;296;-3467.761,-683.2956;Inherit;False;Property;_SubsurfaceIntensity;Subsurface Intensity;24;0;Create;True;0;0;0;False;0;False;10;0;0;100;0;1;FLOAT;0
 Node;AmplifyShaderEditor.RangedFloatNode;283;-3501.57,-160.0811;Inherit;False;Property;_LightOffset;Light Offset;21;0;Create;True;0;0;0;False;2;Header(Lighting Settings);Space(5);False;0;0;0;1;0;1;FLOAT;0
 Node;AmplifyShaderEditor.RangedFloatNode;300;-3502.948,-60.73007;Inherit;False;Property;_DirectLightInt;Direct Light Int;22;0;Create;True;0;0;0;False;0;False;1;0;1;10;0;1;FLOAT;0
 Node;AmplifyShaderEditor.SimpleMultiplyOpNode;307;-3151.009,-466.4042;Inherit;False;2;2;0;FLOAT3;0,0,0;False;1;COLOR;0,0,0,0;False;1;COLOR;0
@@ -2533,6 +2542,10 @@ Node;AmplifyShaderEditor.TemplateMultiPassMasterNode;398;1411.169,889.1141;Float
 Node;AmplifyShaderEditor.TemplateMultiPassMasterNode;399;1411.169,889.1141;Float;False;False;-1;2;UnityEditor.ShaderGraphUnlitGUI;0;1;New Amplify Shader;2992e84f91cbeb14eab234972e07ea9d;True;DepthNormals;0;8;DepthNormals;0;False;False;False;False;False;False;False;False;False;False;False;False;True;0;False;;False;True;0;False;;False;False;False;False;False;False;False;False;False;True;False;0;False;;255;False;;255;False;;0;False;;0;False;;0;False;;0;False;;0;False;;0;False;;0;False;;0;False;;False;False;False;False;True;4;RenderPipeline=UniversalPipeline;RenderType=Opaque=RenderType;Queue=Geometry=Queue=0;UniversalMaterialType=Unlit;True;3;True;12;all;0;False;False;False;False;False;False;False;False;False;False;False;False;False;False;False;False;False;False;False;False;False;False;False;False;False;False;True;1;False;;True;3;False;;False;True;1;LightMode=DepthNormalsOnly;False;False;0;;0;0;Standard;0;False;0
 Node;AmplifyShaderEditor.TemplateMultiPassMasterNode;400;1411.169,889.1141;Float;False;False;-1;2;UnityEditor.ShaderGraphUnlitGUI;0;1;New Amplify Shader;2992e84f91cbeb14eab234972e07ea9d;True;DepthNormalsOnly;0;9;DepthNormalsOnly;0;False;False;False;False;False;False;False;False;False;False;False;False;True;0;False;;False;True;0;False;;False;False;False;False;False;False;False;False;False;True;False;0;False;;255;False;;255;False;;0;False;;0;False;;0;False;;0;False;;0;False;;0;False;;0;False;;0;False;;False;False;False;False;True;4;RenderPipeline=UniversalPipeline;RenderType=Opaque=RenderType;Queue=Geometry=Queue=0;UniversalMaterialType=Unlit;True;3;True;12;all;0;False;False;False;False;False;False;False;False;False;False;False;False;False;False;False;False;False;False;False;False;False;False;False;False;False;False;True;1;False;;True;3;False;;False;True;1;LightMode=DepthNormalsOnly;False;True;9;d3d11;metal;vulkan;xboxone;xboxseries;playstation;ps4;ps5;switch;0;;0;0;Standard;0;False;0
 Node;AmplifyShaderEditor.TemplateMultiPassMasterNode;392;1411.169,889.1141;Float;False;True;-1;2;UnityEditor.ShaderGraphUnlitGUI;0;13;Polyart/Dreamscape/URP/Tree Wind Custom Lighting;2992e84f91cbeb14eab234972e07ea9d;True;Forward;0;1;Forward;8;False;False;False;False;False;False;False;False;False;False;False;False;True;0;False;;False;True;2;False;;False;False;False;False;False;False;False;False;False;True;False;0;False;;255;False;;255;False;;0;False;;0;False;;0;False;;0;False;;0;False;;0;False;;0;False;;0;False;;False;False;False;False;True;4;RenderPipeline=UniversalPipeline;RenderType=Opaque=RenderType;Queue=Geometry=Queue=0;UniversalMaterialType=Unlit;True;3;True;12;all;0;False;True;1;1;False;;0;False;;1;1;False;;0;False;;False;False;False;False;False;False;False;False;False;False;False;False;False;False;True;True;True;True;True;0;False;;False;False;False;False;False;False;False;True;False;0;False;;255;False;;255;False;;0;False;;0;False;;0;False;;0;False;;0;False;;0;False;;0;False;;0;False;;False;True;1;False;;True;3;False;;True;True;0;False;;0;False;;True;1;LightMode=UniversalForwardOnly;False;False;0;;0;0;Standard;23;Surface;0;0;  Blend;0;0;Two Sided;0;638099232587446857;Forward Only;0;0;Cast Shadows;1;0;  Use Shadow Threshold;0;0;Receive Shadows;1;0;GPU Instancing;1;0;LOD CrossFade;0;0;Built-in Fog;1;638126632095055901;DOTS Instancing;0;0;Meta Pass;0;0;Extra Pre Pass;0;0;Tessellation;0;0;  Phong;0;0;  Strength;0.5,False,;0;  Type;0;0;  Tess;16,False,;0;  Min;10,False,;0;  Max;25,False,;0;  Edge Length;16,False,;0;  Max Displacement;25,False,;0;Vertex Position,InvertActionOnDeselection;1;0;0;10;False;True;True;True;False;False;True;True;True;True;False;;False;0
+Node;AmplifyShaderEditor.RangedFloatNode;401;-4557.155,-686.1132;Inherit;False;Property;_SubsurfaceFadeDistance;Subsurface Fade Distance;25;0;Create;True;0;0;0;False;0;False;200;0;0;0;0;1;FLOAT;0
+Node;AmplifyShaderEditor.LerpOp;402;-3840.689,-776.2373;Inherit;False;3;0;FLOAT;0;False;1;FLOAT;0;False;2;FLOAT;0;False;1;FLOAT;0
+Node;AmplifyShaderEditor.FunctionNode;404;-4245.709,-680.3781;Inherit;False;PA_SF_DistanceBlend;-1;;95;35a1c16c00037ed46b6114de6dd42a44;0;2;6;FLOAT;200;False;8;FLOAT;2;False;1;FLOAT;0
+Node;AmplifyShaderEditor.RangedFloatNode;296;-4316.761,-869.2956;Inherit;False;Property;_SubsurfaceIntensity;Subsurface Intensity;24;0;Create;True;0;0;0;False;0;False;10;0;0;100;0;1;FLOAT;0
 WireConnection;131;8;110;0
 WireConnection;131;9;111;0
 WireConnection;124;0;123;0
@@ -2553,7 +2566,7 @@ WireConnection;246;27;101;0
 WireConnection;246;29;102;0
 WireConnection;246;30;104;0
 WireConnection;324;23;279;0
-WireConnection;324;24;296;0
+WireConnection;324;24;402;0
 WireConnection;77;0;257;0
 WireConnection;77;1;246;0
 WireConnection;323;0;307;0
@@ -2583,5 +2596,8 @@ WireConnection;392;2;359;0
 WireConnection;392;3;183;0
 WireConnection;392;4;107;0
 WireConnection;392;5;117;0
+WireConnection;402;0;296;0
+WireConnection;402;2;404;0
+WireConnection;404;6;401;0
 ASEEND*/
-//CHKSM=03D55A2FF9D4B08F2759628752A05603617A34E0
+//CHKSM=798E0FEC104DBD55991FDD7C6BC14FA97BBC339E
