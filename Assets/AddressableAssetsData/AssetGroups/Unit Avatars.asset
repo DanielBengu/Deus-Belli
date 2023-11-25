@@ -10,19 +10,35 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: bbb281ee3bf0b054c82ac2347e9e782c, type: 3}
-  m_Name: Sprite Units
+  m_Name: Unit Avatars
   m_EditorClassIdentifier: 
-  m_GroupName: Sprite Units
+  m_GroupName: Unit Avatars
   m_Data:
     m_SerializedData: []
   m_GUID: b3e0702f69d40644f9af4fc5028d2ad4
   m_SerializeEntries:
-  - m_GUID: 9f780aa27acc68845bc0875cf0ca1fa4
-    m_Address: Sprite/Archer
+  - m_GUID: fbd24185ed77010438b49e542f605bc1
+    m_Address: Sprite/Goblin_Thief
     m_ReadOnly: 0
     m_SerializedLabels: []
-  - m_GUID: 9a27a138b21f93147b5d5eeff290ffcc
+  - m_GUID: 2c415a986309aa648b0c4797e13f541b
+    m_Address: Sprite/Goblin_Archer
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+  - m_GUID: 17c3a355f15df344c920af4587ea9b7e
+    m_Address: Sprite/Goblin_Warrior
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+  - m_GUID: 28fdf38a850c34d4dac2931df6d43ae8
     m_Address: Sprite/Warrior
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+  - m_GUID: 58b2cb2676bcdf24089ee2794094c420
+    m_Address: Sprite/Bandit
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+  - m_GUID: 0336b40dd49c8fc42a67bb634da4e351
+    m_Address: Sprite/Archer
     m_ReadOnly: 0
     m_SerializedLabels: []
   m_ReadOnly: 0

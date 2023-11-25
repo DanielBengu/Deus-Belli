@@ -21,11 +21,9 @@ public class UIManager : MonoBehaviour
 
     #region Info Panel
     Image unitImage;
-        TextMeshProUGUI nameText;
-        TextMeshProUGUI hpValue;
-        TextMeshProUGUI movementValue;
-        TextMeshProUGUI attackValue;
-        TextMeshProUGUI rangeValue;
+    Transform traitParent;
+    Transform statsParent;
+    TextMeshProUGUI nameText;
     #endregion
 
 	public void SetFightVariables(IGod god){
@@ -36,15 +34,13 @@ public class UIManager : MonoBehaviour
 
         infoPanel = GameObject.Find("Info");
         endTurnButton = GameObject.Find("End Turn Button");
-        fightVictoryScreen = AddressablesManager.LoadResource<GameObject>(AddressablesManager.TypeOfResource.Prefab, "Fight Victory");
-        fightDefeatScreen = AddressablesManager.LoadResource<GameObject>(AddressablesManager.TypeOfResource.Prefab, "Fight Defeat");
+        fightVictoryScreen = AddressablesManager.LoadResource<GameObject>(AddressablesManager.TypeOfResource.Prefab, fightVictoryScreenPrefabName);
+        fightDefeatScreen = AddressablesManager.LoadResource<GameObject>(AddressablesManager.TypeOfResource.Prefab, fightDefeatScreenPrefabName);
 
+        traitParent = infoPanel.transform.Find("Traits");
+        statsParent = infoPanel.transform.Find("Stats");
         unitImage = infoPanel.transform.Find("Image").gameObject.GetComponent<Image>();
         nameText = infoPanel.transform.Find("Unit title").gameObject.GetComponent<TextMeshProUGUI>();
-        hpValue = infoPanel.transform.Find("HP value").gameObject.GetComponent<TextMeshProUGUI>();
-        movementValue = infoPanel.transform.Find("Movement value").gameObject.GetComponent<TextMeshProUGUI>();
-        attackValue = infoPanel.transform.Find("Attack value").gameObject.GetComponent<TextMeshProUGUI>();
-        rangeValue = infoPanel.transform.Find("Range value").gameObject.GetComponent<TextMeshProUGUI>();
         SetInfoPanel(false);
     }
     public void SetFightEndPhaseButton()
@@ -58,8 +54,8 @@ public class UIManager : MonoBehaviour
     public void SetRogueVariables(int gold, string godSelected, int seed)
 	{
         rogueCanvas = GameObject.Find("RogueCanvas");
-        rogueVictoryScreen = AddressablesManager.LoadResource<GameObject>(AddressablesManager.TypeOfResource.Prefab, "Rogue Victory");
-        rogueDefeatScreen = AddressablesManager.LoadResource<GameObject>(AddressablesManager.TypeOfResource.Prefab, "Fight Defeat");
+        rogueVictoryScreen = AddressablesManager.LoadResource<GameObject>(AddressablesManager.TypeOfResource.Prefab, rogueVictoryScreenPrefabName);
+        rogueDefeatScreen = AddressablesManager.LoadResource<GameObject>(AddressablesManager.TypeOfResource.Prefab, rogueDefeatScreenPrefabName);
         TextMeshProUGUI rogueGold = GameObject.Find("Gold Value").GetComponent<TextMeshProUGUI>();
         rogueGold.text = gold.ToString();
         TextMeshProUGUI rogueGod = GameObject.Find("God Text").GetComponent<TextMeshProUGUI>();
@@ -101,13 +97,38 @@ public class UIManager : MonoBehaviour
 
     public void SetInfoPanel(bool active, Unit unit = null){
         SetGameObject(infoPanel, active);
-        if (active){
+        if (active && unit != null){
+
+            //We setup the traits in the info panel
+			for (int i = 0; i < traitParent.childCount; i++)
+                if (unit.Traits.Count > i)
+                    traitParent.GetChild(i).GetComponent<Image>().sprite = AddressablesManager.LoadResource<Sprite>(AddressablesManager.TypeOfResource.Sprite, unit.Traits[i].ToString());
+                else
+                    traitParent.GetChild(i).gameObject.SetActive(false);
+
             nameText.text = unit.unitName;
             unitImage.sprite = unit.unitImage;
-            hpValue.text = $"{unit.hpCurrent}/{unit.hpMax}";
-            movementValue.text = $"{unit.movementCurrent}/{unit.movementMax}";
-            attackValue.text = unit.attack.ToString();
-            rangeValue.text = unit.range.ToString();
+			for (int i = 0; i < statsParent.childCount; i++)
+			{
+                TextMeshProUGUI stat = statsParent.GetChild(i).GetComponent<TextMeshProUGUI>();
+                switch (stat.name)
+				{
+                    case "HP":
+                        stat.text = $"{unit.hpCurrent}/{unit.hpMax}";
+                        break;
+                    case "Movement":
+                        stat.text = $"{unit.movementCurrent}/{unit.movementMax}";
+                        break;
+                    case "Attack":
+                        stat.text = unit.attack.ToString();
+                        break;
+                    case "Range":
+                        stat.text = unit.range.ToString();
+                        break;
+                    default:
+						break;
+				}
+			}
         }
     }
 

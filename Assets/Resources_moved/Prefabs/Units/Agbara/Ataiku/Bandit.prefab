@@ -2867,7 +2867,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   unitName: Jack
-  unitImage: {fileID: 0}
+  unitImage: {fileID: 21300000, guid: 58b2cb2676bcdf24089ee2794094c420, type: 3}
   prefab: {fileID: 1000014232435074}
   startingTileNumber: 0
   hpMax: 5

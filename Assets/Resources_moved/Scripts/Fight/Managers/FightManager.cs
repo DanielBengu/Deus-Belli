@@ -183,15 +183,15 @@ public class FightManager : MonoBehaviour
                 int startingTile = RandomManager.GetRandomValue(seed * (i + 1), 0, possiblePlayerStartingUnits.Length);
                 unitTile = GameObject.Find($"Terrain_{possiblePlayerStartingUnits[startingTile]}").GetComponent<Tile>();
                 alreadyOccupiedTiles.Add(unitTile.tileNumber);
-                unitList.Add(GenerateSingleUnit(unit, unitTile, unitsParent));
+                unitList.Add(GenerateSingleUnit(unit.GetComponent<Unit>(), unitTile, unitsParent));
                 exitClause = !(unitTile != null && unitTile.IsPassable && possiblePlayerStartingUnits.Length > 0);
             }
         }
 
-        GameObject[] enemyUnits = level.enemyList.Values.ToArray();
+        Unit[] enemyUnits = level.enemyList.Values.ToArray();
         for (int i = 0; i < enemyUnits.Length; i++)
         {
-            GameObject unit = enemyUnits[i];
+            Unit unit = enemyUnits[i];
             //First part of the where clause removes unavailable terrain (like mountains), the second selects all the tiles of the last two columns of the game
             int[] possiblePlayerStartingUnits = mapTiles.Where(k =>
             (k.Value.IsPassable && !alreadyOccupiedTiles.Contains(k.Key)) &&
@@ -212,13 +212,13 @@ public class FightManager : MonoBehaviour
         return unitList;
     }
 
-    Unit GenerateSingleUnit(GameObject unit, Tile tile, Transform parent)
+    Unit GenerateSingleUnit(Unit unit, Tile tile, Transform parent)
     {
         Quaternion rotation = new(0, 180, 0, 0);
         var unitGenerated = Instantiate(unit, tile.transform.position, rotation, parent);
         var unitScript = unitGenerated.GetComponent<Unit>();
-
-        unitScript.SetupManager(this);
+        unitScript.LoadStats(unit);
+        unitScript.FightManager = this;
         unitScript.CurrentTile = tile;
         tile.unitOnTile = unitGenerated.GetComponent<Unit>();
         return unitScript;

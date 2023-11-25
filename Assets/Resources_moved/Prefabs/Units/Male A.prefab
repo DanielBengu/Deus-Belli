@@ -2965,7 +2965,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 32f75263af4039848bdcbfad0a330509, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  unitName: bob guerriero
+  unitName: Bob guerriero
   unitImage: {fileID: 21300000, guid: 9a27a138b21f93147b5d5eeff290ffcc, type: 3}
   prefab: {fileID: 0}
   startingTileNumber: 0

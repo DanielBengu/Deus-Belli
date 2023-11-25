@@ -1915,7 +1915,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   unitName: Koblin
-  unitImage: {fileID: 0}
+  unitImage: {fileID: 21300000, guid: 2c415a986309aa648b0c4797e13f541b, type: 3}
   prefab: {fileID: 0}
   startingTileNumber: 0
   hpMax: 5

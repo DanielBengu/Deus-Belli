@@ -8,45 +8,55 @@ public class Unit : MonoBehaviour
     public Tile CurrentTile { get; set; }
     public bool HasPerformedMainAction { get; set; }
 
-    FightManager fightManager;
+    public FightManager FightManager { get; set; }
+    
+    public int startingTileNumber;
+
+    #region Info Panel
 
     public string unitName;
     public Sprite unitImage;
-    public GameObject prefab;
-    public int startingTileNumber;
+
+    #region Stats
+    public List<TraitsEnum> Traits { get; set; } = new();
+    public int hpMax;
+    public int hpCurrent;
+    public float movementMax;
+    public float movementCurrent;
+    public int attack;
+    public int faction;
+    public int range;
+    #endregion
+
+    #endregion
 
     public List<Tile> PossibleMovements { get { return GetPossibleMovements(); } }
+
+    public void LoadStats(Unit unit)
+	{
+        Traits = unit.Traits;
+        hpMax = unit.hpMax;
+        movementMax = unit.movementMax;
+        attack = unit.attack;
+        faction = unit.faction;
+        range = unit.range;
+	}
 
     public void OnMouseDown()
     {
         CurrentTile.OnMouseDown();
     }
 
-    #region Stats
-    public int hpMax;
-        public int hpCurrent;
-        public float movementMax;
-        public float movementCurrent;
-        public int attack;
-        public int faction;
-        public int range;
-    #endregion
-
-    public void SetupManager(FightManager manager)
+    public List<Tile> GetPossibleAttacks()
 	{
-        fightManager = manager;
-	}
-
-	public List<Tile> GetPossibleAttacks()
-	{
-        return fightManager.GetPossibleAttacksForUnit(this);
+        return FightManager.GetPossibleAttacksForUnit(this);
     }
 
     List<Tile> GetPossibleMovements()
     {
         //if map has changed
         if (true)
-            _possibleMovements = fightManager.GetPossibleMovements(this);
+            _possibleMovements = FightManager.GetPossibleMovements(this);
 
         return _possibleMovements;
     }
@@ -64,6 +74,20 @@ public class Unit : MonoBehaviour
 
     public void StartDamageForOpponent()
 	{
-        fightManager.MakeUnitTakeDamage();
+        FightManager.MakeUnitTakeDamage();
+	}
+
+    public enum TraitsEnum
+	{
+        Floaty,
+        Healthy,
+        Magic_Defence,
+        Overload,
+        Regeneration,
+        Second_Wind,
+        Speedy,
+        Strong,
+        Tanky,
+        Wealthy
 	}
 }

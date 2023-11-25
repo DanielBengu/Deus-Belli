@@ -1,6 +1,8 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using static Unit;
 
 public class Level
 {
@@ -14,7 +16,7 @@ public class Level
     public Dictionary<int, GameObject> tilesDict = new();
 
     //Key represents the assigned tile number of the unit
-    public Dictionary<int, GameObject> enemyList;
+    public Dictionary<int, Unit> enemyList;
 
 	public int seed;
 	public IGod enemyGod;
@@ -39,7 +41,7 @@ public class Level
 		for (int i = 0; i < HorizontalTiles * VerticalTiles; i++)
 		{
 			GameObject objectToSpawn = ObjectsManager.GetObject("Grass1");
-			GameObject tileObject = Object.Instantiate(objectToSpawn, objectsParent);
+			GameObject tileObject = UnityEngine.Object.Instantiate(objectToSpawn, objectsParent);
 
 			LoadTile(tileObject, $"Terrain_{i}", objectToSpawn.name, isEdit, true);
 			tilesDict.Add(i, tileObject);
@@ -56,7 +58,7 @@ public class Level
 		for (int i = 0; i < HorizontalTiles * VerticalTiles; i++)
 		{
 			GameObject objectToSpawn = models.First(m => m.name == customMap[i]);
-			GameObject tileObject = Object.Instantiate(objectToSpawn, objectsParent);
+			GameObject tileObject = UnityEngine.Object.Instantiate(objectToSpawn, objectsParent);
 
 			LoadTile(tileObject, $"Terrain_{i}", objectToSpawn.name, isEdit, true);
 			tilesDict.Add(i, tileObject);
@@ -75,16 +77,36 @@ public class Level
 
 	public void SetupEnemies(RogueTileType tileType, int currentRow, int difficulty)
 	{
-		Dictionary<int, GameObject> result = new();
+		int enemiesSetupSeed = RandomManager.GetRandomValue(seed, 0, 100000000);
+		Dictionary<int, Unit> result = new();
 		Encounter encounter = enemyGod.Encounters[RandomManager.GetRandomValue(seed, 0, enemyGod.Encounters.Length)];
 
 		for (int i = 0; i < encounter.units.Length; i++)
 		{
+			int enemySeed = RandomManager.GetRandomValue(enemiesSetupSeed, 0, 100000000);
 			Unit enemy = encounter.units[i];
-			enemy.faction = 1;
-			result.Add(encounter.positions[i], enemy.gameObject);
+			SetupEnemy(encounter.units[i], enemySeed);
+			result.Add(encounter.positions[i], enemy);
 		}
 
 		enemyList = result;
+	}
+
+	public void SetupEnemy(Unit unit, int enemySeed)
+	{
+		unit.faction = 1;
+		SetRandomTraits(unit, enemySeed);
+	}
+
+	public void SetRandomTraits(Unit unit, int enemySeed)
+	{
+		List<TraitsEnum> unitTraits = new();
+		int numOfTraits = RandomManager.GetRandomValue(enemySeed, 0, 6);
+		for (int i = 0; i < numOfTraits; i++)
+		{
+			int traitSeed = RandomManager.GetRandomValue(enemySeed * (i + 1), 0, 10000000);
+			unitTraits.Add((TraitsEnum)RandomManager.GetRandomValue(traitSeed, 0, Enum.GetNames(typeof(TraitsEnum)).Length));
+			unit.Traits = unitTraits;
+		}
 	}
 }

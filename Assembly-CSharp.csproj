@@ -63,6 +63,7 @@
     <Compile Include="Assets\Polyart\PolyartStudio\SharedResources\Scripts\Misc\SmoothMouseLook.cs" />
     <Compile Include="Assets\InitManager.cs" />
     <Compile Include="Assets\Resources_moved\Scripts\General\Extensions\RandomExtension.cs" />
+    <Compile Include="Assets\Polyart\PolyartStudio\Scripts\NatureManager.cs" />
     <Compile Include="Assets\Resources_moved\Scripts\Fight\Managers\FightManager.cs" />
     <Compile Include="Assets\Resources_moved\Scripts\GodsArchive\Gods\Agbara\Omi.cs" />
     <Compile Include="Assets\Resources_moved\Scripts\UnitsArchive.cs" />
@@ -98,11 +99,13 @@
     <Compile Include="Assets\Polyart\PolyartStudio\SharedResources\CritiasFoliage\Examples\ExampleRuntimeTreeAdder.cs" />
     <Compile Include="Assets\Polyart\PolyartStudio\SharedResources\Scripts\Misc\Cull_Lights.cs" />
     <Compile Include="Assets\Polyart\PolyartStudio\SharedResources\CritiasFoliage\Examples\ExampleRuntimeTreeRemover.cs" />
+    <Compile Include="Assets\Polyart\PolyartStudio\Scripts\SmoothMouseLook.cs" />
     <Compile Include="Assets\Polyart\PolyartStudio\SharedResources\CritiasFoliage\Code\FoliageColliders.cs" />
     <Compile Include="Assets\Resources_moved\Scripts\Rogue\Classes\DB_Event.cs" />
     <Compile Include="Assets\Polyart\PolyartStudio\SharedResources\CritiasFoliage\Code\FoliagePainter.cs" />
     <Compile Include="Assets\Resources_moved\Scripts\Menu\MainMenu.cs" />
     <Compile Include="Assets\Resources_moved\Scripts\Rogue\RogueNode.cs" />
+    <Compile Include="Assets\Polyart\PolyartStudio\DreamscapeCampsite\Scripts\Flickering.cs" />
     <Compile Include="Assets\Polyart\PolyartStudio\SharedResources\Scripts\Tools\FoliageInteractor.cs" />
     <Compile Include="Assets\Resources_moved\Scripts\Fight\Level.cs" />
     <Compile Include="Assets\Polyart\PolyartStudio\SharedResources\Scripts\Gameplay\Character\Interactable_Dreamscape.cs" />
@@ -125,6 +128,7 @@
     <Compile Include="Assets\Resources_moved\Scripts\GodsArchive\InterfacesAndClasses\IGod.cs" />
     <Compile Include="Assets\Polyart\PolyartStudio\SharedResources\Scripts\Tools\NatureManager.cs" />
     <Compile Include="Assets\Resources_moved\Scripts\Fight\Tile.cs" />
+    <Compile Include="Assets\Polyart\PolyartStudio\Scripts\Flythrough.cs" />
     <Compile Include="Assets\Resources_moved\Scripts\Fight\Managers\TurnManager.cs" />
     <Compile Include="Assets\Resources_moved\Scripts\Rogue\Managers\RogueManager.cs" />
     <Compile Include="Assets\Polyart\PolyartStudio\SharedResources\CritiasFoliage\Code\FoliageTerrainListener.cs" />
@@ -136,10 +140,6 @@
     <Compile Include="Assets\Resources_moved\Scripts\Fight\Classes\Pathfinding.cs" />
     <Compile Include="Assets\Resources_moved\Scripts\Menu\TextMenu.cs" />
     <Compile Include="Assets\Polyart\PolyartStudio\SharedResources\CritiasFoliage\Code\FoliageCaching.cs" />
-    <Compile Include="Assets\Polyart\PolyartStudio\Scripts\SmoothMouseLook.cs" />
-    <Compile Include="Assets\Polyart\PolyartStudio\DreamscapeCampsite\Scripts\Flickering.cs" />
-    <Compile Include="Assets\Polyart\PolyartStudio\Scripts\NatureManager.cs" />
-    <Compile Include="Assets\Polyart\PolyartStudio\Scripts\Flythrough.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Assets\TextMesh Pro\Shaders\TMPro.cginc" />

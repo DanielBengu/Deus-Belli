@@ -81,14 +81,14 @@ public class NewGameManager : MonoBehaviour
     }
     public void StartGame()
     {
-        if (godSelected != null)
-        {
-            int seed = seedInputField.text == string.Empty ? 0 : int.Parse(seedInputField.text);
-            PlayerPrefs.SetInt(GeneralManager.SEED, seed);
-            PlayerPrefs.SetString(GeneralManager.GOD_SELECTED_PP, godSelected);
-            PlayerPrefs.SetInt(GeneralManager.ONGOING_RUN, 0);
-            ScenesManager.LoadSceneAsync(ScenesManager.Scenes.Fight);
-        }
+        if (godSelected == null)
+            return;
+
+        int seed = seedInputField.text == string.Empty ? 0 : int.Parse(seedInputField.text);
+        PlayerPrefs.SetInt(GeneralManager.SEED, seed);
+        PlayerPrefs.SetString(GeneralManager.GOD_SELECTED_PP, godSelected);
+        PlayerPrefs.SetInt(GeneralManager.ONGOING_RUN, 0);
+        ScenesManager.LoadSceneAsync(ScenesManager.Scenes.Fight);
     }
 
     public enum Religions

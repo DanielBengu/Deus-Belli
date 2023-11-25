@@ -1,2 +1,2 @@
-Male A#Warrior#Warrior#10#4#2#1#21
-Male B#Archer#Warrior#6#3#2#2#28
+Male A#Wario Warrior#Warrior#10#4#2#1#21
+Male B#Archie Archer#Archer#6#3#2#2#28
