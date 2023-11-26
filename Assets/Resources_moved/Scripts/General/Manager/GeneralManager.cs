@@ -111,26 +111,15 @@ public class GeneralManager : MonoBehaviour
                     break;
             }
 
-        if (IsScrollButtonDown)
+        if(IsScrollButtonDown && currentSection == CurrentSection.Rogue)
 		{
-            
-            if(currentSection == CurrentSection.Rogue)
-			{
-                Transform objectToMove = rogueSectionInstance.transform.GetChild(0);
-                float[] clampValues = rogueManager.GetCameraClamp();
-                CameraManager.UpdatePositionOrRotation(objectToMove, currentSection, new(clampValues[0], clampValues[1]));
-                rogueManager.GenerateNewNodeLines();
-            }
+            Transform objectToMove = rogueSectionInstance.transform.GetChild(0);
+            CameraManager.UpdatePositionOrRotation(objectToMove, currentSection, new() { MapLength = rogueManager.MapLength });
+            rogueManager.GenerateNewNodeLines();
         }
 
         if(currentSection == CurrentSection.Fight)
-        {
-            //We search for the tile in the center of the game
-            int centralTile = (fightManager.level.VerticalTiles / 2 * fightManager.level.HorizontalTiles) + (fightManager.level.HorizontalTiles / 2) - 1;
-            Transform target = GameObject.Find($"Terrain_{centralTile}").transform;
-            CameraManager.UpdatePositionOrRotation(fightManager.fightObjects, currentSection, new(fightManager.fightObjectsRotator));
-        }
-
+            CameraManager.UpdatePositionOrRotation(fightManager.fightObjects, currentSection, new() { Rotator = fightManager.fightObjectsRotator });
     }
 
     RunData LoadRunData()
@@ -223,12 +212,7 @@ public class GeneralManager : MonoBehaviour
 			case RogueTileType.Fight:
                 fightSectionInstance = Instantiate(fightSectionPrefab);
                 fightManager = GameObject.Find(FIGHT_MANAGER_OBJ_NAME).GetComponent<FightManager>();
-                fightManager.structureManager = structureManager;
-                fightManager.cameraManager = cameraManager;
-                fightManager.generalManager = this;
-                fightManager.structureManager.uiManager.SetFightVariables(GodSelected);
-                fightManager.structureManager.spriteManager.fightManager = fightManager;
-                fightManager.Setup(node.level);
+                fightManager.Setup(node.level, structureManager, cameraManager, this);
                 break;
 			case RogueTileType.Event:
                 eventSectionInstance = Instantiate(eventSectionPrefab);
@@ -248,11 +232,13 @@ public class GeneralManager : MonoBehaviour
     {
         rogueSectionInstance = Instantiate(rogueSectionPrefab);
         rogueManager = GameObject.Find(ROGUE_MANAGER_OBJ_NAME).GetComponent<RogueManager>();
-        rogueManager.SetupRogue(structureManager, runData.currentRow, runData.currentPositionInRow, runData.masterSeed);
-        rogueManager.StructureManager.uiManager.SetRogueVariables(Gold, GodSelected.GetName(), runData.masterSeed);
-        currentSection = CurrentSection.Rogue;
 
+        cameraManager.SetupRogueCamera(rogueSectionInstance.transform.GetChild(0), runData.currentRow, rogueManager.MapLength);
+
+        rogueManager.SetupRogue(structureManager, runData.currentRow, runData.currentPositionInRow, runData.masterSeed);
         rogueManager.IsRunCompleted(isDefeat);
+
+        currentSection = CurrentSection.Rogue;
     }
 
     public static void CloseRun()

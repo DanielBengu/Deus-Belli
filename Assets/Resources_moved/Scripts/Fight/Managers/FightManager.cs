@@ -109,9 +109,15 @@ public class FightManager : MonoBehaviour
 
     #region Startup Methods
 
-    public void Setup(Level level)
+    public void Setup(Level level, StructureManager sm, CameraManager cm, GeneralManager gm)
 	{
         Debug.Log("START FIGHT MANAGER SETUP");
+
+        structureManager = sm;
+        cameraManager = cm;
+        generalManager = gm;
+        structureManager.uiManager.SetFightVariables(gm.GodSelected);
+        structureManager.spriteManager.fightManager = this;
 
         this.level = level;
 

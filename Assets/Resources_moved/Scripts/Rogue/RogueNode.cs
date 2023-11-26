@@ -30,7 +30,7 @@ public class RogueNode : MonoBehaviour
 			case RogueTileType.Boss:
 			case RogueTileType.Miniboss:
 			case RogueTileType.Fight:
-				level.StartLevel(nodeSeed, tileType, mapRow, rm.generalManager.Difficulty, rm.generalManager.GodSelected);
+				level.StartLevel(nodeSeed, tileType, mapRow, rm.gm.Difficulty, rm.gm.GodSelected);
 				break;
 			case RogueTileType.Merchant:
 				merchant = new(nodeSeed);

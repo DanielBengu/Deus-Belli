@@ -8,7 +8,7 @@ public class RogueManager : MonoBehaviour
     const int MINIMUM_NODES = 2;
     const int MAXIMUM_NODES = 4;
 
-    public GeneralManager generalManager;
+    public GeneralManager gm;
     public StructureManager StructureManager { get; set; }
 
     public RogueNode origin;
@@ -17,14 +17,14 @@ public class RogueManager : MonoBehaviour
 
     public Transform playerUnitTransform;
     static readonly int MAP_LENGTH = 10;
-    int maxNode;
+    public int MapLength { get; set; }
     public Dictionary<SeedType, int> seedList = new();
 
-	public bool IsGameOver { get { return generalManager.CurrentRow == maxNode; } }
+	public bool IsGameOver { get { return gm.CurrentRow == MapLength; } }
 
 	public bool IsAnyUnitMoving { get { return StructureManager.IsObjectMoving; } }
 
-    public bool IsGameInStandby { get { return generalManager.IsGameInStandby; } }
+    public bool IsGameInStandby { get { return gm.IsGameInStandby; } }
     public DB_Event CurrentEvent { get; set; }
 	public Merchant MerchantShop { get; set; }
 
@@ -36,8 +36,8 @@ public class RogueManager : MonoBehaviour
 
     void StartEncounter()
 	{
-        RogueNode selectedNode = generalManager.selectedNode;
-        generalManager.StartSection(selectedNode.rogueTileType);
+        RogueNode selectedNode = gm.selectedNode;
+        gm.StartSection(selectedNode.rogueTileType);
     }
 
     public void IsRunCompleted(bool isDefeat)
@@ -46,26 +46,30 @@ public class RogueManager : MonoBehaviour
 
         if (isDefeat)
             gameScreen = GameScreens.RogueDefeatScreen;
-        else if (generalManager.CurrentRow == maxNode)
+        else if (gm.CurrentRow == MapLength)
             gameScreen = GameScreens.RogueVictoryScreen;
 
         if(gameScreen != GameScreens.Default)
-            StructureManager.GetGameScreen(gameScreen, generalManager.Gold);
+            StructureManager.GetGameScreen(gameScreen, gm.Gold);
 	}
 
     public void SetupRogue(StructureManager structureManager, int currentRow, int currentPositionOnRow, int masterSeed)
 	{
-        generalManager = GameObject.Find(GeneralManager.GENERAL_MANAGER_OBJ_NAME).GetComponent<GeneralManager>();
+        gm = GameObject.Find(GeneralManager.GENERAL_MANAGER_OBJ_NAME).GetComponent<GeneralManager>();
 
-        generalManager.CurrentRow = currentRow;
-        generalManager.CurrentPositionInRow = currentPositionOnRow;
+        gm.CurrentRow = currentRow;
+        gm.CurrentPositionInRow = currentPositionOnRow;
+
+        StructureManager = structureManager;
+        StructureManager.uiManager.SetRogueVariables(gm.Gold, gm.GodSelected.GetName(), gm.runData.masterSeed);
+
         seedList.Add(SeedType.Master, masterSeed);
         seedList.Add(SeedType.RogueTile, RandomManager.GetRandomValue(masterSeed, 0, 99999));
         seedList.Add(SeedType.MapLength, RandomManager.GetRandomValue(masterSeed, 100000, 199999));
         seedList.Add(SeedType.NodesOnRow, RandomManager.GetRandomValue(masterSeed, 200000, 299999));
-        StructureManager = structureManager;
+        
 
-        maxNode = MAP_LENGTH; //RandomManager.GetRandomValue(seedList[SeedType.MapLength], 7, 9);
+        MapLength = MAP_LENGTH; //RandomManager.GetRandomValue(seedList[SeedType.MapLength], 7, 9);
 
         GenerateMap();
         RogueNode currentNode = tileList.Find(t => t.mapRow == currentRow && t.positionInRow == currentPositionOnRow);
@@ -78,9 +82,9 @@ public class RogueManager : MonoBehaviour
         originTile.SetupTile(this, RogueTileType.Starting, originTile.mapRow, originTile.positionInRow, 0, 0);
         tileList.Add(originTile);
 
-        for (int i = 1; i <= maxNode; i++)
+        for (int i = 1; i <= MapLength; i++)
         {
-            CreateRowOfNodes(i, maxNode, origin.transform);
+            CreateRowOfNodes(i, MapLength, origin.transform);
             SetNodesChilds(tileList.Where(t => t.mapRow == i - 1).ToList(), tileList.Where(t => t.mapRow == i).ToList());
         }
 
@@ -89,12 +93,6 @@ public class RogueManager : MonoBehaviour
 
         GenerateNewNodeLines();
     }
-
-    public float[] GetCameraClamp()
-	{
-        float maxX = tileList.Last().mapRow * -275;
-        return new[] { maxX, -400f };
-	}
 
     void CreateRowOfNodes(int row, int maxRowOfMap, Transform firstNode)
 	{
@@ -109,9 +107,9 @@ public class RogueManager : MonoBehaviour
 
         if (nodesOnPreviousRow < MINIMUM_NODES)
             nodesOnCurrentRow = nodesOnPreviousRow + 1;
-        else if (row == maxNode)
+        else if (row == MapLength)
             nodesOnCurrentRow = 1;
-        else if (row == maxNode - 1)
+        else if (row == MapLength - 1)
             nodesOnCurrentRow = 2;
         else
             nodesOnCurrentRow = RandomManager.GetRandomValue(seedList[SeedType.NodesOnRow] + row, MINIMUM_NODES, maximumNodesPossibleForCurrentRow + 1);
@@ -224,7 +222,7 @@ public class RogueManager : MonoBehaviour
         }
 
         //Check for unlinked parents to force
-        foreach (var node in nodes.Where(t => t.mapRow != maxNode && t.rogueChilds.Count == 0))
+        foreach (var node in nodes.Where(t => t.mapRow != MapLength && t.rogueChilds.Count == 0))
         {
             int seed = seedList[SeedType.RogueTile] * node.mapRow * node.positionInRow;
             List<RogueNode> possibleChoices = nodes.Where(t =>  t.mapRow == node.mapRow + 1 &&
@@ -259,12 +257,12 @@ public class RogueManager : MonoBehaviour
 	{
 		if (IsAnyUnitMoving) return;
 
-        RogueNode startingNode = tileList.Find(t => t.mapRow == generalManager.CurrentRow && t.positionInRow == generalManager.CurrentPositionInRow);
+        RogueNode startingNode = tileList.Find(t => t.mapRow == gm.CurrentRow && t.positionInRow == gm.CurrentPositionInRow);
         if (startingNode.rogueChilds.Contains(tile))
 		{
-            generalManager.selectedNode = tile;
-            generalManager.CurrentRow = tile.mapRow;
-            generalManager.CurrentPositionInRow = tile.positionInRow;
+            gm.selectedNode = tile;
+            gm.CurrentRow = tile.mapRow;
+            gm.CurrentPositionInRow = tile.positionInRow;
             StructureManager.MoveUnit(playerUnitTransform, tile);
         }
             
@@ -273,7 +271,7 @@ public class RogueManager : MonoBehaviour
     //Method called by the red "Abandon Run" button on the Rogue section UI
     public void AbandonRunClick()
 	{
-        if (!generalManager.IsGameInStandby)
+        if (!gm.IsGameInStandby)
             EndRun(1);
 	}
     public void UnitsCheckClick()
@@ -305,10 +303,10 @@ public class RogueManager : MonoBehaviour
     public static void MerchantBuyClick(int objectBoughtIndex)
 	{
 		RogueManager rm = GameObject.Find(GeneralManager.ROGUE_MANAGER_OBJ_NAME).GetComponent<RogueManager>();
-		if (rm.MerchantShop.BuyItem(objectBoughtIndex, rm.generalManager.Gold, out int newGoldAmount))
+		if (rm.MerchantShop.BuyItem(objectBoughtIndex, rm.gm.Gold, out int newGoldAmount))
 		{
-            rm.generalManager.Gold = newGoldAmount;
-            rm.StructureManager.ClearMerchantItem(objectBoughtIndex, rm.generalManager.Gold);
+            rm.gm.Gold = newGoldAmount;
+            rm.StructureManager.ClearMerchantItem(objectBoughtIndex, rm.gm.Gold);
         }
 	}
 

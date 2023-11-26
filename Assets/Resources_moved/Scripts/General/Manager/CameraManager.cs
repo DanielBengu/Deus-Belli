@@ -34,13 +34,17 @@ public class CameraManager : MonoBehaviour
                 RotateItem(objectToMove);
                 break;
 			case GeneralManager.CurrentSection.Rogue:
-                MoveItem(objectToMove, options);
+                float[] clampValues = GetCameraClamp(options.MapLength);
+                MoveItemByMouseInput(objectToMove, clampValues[0], clampValues[1]);
                 break;
 			case GeneralManager.CurrentSection.Custom:
                 if (Input.GetMouseButton((int)MouseButton.Right))
                     RotateItem(objectToMove);
                 else if (Input.GetMouseButton((int)MouseButton.Middle))
-                    MoveItem(objectToMove, options);
+				{
+                    float[] clampValuesCustom = options.GetMovementClamp();
+                    MoveItemByMouseInput(objectToMove, clampValuesCustom[0], clampValuesCustom[1]);
+                }
                 else
                     return;
                 break;
@@ -49,18 +53,21 @@ public class CameraManager : MonoBehaviour
 		}
     }
 
-    static void MoveItem(Transform objectToMove, CameraMovementOptions options)
+    static void MoveItemByMouseInput(Transform objectToMove, float xMin, float xMax)
 	{
-        float[] clampValues = options.GetMovementClamp();
-        float xMin = clampValues[0];
-        float xMax = clampValues[1];
-
         float moveHorizontalRogue = Input.GetAxis("Mouse X");
 
         Vector3 position = objectToMove.position;
         position.x += moveHorizontalRogue * movementSpeed;
 
         position.x = Mathf.Clamp(position.x, xMin, xMax);
+        objectToMove.position = position;
+    }
+    static void MoveItemToPosition(Transform objectToMove, float targetX)
+    {
+        Vector3 position = objectToMove.position;
+        position.x = targetX;
+
         objectToMove.position = position;
     }
 
@@ -124,8 +131,22 @@ public class CameraManager : MonoBehaviour
         isOutOfFocus = status;
     }
 
-    public Transform GetCameraPosition(){
-        return transform;
+    static float[] GetCameraClamp(int mapLength)
+    {
+        float maxX = mapLength * -275;
+        return new[] { maxX, -400f };
+    }
+
+    static float[] GetMovableObjectClamp(int mapLength)
+    {
+        float maxX = mapLength * -275;
+        return new[] { maxX, -400f };
+    }
+
+    public void SetupRogueCamera(Transform objectToSetup, int mapPosition, int mapLength)
+	{
+        float[] xClamp = GetMovableObjectClamp(mapLength);
+        MoveItemToPosition(objectToSetup, xClamp[1]);
     }
 }
 
@@ -133,25 +154,26 @@ public class CameraMovementOptions
 {
     float _minMovementValue = -1;
     float _maxMovementValue = -1;
-    Transform _objectRotator = null;
 
-    #region Constructors
-    public CameraMovementOptions(float minClamp, float maxClamp)
+    public int MapLength { get; set; } = -1;
+    public Transform Rotator { get; set; } = null;
+
+	#region Constructors
+	public CameraMovementOptions()
+	{
+
+	}
+	public CameraMovementOptions(float minClamp, float maxClamp)
     {
         _minMovementValue = minClamp;
         _maxMovementValue = maxClamp;
-    }
-
-    public CameraMovementOptions(Transform rotator)
-    {
-        _objectRotator = rotator;
     }
 
     public CameraMovementOptions(float minClamp, float maxClamp, Transform rotator)
     {
         _minMovementValue = minClamp;
         _maxMovementValue = maxClamp;
-        _objectRotator = rotator;
+        Rotator = rotator;
     }
     #endregion
 
@@ -160,11 +182,6 @@ public class CameraMovementOptions
     {
         _minMovementValue = minValue;
         _maxMovementValue = maxValue;
-    }
-
-    public void SetObjectRotator(Transform rotator)
-    {
-        _objectRotator = rotator;
     }
     #endregion
 
@@ -176,7 +193,7 @@ public class CameraMovementOptions
 
     public Transform GetRotator()
     {
-        return _objectRotator;
+        return Rotator;
     }
     #endregion
 }
