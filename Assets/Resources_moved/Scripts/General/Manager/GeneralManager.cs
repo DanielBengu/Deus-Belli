@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using Steamworks;
 
 public class GeneralManager : MonoBehaviour
 {
@@ -216,13 +217,13 @@ public class GeneralManager : MonoBehaviour
                 break;
 			case RogueTileType.Event:
                 eventSectionInstance = Instantiate(eventSectionPrefab);
-                rogueManager.StructureManager.uiManager.SetEventVariables(node.currentEvent);
+                rogueManager.structureManager.uiManager.SetEventVariables(node.currentEvent);
                 rogueManager.CurrentEvent = node.currentEvent;
                 break;
             case RogueTileType.Merchant:
                 merchantSectionInstance = Instantiate(merchantSectionPrefab);
-                rogueManager.StructureManager.uiManager.SetMerchantVariables(runData.gold);
-                rogueManager.StructureManager.InstantiateMerchantItems(node.merchant.ItemList);
+                rogueManager.structureManager.uiManager.SetMerchantVariables(runData.gold);
+                rogueManager.structureManager.InstantiateMerchantItems(node.merchant.ItemList);
                 rogueManager.MerchantShop = node.merchant;
                 break;
 		}
@@ -240,6 +241,11 @@ public class GeneralManager : MonoBehaviour
 
         currentSection = CurrentSection.Rogue;
     }
+
+    public void CompleteRun()
+	{
+        AchievementManager.CompleteRun("Agbara");
+	}
 
     public static void CloseRun()
 	{

@@ -135,11 +135,13 @@
     <Compile Include="Assets\Resources_moved\Scripts\GodsArchive\InterfacesAndClasses\Encounter.cs" />
     <Compile Include="Assets\Polyart\PolyartStudio\SharedResources\CritiasFoliage\Examples\ExampleRuntimeSettings.cs" />
     <Compile Include="Assets\Resources_moved\Scripts\Menu\NewGameManager.cs" />
+    <Compile Include="Assets\Scripts\Steamworks.NET\SteamManager.cs" />
     <Compile Include="Assets\Polyart\PolyartStudio\SharedResources\CritiasFoliage\Code\FoliageType.cs" />
     <Compile Include="Assets\Resources_moved\Scripts\Custom Creator\CustomCreatorManager.cs" />
     <Compile Include="Assets\Resources_moved\Scripts\Fight\Classes\Pathfinding.cs" />
     <Compile Include="Assets\Resources_moved\Scripts\Menu\TextMenu.cs" />
     <Compile Include="Assets\Polyart\PolyartStudio\SharedResources\CritiasFoliage\Code\FoliageCaching.cs" />
+    <Compile Include="Assets\Resources_moved\Scripts\General\Manager\AchievementManager.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Assets\TextMesh Pro\Shaders\TMPro.cginc" />

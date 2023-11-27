@@ -8,17 +8,26 @@ public class MainMenu: MonoBehaviour
     [SerializeField]
     GameObject OptionPrefab;
     [SerializeField]
+    GameObject StartPrefab;
+    [SerializeField]
     GameObject NewGamePrefab;
+    [SerializeField]
+    GameObject ArchivePrefab;
     [SerializeField]
     Button ContinueText;
     [SerializeField]
     TextMeshProUGUI ContinueInfoText;
 
+    GameObject currentSection;
+
     private void Start()
 	{
-        bool isRunOngoing = PlayerPrefs.GetInt(GeneralManager.ONGOING_RUN) != 0;
-        ContinueText.interactable = isRunOngoing;
-        ContinueInfoText.text = isRunOngoing ? GetContinueInfoText() : string.Empty;
+        currentSection = transform.GetChild(0).gameObject;
+        bool runIsOnGoing = PlayerPrefs.GetInt(GeneralManager.ONGOING_RUN) != 0;
+
+        ContinueText.interactable = runIsOnGoing;
+        if(runIsOnGoing)
+            ContinueInfoText.text = GetContinueInfoText();
     }
 
     string GetContinueInfoText()
@@ -28,31 +37,36 @@ public class MainMenu: MonoBehaviour
         return $"{godSelected}: {goldAccumulated}g";
     }
 
-	public void NewGame(){
-        GameObject mainScene = GameObject.Find("Main");
-        GeneratePrefab(NewGamePrefab, "NewGame");
-        Destroy(mainScene);
+    public void SwitchSection(GameObject prefabToInstantiate, Vector3 position)
+	{
+        Destroy(currentSection);
+        currentSection = Instantiate(prefabToInstantiate, position, Quaternion.identity, transform);
     }
 
-    public void ContinueRun(){
+    #region Buttons
+    public void NewGame()
+    {
+        SwitchSection(NewGamePrefab, new(100, -300, 0));
+    }
+
+    public void ContinueRun()
+    {
         ScenesManager.LoadSceneAsync(ScenesManager.Scenes.Fight);
     }
 
     public void Custom()
-	{
+    {
         ScenesManager.LoadSceneAsync(ScenesManager.Scenes.CustomCreator);
     }
 
-    public void Options(){
-        GameObject mainScene = GameObject.Find("Main");
-
-        GeneratePrefab(OptionPrefab, "Options");
-        Destroy(mainScene);
+    public void Options()
+    {
+        SwitchSection(OptionPrefab, new(0, 0, 0));
     }
 
-    public static GameObject GeneratePrefab(GameObject prefab, string name){
-        GameObject Options = Instantiate(prefab,new Vector3(600, 250, 0),Quaternion.identity);
-        Options.name = name;
-        return Options;
+    public void Archive()
+    {
+        SwitchSection(ArchivePrefab, new(0, 0, 0));
     }
+    #endregion
 }

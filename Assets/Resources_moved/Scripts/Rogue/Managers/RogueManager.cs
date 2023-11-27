@@ -9,7 +9,7 @@ public class RogueManager : MonoBehaviour
     const int MAXIMUM_NODES = 4;
 
     public GeneralManager gm;
-    public StructureManager StructureManager { get; set; }
+    public StructureManager structureManager;
 
     public RogueNode origin;
     public GameObject tile;
@@ -22,7 +22,7 @@ public class RogueManager : MonoBehaviour
 
 	public bool IsGameOver { get { return gm.CurrentRow == MapLength; } }
 
-	public bool IsAnyUnitMoving { get { return StructureManager.IsObjectMoving; } }
+	public bool IsAnyUnitMoving { get { return structureManager.IsObjectMoving; } }
 
     public bool IsGameInStandby { get { return gm.IsGameInStandby; } }
     public DB_Event CurrentEvent { get; set; }
@@ -30,7 +30,7 @@ public class RogueManager : MonoBehaviour
 
 	private void Update()
 	{
-        if (StructureManager.MovementTick() == 1)
+        if (structureManager.MovementTick() == 1)
             StartEncounter();
     }
 
@@ -50,7 +50,7 @@ public class RogueManager : MonoBehaviour
             gameScreen = GameScreens.RogueVictoryScreen;
 
         if(gameScreen != GameScreens.Default)
-            StructureManager.GetGameScreen(gameScreen, gm.Gold);
+            structureManager.GetGameScreen(gameScreen, gm.Gold);
 	}
 
     public void SetupRogue(StructureManager structureManager, int currentRow, int currentPositionOnRow, int masterSeed)
@@ -60,8 +60,8 @@ public class RogueManager : MonoBehaviour
         gm.CurrentRow = currentRow;
         gm.CurrentPositionInRow = currentPositionOnRow;
 
-        StructureManager = structureManager;
-        StructureManager.uiManager.SetRogueVariables(gm.Gold, gm.GodSelected.GetName(), gm.runData.masterSeed);
+        this.structureManager = structureManager;
+        this.structureManager.uiManager.SetRogueVariables(gm.Gold, gm.GodSelected.GetName(), gm.runData.masterSeed);
 
         seedList.Add(SeedType.Master, masterSeed);
         seedList.Add(SeedType.RogueTile, RandomManager.GetRandomValue(masterSeed, 0, 99999));
@@ -120,7 +120,7 @@ public class RogueManager : MonoBehaviour
             int nodeIndex = tileList.Count + i + 1;
             int nodeSeed = seedList[SeedType.RogueTile] * nodeIndex;
 
-            newNodes.Add(StructureManager.GenerateRogueTile(row, positionOnRow, maxRowOfMap, nodeIndex, nodeSeed, tile.transform, firstNode, this));
+            newNodes.Add(structureManager.GenerateRogueTile(row, positionOnRow, maxRowOfMap, nodeIndex, nodeSeed, tile.transform, firstNode, this));
         }
         
         if(newNodes != null)
@@ -250,7 +250,7 @@ public class RogueManager : MonoBehaviour
 
     public void GenerateNewNodeLines()
 	{
-        StructureManager.GenerateRogueLine(tileList);
+        structureManager.GenerateRogueLine(tileList);
     }
 
     public void NodeClicked(RogueNode tile)
@@ -263,7 +263,7 @@ public class RogueManager : MonoBehaviour
             gm.selectedNode = tile;
             gm.CurrentRow = tile.mapRow;
             gm.CurrentPositionInRow = tile.positionInRow;
-            StructureManager.MoveUnit(playerUnitTransform, tile);
+            structureManager.MoveUnit(playerUnitTransform, tile);
         }
             
     }
@@ -306,7 +306,7 @@ public class RogueManager : MonoBehaviour
 		if (rm.MerchantShop.BuyItem(objectBoughtIndex, rm.gm.Gold, out int newGoldAmount))
 		{
             rm.gm.Gold = newGoldAmount;
-            rm.StructureManager.ClearMerchantItem(objectBoughtIndex, rm.gm.Gold);
+            rm.structureManager.ClearMerchantItem(objectBoughtIndex, rm.gm.Gold);
         }
 	}
 
