@@ -20,43 +20,63 @@ MonoBehaviour:
   - m_GUID: 4517214e5a7fe5840a839bd0861f0aa5
     m_Address: Sprite/Floaty
     m_ReadOnly: 0
-    m_SerializedLabels: []
+    m_SerializedLabels:
+    - Trait
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 3567bfb1584d1d242962cf9305429d83
     m_Address: Sprite/Healthy
     m_ReadOnly: 0
-    m_SerializedLabels: []
+    m_SerializedLabels:
+    - Trait
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 5f267273e6d2f694295a05757dc9d750
     m_Address: Sprite/Magic_Defence
     m_ReadOnly: 0
-    m_SerializedLabels: []
+    m_SerializedLabels:
+    - Trait
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: b6c2b9db54967f04ea3e8d2cb14664f2
     m_Address: Sprite/Overload
     m_ReadOnly: 0
-    m_SerializedLabels: []
+    m_SerializedLabels:
+    - Trait
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 6e732c6a9dfacc84d844074fa1031259
     m_Address: Sprite/Regeneration
     m_ReadOnly: 0
-    m_SerializedLabels: []
+    m_SerializedLabels:
+    - Trait
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 2043344eba5405a45a45f00b9e5d9a03
     m_Address: Sprite/Second_Wind
     m_ReadOnly: 0
-    m_SerializedLabels: []
+    m_SerializedLabels:
+    - Trait
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: ddc9446e9e2442441b94c60fe097e8b9
     m_Address: Sprite/Speedy
     m_ReadOnly: 0
-    m_SerializedLabels: []
+    m_SerializedLabels:
+    - Trait
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 59e965b386a200c46b0f0fe84a21c0eb
     m_Address: Sprite/Strong
     m_ReadOnly: 0
-    m_SerializedLabels: []
+    m_SerializedLabels:
+    - Trait
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 8471b212863fe7a4999baab4e2f9f28a
     m_Address: Sprite/Tanky
     m_ReadOnly: 0
-    m_SerializedLabels: []
+    m_SerializedLabels:
+    - Trait
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: b516c9f2d7619b24093e391264575d2f
     m_Address: Sprite/Wealthy
     m_ReadOnly: 0
-    m_SerializedLabels: []
+    m_SerializedLabels:
+    - Trait
+    FlaggedDuringContentUpdateRestriction: 0
   m_ReadOnly: 0
   m_Settings: {fileID: 11400000, guid: 42fa5884c9964964993dbdd708fbd850, type: 2}
   m_SchemaSet:
