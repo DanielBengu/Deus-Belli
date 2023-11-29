@@ -56,13 +56,13 @@ public class StructureManager : MonoBehaviour
     public RogueNode GenerateRogueTile(int currentRow, int positionOnRow, int maxRowOnMap, int nodeIndex, int nodeSeed, Transform origin, Transform firstNode, RogueManager rm)
 	{
         int randomLength = RandomManager.GetRandomValue(nodeSeed, 3, 6);
-        Vector3 tilePosition = origin.position;
-        float precedentRowX = firstNode.transform.position.x + (450 * (currentRow - 1));
-        tilePosition.x = precedentRowX + 150 + (50 * randomLength); //sourceTile.transform.position.x + 150 + (50 * randomLength);
-        tilePosition.z = firstNode.transform.position.z + 200 - (200 * positionOnRow);
+        Vector3 tilePosition = origin.localPosition;
+        float precedentRowX = firstNode.transform.position.x + (15 * (currentRow - 1));
+        tilePosition.x = precedentRowX + 5 + (randomLength); //sourceTile.transform.position.x + 150 + (50 * randomLength);
+        tilePosition.y = firstNode.transform.position.y;
+        tilePosition.z = firstNode.transform.position.z + 5 - (5 * positionOnRow);
 
-        GameObject newTile = Instantiate(origin.gameObject, tilePosition, origin.rotation, firstNode);
-        newTile.transform.localScale = new Vector3(1, 1, 1);
+        GameObject newTile = Instantiate(origin.gameObject, tilePosition, Quaternion.identity, firstNode);
         RogueNode newTileScript = newTile.GetComponent<RogueNode>();
         RogueTileType typeOfNode = GenerateRogueNodeType(currentRow, maxRowOnMap, rm, nodeIndex);
         newTileScript.SetupTile(rm, typeOfNode, currentRow, positionOnRow, nodeIndex, nodeSeed);

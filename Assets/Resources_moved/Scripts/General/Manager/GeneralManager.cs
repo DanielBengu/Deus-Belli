@@ -217,13 +217,13 @@ public class GeneralManager : MonoBehaviour
                 break;
 			case RogueTileType.Event:
                 eventSectionInstance = Instantiate(eventSectionPrefab);
-                rogueManager.structureManager.uiManager.SetEventVariables(node.currentEvent);
+                rogueManager.sm.uiManager.SetEventVariables(node.currentEvent);
                 rogueManager.CurrentEvent = node.currentEvent;
                 break;
             case RogueTileType.Merchant:
                 merchantSectionInstance = Instantiate(merchantSectionPrefab);
-                rogueManager.structureManager.uiManager.SetMerchantVariables(runData.gold);
-                rogueManager.structureManager.InstantiateMerchantItems(node.merchant.ItemList);
+                rogueManager.sm.uiManager.SetMerchantVariables(runData.gold);
+                rogueManager.sm.InstantiateMerchantItems(node.merchant.ItemList);
                 rogueManager.MerchantShop = node.merchant;
                 break;
 		}
@@ -232,11 +232,11 @@ public class GeneralManager : MonoBehaviour
     void GenerateRogueSection(bool isDefeat)
     {
         rogueSectionInstance = Instantiate(rogueSectionPrefab);
-        rogueManager = GameObject.Find(ROGUE_MANAGER_OBJ_NAME).GetComponent<RogueManager>();
+        rogueManager = rogueSectionInstance.transform.Find(ROGUE_MANAGER_OBJ_NAME).GetComponent<RogueManager>();
 
         cameraManager.SetupRogueCamera(rogueSectionInstance.transform.GetChild(0), runData.currentRow, rogueManager.MapLength);
 
-        rogueManager.SetupRogue(structureManager, runData.currentRow, runData.currentPositionInRow, runData.masterSeed);
+        rogueManager.SetupRogue(structureManager, this, runData.currentRow, runData.currentPositionInRow, runData.masterSeed);
         rogueManager.IsRunCompleted(isDefeat);
 
         currentSection = CurrentSection.Rogue;
