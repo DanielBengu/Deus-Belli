@@ -36,7 +36,7 @@ public class CustomCreatorManager : MonoBehaviour
 
 		baseLevel.StartLevel(0, RogueTileType.Fight, 0, 0, new Ataiku(), mapRows);
 		baseLevel.GenerateTerrain(true, mapObjects);
-		var tiles = _structureManager.GenerateFightTiles(baseLevel.tilesDict, null, mapObjects, baseLevel.TopLeftSquarePositionX, baseLevel.YPosition, baseLevel.TopLeftSquarePositionZ, mapRows, mapColumns);
+		var tiles = _structureManager.GenerateFightTiles(baseLevel.tilesDict, null, baseLevel.TopLeftSquarePositionX, baseLevel.YPosition, baseLevel.TopLeftSquarePositionZ, mapRows, mapColumns);
 		_mapEditorManager.mapRows = mapRows;
 		_mapEditorManager.mapColumns = mapColumns;
 		_mapEditorManager.currentSection = MapEditorManager.CustomSection.Edit_Custom_Map;
@@ -68,7 +68,7 @@ public class CustomCreatorManager : MonoBehaviour
 		level.StartLevel(0, RogueTileType.Fight, 0, 0, new Ataiku(), mapRows);
 		level.GenerateTerrain(true, parent, mapLayout);
 		int xPositionForMap = isPreview ? 800 : level.TopLeftSquarePositionX;
-		_structureManager.GenerateFightTiles(level.tilesDict, null, mapObjects, xPositionForMap, level.YPosition, level.TopLeftSquarePositionZ, mapRows, mapColumns);
+		_structureManager.GenerateFightTiles(level.tilesDict, null, xPositionForMap, level.YPosition, level.TopLeftSquarePositionZ, mapRows, mapColumns);
 	}
 
 	#endregion

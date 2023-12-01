@@ -1,7 +1,10 @@
+using System;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.UI;
+using static Pathfinding;
 
 public class StructureManager : MonoBehaviour
 {
@@ -22,14 +25,13 @@ public class StructureManager : MonoBehaviour
 
 	public Dictionary<int, Tile> SetupFightSection(Dictionary<int, GameObject> tileList, FightManager manager, int topX, int y, int topZ, int X_Length, int Y_Length)
 	{
-        Transform objectsParent = GameObject.Find("Fight Objects").transform;
-        var mapTiles = GenerateFightTiles(tileList, manager, objectsParent, topX, y, topZ, X_Length, Y_Length);
+        var mapTiles = GenerateFightTiles(tileList, manager, topX, y, topZ, X_Length, Y_Length);
         pathfinding = new(mapTiles, X_Length, Y_Length);
         actionPerformer.pathfinding = pathfinding;
         return mapTiles;
     }
 
-    public Dictionary<int, Tile> GenerateFightTiles(Dictionary<int, GameObject> tileList, FightManager manager, Transform objectsParent, int topX, int y, int topZ, int XLength, int YLength)
+    public Dictionary<int, Tile> GenerateFightTiles(Dictionary<int, GameObject> tileList, FightManager manager, int topX, int y, int topZ, int XLength, int YLength)
     {
         Dictionary<int, Tile> mapTiles = new();
         Debug.Log("START TILE GENERATION");
@@ -126,8 +128,8 @@ public class StructureManager : MonoBehaviour
             uiManager.SetInfoPanel(false);
     }
 
-    public List<Tile> FindPathToDestination(Tile targetTile, bool selectTiles){
-        List<Tile> path = pathfinding.FindPathToDestination(targetTile);
+    public List<Tile> FindPathToDestination(Tile targetTile, bool selectTiles, int startingTileNumber){
+		List<Tile> path = pathfinding.FindPathToDestination(targetTile, out _, startingTileNumber);
         if(selectTiles)
             spriteManager.GenerateTileSelection(path);
         return path;
@@ -156,9 +158,9 @@ public class StructureManager : MonoBehaviour
         return pathfinding.CalculateMapTilesDistance(startingUnit);
     }
     // -1 if nothing was queued for movement, 0 if object is still moving, 1 if object is done moving
-    public int MovementTick()
+    public void MovementTick(float speed, Action callback)
     {
-        return actionPerformer.movement.MovementTick();
+        actionPerformer.movement.MovementTick(speed, callback);
     }
     public void MoveUnit(Unit unit, Tile targetTile, bool isTeleport)
     {
@@ -173,10 +175,13 @@ public class StructureManager : MonoBehaviour
     }
     public bool IsAttackPossible(Unit attacker, Unit defender)
 	{
-        //Unit out of movement range
-        if (attacker && !attacker.GetPossibleAttacks().Find(t => t.tileNumber == defender.CurrentTile.tileNumber))
+        if (!attacker || !defender)
             return false;
 
+        bool noAttacksInRange = !attacker.GetPossibleAttacks().Any(a => a.tileToAttack.tileNumber == defender.CurrentTile.tileNumber);
+
+		if(noAttacksInRange)
+            return false;
 
         return true;
 	}
@@ -207,14 +212,33 @@ public class StructureManager : MonoBehaviour
     {
         uiManager.GetScreen(screen, gold);
     }
-    public List<Tile> GetPossibleAttacksForUnit(Unit unit, bool selectTiles)
+    public List<PossibleAttack> GetPossibleAttacksForUnit(Unit unit, bool selectTiles, List<Tile> possibleMovements = null)
 	{
-        List<Tile> possibleAttacks = pathfinding.FindPossibleAttacks(unit);
+        //List<Tile> possibleAttacks = pathfinding.FindPossibleAttacks(unit);
+        List<PossibleAttack> possible = pathfinding.FindPossibleAttacks_New(unit, possibleMovements);
 
-        if (selectTiles)
-            SelectTiles(possibleAttacks, false);
+		if (selectTiles)
+            SelectTiles(possible.Select(a => a.tileToAttack).ToList(), false);
 
-        return possibleAttacks;
+        return possible;
+    }
+
+    public Tile CheapestTileToMoveTo(List<PossibleAttack> possibleAttacks, Unit attacker, Unit defender)
+    {
+        Tile lowestTile = possibleAttacks.First().tileToMoveTo;
+        float lowestCost = OUT_OF_BOUND_VALUE;
+		foreach (PossibleAttack possibleAttack in possibleAttacks.Where(a => a.tileToAttack.tileNumber == defender.CurrentTile.tileNumber))
+        {
+            Tile tile = pathfinding.FindPathToDestination(possibleAttack.tileToMoveTo, out float cost, attacker.CurrentTile.tileNumber).Last();
+            //If true, we found a cheaper road
+            if(cost < lowestCost)
+            {
+                lowestTile = tile;
+                lowestCost = cost;
+			}
+        }
+
+        return lowestTile;
     }
     public void SetInfoPanel(bool active, Unit unit = null)
     {
@@ -222,6 +246,8 @@ public class StructureManager : MonoBehaviour
     }
     public void SelectTiles(List<Tile> tilelist, bool clearBeforeSelecting, TileType tileType = TileType.Default)
     {
+        if (clearBeforeSelecting)
+
         spriteManager.GenerateTileSelection(tilelist, tileType);
     }
 

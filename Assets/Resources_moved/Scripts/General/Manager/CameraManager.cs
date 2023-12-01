@@ -1,5 +1,6 @@
 using Unity.VisualScripting;
 using UnityEngine;
+using static GeneralManager;
 
 public class CameraManager : MonoBehaviour
 {
@@ -8,36 +9,25 @@ public class CameraManager : MonoBehaviour
     public float minDistance = 1f;
     public float maxDistance = 10f;
 
-    // The current scroll distance
-    private float distance = 50f;
+    private static readonly float speedMod = 30.0f;//a speed modifier
 
-    private static float speedMod = 30.0f;//a speed modifier
-
-    public float scrollSpeed = 10f;
-
-    bool isOutOfFocus = false;
+    public static float scrollSpeed = 2500f;
 
     Vector3 defaultCameraPosition = new(670, 1070, 73);
     Quaternion defaultCameraRotation = Quaternion.Euler((float)33.3, 0, 0);
-
-    Vector3 cameraPositionOutOfFocus = new(670, 300, 640);
-    Quaternion rotationOutOfFocus = Quaternion.Euler(0, 0, 0);
-    Vector3 cameraPositionOnFocus = new(670, 690, 650);
-    Quaternion rotationOnFocus = Quaternion.Euler(40, 0, 0);
-    
-    public static void UpdatePositionOrRotation(Transform objectToMove, GeneralManager.CurrentSection section, CameraMovementOptions options = null)
+    public static void UpdatePositionOrRotation(Transform objectToMove, CurrentSection section, CameraMovementOptions options = null)
     {
         switch (section)
 		{
-			case GeneralManager.CurrentSection.Fight:
+			case CurrentSection.Fight:
                 if (Input.GetMouseButton((int)MouseButton.Right))
                 RotateItem(objectToMove);
                 break;
-			case GeneralManager.CurrentSection.Rogue:
+			case CurrentSection.Rogue:
                 float[] clampValues = GetCameraClamp(options.MapLength);
                 MoveItemByMouseInput(objectToMove, clampValues[0], clampValues[1]);
                 break;
-			case GeneralManager.CurrentSection.Custom:
+			case CurrentSection.Custom:
                 if (Input.GetMouseButton((int)MouseButton.Right))
                     RotateItem(objectToMove);
                 else if (Input.GetMouseButton((int)MouseButton.Middle))
@@ -63,13 +53,22 @@ public class CameraManager : MonoBehaviour
         position.x = Mathf.Clamp(position.x, xMin, xMax);
         objectToMove.position = position;
     }
-    static void MoveItemToPosition(Transform objectToMove, float targetX)
+    static void TeleportItemToPosition(Transform objectToMove, float targetX)
     {
         Vector3 position = objectToMove.position;
         position.x = targetX;
 
         objectToMove.position = position;
     }
+
+    static void MoveItem(Transform objectToMove, Vector3 direction, float scrollInput)
+    {
+		// Calculate the new distance based on the mouse wheel input
+		float distance = scrollInput * scrollSpeed;
+
+		// Move the camera along the blue axis by the distance
+		objectToMove.Translate(distance * Time.deltaTime * direction);
+	}
 
     static void RotateItem(Transform objectToMove)
 	{
@@ -82,36 +81,60 @@ public class CameraManager : MonoBehaviour
         transform.SetPositionAndRotation(defaultCameraPosition, defaultCameraRotation);
     }
 
-    public void ScrollWheel(float scroll, Transform rogueSection = null){
-        // Calculate the new distance based on the mouse wheel input
-        distance += scroll * scrollSpeed;
+    public void HandleScroll(float scroll, Transform objectToMove, CurrentSection section, int mapLength)
+	{
+		Vector3 direction = section == CurrentSection.Rogue ? Vector3.right : Vector3.forward;
+		MoveItem(objectToMove, direction, scroll);
 
-        // Get the scroll direction
-        int scrollDirection = (int)Mathf.Sign(scroll);
+        if(section == CurrentSection.Rogue)
+        {
+			float[] clampValues = GetCameraClamp(mapLength);
+			Vector3 objectPosition = objectToMove.position;
+			objectPosition.x = Mathf.Clamp(objectPosition.x, clampValues[0], clampValues[1]);
+		}
+	}
 
-        Transform objectToMove = rogueSection != null ? rogueSection : transform;
-        Vector3 direction = rogueSection != null ? Vector3.right : Vector3.forward;
-        // Move the camera along the blue axis by the distance
-        objectToMove.Translate(distance * scrollDirection * 1000 * Time.deltaTime * direction, Space.Self);
-
-        distance = 5f;
+    static float[] GetCameraClamp(int mapLength)
+    {
+        float maxX = mapLength * -275;
+        return new[] { maxX, -400f };
     }
 
-    /*
-    //Switch between the two camera states: In and Out of focus
-    public void CameraFocus(){
-        Transform cameraStart = cameraManager.GetCameraPosition();
-        Transform cameraTarget = cameraManager.GetCameraSwitchFocus();
-        if(IsCameraFocused){
-            structureManager.ClearSelectedTiles();
-            structureManager.SetInfoPanel(false, UnitSelected, infoPanel);
-        }
-        structureManager.StartObjectMovement(cameraStart, cameraTarget, 2500);
-        GameObject.Destroy(cameraTarget.gameObject);
+    static float[] GetMovableObjectClamp(int mapLength)
+    {
+        float maxX = mapLength * -275;
+        return new[] { maxX, -400f };
     }
-    */
 
-    public Transform GetCameraSwitchFocus(){
+    public void SetupRogueCamera(Transform objectToSetup, int mapLength)
+	{
+        float[] xClamp = GetMovableObjectClamp(mapLength);
+        TeleportItemToPosition(objectToSetup, xClamp[1]);
+    }
+
+	#region Switch Camera Focus (legacy)
+	/*
+	
+	bool isOutOfFocus = false;
+
+	Vector3 cameraPositionOutOfFocus = new(670, 300, 640);
+	Quaternion rotationOutOfFocus = Quaternion.Euler(0, 0, 0);
+	Vector3 cameraPositionOnFocus = new(670, 690, 650);
+	Quaternion rotationOnFocus = Quaternion.Euler(40, 0, 0);
+
+	//Switch between the two camera states: In and Out of focus
+	public void CameraFocus(){
+    Transform cameraStart = cameraManager.GetCameraPosition();
+    Transform cameraTarget = cameraManager.GetCameraSwitchFocus();
+    if(IsCameraFocused){
+	    structureManager.ClearSelectedTiles();
+	    structureManager.SetInfoPanel(false, UnitSelected, infoPanel);
+    }
+    structureManager.StartObjectMovement(cameraStart, cameraTarget, 2500);
+    GameObject.Destroy(cameraTarget.gameObject);
+    }
+
+        public Transform GetCameraSwitchFocus(){
         Transform cameraTarget = new GameObject().transform;
         if(isOutOfFocus){
             cameraTarget.SetPositionAndRotation(cameraPositionOnFocus, rotationOnFocus);
@@ -131,23 +154,9 @@ public class CameraManager : MonoBehaviour
         isOutOfFocus = status;
     }
 
-    static float[] GetCameraClamp(int mapLength)
-    {
-        float maxX = mapLength * -275;
-        return new[] { maxX, -400f };
-    }
+    */
 
-    static float[] GetMovableObjectClamp(int mapLength)
-    {
-        float maxX = mapLength * -275;
-        return new[] { maxX, -400f };
-    }
-
-    public void SetupRogueCamera(Transform objectToSetup, int mapPosition, int mapLength)
-	{
-        float[] xClamp = GetMovableObjectClamp(mapLength);
-        MoveItemToPosition(objectToSetup, xClamp[1]);
-    }
+	#endregion
 }
 
 public class CameraMovementOptions

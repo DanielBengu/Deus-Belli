@@ -104,10 +104,10 @@ public class GeneralManager : MonoBehaviour
             switch (currentSection)
             {
                 case CurrentSection.Fight:
-                    cameraManager.ScrollWheel(scrollWheelInput);
+                    cameraManager.HandleScroll(scrollWheelInput, cameraManager.transform, currentSection, -1);
                     break;
                 case CurrentSection.Rogue:
-                    cameraManager.ScrollWheel(scrollWheelInput, rogueSectionInstance.transform);
+                    cameraManager.HandleScroll(scrollWheelInput, rogueSectionInstance.transform, currentSection, rogueManager.MapLength);
                     rogueManager.GenerateNewNodeLines();
                     break;
             }
@@ -217,13 +217,13 @@ public class GeneralManager : MonoBehaviour
                 break;
 			case RogueTileType.Event:
                 eventSectionInstance = Instantiate(eventSectionPrefab);
-                rogueManager.sm.uiManager.SetEventVariables(node.currentEvent);
+                rogueManager.StructureManager.uiManager.SetEventVariables(node.currentEvent);
                 rogueManager.CurrentEvent = node.currentEvent;
                 break;
             case RogueTileType.Merchant:
                 merchantSectionInstance = Instantiate(merchantSectionPrefab);
-                rogueManager.sm.uiManager.SetMerchantVariables(runData.gold);
-                rogueManager.sm.InstantiateMerchantItems(node.merchant.ItemList);
+                rogueManager.StructureManager.uiManager.SetMerchantVariables(runData.gold);
+                rogueManager.StructureManager.InstantiateMerchantItems(node.merchant.ItemList);
                 rogueManager.MerchantShop = node.merchant;
                 break;
 		}
@@ -234,7 +234,7 @@ public class GeneralManager : MonoBehaviour
         rogueSectionInstance = Instantiate(rogueSectionPrefab);
         rogueManager = rogueSectionInstance.transform.Find(ROGUE_MANAGER_OBJ_NAME).GetComponent<RogueManager>();
 
-        cameraManager.SetupRogueCamera(rogueSectionInstance.transform.GetChild(0), runData.currentRow, rogueManager.MapLength);
+        cameraManager.SetupRogueCamera(rogueSectionInstance.transform.GetChild(0), rogueManager.MapLength);
 
         rogueManager.SetupRogue(structureManager, this, runData.currentRow, runData.currentPositionInRow, runData.masterSeed);
         rogueManager.IsRunCompleted(isDefeat);

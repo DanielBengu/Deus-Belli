@@ -45,13 +45,11 @@ public class NewGameManager : MonoBehaviour
 
     public IReligion LoadReligion(int religion)
 	{
-		switch (religion)
+		return religion switch
 		{
-            case 0:
-                return new Agbara();
-            default:
-                return new Agbara();
-		}
+			0 => new Agbara(),
+			_ => new Agbara(),
+		};
 	}
     
     public void LoadGods(IReligion religionSelected)

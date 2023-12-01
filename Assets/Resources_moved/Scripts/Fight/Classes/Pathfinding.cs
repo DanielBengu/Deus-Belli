@@ -128,22 +128,98 @@ public class Pathfinding
     {
         List<Tile> possibleAttacks = new();
         List<Tile> possibleMovements = CalculateMapTilesDistance(attacker);
-        foreach (var possibleMovementsTile in possibleMovements)
+        List<Tile> startingPointsForAttack = possibleMovements;
+        for (int i = 0; i < attacker.range; i++)
         {
-            List<Tile> neighboursTile = FindNeighbours(attacker, possibleMovementsTile, false).Where(t => t != null).ToList();
-            
-            foreach (var neighbour in neighboursTile)
+            List<Tile> newStartingPoint = new();
+            foreach (var tile in startingPointsForAttack)
             {
-                if (neighbour && neighbour.unitOnTile && neighbour.unitOnTile.faction != attacker.faction)
-                {
-                    possibleAttacks.Add(neighbour);
-                }
-            }
-        }
+				List<Tile> neighboursTile = FindNeighbours(attacker, tile, false).Where(t => t != null).ToList();
+                newStartingPoint.AddRange(neighboursTile);
+
+				foreach (var neighbour in neighboursTile)
+				{
+					if (neighbour && neighbour.unitOnTile && neighbour.unitOnTile.faction != attacker.faction)
+					{
+						possibleAttacks.Add(neighbour);
+					}
+				}
+
+                
+			}
+            startingPointsForAttack = newStartingPoint;
+		}
         return possibleAttacks;
     }
 
-    List<Tile> FindNeighbours(Unit sourceUnit, Tile source, bool calculateCosts){
+    //If needed we can optimize by removing from the search the tiles already searched in previous loops, somehow
+	public List<PossibleAttack> FindPossibleAttacks_New(Unit attacker, List<Tile> possibleMovements)
+	{
+        //If no list of possible movements was passed, we generate it
+        possibleMovements ??= CalculateMapTilesDistance(attacker);
+		List<PossibleAttack> possibleAttacks = new();
+		List<Tile> startingPointsForAttack = possibleMovements;
+		List<Tile> tilesToSearch = new();
+
+		foreach (var tile in possibleMovements)
+        {
+            tilesToSearch = new() { tile };
+            List<Tile> tempTiles = new();
+			for (int i = 0; i < attacker.range; i++)
+            {
+                foreach (var tileToSearch in tilesToSearch)
+                {
+					List<Tile> neighboursTile = FindNeighbours(attacker, tileToSearch, false).Where(t => t != null).ToList();
+					tempTiles.AddRange(neighboursTile);
+
+                    GetPossibleAttacksOnNeighbours(neighboursTile, tile, attacker.faction, possibleAttacks);
+				}
+                tilesToSearch.AddRange(tempTiles);
+                tempTiles= new();
+			}
+		}
+		/*for (int i = 0; i < attacker.range; i++)
+		{
+			List<Tile> newStartingPoint = new List<Tile>();
+			foreach (var tile in startingPointsForAttack)
+			{
+				List<Tile> neighboursTile = FindNeighbours(attacker, tile, false).Where(t => t != null).ToList();
+				newStartingPoint.AddRange(neighboursTile);
+
+				foreach (var neighbour in neighboursTile)
+				{
+					if (neighbour && neighbour.unitOnTile && neighbour.unitOnTile.faction != attacker.faction)
+					{
+						possibleAttacks.Add(neighbour);
+					}
+				}
+
+
+			}
+			startingPointsForAttack = newStartingPoint;
+		}*/
+		return possibleAttacks;
+	}
+
+	void GetPossibleAttacksOnNeighbours(List<Tile> neighboursTile, Tile tileOfOrigin, int attackerFaction, List<PossibleAttack> possibleAttacks)
+    {
+        foreach (var neighbour in neighboursTile)
+        {
+            if (!NeighbourHasAnEnemy(neighbour, attackerFaction))
+                continue;
+
+            PossibleAttack attack = new(neighbour, tileOfOrigin);
+            if(!possibleAttacks.Contains(attack))
+				possibleAttacks.Add(attack);
+		}
+			
+	}
+
+    bool NeighbourHasAnEnemy(Tile neighbour, int attackerFaction) {
+        return neighbour && neighbour.unitOnTile && neighbour.unitOnTile.faction != attackerFaction;
+	}
+
+	List<Tile> FindNeighbours(Unit sourceUnit, Tile source, bool calculateCosts){
         List<Tile> neighbours = new();
         foreach (var direction in directions)
         {
@@ -166,12 +242,13 @@ public class Pathfinding
     }
 
     //Returns the list of steps necessary to reach the destination tile with the least movement cost
-    public List<Tile> FindPathToDestination(Tile destination){
-        List<Tile> result = new(){destination};
+    public List<Tile> FindPathToDestination(Tile destination, out float cost, int startingTileNumber = -1){
+		float lowestTentativeCost;
+		List<Tile> result = new(){destination};
         Debug.Log($"Starting calculation at tile n.{result.Last()}");
         int failSafe = 0;
         while(true){
-            float lowestTentativeCost = OUT_OF_BOUND_VALUE;
+            lowestTentativeCost = OUT_OF_BOUND_VALUE;
             Tile lowestTile = null;
 
             foreach (var direction in directions)
@@ -185,13 +262,30 @@ public class Pathfinding
             }
 
             failSafe++;
-            if(result.Last().tentativeCost == 0 || failSafe == FAIL_SAFE_MAX)
+            //The tile from which we are searching the quickest path has a tentative cost of 0, so we use that to check whether we reached it
+            if((startingTileNumber == -1 && result.Last().tentativeCost == 0) 
+                || failSafe == FAIL_SAFE_MAX
+                || startingTileNumber == result.Last().tileNumber
+                )
                 break;
             
             Debug.Log($"Finding path: next tile n.{lowestTile.tileNumber}");
             result.Add(lowestTile);
         }
         result.Reverse();
-        return result;
+        cost = result.Last().tentativeCost;
+		return result;
+    }
+
+    public struct PossibleAttack
+    {
+        public Tile tileToAttack;
+        public Tile tileToMoveTo;
+
+        public PossibleAttack(Tile tileToAttack, Tile tileToMoveTo)
+        {
+            this.tileToAttack = tileToAttack;
+            this.tileToMoveTo = tileToMoveTo;
+        }
     }
 }

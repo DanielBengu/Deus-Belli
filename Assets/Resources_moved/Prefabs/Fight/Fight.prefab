@@ -273,6 +273,10 @@ PrefabInstance:
       value: 7
       objectReference: {fileID: 0}
     - target: {fileID: 6106894816546113674, guid: 99d4b6185d8babd4b8b8caab0b5d7561, type: 3}
+      propertyPath: unitsSpeed
+      value: 800
+      objectReference: {fileID: 0}
+    - target: {fileID: 6106894816546113674, guid: 99d4b6185d8babd4b8b8caab0b5d7561, type: 3}
       propertyPath: CameraFirstX
       value: 670
       objectReference: {fileID: 0}

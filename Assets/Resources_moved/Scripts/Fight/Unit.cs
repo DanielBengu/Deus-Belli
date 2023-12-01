@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using UnityEngine;
+using static Pathfinding;
 
 public class Unit : MonoBehaviour
 {
@@ -47,9 +48,9 @@ public class Unit : MonoBehaviour
         CurrentTile.OnMouseDown();
     }
 
-    public List<Tile> GetPossibleAttacks()
+    public List<PossibleAttack> GetPossibleAttacks(List<Tile> possibleMovements = null)
 	{
-        return FightManager.GetPossibleAttacksForUnit(this);
+        return FightManager.GetPossibleAttacksForUnit(this, possibleMovements);
     }
 
     List<Tile> GetPossibleMovements()
@@ -72,6 +73,7 @@ public class Unit : MonoBehaviour
         startingTileNumber = int.Parse(data[7]);
     }
 
+    //Called at the end of an attack animation
     public void StartDamageForOpponent()
 	{
         FightManager.MakeUnitTakeDamage();

@@ -12,11 +12,6 @@ public class ActionPerformer
 
     public Unit enemyInQueueForAnimation;
 
-    public bool IsUnitNotIdle(Unit unit)
-	{
-        return false;
-    }
-
     public void StartAction(ActionPerformed action, GameObject source, GameObject target)
     {
         switch (action)
@@ -62,7 +57,7 @@ public class ActionPerformer
 
     public void MoveUnit(Unit unit, Tile targetTile)
     {
-        List<Tile> tilesPath = pathfinding.FindPathToDestination(targetTile);
+        List<Tile> tilesPath = pathfinding.FindPathToDestination(targetTile, out float cost);
         movement.MoveUnit(unit.transform, tilesPath.Select(t => t.transform).ToList(), true);
     }
 

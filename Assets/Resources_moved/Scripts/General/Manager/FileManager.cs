@@ -42,18 +42,13 @@ public class FileManager : MonoBehaviour
 		return playerUnits;
 	}
 
-	public static void LoadUnit(GameObject prefab)
-	{
-
-	}
-
 	public static void SaveUnits(List<GameObject> units, bool overwriteCurrentList)
 	{
 		List<string> dataLines = new();
 		foreach (var item in units)
 		{
 			Unit unitScript = item.GetComponent<Unit>();
-			dataLines.Add($"{item.name.Substring(0, 6)}#{unitScript.unitName}#{unitScript.unitImage.name}#{unitScript.hpMax}#{unitScript.movementMax}#{unitScript.attack}#{unitScript.range}#{unitScript.startingTileNumber}");
+			dataLines.Add($"{item.name[..6]}#{unitScript.unitName}#{unitScript.unitImage.name}#{unitScript.hpMax}#{unitScript.movementMax}#{unitScript.attack}#{unitScript.range}#{unitScript.startingTileNumber}");
 		}
 
 		if (overwriteCurrentList)

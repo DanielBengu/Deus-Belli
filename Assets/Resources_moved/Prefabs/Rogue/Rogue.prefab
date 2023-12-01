@@ -986,6 +986,10 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 853723031407629728}
     - target: {fileID: -4015313132077449474, guid: ee6197ad340c22942bbd95779136a1e5, type: 3}
+      propertyPath: playerSpeed
+      value: 20
+      objectReference: {fileID: 0}
+    - target: {fileID: -4015313132077449474, guid: ee6197ad340c22942bbd95779136a1e5, type: 3}
       propertyPath: roguePrefab
       value: 
       objectReference: {fileID: 6871625446447118757}

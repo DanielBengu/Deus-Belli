@@ -8,36 +8,41 @@ public class RogueManager : MonoBehaviour
     const int MINIMUM_NODES = 2;
     const int MAXIMUM_NODES = 4;
 
-    public GeneralManager gm;
-    public StructureManager sm;
+    public GeneralManager GeneralManager { get; set; }
+    public StructureManager StructureManager { get; set; }
 
     public RogueNode origin;
     public GameObject tile;
 	public readonly List<RogueNode> tileList = new();
 
     public Transform playerUnitTransform;
+    public float playerSpeed;
     static readonly int MAP_LENGTH = 10;
     public int MapLength { get; set; }
     public Dictionary<SeedType, int> seedList = new();
 
-	public bool IsGameOver { get { return gm.CurrentRow == MapLength; } }
+	public bool IsGameOver { get { return GeneralManager.CurrentRow == MapLength; } }
 
-	public bool IsAnyUnitMoving { get { return sm.IsObjectMoving; } }
+	public bool IsAnyUnitMoving { get { return StructureManager.IsObjectMoving; } }
 
-    public bool IsGameInStandby { get { return gm.IsGameInStandby; } }
+    public bool IsGameInStandby { get { return GeneralManager.IsGameInStandby; } }
     public DB_Event CurrentEvent { get; set; }
 	public Merchant MerchantShop { get; set; }
 
-	private void Update()
+    private void Update()
 	{
-        if (sm.MovementTick() == 1)
-            StartEncounter();
+        ManageMovement();
     }
+
+    void ManageMovement()
+    {
+        StructureManager.MovementTick(playerSpeed, StartEncounter);
+	}
 
     void StartEncounter()
 	{
-        RogueNode selectedNode = gm.selectedNode;
-        gm.StartSection(selectedNode.rogueTileType);
+        RogueNode selectedNode = GeneralManager.selectedNode;
+        GeneralManager.StartSection(selectedNode.rogueTileType);
     }
 
     public void IsRunCompleted(bool isDefeat)
@@ -46,21 +51,21 @@ public class RogueManager : MonoBehaviour
 
         if (isDefeat)
             gameScreen = GameScreens.RogueDefeatScreen;
-        else if (gm.CurrentRow == MapLength)
+        else if (GeneralManager.CurrentRow == MapLength)
             gameScreen = GameScreens.RogueVictoryScreen;
 
         if(gameScreen != GameScreens.Default)
-            sm.GetGameScreen(gameScreen, gm.Gold);
+            StructureManager.GetGameScreen(gameScreen, GeneralManager.Gold);
 	}
 
     public void SetupRogue(StructureManager sm, GeneralManager gm, int currentRow, int currentPositionOnRow, int masterSeed)
 	{
-        this.gm = gm;
+        GeneralManager = gm;
         gm.CurrentRow = currentRow;
         gm.CurrentPositionInRow = currentPositionOnRow;
 
-        this.sm = sm;
-        this.sm.uiManager.SetRogueVariables(gm.Gold, gm.GodSelected.GetName(), gm.runData.masterSeed);
+        StructureManager = sm;
+        StructureManager.uiManager.SetRogueVariables(gm.Gold, gm.GodSelected.GetName(), gm.runData.masterSeed);
 
         seedList.Add(SeedType.Master, masterSeed);
         seedList.Add(SeedType.RogueTile, RandomManager.GetRandomValue(masterSeed, 0, 99999));
@@ -119,7 +124,7 @@ public class RogueManager : MonoBehaviour
             int nodeIndex = tileList.Count + i + 1;
             int nodeSeed = seedList[SeedType.RogueTile] * nodeIndex;
 
-            newNodes.Add(sm.GenerateRogueTile(row, positionOnRow, maxRowOfMap, nodeIndex, nodeSeed, tile.transform, firstNode, this));
+            newNodes.Add(StructureManager.GenerateRogueTile(row, positionOnRow, maxRowOfMap, nodeIndex, nodeSeed, tile.transform, firstNode, this));
         }
         
         if(newNodes != null)
@@ -249,20 +254,20 @@ public class RogueManager : MonoBehaviour
 
     public void GenerateNewNodeLines()
 	{
-        sm.GenerateRogueLine(tileList);
+        StructureManager.GenerateRogueLine(tileList);
     }
 
     public void NodeClicked(RogueNode tile)
 	{
 		if (IsAnyUnitMoving) return;
 
-        RogueNode startingNode = tileList.Find(t => t.mapRow == gm.CurrentRow && t.positionInRow == gm.CurrentPositionInRow);
+        RogueNode startingNode = tileList.Find(t => t.mapRow == GeneralManager.CurrentRow && t.positionInRow == GeneralManager.CurrentPositionInRow);
         if (startingNode.rogueChilds.Contains(tile))
 		{
-            gm.selectedNode = tile;
-            gm.CurrentRow = tile.mapRow;
-            gm.CurrentPositionInRow = tile.positionInRow;
-            sm.MoveUnit(playerUnitTransform, tile);
+            GeneralManager.selectedNode = tile;
+            GeneralManager.CurrentRow = tile.mapRow;
+            GeneralManager.CurrentPositionInRow = tile.positionInRow;
+            StructureManager.MoveUnit(playerUnitTransform, tile);
         }
             
     }
@@ -270,7 +275,7 @@ public class RogueManager : MonoBehaviour
     //Method called by the red "Abandon Run" button on the Rogue section UI
     public void AbandonRunClick()
 	{
-        if (!gm.IsGameInStandby)
+        if (!GeneralManager.IsGameInStandby)
             EndRun(1);
 	}
     public void UnitsCheckClick()
@@ -302,10 +307,10 @@ public class RogueManager : MonoBehaviour
     public static void MerchantBuyClick(int objectBoughtIndex)
 	{
 		RogueManager rm = GameObject.Find(GeneralManager.ROGUE_MANAGER_OBJ_NAME).GetComponent<RogueManager>();
-		if (rm.MerchantShop.BuyItem(objectBoughtIndex, rm.gm.Gold, out int newGoldAmount))
+		if (rm.MerchantShop.BuyItem(objectBoughtIndex, rm.GeneralManager.Gold, out int newGoldAmount))
 		{
-            rm.gm.Gold = newGoldAmount;
-            rm.sm.ClearMerchantItem(objectBoughtIndex, rm.gm.Gold);
+            rm.GeneralManager.Gold = newGoldAmount;
+            rm.StructureManager.ClearMerchantItem(objectBoughtIndex, rm.GeneralManager.Gold);
         }
 	}
 

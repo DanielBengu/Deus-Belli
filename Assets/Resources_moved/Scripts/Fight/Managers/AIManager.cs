@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using static Pathfinding;
 
 public class AIManager : MonoBehaviour
 {
@@ -50,7 +51,7 @@ public class AIManager : MonoBehaviour
     void CalculateTurnForUnit(Unit unit){
         Debug.Log($"CALCULATING MOVE FOR UNIT {unit.unitName}");
         List<Tile> possibleMovements = unit.PossibleMovements;
-        List<Tile> possibleAttacks = unit.GetPossibleAttacks();
+        List<PossibleAttack> possibleAttacks = unit.GetPossibleAttacks(possibleMovements);
 
         ActionAI action = DecideAction(possibleMovements,possibleAttacks);
 
@@ -65,7 +66,7 @@ public class AIManager : MonoBehaviour
 		} 
     }
 
-    ActionAI DecideAction(List<Tile> possibleMovements, List<Tile> possibleAttacks)
+    ActionAI DecideAction(List<Tile> possibleMovements, List<PossibleAttack> possibleAttacks)
     {
         ActionAI action = ActionAI.Skip;
 
@@ -75,16 +76,16 @@ public class AIManager : MonoBehaviour
         return action;
     }
 
-    public void Attack(List<Tile> possibleAttacks, Unit unit)
+    public void Attack(List<PossibleAttack> possibleAttacks, Unit unit)
     {
         if (possibleAttacks.Count == 0)
             return;
 
         int randomChoice = RandomManager.GetRandomValue(seed, 0, possibleAttacks.Count);
-        Tile attackTarget = possibleAttacks[randomChoice]; //Attack at random possible targets
-        Debug.Log($"AI ATTACKING TILE N.{attackTarget.tileNumber}");
+        PossibleAttack attackTarget = possibleAttacks[randomChoice]; //Attack at random possible targets
+        Debug.Log($"AI ATTACKING TILE N.{attackTarget.tileToAttack.tileNumber}");
         fightManager.UnitSelected = unit;
-        fightManager.QueueAttack(unit, attackTarget.unitOnTile);
+        fightManager.QueueAttack(unit, attackTarget.tileToAttack.unitOnTile, attackTarget.tileToMoveTo);
     }
 
     public void Flee(List<Tile> possibleMovements, Unit unit)

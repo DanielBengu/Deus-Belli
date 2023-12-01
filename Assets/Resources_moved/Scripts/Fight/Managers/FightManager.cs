@@ -3,6 +3,8 @@ using UnityEngine;
 using System.Linq;
 using System.IO;
 using Unity.VisualScripting;
+using UnityEngine.Device;
+using static Pathfinding;
 
 public class FightManager : MonoBehaviour
 {
@@ -27,9 +29,13 @@ public class FightManager : MonoBehaviour
     public Level level;
 
     public bool isGameOver = false;
+
+    public float unitsSpeed;
         
     // This property stores the currently selected unit
     public Unit UnitSelected { get; set; }
+    //Possible attacks for the selected unit
+    public List<PossibleAttack> PossibleAttacks { get; set; }
 
 	//public bool IsCameraFocused { get{return cameraManager.GetCameraFocusStatus();} set{cameraManager.SetCameraFocusStatus(value);} }
 	public bool IsAnyUnitMoving { get{return structureManager.IsObjectMoving;}}
@@ -48,53 +54,25 @@ public class FightManager : MonoBehaviour
 
 	void Update()
     {
-        ManageGame();
+        ManageEndGame();
         ManageMovements();
         ManageInputs();
     }
 
-    void ManageGame()
+    void ManageEndGame()
     {
-        bool isFightWon = !isGameOver && UnitsOnField.Count(u => u.faction == ENEMY_FACTION) == 0;
-        bool isFightLost = !isGameOver && UnitsOnField.Count(u => u.faction == USER_FACTION) == 0;
+        if (isGameOver)
+            return;
 
-        if (isFightWon || isFightLost)
-        {
-            int goldGenerated = 0;
-            if (isFightWon) goldGenerated = GenerateAndAddGold();
-            isGameOver = true;
-            GeneralManager.GameStatus status = isFightWon ? GeneralManager.GameStatus.Won : GeneralManager.GameStatus.Lost;
-            GameScreens screen = isFightWon ? GameScreens.FightVictoryScreen : GameScreens.FightDefeatScreen;
-            generalManager.SaveGameProgress(status);
-            structureManager.GetGameScreen(screen, goldGenerated);
-        }
+        //I check first the defeat section to avoid ties (if both are dead at the same time, player lost)
+        bool isDefeat = ManageDefeat();
+        if(!isDefeat)
+		    ManageVictory();
     }
 
     #endregion
 
     #region Key Input Management
-
-    void ManageMovements(){
-        // If an object is being moved, check if it has finished moving
-        int finishedMoving = structureManager.MovementTick();
-
-        switch (ActionInQueue)
-		{
-			case ActionPerformed.FightMovement:
-				break;
-			case ActionPerformed.Attack:
-                if(finishedMoving != 0)
-				{
-                    structureManager.actionPerformer.StartAction(ActionPerformed.Attack, UnitSelected.gameObject, ActionTarget.GetComponent<Unit>().CurrentTile.gameObject);
-                    ResetGameState(true);
-                }
-                return;
-            case ActionPerformed.Default:
-			default:
-                return;
-        }    
-    }
-
     void ManageInputs(){
         if (!IsGameInStandby && Input.anyKeyDown)
             ManageKeysDown();
@@ -230,9 +208,50 @@ public class FightManager : MonoBehaviour
         return unitScript;
     }
 
-    #endregion
+	#endregion
 
-    public void SetIsOptionOpen(bool isOptionOpen)
+	#region Manage Methods
+	void ManageAction()
+	{
+		if (ActionInQueue != ActionPerformed.Attack)
+			return;
+
+		structureManager.actionPerformer.StartAction(ActionPerformed.Attack, UnitSelected.gameObject, ActionTarget.GetComponent<Unit>().CurrentTile.gameObject);
+		ResetGameState(true);
+	}
+
+    void ManageVictory()
+    {
+		bool isFightWon = UnitsOnField.Count(u => u.faction == ENEMY_FACTION) == 0;
+
+        if (!isFightWon) return;
+
+		isGameOver = true;
+		int goldGenerated = GenerateAndAddGold();
+		generalManager.SaveGameProgress(GeneralManager.GameStatus.Won);
+		structureManager.GetGameScreen(GameScreens.FightVictoryScreen, goldGenerated);
+	}
+
+    bool ManageDefeat()
+    {
+		bool isFightLost = UnitsOnField.Count(u => u.faction == USER_FACTION) == 0;
+
+        if(!isFightLost) return false;
+
+		isGameOver = true;
+		generalManager.SaveGameProgress(GeneralManager.GameStatus.Lost);
+		structureManager.GetGameScreen(GameScreens.FightVictoryScreen, -1);
+        return true;
+	}
+
+	void ManageMovements()
+	{
+		structureManager.MovementTick(unitsSpeed, ManageAction);
+	}
+
+	#endregion
+
+	public void SetIsOptionOpen(bool isOptionOpen)
 	{
         generalManager.IsOptionOpen = isOptionOpen;
 	}
@@ -299,45 +318,45 @@ public class FightManager : MonoBehaviour
             if (unit.faction == ENEMY_FACTION)
                 UnitSelected = null;
             structureManager.SelectTiles(unit.CurrentTile.ToList(), false, TileType.Selected);
+            return;
         }
-		else
-		{
-            //We selected an allied unit that has already performed his action this turn
-            if ((UnitSelected && UnitSelected.HasPerformedMainAction))
-            {
-                ResetGameState(false);
-                structureManager.SelectTiles(unit.CurrentTile.ToList(), true);
-                return;
-            }
-
-            //We selected an allied unit that can still perform an action
-            if (unit.faction == USER_FACTION)
-            {
-                ResetGameState(false);
-                structureManager.GeneratePossibleMovementForUnit(UnitSelected, true);
-                structureManager.GetPossibleAttacksForUnit(UnitSelected, true);
-                return;
-            }
-
-            ///We either selected an enemy unit and didn't select an ally to perform an attack before,
-            ///or we selected an enemy out of reach from the ally
-            if (!UnitSelected || !IsAttackPossible(UnitSelected, unit))
-            {
-                ResetGameState(true);
-                structureManager.SelectTiles(unit.CurrentTile.ToList(), true);
-                return;
-            }
-
-            //User wants to attack an enemy, we confirm the action and the path to take
-            if (!IsShowingPath)
-            {
-                AskForMovementConfirmation(unit.CurrentTile, UnitSelected.range);
-                return;
-            }
-
-            //User confirmed the action
-            QueueAttack(UnitSelected, unit);
+		
+        //We selected an allied unit that has already performed his action this turn
+        if (UnitSelected && UnitSelected.HasPerformedMainAction)
+        {
+            ResetGameState(false);
+            structureManager.SelectTiles(unit.CurrentTile.ToList(), true);
+            return;
         }
+
+        //We selected an allied unit that can still perform an action
+        if (unit.faction == USER_FACTION)
+        {
+            ResetGameState(false);
+            List<Tile> possibleMovements = structureManager.GeneratePossibleMovementForUnit(UnitSelected, true);
+            PossibleAttacks = structureManager.GetPossibleAttacksForUnit(UnitSelected, true, possibleMovements);
+            return;
+        }
+
+        ///We either selected an enemy unit and didn't select an ally to perform an attack before,
+        ///or we selected an enemy out of reach from the ally
+        if (!UnitSelected || !IsAttackPossible(UnitSelected, unit))
+        {
+            ResetGameState(true);
+            structureManager.SelectTiles(unit.CurrentTile.ToList(), true);
+            return;
+        }
+		Tile tileToMoveTo = structureManager.CheapestTileToMoveTo(PossibleAttacks, UnitSelected, unit);
+		//User wants to attack an enemy, we confirm the action and the path to take
+		if (!IsShowingPath)
+        {
+            AskForMovementConfirmation(tileToMoveTo);
+            return;
+        }
+
+        
+		//User confirmed the action
+		QueueAttack(UnitSelected, unit, tileToMoveTo);
     }
 
     void ManageClick_EmptyTileSelected(Tile tileSelected)
@@ -398,27 +417,30 @@ public class FightManager : MonoBehaviour
         return false;
 	}
 
-    void AskForMovementConfirmation(Tile destinationTile, int attackerRange = 0)
+    void AskForMovementConfirmation(Tile destinationTile)
     {
         structureManager.ClearSelection(false);
-        List<Tile> path = structureManager.FindPathToDestination(destinationTile, false);
-        List<Tile> attackTiles = path.Skip(path.Count - attackerRange).ToList();
-        path = path.SkipLast(attackerRange).ToList();
+        List<Tile> path = structureManager.FindPathToDestination(destinationTile, false, UnitSelected.CurrentTile.tileNumber);
+        List<Tile> attackTiles = path.ToList();
+        path = path.Skip(1).ToList();
         structureManager.SelectTiles(path, true, TileType.Selected);
         structureManager.SelectTiles(attackTiles, false, TileType.Enemy);
         IsShowingPath = true;
     }
 
-    public void QueueAttack(Unit attacker, Unit defender)
+    public void QueueAttack(Unit attacker, Unit defender, Tile tileToMoveTo)
     {
-        List<Tile> path = structureManager.FindPathToDestination(defender.CurrentTile, false);
+        List<Tile> path = structureManager.FindPathToDestination(tileToMoveTo, false, attacker.CurrentTile.tileNumber).ToList();
 
-        int targetMovementTileIndex = path.Count - 1 - attacker.range;
+        int targetMovementTileIndex = path.Count - 1;
         if (targetMovementTileIndex < 0) targetMovementTileIndex = 0;
-        Tile targetTile = structureManager.gameData.mapTiles[path[targetMovementTileIndex].tileNumber];
 
-        structureManager.MoveUnit(UnitSelected, targetTile, false);
-        ActionInQueue = ActionPerformed.Attack;
+        Tile targetTile = attacker.CurrentTile;
+        if(path.Count > 0)
+            targetTile = structureManager.gameData.mapTiles[path[targetMovementTileIndex].tileNumber];
+
+		structureManager.MoveUnit(UnitSelected, targetTile, false);
+		ActionInQueue = ActionPerformed.Attack;
         ActionTarget = defender.gameObject;
         UnitSelected = attacker;
         IsShowingPath = false;
@@ -434,19 +456,21 @@ public class FightManager : MonoBehaviour
         structureManager.ClearSelection(true);
         structureManager.SetInfoPanel(false);
         ActionInQueue = ActionPerformed.Default;
+        PossibleAttacks = new();
     }
 
     void EndPhase(int faction)
 	{
         if (IsSetup)
-		{
+        {
             IsSetup = false;
             List<Tile> tileList = structureManager.gameData.mapTiles.Values.ToList();
             structureManager.SelectTiles(tileList, false, TileType.Base);
             structureManager.UpdateFightEndPhaseButton();
+            return;
         }
-        else
-            EndTurn(faction);
+
+        EndTurn(faction);
 	}
 
     public void EndTurn(int faction){
@@ -458,7 +482,7 @@ public class FightManager : MonoBehaviour
             case ENEMY_FACTION:
                 StartUserTurn();
                 break;
-            case 2:
+            case 2://For neutral armies
                 break;
             default:
                 break;
@@ -475,15 +499,10 @@ public class FightManager : MonoBehaviour
 		foreach (var unit in UnitsOnField)
             Destroy(unit.gameObject);
     }
-    public void ReturnToRogueButton(bool isDefeat)
-    {
-        GeneralManager fm = GameObject.Find(GeneralManager.GENERAL_MANAGER_OBJ_NAME).GetComponent<GeneralManager>();
-        fm.ReturnToRogue(RogueTileType.Fight, isDefeat);
-    }
 
-    public List<Tile> GetPossibleAttacksForUnit(Unit unit)
+    public List<PossibleAttack> GetPossibleAttacksForUnit(Unit unit, List<Tile> possibleMovements)
 	{
-        return structureManager.GetPossibleAttacksForUnit(unit, false);
+        return structureManager.GetPossibleAttacksForUnit(unit, false, possibleMovements);
 	}
 
 
@@ -492,21 +511,19 @@ public class FightManager : MonoBehaviour
         return structureManager.GeneratePossibleMovementForUnit(unit, false);
     }
 
-    //Called by "End Turn" button of UI
-    public void EndTurnButton(int faction){
-        FightManager fm = GameObject.Find(GeneralManager.FIGHT_MANAGER_OBJ_NAME).GetComponent<FightManager>();
-        fm.EndPhase(faction);
-    }
-
-    public void MakeUnitTakeDamage()
+	#region Button Calls
+	//Called by "End Turn" button of UI
+	public void EndTurnButton(int faction)
 	{
-        structureManager.actionPerformer.StartTakeDamageAnimation();
+		FightManager fm = GameObject.Find(GeneralManager.FIGHT_MANAGER_OBJ_NAME).GetComponent<FightManager>();
+		fm.EndPhase(faction);
 	}
 
-    public bool IsAnyUnitNotIdle()
+	public void MakeUnitTakeDamage()
 	{
-        return true;
+		structureManager.actionPerformer.StartTakeDamageAnimation();
 	}
+	#endregion
 }
 
 public enum ObjectClickedEnum{

@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using System.Linq;
+using System;
 
 public class Movement
 {
@@ -17,37 +18,36 @@ public class Movement
 
     Vector3 targetPosition;
 
-    readonly float speed = 800;
-
     //List of steps necessary to go from point A to B
     public List<Transform> movementSteps = new();
 
-    public int MovementTick()
+    public void MovementTick(float speed, Action callback)
     {
         if (!IsObjectMoving)
-            return -1;
+            return;
 
-        float distanceCovered = (Time.time - startTime) * speed;
-        float fractionOfJourney = distanceCovered / journeyLength;
-        if (fractionOfJourney > 0)
-            objectMovingTransform.position = Vector3.Lerp(startingPosition, targetPosition, fractionOfJourney);
+		//Unit arrived at destination
+		if (Vector3.Distance(objectMovingTransform.position, targetPosition) < 0.1f)
+		{
+			if (movementSteps.Count > 0)
+			{
+				SetNewMovementStep(objectMovingTransform);
+				return;
+			}
 
-        //Unit arrived at destination
-        if (Vector3.Distance(objectMovingTransform.position, targetPosition) < 0.001f)
-        {
-            if (movementSteps.Count > 0)
-            {
-                SetNewMovementStep(objectMovingTransform);
-            }
-            else
-            {
-                IsObjectMoving = false;
-                AnimationPerformer.PerformAnimation(Animation.Idle, objectMovingTransform.gameObject);
-                return 1;
-            }
-        }
-        return 0;
-    }
+			IsObjectMoving = false;
+			AnimationPerformer.PerformAnimation(Animation.Idle, objectMovingTransform.gameObject);
+			callback();
+			return;
+		}
+
+
+		float distanceCovered = (Time.time - startTime) * speed;
+		float fractionOfJourney = distanceCovered / journeyLength;
+		if (fractionOfJourney > 0)
+			objectMovingTransform.position = Vector3.Lerp(startingPosition, targetPosition, fractionOfJourney);
+		
+	}
 
     public bool StartObjectMovement(Transform starting, Transform target)
     {
