@@ -1,12 +1,9 @@
-using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using UnityEngine;
-using UnityEngine.AddressableAssets;
-
-public class FileManager : MonoBehaviour
+public static class FileManager
 {
-	const string PLAYER_UNITS_PATH = "Assets\\Resources_moved\\Scripts\\General\\Player Data\\Unit list.txt";
+	public const string PLAYER_UNITS_PATH = "Assets\\Resources_moved\\Scripts\\General\\Player Data\\Unit list.txt";
 	public static List<Unit> GetUnits(DataSource source, string[] CustomData = null)
 	{
 		List<Unit> playerUnits = new();
@@ -31,6 +28,7 @@ public class FileManager : MonoBehaviour
 				string[] data = units[i].Split('#');
 				GameObject unitObject = AddressablesManager.LoadResource<GameObject>(AddressablesManager.TypeOfResource.Units, data[0]);
 				Unit unitScript = unitObject.GetComponent<Unit>();
+				unitScript.Load(unitScript);
 				unitScript.LoadData(data);
 				playerUnits.Add(unitScript);
 			}
@@ -42,20 +40,14 @@ public class FileManager : MonoBehaviour
 		return playerUnits;
 	}
 
-	public static void SaveUnits(List<GameObject> units, bool overwriteCurrentList)
+	public static void OverwriteFile(string filePath, string[] dataLines)
 	{
-		List<string> dataLines = new();
-		foreach (var item in units)
-		{
-			Unit unitScript = item.GetComponent<Unit>();
-			dataLines.Add($"{item.name[..6]}#{unitScript.unitName}#{unitScript.unitImage.name}#{unitScript.hpMax}#{unitScript.movementMax}#{unitScript.attack}#{unitScript.range}#{unitScript.startingTileNumber}");
-		}
+		File.WriteAllLines(filePath, dataLines);
+	}
 
-		if (overwriteCurrentList)
-			File.WriteAllLines(PLAYER_UNITS_PATH, dataLines);
-		else
-			File.AppendAllLines(PLAYER_UNITS_PATH, dataLines);
-		
+	public static void AppendFile(string filePath, string[] dataLines)
+	{
+		File.AppendAllLines(filePath, dataLines);
 	}
 
 	public enum DataSource

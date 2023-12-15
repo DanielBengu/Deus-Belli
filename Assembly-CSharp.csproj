@@ -64,6 +64,7 @@
     <Compile Include="Assets\Resources_moved\Scripts\General\Manager\SpriteManager.cs" />
     <Compile Include="Assets\Resources_moved\Scripts\Menu\CharactersButtonScript.cs" />
     <Compile Include="Assets\Resources_moved\Scripts\General\Manager\ObjectsManager.cs" />
+    <Compile Include="Assets\Resources_moved\Scripts\Fight\Classes\Unit\Unit.cs" />
     <Compile Include="Assets\Polyart\PolyartStudio\SharedResources\Scripts\Tools\NatureManager.cs" />
     <Compile Include="Assets\Polyart\PolyartStudio\SharedResources\Scripts\Gameplay\Character\TestInteractable.cs" />
     <Compile Include="Assets\Polyart\PolyartStudio\SharedResources\CritiasFoliage\Code\FoliageType.cs" />
@@ -73,7 +74,6 @@
     <Compile Include="Assets\Polyart\PolyartStudio\SharedResources\CritiasFoliage\Code\FoliageCaching.cs" />
     <Compile Include="Assets\Resources_moved\Scripts\Fight\Level.cs" />
     <Compile Include="Assets\Resources_moved\Scripts\General\Manager\FileManager.cs" />
-    <Compile Include="Assets\Resources_moved\Scripts\Fight\Unit.cs" />
     <Compile Include="Assets\Resources_moved\Scripts\Fight\Managers\TurnManager.cs" />
     <Compile Include="Assets\Polyart\PolyartStudio\SharedResources\Scripts\Gameplay\Character\Interactable_Dreamscape.cs" />
     <Compile Include="Assets\Resources_moved\Scripts\Custom Creator\CustomCreatorManager.cs" />
@@ -96,6 +96,7 @@
     <Compile Include="Assets\Polyart\PolyartStudio\Scripts\Flythrough.cs" />
     <Compile Include="Assets\Resources_moved\Scripts\General\Manager\UIManager.cs" />
     <Compile Include="Assets\Scripts\Steamworks.NET\SteamManager.cs" />
+    <Compile Include="Assets\Resources_moved\Scripts\General\Manager\SaveManager.cs" />
     <Compile Include="Assets\Resources_moved\Scripts\GodsArchive\Gods\Agbara\Ataiku.cs" />
     <Compile Include="Assets\Polyart\PolyartStudio\SharedResources\Scripts\Tools\FoliageInteractor.cs" />
     <Compile Include="Assets\Resources_moved\Scripts\Rogue\Managers\RogueManager.cs" />
@@ -123,6 +124,7 @@
     <Compile Include="Assets\Polyart\PolyartStudio\SharedResources\CritiasFoliage\Code\FoliageDataRuntime.cs" />
     <Compile Include="Assets\Polyart\PolyartStudio\SharedResources\Scripts\Misc\FPS_Counter.cs" />
     <Compile Include="Assets\Polyart\PolyartStudio\SharedResources\CritiasFoliage\Code\FoliageInstance.cs" />
+    <Compile Include="Assets\Resources_moved\Scripts\Fight\Classes\FightInput.cs" />
     <Compile Include="Assets\Polyart\PolyartStudio\SharedResources\CritiasFoliage\Code\FoliagePainterRuntime.cs" />
     <Compile Include="Assets\Polyart\PolyartStudio\SharedResources\CritiasFoliage\Examples\ExampleRuntimeTreeAdder.cs" />
     <Compile Include="Assets\Resources_moved\Scripts\Fight\Managers\AIManager.cs" />
@@ -130,6 +132,7 @@
     <Compile Include="Assets\Polyart\PolyartStudio\SharedResources\CritiasFoliage\Code\FoliageWindTreeUtilities.cs" />
     <Compile Include="Assets\Polyart\PolyartStudio\SharedResources\Scripts\Gameplay\MillRotate.cs" />
     <Compile Include="Assets\Polyart\PolyartStudio\SharedResources\CritiasFoliage\Code\Foliage.cs" />
+    <Compile Include="Assets\Resources_moved\Scripts\Fight\Classes\Unit\UnitMovement.cs" />
     <Compile Include="Assets\Polyart\PolyartStudio\SharedResources\CritiasFoliage\Examples\ExampleRuntimeTreeRemover.cs" />
     <Compile Include="Assets\Polyart\PolyartStudio\SharedResources\CritiasFoliage\Code\FoliageTerrainUtilities.cs" />
     <Compile Include="Assets\Resources_moved\Scripts\GodsArchive\Gods\Agbara\Omi.cs" />

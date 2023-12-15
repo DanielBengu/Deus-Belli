@@ -1,0 +1,213 @@
+using System.Collections.Generic;
+using System.Linq;
+using UnityEngine;
+public class FightInput
+{
+	readonly FightManager _fightManager;
+	readonly StructureManager _structureManager;
+
+	public FightInput(FightManager fm, StructureManager sm)
+    {
+		_fightManager = fm;
+		_structureManager = sm;
+	}
+    public void ManageClick(ObjectClickedEnum objectClicked, GameObject reference)
+	{
+		if (_fightManager.IsSetup)
+		{
+			ManageSetupInput(objectClicked, reference);
+			return;
+		}
+
+		switch (objectClicked)
+		{
+			case ObjectClickedEnum.EmptyTile:
+				ManageClick_EmptyTileSelected(reference.GetComponent<Tile>());
+				_structureManager.SetInfoPanel(false, _fightManager.UnitSelected);
+				break;
+
+			case ObjectClickedEnum.UnitTile:
+				var unitSelected = reference.GetComponent<Unit>();
+				ManageClick_UnitSelected(unitSelected);
+				_structureManager.SetInfoPanel(true, unitSelected);
+				break;
+
+			case ObjectClickedEnum.RightClickOnField:
+				_fightManager.ResetGameState(true);
+				break;
+
+			case ObjectClickedEnum.Default:
+				break;
+		}
+	}
+
+	public void ManageClick_EmptyTileSelected(Tile tileSelected)
+	{
+		if (!_fightManager.UnitSelected)
+		{
+			EmptyActionTileClick(tileSelected, true);
+			return;
+		}
+
+		//If tile clicked is in range
+		if (_fightManager.UnitSelected.Movement.PossibleMovements.Contains(tileSelected))
+		{
+			Click_TileInsideRange(tileSelected);
+			return;
+		}
+
+		//User clicked outside the range
+		EmptyActionTileClick(tileSelected, true);
+	}
+
+	public void ManageClick_UnitSelected(Unit unit)
+	{
+		//We selected an allied unit that has already performed his action this turn
+		if (HasUnitAlreadyPerformedAction())
+		{
+			EmptyActionTileClick(unit.Movement.CurrentTile, false);
+			return;
+		}
+
+		//We selected an allied unit that can still perform an action
+		if (unit.faction == FightManager.USER_FACTION)
+		{
+			_fightManager.ResetGameState(false);
+			List<Tile> possibleMovements = _structureManager.GeneratePossibleMovementForUnit(_fightManager.UnitSelected, true);
+			_fightManager.PossibleAttacks = _fightManager.structureManager.GetPossibleAttacksForUnit(_fightManager.UnitSelected, true, possibleMovements);
+			return;
+		}
+
+		///We either selected an enemy unit and didn't select an ally to perform an attack before,
+		///or we selected an enemy out of reach from the ally
+		if (!_fightManager.UnitSelected || !IsAttackPossible(_fightManager.UnitSelected, unit))
+		{
+			EmptyActionTileClick(unit.Movement.CurrentTile, true);
+			return;
+		}
+
+		Tile tileToMoveTo = _structureManager.CheapestTileToMoveTo(_fightManager.PossibleAttacks, _fightManager.UnitSelected, unit);
+		//User wants to attack an enemy, we confirm the action and the path to take
+		if (!_fightManager.IsShowingPath)
+		{
+			AskForMovementConfirmation(tileToMoveTo);
+			return;
+		}
+
+		//User confirmed the action
+		_fightManager.QueueAttack(_fightManager.UnitSelected, unit, tileToMoveTo);
+	}
+
+	void EmptyActionTileClick(Tile currentTile, bool resetGameState)
+	{
+		_fightManager.ResetGameState(resetGameState);
+		_structureManager.SelectTiles(currentTile.ToList(), true);
+	}
+
+	public bool HasUnitAlreadyPerformedAction()
+	{
+		if (!_fightManager.UnitSelected)
+			return false;
+		
+		return _fightManager.UnitSelected.Movement.HasPerformedMainAction;
+	}
+
+	void Click_TileInsideRange(Tile tileSelected)
+	{
+		if (_fightManager.IsShowingPath)
+		{
+			_structureManager.MoveUnit(_fightManager.UnitSelected, tileSelected, false);
+			_fightManager.ResetGameState(true);
+			return;
+		}
+
+		AskForMovementConfirmation(tileSelected);
+	}
+
+	public bool IsAttackPossible(Unit attacker, Unit defender)
+	{
+		return _structureManager.IsAttackPossible(attacker, defender);
+	}
+
+	public void AskForMovementConfirmation(Tile destinationTile)
+	{
+		_structureManager.ClearSelection(false);
+		List<Tile> path = _structureManager.FindPathToDestination(destinationTile, false, _fightManager.UnitSelected.Movement.CurrentTile.tileNumber);
+		List<Tile> attackTiles = path.ToList();
+		path = path.Skip(1).ToList();
+		_structureManager.SelectTiles(path, true, TileType.Selected);
+		_structureManager.SelectTiles(attackTiles, false, TileType.Enemy);
+		_fightManager.IsShowingPath = true;
+	}
+
+
+	#region Setup
+
+	void ManageSetupInput(ObjectClickedEnum oc, GameObject reference)
+	{
+		switch (oc)
+		{
+			case ObjectClickedEnum.UnitTile:
+				Setup_UnitSelected(reference.GetComponent<Unit>());
+				break;
+			case ObjectClickedEnum.EmptyTile:
+				Setup_EmptyTileSelected(reference.GetComponent<Tile>());
+				break;
+		}
+	}
+
+	void Setup_UnitSelected(Unit unitSelected)
+	{
+		_fightManager.ResetGameState(false);
+		_fightManager.SetupUnitPosition();
+		if (unitSelected.faction == FightManager.ENEMY_FACTION)
+			_fightManager.UnitSelected = null;
+		_structureManager.SelectTiles(unitSelected.Movement.CurrentTile.ToList(), false, TileType.Selected);
+		_structureManager.SetInfoPanel(true, unitSelected);
+	}
+	bool Setup_IsTeleportValid(Tile tileSelected)
+	{
+		bool isTileSelectedEmpty = tileSelected.unitOnTile == null;
+		bool isTileSelectedPassable = tileSelected.IsPassable;
+		bool isTileSelectedInsideSetupRange = _fightManager.SetupTiles.Contains(tileSelected.tileNumber);
+
+		return isTileSelectedEmpty && isTileSelectedPassable && isTileSelectedInsideSetupRange;
+	}
+	void Setup_EmptyTileSelected(Tile tileSelected)
+	{
+		//User wants to move a unit
+		if (_fightManager.UnitSelected)
+		{
+			Setup_MoveUnit(tileSelected);
+			return;
+		}
+
+		Setup_EmptyClick(tileSelected);
+	}
+	void Setup_MoveUnit(Tile tileSelected)
+	{
+		//User clicked on an allowed tile to teleport the unit
+		if (Setup_IsTeleportValid(tileSelected))
+			_structureManager.MoveUnit(_fightManager.UnitSelected, tileSelected, true);
+		_fightManager.ResetGameState(true);
+		_fightManager.SetupUnitPosition();
+		return;
+	}
+	void Setup_EmptyClick(Tile tileSelected)
+	{
+		_fightManager.ResetGameState(true);
+		_structureManager.ClearSelection(true);
+		_fightManager.SetupUnitPosition();
+		_structureManager.SelectTiles(tileSelected.ToList(), false);
+	}
+
+	#endregion
+
+	public enum ObjectClickedEnum
+	{
+		EmptyTile,
+		UnitTile,
+		RightClickOnField,
+		Default,
+	}
+}

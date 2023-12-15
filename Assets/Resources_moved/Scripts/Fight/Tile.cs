@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
+using static FightInput;
 
 public class Tile : MonoBehaviour, IComparable<Tile>
 {

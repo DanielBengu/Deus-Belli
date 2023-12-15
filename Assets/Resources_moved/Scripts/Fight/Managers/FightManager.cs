@@ -5,6 +5,7 @@ using System.IO;
 using Unity.VisualScripting;
 using UnityEngine.Device;
 using static Pathfinding;
+using static FightInput;
 
 public class FightManager : MonoBehaviour
 {
@@ -48,6 +49,7 @@ public class FightManager : MonoBehaviour
 
     public int CurrentTurnCount { get; set; }
     public List<Unit> UnitsOnField { get { return structureManager.gameData.unitsOnField; } }
+	public FightInput FightInput { get; set; }
 	#endregion
 
 	#region Update Methods
@@ -87,6 +89,7 @@ public class FightManager : MonoBehaviour
 
     #region Startup Methods
 
+    //Substitute of Start()
     public void Setup(Level level, StructureManager sm, CameraManager cm, GeneralManager gm)
 	{
         Debug.Log("START FIGHT MANAGER SETUP");
@@ -96,6 +99,7 @@ public class FightManager : MonoBehaviour
         generalManager = gm;
         structureManager.uiManager.SetFightVariables(gm.GodSelected);
         structureManager.spriteManager.fightManager = this;
+        FightInput = new FightInput(this, structureManager);
 
         this.level = level;
 
@@ -129,7 +133,7 @@ public class FightManager : MonoBehaviour
         SetupTiles = SetupUnitPosition();
     }
 
-    int[] SetupUnitPosition()
+    public int[] SetupUnitPosition()
 	{
         List<Tile> tileList = new();
 		for (int i = 0; i < level.HorizontalTiles; i++)
@@ -201,9 +205,9 @@ public class FightManager : MonoBehaviour
         Quaternion rotation = new(0, 180, 0, 0);
         var unitGenerated = Instantiate(unit, tile.transform.position, rotation, parent);
         var unitScript = unitGenerated.GetComponent<Unit>();
-        unitScript.LoadStats(unit);
+        unitScript.Load(unit);
         unitScript.FightManager = this;
-        unitScript.CurrentTile = tile;
+        unitScript.Movement.CurrentTile = tile;
         tile.unitOnTile = unitGenerated.GetComponent<Unit>();
         return unitScript;
     }
@@ -216,7 +220,7 @@ public class FightManager : MonoBehaviour
 		if (ActionInQueue != ActionPerformed.Attack)
 			return;
 
-		structureManager.actionPerformer.StartAction(ActionPerformed.Attack, UnitSelected.gameObject, ActionTarget.GetComponent<Unit>().CurrentTile.gameObject);
+		structureManager.actionPerformer.StartAction(ActionPerformed.Attack, UnitSelected.gameObject, ActionTarget.GetComponent<Unit>().Movement.CurrentTile.gameObject);
 		ResetGameState(true);
 	}
 
@@ -264,7 +268,7 @@ public class FightManager : MonoBehaviour
         foreach (var unit in UnitsOnField.Where(u => u.faction == USER_FACTION))
         {
             unit.movementCurrent = unit.movementMax;
-            unit.HasPerformedMainAction = false;
+            unit.Movement.HasPerformedMainAction = false;
         }
     }
 
@@ -283,159 +287,19 @@ public class FightManager : MonoBehaviour
         return goldGenerated;
     }
 
-    public void ManageClick(ObjectClickedEnum objectClicked, GameObject reference){
-        switch (objectClicked)
-        {
-            case ObjectClickedEnum.EmptyTile:
-                var tileSelected = reference.GetComponent<Tile>();
-                ManageClick_EmptyTileSelected(tileSelected);
-                structureManager.SetInfoPanel(false, UnitSelected);
-            break;
-
-            case ObjectClickedEnum.UnitTile:
-                var unitSelected = reference.GetComponent<Unit>();
-                ManageClick_UnitSelected(unitSelected);
-                structureManager.SetInfoPanel(true, unitSelected);
-            break;
-
-            case ObjectClickedEnum.RightClickOnField:
-                ResetGameState(true);
-            break;
-
-            case ObjectClickedEnum.Default:
-            break;
-        }
-    }
-
-    #region Manage Click Actions
-
-    void ManageClick_UnitSelected(Unit unit)
-    {
-		if (IsSetup)
-		{
-            ResetGameState(false);
-            SetupUnitPosition();
-            if (unit.faction == ENEMY_FACTION)
-                UnitSelected = null;
-            structureManager.SelectTiles(unit.CurrentTile.ToList(), false, TileType.Selected);
-            return;
-        }
-		
-        //We selected an allied unit that has already performed his action this turn
-        if (UnitSelected && UnitSelected.HasPerformedMainAction)
-        {
-            ResetGameState(false);
-            structureManager.SelectTiles(unit.CurrentTile.ToList(), true);
-            return;
-        }
-
-        //We selected an allied unit that can still perform an action
-        if (unit.faction == USER_FACTION)
-        {
-            ResetGameState(false);
-            List<Tile> possibleMovements = structureManager.GeneratePossibleMovementForUnit(UnitSelected, true);
-            PossibleAttacks = structureManager.GetPossibleAttacksForUnit(UnitSelected, true, possibleMovements);
-            return;
-        }
-
-        ///We either selected an enemy unit and didn't select an ally to perform an attack before,
-        ///or we selected an enemy out of reach from the ally
-        if (!UnitSelected || !IsAttackPossible(UnitSelected, unit))
-        {
-            ResetGameState(true);
-            structureManager.SelectTiles(unit.CurrentTile.ToList(), true);
-            return;
-        }
-		Tile tileToMoveTo = structureManager.CheapestTileToMoveTo(PossibleAttacks, UnitSelected, unit);
-		//User wants to attack an enemy, we confirm the action and the path to take
-		if (!IsShowingPath)
-        {
-            AskForMovementConfirmation(tileToMoveTo);
-            return;
-        }
-
-        
-		//User confirmed the action
-		QueueAttack(UnitSelected, unit, tileToMoveTo);
-    }
-
-    void ManageClick_EmptyTileSelected(Tile tileSelected)
-    {
-        if(IsSetup)
-		{
-			//User wants to move a unit
-			if (UnitSelected)
-			{
-                //User clicked on an allowed tile to teleport the unit
-                if(tileSelected.unitOnTile == null && tileSelected.IsPassable && SetupTiles.Contains(tileSelected.tileNumber))
-                    structureManager.MoveUnit(UnitSelected, tileSelected, true);
-                ResetGameState(true);
-                SetupUnitPosition();
-            }
-            else
-			{
-                ResetGameState(true);
-                structureManager.ClearSelection(true);
-                SetupUnitPosition();
-                structureManager.SelectTiles(tileSelected.ToList(), false);
-            }
-		} 
-        else {
-            if (!UnitSelected)
-            {
-                ResetGameState(true);
-                structureManager.SelectTiles(tileSelected.ToList(), true);
-                return;
-            }
-
-            //If tile clicked is in range
-            if (UnitSelected.PossibleMovements.Contains(tileSelected))
-            {
-                if (IsShowingPath)
-                {
-                    structureManager.MoveUnit(UnitSelected, tileSelected, false);
-                    ResetGameState(true);
-                }
-                else
-                {
-                    AskForMovementConfirmation(tileSelected);
-                }
-                return;
-            }
-
-            //User clicked outside the range
-            ResetGameState(true);
-            structureManager.SelectTiles(tileSelected.ToList(), true);
-        }
-    }
-
-    bool IsAttackPossible(Unit attacker, Unit defender)
+	public void ManageClick(ObjectClickedEnum objectClicked, GameObject reference)
 	{
-        if(structureManager.IsAttackPossible(attacker, defender))
-            return true;
-
-        return false;
+		FightInput.ManageClick(objectClicked, reference);
 	}
-
-    void AskForMovementConfirmation(Tile destinationTile)
-    {
-        structureManager.ClearSelection(false);
-        List<Tile> path = structureManager.FindPathToDestination(destinationTile, false, UnitSelected.CurrentTile.tileNumber);
-        List<Tile> attackTiles = path.ToList();
-        path = path.Skip(1).ToList();
-        structureManager.SelectTiles(path, true, TileType.Selected);
-        structureManager.SelectTiles(attackTiles, false, TileType.Enemy);
-        IsShowingPath = true;
-    }
 
     public void QueueAttack(Unit attacker, Unit defender, Tile tileToMoveTo)
     {
-        List<Tile> path = structureManager.FindPathToDestination(tileToMoveTo, false, attacker.CurrentTile.tileNumber).ToList();
+        List<Tile> path = structureManager.FindPathToDestination(tileToMoveTo, false, attacker.Movement.CurrentTile.tileNumber).ToList();
 
         int targetMovementTileIndex = path.Count - 1;
         if (targetMovementTileIndex < 0) targetMovementTileIndex = 0;
 
-        Tile targetTile = attacker.CurrentTile;
+        Tile targetTile = attacker.Movement.CurrentTile;
         if(path.Count > 0)
             targetTile = structureManager.gameData.mapTiles[path[targetMovementTileIndex].tileNumber];
 
@@ -447,9 +311,7 @@ public class FightManager : MonoBehaviour
         structureManager.ClearSelection(true);
     }
 
-	#endregion
-
-    void ResetGameState(bool resetUnitSelected)
+    public void ResetGameState(bool resetUnitSelected)
     {
         if (resetUnitSelected) UnitSelected = null;
         IsShowingPath = false;
@@ -492,9 +354,7 @@ public class FightManager : MonoBehaviour
     public void DisableFightSection()
 	{
 		foreach (var tile in structureManager.gameData.mapTiles.Values)
-		{
             Destroy(tile.gameObject);
-        }   
 
 		foreach (var unit in UnitsOnField)
             Destroy(unit.gameObject);
@@ -525,14 +385,6 @@ public class FightManager : MonoBehaviour
 	}
 	#endregion
 }
-
-public enum ObjectClickedEnum{
-    EmptyTile,
-    UnitTile,
-    RightClickOnField,
-    Default,
-}
-
 public enum ActionPerformed
 {
     FightMovement,

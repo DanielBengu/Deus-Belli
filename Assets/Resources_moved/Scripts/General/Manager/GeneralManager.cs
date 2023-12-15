@@ -44,8 +44,6 @@ public class GeneralManager : MonoBehaviour
     CameraManager cameraManager;
     [SerializeField]
     StructureManager structureManager;
-    [SerializeField]
-    FileManager fileManager;
 
     [SerializeField]
     GameObject OptionsPrefab;
@@ -72,27 +70,28 @@ public class GeneralManager : MonoBehaviour
 	{
         bool isOngoingRun = PlayerPrefs.GetInt(ONGOING_RUN) != 0;
         if (isOngoingRun)
-            runData = LoadRunData();
-		else
-		{
-            string godSelected = PlayerPrefs.GetString(GOD_SELECTED_PP);
-            IGod god = LoadGodFromName(godSelected);
-            int optionalSeed = PlayerPrefs.GetInt(SEED);
-            int masterSeed = optionalSeed > 0 ? optionalSeed : Math.Abs(Guid.NewGuid().GetHashCode());
-            int difficulty = 1;
-            List<Unit> startingUnits = FileManager.GetUnits(FileManager.DataSource.PlayerUnits);
-            runData = new RunData(god, 0, 1, masterSeed, 0, startingUnits, difficulty);
+        {
+			runData = LoadRunData();
+			GenerateRogueSection(false);
+            return;
+		}
 
-            PlayerPrefs.SetInt(SEED, masterSeed);
-            PlayerPrefs.SetInt(GOLD, 0);
-            PlayerPrefs.SetInt(CURRENT_ROW, 0);
-            PlayerPrefs.SetInt(CURRENT_POSITION_IN_ROW, 1);
-            PlayerPrefs.SetInt(ONGOING_RUN, 1);
-            PlayerPrefs.SetInt(DIFFICULTY, difficulty);
-        }
+        string godSelected = PlayerPrefs.GetString(GOD_SELECTED_PP);
+        IGod god = LoadGodFromName(godSelected);
+        int optionalSeed = PlayerPrefs.GetInt(SEED);
+        int masterSeed = optionalSeed > 0 ? optionalSeed : Math.Abs(Guid.NewGuid().GetHashCode());
+        int difficulty = 1;
+        List<Unit> startingUnits = FileManager.GetUnits(FileManager.DataSource.PlayerUnits);
+        runData = new RunData(god, 0, 1, masterSeed, 0, startingUnits, difficulty);
 
-        GenerateRogueSection(false);
-    }
+        PlayerPrefs.SetInt(SEED, masterSeed);
+        PlayerPrefs.SetInt(GOLD, 0);
+        PlayerPrefs.SetInt(CURRENT_ROW, 0);
+        PlayerPrefs.SetInt(CURRENT_POSITION_IN_ROW, 1);
+        PlayerPrefs.SetInt(ONGOING_RUN, 1);
+        PlayerPrefs.SetInt(DIFFICULTY, difficulty);
+		GenerateRogueSection(false);
+	}
 
 	private void Update()
 	{
@@ -138,11 +137,7 @@ public class GeneralManager : MonoBehaviour
 
 	public void SaveGameProgress(GameStatus status)
 	{
-        PlayerPrefs.SetInt(GOLD, runData.gold);
-        PlayerPrefs.SetInt(CURRENT_ROW, runData.currentRow);
-        PlayerPrefs.SetInt(CURRENT_POSITION_IN_ROW, runData.currentPositionInRow);
-        PlayerPrefs.SetInt(GAME_STATUS, (int)status);
-        FileManager.SaveUnits(runData.unitList.Select(u => u.gameObject).ToList(), true);
+        SaveManager.SaveGameProgress(Gold, CurrentRow, CurrentPositionInRow, (int)status, runData.unitList);
     }
 
     public IGod LoadGodFromName(string name)

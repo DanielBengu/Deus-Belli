@@ -28,8 +28,7 @@ public class DB_Event
 				eventEntity.runData.gold += Convert.ToInt32(eventEntity.objToAdd);
 				break;
 			case ObjectToAdd.Unit:
-				List<GameObject> unitList = ((List<Unit>)eventEntity.objToAdd).Select(u => u.gameObject).ToList();
-				FileManager.SaveUnits(unitList, false);
+				SaveManager.SaveUnits((List<Unit>)eventEntity.objToAdd, SaveManager.OperationType.Append);
 				break;
 		}
 	}

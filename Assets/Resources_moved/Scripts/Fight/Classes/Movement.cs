@@ -88,9 +88,9 @@ public class Movement
 			{
                 Tile targetTile = tilesPath.Last().GetComponent<Tile>();
 
-                unitScript.CurrentTile.unitOnTile = null;
+                unitScript.Movement.CurrentTile.unitOnTile = null;
                 targetTile.unitOnTile = unitScript;
-                unitScript.CurrentTile = targetTile;
+                unitScript.Movement.CurrentTile = targetTile;
             }
         }
 
@@ -120,8 +120,8 @@ public class Movement
 	{
         unit.transform.position = new(tile.transform.position.x, unit.transform.position.y, tile.transform.position.z);
 
-        unit.CurrentTile.unitOnTile = null;
+        unit.Movement.CurrentTile.unitOnTile = null;
         tile.unitOnTile = unit;
-        unit.CurrentTile = tile;
+        unit.Movement.CurrentTile = tile;
     }
 }

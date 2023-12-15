@@ -232,7 +232,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   minDistance: 1
   maxDistance: 10
-  scrollSpeed: 0
 --- !u!114 &519420034
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -358,7 +357,6 @@ GameObject:
   - component: {fileID: 1412221415}
   - component: {fileID: 1412221417}
   - component: {fileID: 1412221416}
-  - component: {fileID: 1412221418}
   m_Layer: 0
   m_Name: General Manager
   m_TagString: Untagged
@@ -385,7 +383,6 @@ MonoBehaviour:
   rogueManager: {fileID: 0}
   cameraManager: {fileID: 519420033}
   structureManager: {fileID: 1412221415}
-  fileManager: {fileID: 0}
   OptionsPrefab: {fileID: 1339626058413363848, guid: 71fe3856afc4d8f4280cae4bfbfe0bf6, type: 3}
   OptionsParent: {fileID: 0}
   selectedNode: {fileID: 0}
@@ -443,18 +440,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   fightManager: {fileID: 0}
---- !u!114 &1412221418
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1412221412}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6849c322e673cb64cafde9a626e8e416, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &1616851528
 GameObject:
   m_ObjectHideFlags: 0

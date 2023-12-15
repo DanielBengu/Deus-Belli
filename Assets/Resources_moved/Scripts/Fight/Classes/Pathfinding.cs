@@ -85,7 +85,7 @@ public class Pathfinding
             mapTiles[i].IsVisited = false;
         }
 
-        startingUnit.CurrentTile.tentativeCost = 0;
+        startingUnit.Movement.CurrentTile.tentativeCost = 0;
         bool pathFound = false;
         int lowestTileIndex = 0;
         Tile tileToCalculate;
@@ -178,26 +178,6 @@ public class Pathfinding
                 tempTiles= new();
 			}
 		}
-		/*for (int i = 0; i < attacker.range; i++)
-		{
-			List<Tile> newStartingPoint = new List<Tile>();
-			foreach (var tile in startingPointsForAttack)
-			{
-				List<Tile> neighboursTile = FindNeighbours(attacker, tile, false).Where(t => t != null).ToList();
-				newStartingPoint.AddRange(neighboursTile);
-
-				foreach (var neighbour in neighboursTile)
-				{
-					if (neighbour && neighbour.unitOnTile && neighbour.unitOnTile.faction != attacker.faction)
-					{
-						possibleAttacks.Add(neighbour);
-					}
-				}
-
-
-			}
-			startingPointsForAttack = newStartingPoint;
-		}*/
 		return possibleAttacks;
 	}
 
@@ -242,7 +222,7 @@ public class Pathfinding
     }
 
     //Returns the list of steps necessary to reach the destination tile with the least movement cost
-    public List<Tile> FindPathToDestination(Tile destination, out float cost, int startingTileNumber = -1){
+    public List<Tile> FindPathToDestination(Tile destination, out float cost, int startingTileNumber){
 		float lowestTentativeCost;
 		List<Tile> result = new(){destination};
         Debug.Log($"Starting calculation at tile n.{result.Last()}");
@@ -262,11 +242,7 @@ public class Pathfinding
             }
 
             failSafe++;
-            //The tile from which we are searching the quickest path has a tentative cost of 0, so we use that to check whether we reached it
-            if((startingTileNumber == -1 && result.Last().tentativeCost == 0) 
-                || failSafe == FAIL_SAFE_MAX
-                || startingTileNumber == result.Last().tileNumber
-                )
+            if(failSafe == FAIL_SAFE_MAX || startingTileNumber == result.Last().tileNumber)
                 break;
             
             Debug.Log($"Finding path: next tile n.{lowestTile.tileNumber}");

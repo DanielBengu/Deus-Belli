@@ -38,22 +38,25 @@ public class StructureManager : MonoBehaviour
         for(int i=0;i< YLength;i++)
         {
             for(int x=0; x< XLength; x++){
-                #region Spawn background tile
-
-                    Vector3 spawnPosition = new(topX + (x * 100), y, topZ - (i * 100));
-                    GameObject tile = tileList[x + (i * YLength)];
-                    tile.transform.position = spawnPosition;
-                    Tile tileScript = tile.GetComponent<Tile>();
-
-                    tileScript.SetupManager(manager);
-                    tileScript.tileNumber = x + (i * XLength);
-                    mapTiles.Add(tileScript.tileNumber, tileScript);
-                #endregion
+                Tile tile = SetupFightTile(topX, topZ, x, y, XLength, YLength, i, manager, tileList);
+                mapTiles.Add(tile.tileNumber, tile);
             }
         }
         Debug.Log("END TILE GENERATION");
         return mapTiles;
     }
+
+    Tile SetupFightTile(int positionX, int positionZ, int index_X, int index_Y, int XLength, int YLength, int i, FightManager manager, Dictionary<int, GameObject> tileList)
+    {
+		Vector3 spawnPosition = new(positionX + (index_X * 100), index_Y, positionZ - (i * 100));
+		GameObject tile = tileList[index_X + (i * YLength)]; 
+		tile.transform.position = spawnPosition;
+		Tile tileScript = tile.GetComponent<Tile>();
+
+		tileScript.SetupManager(manager);
+		tileScript.tileNumber = index_X + (i * XLength);
+        return tileScript;
+	}
 
     public RogueNode GenerateRogueTile(int currentRow, int positionOnRow, int maxRowOnMap, int nodeIndex, int nodeSeed, Transform origin, Transform firstNode, RogueManager rm)
 	{
@@ -164,7 +167,7 @@ public class StructureManager : MonoBehaviour
     }
     public void MoveUnit(Unit unit, Tile targetTile, bool isTeleport)
     {
-        if (unit.CurrentTile.tileNumber == targetTile.tileNumber)
+        if (unit.Movement.CurrentTile.tileNumber == targetTile.tileNumber)
             return;
         ActionPerformed action = isTeleport ? ActionPerformed.FightTeleport : ActionPerformed.FightMovement;
         actionPerformer.StartAction(action, unit.gameObject, targetTile.gameObject);
@@ -178,7 +181,7 @@ public class StructureManager : MonoBehaviour
         if (!attacker || !defender)
             return false;
 
-        bool noAttacksInRange = !attacker.GetPossibleAttacks().Any(a => a.tileToAttack.tileNumber == defender.CurrentTile.tileNumber);
+        bool noAttacksInRange = !attacker.Movement.GetPossibleAttacks().Any(a => a.tileToAttack.tileNumber == defender.Movement.CurrentTile.tileNumber);
 
 		if(noAttacksInRange)
             return false;
@@ -227,9 +230,9 @@ public class StructureManager : MonoBehaviour
     {
         Tile lowestTile = possibleAttacks.First().tileToMoveTo;
         float lowestCost = OUT_OF_BOUND_VALUE;
-		foreach (PossibleAttack possibleAttack in possibleAttacks.Where(a => a.tileToAttack.tileNumber == defender.CurrentTile.tileNumber))
+		foreach (PossibleAttack possibleAttack in possibleAttacks.Where(a => a.tileToAttack.tileNumber == defender.Movement.CurrentTile.tileNumber))
         {
-            Tile tile = pathfinding.FindPathToDestination(possibleAttack.tileToMoveTo, out float cost, attacker.CurrentTile.tileNumber).Last();
+            Tile tile = pathfinding.FindPathToDestination(possibleAttack.tileToMoveTo, out float cost, attacker.Movement.CurrentTile.tileNumber).Last();
             //If true, we found a cheaper road
             if(cost < lowestCost)
             {
@@ -246,7 +249,7 @@ public class StructureManager : MonoBehaviour
     }
     public void SelectTiles(List<Tile> tilelist, bool clearBeforeSelecting, TileType tileType = TileType.Default)
     {
-        if (clearBeforeSelecting)
+        //if (clearBeforeSelecting)
 
         spriteManager.GenerateTileSelection(tilelist, tileType);
     }

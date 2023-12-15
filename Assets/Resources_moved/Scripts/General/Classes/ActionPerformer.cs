@@ -57,21 +57,21 @@ public class ActionPerformer
 
     public void MoveUnit(Unit unit, Tile targetTile)
     {
-        List<Tile> tilesPath = pathfinding.FindPathToDestination(targetTile, out float cost);
+        List<Tile> tilesPath = pathfinding.FindPathToDestination(targetTile, out float cost, unit.Movement.CurrentTile.tileNumber);
         movement.MoveUnit(unit.transform, tilesPath.Select(t => t.transform).ToList(), true);
     }
 
     public void SetupAttack(Unit attacker, Unit defender)
     {
-        attacker.HasPerformedMainAction = true;
+        attacker.Movement.HasPerformedMainAction = true;
         Attack(attacker, defender);
     }
 
     void Attack(Unit attacker, Unit defender)
     {
         enemyInQueueForAnimation = defender;
-        defender.transform.LookAt(attacker.CurrentTile.transform, Vector3.up);
-        attacker.transform.LookAt(defender.CurrentTile.transform, Vector3.up);
+        defender.transform.LookAt(attacker.Movement.CurrentTile.transform, Vector3.up);
+        attacker.transform.LookAt(defender.Movement.CurrentTile.transform, Vector3.up);
 
         AnimationPerformer.PerformAnimation(Animation.Attack, attacker.gameObject);
         

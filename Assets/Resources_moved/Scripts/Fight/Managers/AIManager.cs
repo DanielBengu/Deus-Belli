@@ -50,8 +50,8 @@ public class AIManager : MonoBehaviour
 
     void CalculateTurnForUnit(Unit unit){
         Debug.Log($"CALCULATING MOVE FOR UNIT {unit.unitName}");
-        List<Tile> possibleMovements = unit.PossibleMovements;
-        List<PossibleAttack> possibleAttacks = unit.GetPossibleAttacks(possibleMovements);
+        List<Tile> possibleMovements = unit.Movement.PossibleMovements;
+        List<PossibleAttack> possibleAttacks = unit.Movement.GetPossibleAttacks(possibleMovements);
 
         ActionAI action = DecideAction(possibleMovements,possibleAttacks);
 
