@@ -21,7 +21,7 @@ public class Movement
     //List of steps necessary to go from point A to B
     public List<Transform> movementSteps = new();
 
-    public void MovementTick(float speed, Action callback)
+    /*public void MovementTick(float speed, Action callback)
     {
         if (!IsObjectMoving)
             return;
@@ -47,9 +47,38 @@ public class Movement
 		if (fractionOfJourney > 0)
 			objectMovingTransform.position = Vector3.Lerp(startingPosition, targetPosition, fractionOfJourney);
 		
+	}*/
+
+	public void MovementTick(float speed, Action callback)
+	{
+		if (!IsObjectMoving)
+			return;
+
+		float distanceCovered = (Time.time - startTime) * speed;
+		float fractionOfJourney = distanceCovered / journeyLength;
+
+		// Ensure fractionOfJourney stays within [0, 1] range
+		fractionOfJourney = Mathf.Clamp01(fractionOfJourney);
+
+		// Lerp position continuously until reaching the target
+		objectMovingTransform.position = Vector3.Lerp(startingPosition, targetPosition, fractionOfJourney);
+
+		// Check if the object has reached the destination
+		if (Vector3.Distance(objectMovingTransform.position, targetPosition) < 0.1f)
+		{
+			if (movementSteps.Count > 0)
+			{
+				SetNewMovementStep(objectMovingTransform);
+				return;
+			}
+
+			IsObjectMoving = false;
+			AnimationPerformer.PerformAnimation(Animation.Idle, objectMovingTransform.gameObject);
+			callback();
+		}
 	}
 
-    public bool StartObjectMovement(Transform starting, Transform target)
+	public bool StartObjectMovement(Transform starting, Transform target)
     {
         //Something else is already moving
         if (IsObjectMoving)
