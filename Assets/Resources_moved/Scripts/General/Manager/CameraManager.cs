@@ -10,8 +10,9 @@ public class CameraManager : MonoBehaviour
     public float maxDistance = 10f;
 
     private static readonly float speedMod = 30.0f;//a speed modifier
+	private static readonly float fightSpeedMod = 300.0f;//a speed modifier
 
-    public static float scrollSpeed = 2500f;
+	public static float scrollSpeed = 25000f;
 
     Vector3 defaultCameraPosition = new(670, 1070, 73);
     Quaternion defaultCameraRotation = Quaternion.Euler((float)33.3, 0, 0);

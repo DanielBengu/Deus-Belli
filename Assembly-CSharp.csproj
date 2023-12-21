@@ -134,6 +134,7 @@
     <Compile Include="Assets\Polyart\PolyartStudio\SharedResources\CritiasFoliage\Code\Foliage.cs" />
     <Compile Include="Assets\Resources_moved\Scripts\Fight\Classes\Unit\UnitMovement.cs" />
     <Compile Include="Assets\Polyart\PolyartStudio\SharedResources\CritiasFoliage\Examples\ExampleRuntimeTreeRemover.cs" />
+    <Compile Include="Assets\Resources_moved\Scripts\Fight\Classes\Unit\Unit JSON.cs" />
     <Compile Include="Assets\Polyart\PolyartStudio\SharedResources\CritiasFoliage\Code\FoliageTerrainUtilities.cs" />
     <Compile Include="Assets\Resources_moved\Scripts\GodsArchive\Gods\Agbara\Omi.cs" />
     <Compile Include="Assets\Polyart\PolyartStudio\SharedResources\CritiasFoliage\Code\FoliageData.cs" />

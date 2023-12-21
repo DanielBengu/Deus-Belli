@@ -1,0 +1,26 @@
+{
+  "unitList": [
+    {
+      "Name": "Wario Warrior",
+      "model_name": "Male A",
+      "portrait_name": "Warrior",
+      "stats": {
+        "hp": 10,
+        "movement": 4,
+        "attack": 2,
+        "range": 1
+      }
+    },
+    {
+      "Name": "Archie Archer",
+      "model_name": "Male B",
+      "portrait_name": "Archer",
+      "stats": {
+        "hp": 6,
+        "movement": 3,
+        "attack": 2,
+        "range": 2
+      }
+    }
+  ]
+}
