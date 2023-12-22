@@ -6,6 +6,7 @@ using static Unit;
 
 public class Level
 {
+	public string _enemyListJSON;
     public int TopLeftSquarePositionX;
     public int TopLeftSquarePositionZ;
     public int YPosition;
@@ -31,7 +32,6 @@ public class Level
         HorizontalTiles = mapSize;
         VerticalTiles = mapSize;
 		this.enemyGod = enemyGod;
-        //tilesDict = SetupTiles();
         SetupEnemies(tileType, currentRow, difficulty);
     }
 
@@ -80,7 +80,6 @@ public class Level
 		int enemiesSetupSeed = RandomManager.GetRandomValue(seed, 0, 100000000);
 		Dictionary<int, Unit> result = new();
 		Encounter encounter = enemyGod.Encounters[RandomManager.GetRandomValue(seed, 0, enemyGod.Encounters.Length)];
-
 		for (int i = 0; i < encounter.units.Length; i++)
 		{
 			int enemySeed = RandomManager.GetRandomValue(enemiesSetupSeed, 0, 100000000);
@@ -88,7 +87,11 @@ public class Level
 			SetupEnemy(encounter.units[i], enemySeed);
 			result.Add(encounter.positions[i], enemy);
 		}
-
+		UnitListData unitList = new()
+		{
+			unitList = UnitListData.ConvertToJSON(encounter.units)
+		};
+		_enemyListJSON = JsonUtility.ToJson(unitList);
 		enemyList = result;
 	}
 

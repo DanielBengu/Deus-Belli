@@ -1,6 +1,8 @@
+using System;
 using System.Collections.Generic;
 using System.IO;
 using UnityEngine;
+using static Unit;
 public static class FileManager
 {
 	public const string PLAYER_UNITS_PATH = "Assets\\Resources_moved\\Scripts\\General\\Player Data\\Unit list.json";
@@ -37,20 +39,39 @@ public static class FileManager
 
 	public static List<Unit> ConvertFromUnitJSON(UnitListData unitListData)
 	{
-		List<Unit> units = new List<Unit>();
+		List<Unit> units = new();
 		foreach (var unitData in unitListData.unitList)
 		{
-			GameObject unitObject = AddressablesManager.LoadResource<GameObject>(AddressablesManager.TypeOfResource.Units, unitData.model_name);
+			GameObject unitObject = AddressablesManager.LoadResource<GameObject>(AddressablesManager.TypeOfResource.Units, unitData.ModelName);
 			Unit unit = unitObject.GetComponent<Unit>();
-			unit.unitImage = AddressablesManager.LoadResource<Sprite>(AddressablesManager.TypeOfResource.Sprite, unitData.portrait_name);
+			unit.unitImage = AddressablesManager.LoadResource<Sprite>(AddressablesManager.TypeOfResource.Sprite, unitData.PortraitName);
 			unit.unitName = unitData.Name;
-			unit.attack = unitData.stats.attack;
-			unit.hpMax = unitData.stats.hp;
-			unit.range = unitData.stats.range;
-			unit.movementMax = unitData.stats.movement;
+			unit.attack = unitData.Stats.Attack;
+			unit.hpMax = unitData.Stats.Hp;
+			unit.range = unitData.Stats.Range;
+			unit.movementMax = unitData.Stats.Movement;
+			unit.Traits = ConvertEnumFromJSON(unitData.Traits);
 			units.Add(unit);
 		}
 		return units;
+	}
+
+	static List<TraitsEnum> ConvertEnumFromJSON(List<string> traitsList)
+	{
+		List<TraitsEnum> traits = new();
+		foreach (var trait in traitsList)
+		{
+			// Try parsing the string to an enum
+			if (Enum.TryParse(trait, out TraitsEnum parsedEnum))
+			{
+				traits.Add(parsedEnum);
+			}
+			else
+			{
+				Debug.LogWarning($"Could not parse {trait} to Traits");
+			}
+		}
+		return traits;
 	}
 
 	static List<Unit> GetPlayerUnits()

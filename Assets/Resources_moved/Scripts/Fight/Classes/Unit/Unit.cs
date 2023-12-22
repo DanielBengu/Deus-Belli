@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using UnityEngine;
 public class Unit : MonoBehaviour
 {
+    public string ModelName { get; set; }
     public UnitMovement Movement { get; set; }
 
     public FightManager FightManager { get; set; }
