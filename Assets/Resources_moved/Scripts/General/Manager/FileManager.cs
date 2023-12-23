@@ -1,11 +1,20 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Xml.Linq;
+using Unity.VisualScripting.FullSerializer;
 using UnityEngine;
 using static Unit;
 public static class FileManager
 {
 	public const string PLAYER_UNITS_PATH = "Assets\\Resources_moved\\Scripts\\General\\Player Data\\Unit list.json";
+	public const string ENCOUNTERS_PATH = "Assets\\Resources_moved\\Config\\Encounters";
+	public static EncounterListData GetEncounters(EncounterTypes typeOfEncounter)
+	{
+		string data = File.ReadAllText($"{ENCOUNTERS_PATH}\\{typeOfEncounter}.json");
+		var encounterList = GetDataFromJSON<EncounterListData>(data);
+		return encounterList;
+	}
 	public static List<Unit> GetUnits(DataSource source, string[] CustomData = null)
 	{
 		List<Unit> playerUnits = new();
@@ -37,26 +46,26 @@ public static class FileManager
 		return playerUnits;
 	}
 
-	public static List<Unit> ConvertFromUnitJSON(UnitListData unitListData)
+	public static List<Unit> ConvertFromUnitJSON(IEnumerable<UnitData> unitData)
 	{
 		List<Unit> units = new();
-		foreach (var unitData in unitListData.unitList)
+		foreach (var unit in unitData)
 		{
-			GameObject unitObject = AddressablesManager.LoadResource<GameObject>(AddressablesManager.TypeOfResource.Units, unitData.ModelName);
-			Unit unit = unitObject.GetComponent<Unit>();
-			unit.unitImage = AddressablesManager.LoadResource<Sprite>(AddressablesManager.TypeOfResource.Sprite, unitData.PortraitName);
-			unit.unitName = unitData.Name;
-			unit.attack = unitData.Stats.Attack;
-			unit.hpMax = unitData.Stats.Hp;
-			unit.range = unitData.Stats.Range;
-			unit.movementMax = unitData.Stats.Movement;
-			unit.Traits = ConvertEnumFromJSON(unitData.Traits);
-			units.Add(unit);
+			GameObject unitObject = AddressablesManager.LoadResource<GameObject>(AddressablesManager.TypeOfResource.Units, unit.ModelName);
+			Unit unitScript = unitObject.GetComponent<Unit>();
+			unitScript.unitImage = AddressablesManager.LoadResource<Sprite>(AddressablesManager.TypeOfResource.Sprite, unit.PortraitName);
+			unitScript.unitName = unit.Name;
+			unitScript.attack = unit.Stats.Attack;
+			unitScript.hpMax = unit.Stats.Hp;
+			unitScript.range = unit.Stats.Range;
+			unitScript.movementMax = unit.Stats.Movement;
+			unitScript.Traits = ConvertTraitsFromJSON(unit.Traits);
+			units.Add(unitScript);
 		}
 		return units;
 	}
 
-	static List<TraitsEnum> ConvertEnumFromJSON(List<string> traitsList)
+	static List<TraitsEnum> ConvertTraitsFromJSON(List<string> traitsList)
 	{
 		List<TraitsEnum> traits = new();
 		foreach (var trait in traitsList)
@@ -77,16 +86,14 @@ public static class FileManager
 	static List<Unit> GetPlayerUnits()
 	{
 		string data = File.ReadAllText(PLAYER_UNITS_PATH);
-		var unitList = CreateFromJSON(data);
-		return ConvertFromUnitJSON(unitList);
+		var unitList = GetDataFromJSON<UnitListData>(data);
+		return ConvertFromUnitJSON(unitList.unitList);
 	}
-
-	public static UnitListData CreateFromJSON(string jsonString)
+	public static T GetDataFromJSON<T>(string jsonString)
 	{
-		UnitListData unitListData = JsonUtility.FromJson<UnitListData>(jsonString);
+		T unitListData = JsonUtility.FromJson<T>(jsonString);
 		return unitListData;
 	}
-
 	public static void OverwriteFile(string filePath, string[] dataLines)
 	{
 		File.WriteAllLines(filePath, dataLines);
@@ -101,5 +108,11 @@ public static class FileManager
 	{
 		PlayerUnits,
 		Custom,
+	}
+
+	public enum EncounterTypes
+	{
+		Generic,
+		Agbara,
 	}
 }

@@ -121,6 +121,7 @@
     <Compile Include="Assets\Resources_moved\Scripts\Rogue\RogueNode.cs" />
     <Compile Include="Assets\Resources_moved\Scripts\General\Entity\EventEntity.cs" />
     <Compile Include="Assets\Resources_moved\Scripts\General\Manager\AddressablesManager.cs" />
+    <Compile Include="Assets\Resources_moved\Scripts\Fight\Classes\Encounters\Encounters.cs" />
     <Compile Include="Assets\Polyart\PolyartStudio\SharedResources\CritiasFoliage\Code\FoliageDataRuntime.cs" />
     <Compile Include="Assets\Polyart\PolyartStudio\SharedResources\Scripts\Misc\FPS_Counter.cs" />
     <Compile Include="Assets\Polyart\PolyartStudio\SharedResources\CritiasFoliage\Code\FoliageInstance.cs" />

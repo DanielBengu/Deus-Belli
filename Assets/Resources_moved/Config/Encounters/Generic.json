@@ -1,0 +1,106 @@
+{
+  "GenericEncounterList": [
+    {
+      "Name": "Bandit_Ambush_GenghisKhan",
+      "Map": "Road_Ambush_GenghisKhan",
+      "EnemyList": [
+        {
+          "Name": "Genghis Khan",
+          "ModelName": "Bandit",
+          "PortraitName": "Archer",
+          "Stats": {
+            "Hp": 10,
+            "Movement": 4,
+            "Attack": 3,
+            "Range": 1
+          },
+          "RandomizedTraits": false,
+          "Traits": [
+            "Floaty",
+            "Second_Wind"
+          ]
+        },
+        {
+          "Name": "Generic Bandit 1",
+          "ModelName": "Bandit",
+          "PortraitName": "Archer",
+          "Stats": {
+            "Hp": 6,
+            "Movement": 3,
+            "Attack": 2,
+            "Range": 2
+          },
+          "RandomizedTraits": true,
+          "Traits": [
+          ]
+        },
+        {
+          "Name": "Generic Bandit 2",
+          "ModelName": "Bandit",
+          "PortraitName": "Archer",
+          "Stats": {
+            "Hp": 4,
+            "Movement": 2,
+            "Attack": 4,
+            "Range": 1
+          },
+          "RandomizedTraits": true,
+          "Traits": [
+          ]
+        }
+      ]
+    }
+  ],
+  "SpecialEncounterList": [
+    {
+      "Name": "Bandit_Ambush_GenghisKhan",
+      "Map": "Road_Ambush_GenghisKhan",
+      "EnemyList": [
+        {
+          "Name": "Genghis Khan",
+          "ModelName": "Bandit",
+          "PortraitName": "Archer",
+          "Stats": {
+            "Hp": 10,
+            "Movement": 4,
+            "Attack": 3,
+            "Range": 1
+          },
+          "RandomizedTraits": false,
+          "Traits": [
+            "Floaty",
+            "Second_Wind"
+          ]
+        },
+        {
+          "Name": "Generic Bandit 1",
+          "ModelName": "Bandit",
+          "PortraitName": "Archer",
+          "Stats": {
+            "Hp": 6,
+            "Movement": 3,
+            "Attack": 2,
+            "Range": 2
+          },
+          "RandomizedTraits": true,
+          "Traits": [
+          ]
+        },
+        {
+          "Name": "Generic Bandit 2",
+          "ModelName": "Bandit",
+          "PortraitName": "Archer",
+          "Stats": {
+            "Hp": 4,
+            "Movement": 2,
+            "Attack": 4,
+            "Range": 1
+          },
+          "RandomizedTraits": true,
+          "Traits": [
+          ]
+        }
+      ]
+    }
+  ]
+}

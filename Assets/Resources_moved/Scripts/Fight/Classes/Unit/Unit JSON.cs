@@ -40,6 +40,7 @@ public class UnitData
 	public string ModelName;
 	public string PortraitName;
 	public Stats Stats;
+	public bool RandomizedTraits;
 	public List<string> Traits = new();
 }
 

@@ -79,19 +79,17 @@ public class Level
 	{
 		int enemiesSetupSeed = RandomManager.GetRandomValue(seed, 0, 100000000);
 		Dictionary<int, Unit> result = new();
-		Encounter encounter = enemyGod.Encounters[RandomManager.GetRandomValue(seed, 0, enemyGod.Encounters.Length)];
-		for (int i = 0; i < encounter.units.Length; i++)
+		var encounterData = FileManager.GetEncounters(FileManager.EncounterTypes.Generic);
+		EncounterData encounter = encounterData.GenericEncounterList[RandomManager.GetRandomValue(seed, 0, encounterData.GenericEncounterList.Count)];
+		List<Unit> enemiesList = FileManager.ConvertFromUnitJSON(encounter.EnemyList);
+		for (int i = 0; i < enemiesList.Count; i++)
 		{
 			int enemySeed = RandomManager.GetRandomValue(enemiesSetupSeed, 0, 100000000);
-			Unit enemy = encounter.units[i];
-			SetupEnemy(encounter.units[i], enemySeed);
-			result.Add(encounter.positions[i], enemy);
+			Unit enemy = enemiesList[i];
+			SetupEnemy(enemy, enemySeed);
+			result.Add(i, enemy);
 		}
-		UnitListData unitList = new()
-		{
-			unitList = UnitListData.ConvertToJSON(encounter.units)
-		};
-		_enemyListJSON = JsonUtility.ToJson(unitList);
+		_enemyListJSON = JsonUtility.ToJson(new UnitListData(){ unitList = UnitListData.ConvertToJSON(enemiesList) });
 		enemyList = result;
 	}
 
