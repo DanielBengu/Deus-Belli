@@ -63,7 +63,7 @@ public class GeneralManager : MonoBehaviour
 	public int CurrentRow { get { return runData.currentRow; } set { runData.currentRow = value; } }
 	public int CurrentPositionInRow { get { return runData.currentPositionInRow; } set { runData.currentPositionInRow = value; } }
 	public int Difficulty { get { return runData.difficulty; } set { runData.difficulty = value; } }
-    public List<Unit> PlayerUnits { get { return runData.unitList; } }
+    public List<UnitData> PlayerUnits { get { return runData.unitList; } }
 
 
 	private void Start()
@@ -81,7 +81,7 @@ public class GeneralManager : MonoBehaviour
         int optionalSeed = PlayerPrefs.GetInt(SEED);
         int masterSeed = optionalSeed > 0 ? optionalSeed : Math.Abs(Guid.NewGuid().GetHashCode());
         int difficulty = 1;
-        List<Unit> startingUnits = FileManager.GetUnits(FileManager.DataSource.PlayerUnits);
+        List<UnitData> startingUnits = FileManager.GetUnits(FileManager.DataSource.PlayerUnits);
         runData = new RunData(god, 0, 1, masterSeed, 0, startingUnits, difficulty);
 
         PlayerPrefs.SetInt(SEED, masterSeed);
@@ -131,7 +131,7 @@ public class GeneralManager : MonoBehaviour
         int currentPositionInRow = PlayerPrefs.GetInt(CURRENT_POSITION_IN_ROW);
         int gold = PlayerPrefs.GetInt(GOLD);
         int difficulty = PlayerPrefs.GetInt(DIFFICULTY);
-        List<Unit> unitList = FileManager.GetUnits(FileManager.DataSource.PlayerUnits);
+        List<UnitData> unitList = FileManager.GetUnits(FileManager.DataSource.PlayerUnits);
         return new RunData(god, currentRow, currentPositionInRow, masterSeed, gold, unitList, difficulty);
 	}
 
@@ -284,9 +284,9 @@ public class GeneralManager : MonoBehaviour
         public int difficulty;
 
         public int gold;
-        public List<Unit> unitList;
+        public List<UnitData> unitList;
 
-        public RunData(IGod godSelected,int currentRow, int currentPositionInRow, int masterSeed, int gold, List<Unit> unitList, int difficulty)
+        public RunData(IGod godSelected,int currentRow, int currentPositionInRow, int masterSeed, int gold, List<UnitData> unitList, int difficulty)
         {
             this.godSelected = godSelected;
             this.currentRow = currentRow;

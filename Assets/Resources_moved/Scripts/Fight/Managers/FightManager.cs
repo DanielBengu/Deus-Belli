@@ -154,11 +154,11 @@ public class FightManager : MonoBehaviour
     {
         Transform unitsParent = GameObject.Find("Fight Units").transform;
         List<Unit> unitList = new();
-        GameObject[] playerUnits = generalManager.PlayerUnits.Select(u => u.gameObject).ToArray();
+        List<UnitData> playerUnits = generalManager.PlayerUnits;
         List<int> alreadyOccupiedTiles = new();
-		for (int i = 0; i < playerUnits.Length; i++)
+		for (int i = 0; i < playerUnits.Count; i++)
 		{
-            GameObject unit = playerUnits[i];
+            var unit = playerUnits[i];
             //First part of the where clause removes unavailable terrain (like mountains), the second selects all the tiles of the first two columns of the game
             int[] possiblePlayerStartingUnits = mapTiles.Where(k => 
             (k.Value.IsPassable && !alreadyOccupiedTiles.Contains(k.Key)) && 
@@ -171,15 +171,15 @@ public class FightManager : MonoBehaviour
                 int startingTile = RandomManager.GetRandomValue(seed * (i + 1), 0, possiblePlayerStartingUnits.Length);
                 unitTile = GameObject.Find($"Terrain_{possiblePlayerStartingUnits[startingTile]}").GetComponent<Tile>();
                 alreadyOccupiedTiles.Add(unitTile.tileNumber);
-                unitList.Add(GenerateSingleUnit(unit.GetComponent<Unit>(), unitTile, unitsParent));
+                unitList.Add(GenerateSingleUnit(unit, unitTile, unitsParent));
                 exitClause = !(unitTile != null && unitTile.IsPassable && possiblePlayerStartingUnits.Length > 0);
             }
         }
 
-        Unit[] enemyUnits = level.enemyList.Values.ToArray();
+        UnitData[] enemyUnits = level.enemyList.Values.ToArray();
         for (int i = 0; i < enemyUnits.Length; i++)
         {
-            Unit unit = enemyUnits[i];
+			UnitData unit = enemyUnits[i];
             //First part of the where clause removes unavailable terrain (like mountains), the second selects all the tiles of the last two columns of the game
             int[] possiblePlayerStartingUnits = mapTiles.Where(k =>
             (k.Value.IsPassable && !alreadyOccupiedTiles.Contains(k.Key)) &&
@@ -200,15 +200,22 @@ public class FightManager : MonoBehaviour
         return unitList;
     }
 
-    Unit GenerateSingleUnit(Unit unit, Tile tile, Transform parent)
+    void GenerateListOfUnits(int[] possibleLocations)
+    {
+
+    }
+
+    Unit GenerateSingleUnit(UnitData unit, Tile tile, Transform parent)
     {
         Quaternion rotation = new(0, 180, 0, 0);
-        var unitGenerated = Instantiate(unit, tile.transform.position, rotation, parent);
-        var unitScript = unitGenerated.GetComponent<Unit>();
-        unitScript.Load(unit);
-        unitScript.FightManager = this;
-        unitScript.Movement.CurrentTile = tile;
-        tile.unitOnTile = unitGenerated.GetComponent<Unit>();
+        GameObject model = AddressablesManager.LoadResource<GameObject>(AddressablesManager.TypeOfResource.Units, unit.ModelName);
+		var unitGenerated = Instantiate(model, tile.transform.position, rotation, parent);
+		var unitScript = unitGenerated.GetComponent<Unit>();
+		unitScript.Load(unit);
+		unitScript.FightManager = this;
+		unitScript.Movement.CurrentTile = tile;
+        unitScript.fightData = new(unit.PortraitName, unit.Stats.Hp, unit.Stats.Movement);
+        tile.unitOnTile = unitScript;
         return unitScript;
     }
 
@@ -226,7 +233,7 @@ public class FightManager : MonoBehaviour
 
     void ManageVictory()
     {
-		bool isFightWon = UnitsOnField.Count(u => u.faction == ENEMY_FACTION) == 0;
+		bool isFightWon = UnitsOnField.Count(u => u.unitData.Faction == ENEMY_FACTION) == 0;
 
         if (!isFightWon) return;
 
@@ -238,7 +245,7 @@ public class FightManager : MonoBehaviour
 
     bool ManageDefeat()
     {
-		bool isFightLost = UnitsOnField.Count(u => u.faction == USER_FACTION) == 0;
+		bool isFightLost = UnitsOnField.Count(u => u.unitData.Faction == USER_FACTION) == 0;
 
         if(!isFightLost) return false;
 
@@ -265,9 +272,9 @@ public class FightManager : MonoBehaviour
         CurrentTurnCount = USER_FACTION;
         ResetGameState(true);
         structureManager.SetEndTurnButton(true);
-        foreach (var unit in UnitsOnField.Where(u => u.faction == USER_FACTION))
+        foreach (var unit in UnitsOnField.Where(u => u.unitData.Faction == USER_FACTION))
         {
-            unit.movementCurrent = unit.movementMax;
+            unit.fightData.currentMovement = unit.unitData.Stats.Movement;
             unit.Movement.HasPerformedMainAction = false;
         }
     }

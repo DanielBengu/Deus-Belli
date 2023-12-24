@@ -21,26 +21,42 @@ MonoBehaviour:
     m_Address: Sprite/Goblin_Thief
     m_ReadOnly: 0
     m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 2c415a986309aa648b0c4797e13f541b
     m_Address: Sprite/Goblin_Archer
     m_ReadOnly: 0
     m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 17c3a355f15df344c920af4587ea9b7e
     m_Address: Sprite/Goblin_Warrior
     m_ReadOnly: 0
     m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 28fdf38a850c34d4dac2931df6d43ae8
     m_Address: Sprite/Warrior
     m_ReadOnly: 0
     m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 58b2cb2676bcdf24089ee2794094c420
     m_Address: Sprite/Bandit
     m_ReadOnly: 0
     m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 0336b40dd49c8fc42a67bb634da4e351
     m_Address: Sprite/Archer
     m_ReadOnly: 0
     m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 3b28e6522dee47a44b86e7bfecfa0604
+    m_Address: Sprite/Lisa
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 8148ab26ca293b74e938e0a83ebf92e3
+    m_Address: Sprite/Genghis_Khan
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
   m_ReadOnly: 0
   m_Settings: {fileID: 11400000, guid: 42fa5884c9964964993dbdd708fbd850, type: 2}
   m_SchemaSet:

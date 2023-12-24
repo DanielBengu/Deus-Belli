@@ -70,7 +70,7 @@ public class FightInput
 		}
 
 		//We selected an allied unit that can still perform an action
-		if (unit.faction == FightManager.USER_FACTION)
+		if (unit.unitData.Faction == FightManager.USER_FACTION)
 		{
 			_fightManager.ResetGameState(false);
 			List<Tile> possibleMovements = _structureManager.GeneratePossibleMovementForUnit(_fightManager.UnitSelected, true);
@@ -160,7 +160,7 @@ public class FightInput
 	{
 		_fightManager.ResetGameState(false);
 		_fightManager.SetupUnitPosition();
-		if (unitSelected.faction == FightManager.ENEMY_FACTION)
+		if (unitSelected.unitData.Faction == FightManager.ENEMY_FACTION)
 			_fightManager.UnitSelected = null;
 		_structureManager.SelectTiles(unitSelected.Movement.CurrentTile.ToList(), false, TileType.Selected);
 		_structureManager.SetInfoPanel(true, unitSelected);

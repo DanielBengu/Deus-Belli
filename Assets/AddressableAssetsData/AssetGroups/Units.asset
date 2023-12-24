@@ -21,42 +21,57 @@ MonoBehaviour:
     m_Address: Units/Bandit
     m_ReadOnly: 0
     m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 5b107b5554d982148ab8856c0213a244
     m_Address: Units/Goblin_Green
     m_ReadOnly: 0
     m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: cb48efe15540447479e9ec9eaa28b9bc
     m_Address: Units/Goblin_Red
     m_ReadOnly: 0
     m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: d4425c481d4fa004f944309f564a676e
     m_Address: Units/Goblin_Yellow
     m_ReadOnly: 0
     m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: e50a1e14b05b62c4db8e76f3e337e53a
     m_Address: Units/Male A
     m_ReadOnly: 0
     m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 366660e41b1db4a4e8b6238e509e2a98
     m_Address: Units/Male B
     m_ReadOnly: 0
     m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 3250f73b619c14d41a3e3b76fbc9dda0
     m_Address: Units/Male C
     m_ReadOnly: 0
     m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 29e093ffeacd86245b1130b7c44179f6
     m_Address: Units/Female A
     m_ReadOnly: 0
     m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 3c3fd9a7cb83f1340af0f09cccc40580
     m_Address: Units/Female B
     m_ReadOnly: 0
     m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 9d3b004940300cb4ca92f47540c235ca
     m_Address: Units/Female C
     m_ReadOnly: 0
     m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 15f9a6dab4c749943af11a085056ea56
+    m_Address: Units/Lisa
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
   m_ReadOnly: 0
   m_Settings: {fileID: 11400000, guid: 42fa5884c9964964993dbdd708fbd850, type: 2}
   m_SchemaSet:

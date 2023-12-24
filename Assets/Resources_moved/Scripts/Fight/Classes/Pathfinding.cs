@@ -77,7 +77,7 @@ public class Pathfinding
         }
 
         Debug.Log("Starting Dijkstra calculation");
-        float maxMovementCost = startingUnit.movementCurrent;
+        float maxMovementCost = startingUnit.fightData.currentMovement;
 
         for (int i = 0; i < mapTiles.Count; i++)
         {
@@ -121,7 +121,7 @@ public class Pathfinding
         }
         Debug.Log("Ending Dijkstra calculation");
 
-        return mapTiles.Select(t => t.Value).Where(t => t.tentativeCost <= startingUnit.movementCurrent && !(t.unitOnTile && t.unitOnTile.faction != startingUnit.faction)).ToList();
+        return mapTiles.Select(t => t.Value).Where(t => t.tentativeCost <= startingUnit.fightData.currentMovement && !(t.unitOnTile && t.unitOnTile.unitData.Faction != startingUnit.unitData.Faction)).ToList();
     }
 
     public List<Tile> FindPossibleAttacks(Unit attacker)
@@ -129,7 +129,7 @@ public class Pathfinding
         List<Tile> possibleAttacks = new();
         List<Tile> possibleMovements = CalculateMapTilesDistance(attacker);
         List<Tile> startingPointsForAttack = possibleMovements;
-        for (int i = 0; i < attacker.range; i++)
+        for (int i = 0; i < attacker.unitData.Stats.Range; i++)
         {
             List<Tile> newStartingPoint = new();
             foreach (var tile in startingPointsForAttack)
@@ -139,7 +139,7 @@ public class Pathfinding
 
 				foreach (var neighbour in neighboursTile)
 				{
-					if (neighbour && neighbour.unitOnTile && neighbour.unitOnTile.faction != attacker.faction)
+					if (neighbour && neighbour.unitOnTile && neighbour.unitOnTile.unitData.Faction != attacker.unitData.Faction)
 					{
 						possibleAttacks.Add(neighbour);
 					}
@@ -165,14 +165,14 @@ public class Pathfinding
         {
             tilesToSearch = new() { tile };
             List<Tile> tempTiles = new();
-			for (int i = 0; i < attacker.range; i++)
+			for (int i = 0; i < attacker.unitData.Stats.Range; i++)
             {
                 foreach (var tileToSearch in tilesToSearch)
                 {
 					List<Tile> neighboursTile = FindNeighbours(attacker, tileToSearch, false).Where(t => t != null).ToList();
 					tempTiles.AddRange(neighboursTile);
 
-                    GetPossibleAttacksOnNeighbours(neighboursTile, tile, attacker.faction, possibleAttacks);
+                    GetPossibleAttacksOnNeighbours(neighboursTile, tile, attacker.unitData.Faction, possibleAttacks);
 				}
                 tilesToSearch.AddRange(tempTiles);
                 tempTiles= new();
@@ -196,7 +196,7 @@ public class Pathfinding
 	}
 
     bool NeighbourHasAnEnemy(Tile neighbour, int attackerFaction) {
-        return neighbour && neighbour.unitOnTile && neighbour.unitOnTile.faction != attackerFaction;
+        return neighbour && neighbour.unitOnTile && neighbour.unitOnTile.unitData.Faction != attackerFaction;
 	}
 
 	List<Tile> FindNeighbours(Unit sourceUnit, Tile source, bool calculateCosts){
@@ -213,7 +213,7 @@ public class Pathfinding
 
     public void CalculateCost(Unit sourceUnit, Tile source, Tile neighbourTile)
     {
-        if (neighbourTile && neighbourTile.IsPassable && !(neighbourTile.unitOnTile && neighbourTile.unitOnTile.faction != sourceUnit.faction))
+        if (neighbourTile && neighbourTile.IsPassable && !(neighbourTile.unitOnTile && neighbourTile.unitOnTile.unitData.Faction != sourceUnit.unitData.Faction))
         {
             float newTentativeCost = source.tentativeCost + neighbourTile.MovementCost;
             if (newTentativeCost < neighbourTile.tentativeCost)

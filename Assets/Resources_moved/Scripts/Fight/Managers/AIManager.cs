@@ -38,9 +38,9 @@ public class AIManager : MonoBehaviour
 
     public void StartAITurn(){
         Debug.Log($"START AI TURN FOR FACTION {fightManager.CurrentTurnCount}");
-        foreach (var unit in structureManager.gameData.unitsOnField.Where(u => u.faction == fightManager.CurrentTurnCount))
+        foreach (var unit in structureManager.gameData.unitsOnField.Where(u => u.unitData.Faction == fightManager.CurrentTurnCount))
         {
-            unit.movementCurrent = unit.movementMax;
+            unit.fightData.currentMovement = unit.unitData.Stats.Movement;
             unitsToCalculate.Enqueue(unit);
         }
 
@@ -49,7 +49,7 @@ public class AIManager : MonoBehaviour
     }
 
     void CalculateTurnForUnit(Unit unit){
-        Debug.Log($"CALCULATING MOVE FOR UNIT {unit.unitName}");
+        Debug.Log($"CALCULATING MOVE FOR UNIT {unit.unitData.Name}");
         List<Tile> possibleMovements = unit.Movement.PossibleMovements;
         List<PossibleAttack> possibleAttacks = unit.Movement.GetPossibleAttacks(possibleMovements);
 

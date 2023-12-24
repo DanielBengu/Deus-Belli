@@ -68,6 +68,7 @@
     <Compile Include="Assets\Polyart\PolyartStudio\SharedResources\Scripts\Tools\NatureManager.cs" />
     <Compile Include="Assets\Polyart\PolyartStudio\SharedResources\Scripts\Gameplay\Character\TestInteractable.cs" />
     <Compile Include="Assets\Polyart\PolyartStudio\SharedResources\CritiasFoliage\Code\FoliageType.cs" />
+    <Compile Include="Assets\RFA\Common\Scripts\Combat.cs" />
     <Compile Include="Assets\Polyart\PolyartStudio\SharedResources\CritiasFoliage\Examples\ExampleRuntimeSettings.cs" />
     <Compile Include="Assets\Polyart\PolyartStudio\Scripts\SmoothMouseLook.cs" />
     <Compile Include="Assets\Polyart\PolyartStudio\SharedResources\CritiasFoliage\Code\FoliageUtilities.cs" />
@@ -79,6 +80,8 @@
     <Compile Include="Assets\Resources_moved\Scripts\Custom Creator\CustomCreatorManager.cs" />
     <Compile Include="Assets\Resources_moved\Scripts\Menu\MainMenu.cs" />
     <Compile Include="Assets\Polyart\PolyartStudio\SharedResources\CritiasFoliage\Code\FoliageColliders.cs" />
+    <Compile Include="Assets\RFA\Common\Plugins\NaughtyCharacter\Scripts\SpringArm.cs" />
+    <Compile Include="Assets\RFA\Common\Plugins\NaughtyCharacter\Scripts\PlayerCamera.cs" />
     <Compile Include="Assets\Resources_moved\Scripts\Menu\TextMenu.cs" />
     <Compile Include="Assets\Resources_moved\Scripts\General\Manager\GeneralManager.cs" />
     <Compile Include="Assets\Resources_moved\Scripts\GodsArchive\Gods\None\BanditLord.cs" />
@@ -92,6 +95,7 @@
     <Compile Include="Assets\Resources_moved\Scripts\TerrainArchive\TerrainArchive.cs" />
     <Compile Include="Assets\Resources_moved\Scripts\Fight\Managers\FightManager.cs" />
     <Compile Include="Assets\Polyart\PolyartStudio\SharedResources\CritiasFoliage\Code\FoliagePainterEditTime.cs" />
+    <Compile Include="Assets\RFA\Common\Scripts\Movement.cs" />
     <Compile Include="Assets\Resources_moved\Scripts\Fight\Tile.cs" />
     <Compile Include="Assets\Polyart\PolyartStudio\Scripts\Flythrough.cs" />
     <Compile Include="Assets\Resources_moved\Scripts\General\Manager\UIManager.cs" />
@@ -102,13 +106,16 @@
     <Compile Include="Assets\Resources_moved\Scripts\Rogue\Managers\RogueManager.cs" />
     <Compile Include="Assets\Resources_moved\Scripts\General\Manager\CameraManager.cs" />
     <Compile Include="Assets\MapEditorManager.cs" />
+    <Compile Include="Assets\RFA\Common\Scripts\Aiming.cs" />
     <Compile Include="Assets\Polyart\PolyartStudio\SharedResources\CritiasFoliage\Code\FoliageDataSerializer.cs" />
     <Compile Include="Assets\Polyart\PolyartStudio\SharedResources\CritiasFoliage\Code\FoliageWindTreeWind.cs" />
     <Compile Include="Assets\Polyart\PolyartStudio\DreamscapeCampsite\Scripts\Flickering.cs" />
     <Compile Include="Assets\Resources_moved\Scripts\GodsArchive\InterfacesAndClasses\IGod.cs" />
+    <Compile Include="Assets\RFA\Common\Scripts\Orbit.cs" />
     <Compile Include="Assets\Polyart\PolyartStudio\SharedResources\Scripts\Gameplay\Character\FirstPersonController_Dreamscape.cs" />
     <Compile Include="Assets\Resources_moved\Scripts\Rogue\Classes\DB_Event.cs" />
     <Compile Include="Assets\Resources_moved\Scripts\Fight\Classes\FirstStageArchive.cs" />
+    <Compile Include="Assets\RFA\Common\Scripts\PlayerInput.cs" />
     <Compile Include="Assets\Resources_moved\Scripts\General\Manager\ScenesManager.cs" />
     <Compile Include="Assets\Cartoon Heroes\Scripts\SetCharacter\SetCharacter.cs" />
     <Compile Include="Assets\InitManager.cs" />
@@ -120,10 +127,11 @@
     <Compile Include="Assets\Polyart\PolyartStudio\SharedResources\Scripts\Tools\WaterReflection.cs" />
     <Compile Include="Assets\Resources_moved\Scripts\Rogue\RogueNode.cs" />
     <Compile Include="Assets\Resources_moved\Scripts\General\Entity\EventEntity.cs" />
-    <Compile Include="Assets\Resources_moved\Scripts\General\Manager\AddressablesManager.cs" />
     <Compile Include="Assets\Resources_moved\Scripts\Fight\Classes\Encounters\Encounters.cs" />
+    <Compile Include="Assets\Resources_moved\Scripts\General\Manager\AddressablesManager.cs" />
     <Compile Include="Assets\Polyart\PolyartStudio\SharedResources\CritiasFoliage\Code\FoliageDataRuntime.cs" />
     <Compile Include="Assets\Polyart\PolyartStudio\SharedResources\Scripts\Misc\FPS_Counter.cs" />
+    <Compile Include="Assets\RFA\Common\Scripts\Jumping.cs" />
     <Compile Include="Assets\Polyart\PolyartStudio\SharedResources\CritiasFoliage\Code\FoliageInstance.cs" />
     <Compile Include="Assets\Resources_moved\Scripts\Fight\Classes\FightInput.cs" />
     <Compile Include="Assets\Polyart\PolyartStudio\SharedResources\CritiasFoliage\Code\FoliagePainterRuntime.cs" />
@@ -145,11 +153,13 @@
     <Compile Include="Assets\Polyart\PolyartStudio\Scripts\NatureManager.cs" />
     <Compile Include="Assets\MapLineScript.cs" />
     <Compile Include="Assets\Resources_moved\Scripts\General\Manager\AchievementManager.cs" />
+    <Compile Include="Assets\RFA\Common\Scripts\AimingController.cs" />
     <Compile Include="Assets\Resources_moved\Scripts\Fight\Classes\Movement.cs" />
     <Compile Include="Assets\Polyart\PolyartStudio\SharedResources\Scripts\Misc\Cull_Lights.cs" />
     <Compile Include="Assets\Polyart\PolyartStudio\SharedResources\CritiasFoliage\Code\FoliageColliderData.cs" />
     <Compile Include="Assets\Resources_moved\Scripts\Fight\Classes\Pathfinding.cs" />
     <Compile Include="Assets\Resources_moved\Scripts\Fight\Classes\AnimationPerformer.cs" />
+    <Compile Include="Assets\Resources_moved\Scripts\Fight\Classes\Unit\UnitFightData.cs" />
     <Compile Include="Assets\Resources_moved\Scripts\Menu\OptionsMenu.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -165,6 +175,7 @@
     <None Include="Assets\Polyart\PolyartStudio\Shaders\Dreamscape_FoliageBillboard.shader" />
     <None Include="Assets\Polyart\PolyartStudio\SharedResources\Shaders\Props\PA_SurfaceORM_Cutout.shader" />
     <None Include="Assets\Resources_moved\Scripts\Custom Creator\CustomMapsArchive.txt" />
+    <None Include="Assets\RFA\Readme.txt" />
     <None Include="Assets\Polyart\PolyartStudio\SharedResources\Shaders\Water\PA_Water_River.shader" />
     <None Include="Assets\Polyart\PolyartStudio\Shaders\Animated\Dreamscape_AnimatedMaterial.shader" />
     <None Include="Assets\Resources_moved\Sprites\Objects\Tables\Brass Marble Table\Brass Table\MAXFILES.TXT" />
@@ -193,6 +204,7 @@
     <None Include="Assets\TextMesh Pro\Shaders\TMP_Bitmap-Custom-Atlas.shader" />
     <None Include="Assets\Polyart\PolyartStudio\SharedResources\Shaders\Props\PA_Trims.shader" />
     <None Include="Assets\TextMesh Pro\Shaders\TMP_SDF.shader" />
+    <None Include="Assets\RFA\Third-Party Notices.txt" />
     <None Include="Assets\Polyart\PolyartStudio\SharedResources\Shaders\Deprecated\Dreamscape_WaterfallFoam.shader" />
     <None Include="Assets\Polyart\PolyartStudio\SharedResources\Shaders\Props\PA_TilingPOM.shader" />
     <None Include="Assets\TextMesh Pro\Shaders\TMP_SDF-Mobile SSD.shader" />

@@ -100,30 +100,36 @@ public class UIManager : MonoBehaviour
         if (active && unit != null){
 
             //We setup the traits in the info panel
-			for (int i = 0; i < traitParent.childCount; i++)
-                if (unit.Traits.Count > i)
-                    traitParent.GetChild(i).GetComponent<Image>().sprite = AddressablesManager.LoadResource<Sprite>(AddressablesManager.TypeOfResource.Sprite, unit.Traits[i].ToString());
+            for (int i = 0; i < traitParent.childCount; i++)
+            {
+				Transform traitBox = traitParent.GetChild(i);
+				if (unit.unitData.Traits.Count > i)
+                {
+                    traitBox.GetComponent<Image>().sprite = AddressablesManager.LoadResource<Sprite>(AddressablesManager.TypeOfResource.Sprite, unit.unitData.Traits[i]);
+					traitBox.gameObject.SetActive(true);
+				}
                 else
-                    traitParent.GetChild(i).gameObject.SetActive(false);
+                    traitBox.gameObject.SetActive(false);
+            }
 
-            nameText.text = unit.unitName;
-            unitImage.sprite = unit.unitImage;
+            nameText.text = unit.unitData.Name;
+            unitImage.sprite = unit.fightData.sprite;
 			for (int i = 0; i < statsParent.childCount; i++)
 			{
                 TextMeshProUGUI stat = statsParent.GetChild(i).GetComponent<TextMeshProUGUI>();
                 switch (stat.name)
 				{
                     case "HP":
-                        stat.text = $"{unit.hpCurrent}/{unit.hpMax}";
+                        stat.text = $"{unit.fightData.currentHp}/{unit.unitData.Stats.Hp}";
                         break;
                     case "Movement":
-                        stat.text = $"{unit.movementCurrent}/{unit.movementMax}";
+                        stat.text = $"{unit.fightData.currentMovement}/{unit.unitData.Stats.Movement}";
                         break;
                     case "Attack":
-                        stat.text = unit.attack.ToString();
+                        stat.text = unit.unitData.Stats.Attack.ToString();
                         break;
                     case "Range":
-                        stat.text = unit.range.ToString();
+                        stat.text = unit.unitData.Stats.Range.ToString();
                         break;
                     default:
 						break;

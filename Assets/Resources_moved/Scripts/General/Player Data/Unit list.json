@@ -4,6 +4,7 @@
       "Name": "Wario Warrior",
       "ModelName": "Male A",
       "PortraitName": "Warrior",
+      "Faction": 0,
       "Stats": {
         "Hp": 10,
         "Movement": 4,
@@ -20,6 +21,7 @@
       "Name": "Archie Archer",
       "ModelName": "Male B",
       "PortraitName": "Archer",
+      "Faction": 0,
       "Stats": {
         "Hp": 6,
         "Movement": 3,
