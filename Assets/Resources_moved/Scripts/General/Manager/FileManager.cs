@@ -64,6 +64,8 @@ public static class FileManager
 			{
 				string mapData = File.ReadAllText(files[i]);
 				map = GetDataFromJSON<TileMapData>(mapData);
+				map.FillTiles();
+				map.TileList = map.TileList.OrderBy(t => t.PositionOnGrid).ToList();
 				bool isMapValid = Validator.Validate(map);
 				if (isMapValid)
 				{

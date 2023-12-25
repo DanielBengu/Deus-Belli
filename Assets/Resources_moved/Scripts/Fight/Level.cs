@@ -28,7 +28,6 @@ public class Level
         TopLeftSquarePositionZ = 1800;
         YPosition = 170;
         SetupEnemies();
-		
 	}
 
 	// if isEdit is true then the map generated will be a basic map with only grass
@@ -39,36 +38,20 @@ public class Level
 			GameObject objectToSpawn = ObjectsManager.GetObject(mapData.TileList[i].Model);
 			GameObject tileObject = UnityEngine.Object.Instantiate(objectToSpawn, objectsParent);
 
-			LoadTile(tileObject, $"Terrain_{i}", objectToSpawn.name, isEdit, true);
-			tilesDict.Add(i, tileObject);
-		}
-	}
-	public void GenerateTerrain(bool isEdit, Transform objectsParent, string[] customMap)
-	{
-		List<GameObject> models = new();
-		//We load onto the list all the different objects we need for this custom map, beforehand
-		for (int i = 0; i < customMap.Length; i++)
-			if (!models.Any(m => m.name.Equals(customMap[i])))
-				models.Add(ObjectsManager.GetObject(customMap[i]));
-
-		for (int i = 0; i < mapData.Rows * mapData.Columns; i++)
-		{
-			GameObject objectToSpawn = models.First(m => m.name == customMap[i]);
-			GameObject tileObject = UnityEngine.Object.Instantiate(objectToSpawn, objectsParent);
-
-			LoadTile(tileObject, $"Terrain_{i}", objectToSpawn.name, isEdit, true);
+			LoadTile(tileObject, $"Terrain_{i}", isEdit, mapData.TileList[i]);
 			tilesDict.Add(i, tileObject);
 		}
 	}
 
-	void LoadTile(GameObject tile, string name, string modelName, bool isEdit, bool isPassable)
+	void LoadTile(GameObject tile, string name, bool isEdit, TileData tileData)
 	{
 		tile.name = name;
 
 		Tile script = tile.GetComponent<Tile>();
-		script.modelName = modelName;
 		script.isEdit = isEdit;
-		script.IsPassable = isPassable;
+		script.modelName = tileData.Model;
+		script.IsPassable = tileData.ValidForMovement;
+		script.MovementCost = tileData.MovementCost;
 	}
 
 	public void SetupEnemies()
@@ -77,7 +60,6 @@ public class Level
 		Dictionary<int, UnitData> result = new();
 		var encounterData = FileManager.GetEncounters(FileManager.EncounterTypes.Generic);
 		EncounterData encounter = encounterData.GenericEncounterList[RandomManager.GetRandomValue(seed, 0, encounterData.GenericEncounterList.Count)];
-		//List<Unit> enemiesList = FileManager.ConvertFromUnitJSON(encounter.EnemyList);
 		for (int i = 0; i < encounter.EnemyList.Count; i++)
 		{
 			int enemySeed = RandomManager.GetRandomValue(enemiesSetupSeed, 0, 100000000);
@@ -90,7 +72,6 @@ public class Level
 
 	public void SetupEnemy(UnitData unit, int enemySeed)
 	{
-		unit.Faction = 1;
 		SetRandomTraits(unit, enemySeed);
 	}
 
@@ -106,5 +87,10 @@ public class Level
 			unitTraits.Add(trait.ToString());
 		}
 		unit.Traits = unitTraits;
+	}
+
+	public int[] GetValidStartingPositionForFaction(int faction)
+	{
+		return mapData.TileList.Where(t => t.StartPositionForFaction == faction && t.ValidForMovement).Select(t => t.PositionOnGrid).ToArray();
 	}
 }

@@ -7,600 +7,700 @@
       "PositionOnGrid": 0,
       "Model": "Grass",
       "StartPositionForFaction": -1,
+      "MovementCost": 1,
       "ValidForMovement": true
     },
     {
       "PositionOnGrid": 1,
       "Model": "Grass",
       "StartPositionForFaction": -1,
+      "MovementCost": 1,
       "ValidForMovement": true
     },
     {
       "PositionOnGrid": 2,
-      "Model": "Grass",
+      "Model": "Mountain",
       "StartPositionForFaction": -1,
-      "ValidForMovement": true
+      "MovementCost": -1,
+      "ValidForMovement": false
     },
     {
       "PositionOnGrid": 3,
       "Model": "Grass",
       "StartPositionForFaction": -1,
+      "MovementCost": 1,
       "ValidForMovement": true
     },
     {
       "PositionOnGrid": 4,
       "Model": "Grass",
       "StartPositionForFaction": -1,
+      "MovementCost": 1,
       "ValidForMovement": true
     },
     {
       "PositionOnGrid": 5,
       "Model": "Grass",
-      "StartPositionForFaction": -1,
+      "StartPositionForFaction": 2,
+      "MovementCost": 1,
       "ValidForMovement": true
     },
     {
       "PositionOnGrid": 6,
       "Model": "Grass",
-      "StartPositionForFaction": -1,
+      "StartPositionForFaction": 2,
+      "MovementCost": 1,
       "ValidForMovement": true
     },
     {
       "PositionOnGrid": 7,
       "Model": "Grass",
       "StartPositionForFaction": -1,
+      "MovementCost": 1,
       "ValidForMovement": true
     },
     {
       "PositionOnGrid": 8,
       "Model": "Grass",
       "StartPositionForFaction": -1,
+      "MovementCost": 1,
       "ValidForMovement": true
     },
     {
       "PositionOnGrid": 9,
       "Model": "Grass",
       "StartPositionForFaction": -1,
+      "MovementCost": 1,
       "ValidForMovement": true
     },
     {
       "PositionOnGrid": 10,
       "Model": "Grass",
-      "StartPositionForFaction": -1,
+      "StartPositionForFaction": 0,
+      "MovementCost": 1,
       "ValidForMovement": true
     },
     {
       "PositionOnGrid": 11,
       "Model": "Grass",
-      "StartPositionForFaction": -1,
+      "StartPositionForFaction": 0,
+      "MovementCost": 1,
       "ValidForMovement": true
     },
     {
       "PositionOnGrid": 12,
       "Model": "Grass",
       "StartPositionForFaction": -1,
+      "MovementCost": 1,
       "ValidForMovement": true
     },
     {
       "PositionOnGrid": 13,
       "Model": "Grass",
       "StartPositionForFaction": -1,
+      "MovementCost": 1,
       "ValidForMovement": true
     },
     {
       "PositionOnGrid": 14,
       "Model": "Grass",
       "StartPositionForFaction": -1,
+      "MovementCost": 1,
       "ValidForMovement": true
     },
     {
       "PositionOnGrid": 15,
       "Model": "Grass",
       "StartPositionForFaction": -1,
+      "MovementCost": 1,
       "ValidForMovement": true
     },
     {
       "PositionOnGrid": 16,
       "Model": "Grass",
       "StartPositionForFaction": -1,
+      "MovementCost": 1,
       "ValidForMovement": true
     },
     {
       "PositionOnGrid": 17,
       "Model": "Grass",
       "StartPositionForFaction": -1,
+      "MovementCost": 1,
       "ValidForMovement": true
     },
     {
       "PositionOnGrid": 18,
       "Model": "Grass",
-      "StartPositionForFaction": -1,
+      "StartPositionForFaction": 1,
+      "MovementCost": 1,
       "ValidForMovement": true
     },
     {
       "PositionOnGrid": 19,
       "Model": "Grass",
-      "StartPositionForFaction": -1,
+      "StartPositionForFaction": 1,
+      "MovementCost": 1,
       "ValidForMovement": true
     },
     {
       "PositionOnGrid": 20,
       "Model": "Grass",
-      "StartPositionForFaction": -1,
+      "StartPositionForFaction": 0,
+      "MovementCost": 1,
       "ValidForMovement": true
     },
     {
       "PositionOnGrid": 21,
       "Model": "Grass",
-      "StartPositionForFaction": -1,
+      "StartPositionForFaction": 0,
+      "MovementCost": 1,
       "ValidForMovement": true
     },
     {
       "PositionOnGrid": 22,
       "Model": "Grass",
       "StartPositionForFaction": -1,
+      "MovementCost": 1,
       "ValidForMovement": true
     },
     {
       "PositionOnGrid": 23,
       "Model": "Grass",
       "StartPositionForFaction": -1,
+      "MovementCost": 1,
       "ValidForMovement": true
     },
     {
       "PositionOnGrid": 24,
       "Model": "Grass",
       "StartPositionForFaction": -1,
+      "MovementCost": 1,
       "ValidForMovement": true
     },
     {
       "PositionOnGrid": 25,
       "Model": "Grass",
       "StartPositionForFaction": -1,
+      "MovementCost": 1,
       "ValidForMovement": true
     },
     {
       "PositionOnGrid": 26,
       "Model": "Grass",
       "StartPositionForFaction": -1,
+      "MovementCost": 1,
       "ValidForMovement": true
     },
     {
       "PositionOnGrid": 27,
       "Model": "Grass",
       "StartPositionForFaction": -1,
+      "MovementCost": 1,
       "ValidForMovement": true
     },
     {
       "PositionOnGrid": 28,
       "Model": "Grass",
-      "StartPositionForFaction": -1,
+      "StartPositionForFaction": 1,
+      "MovementCost": 1,
       "ValidForMovement": true
     },
     {
       "PositionOnGrid": 29,
       "Model": "Grass",
-      "StartPositionForFaction": -1,
+      "StartPositionForFaction": 1,
+      "MovementCost": 1,
       "ValidForMovement": true
     },
     {
       "PositionOnGrid": 30,
       "Model": "Grass",
-      "StartPositionForFaction": -1,
+      "StartPositionForFaction": 0,
+      "MovementCost": 1,
       "ValidForMovement": true
     },
     {
       "PositionOnGrid": 31,
       "Model": "Grass",
-      "StartPositionForFaction": -1,
+      "StartPositionForFaction": 0,
+      "MovementCost": 1,
       "ValidForMovement": true
     },
     {
       "PositionOnGrid": 32,
       "Model": "Grass",
       "StartPositionForFaction": -1,
+      "MovementCost": 1,
       "ValidForMovement": true
     },
     {
       "PositionOnGrid": 33,
       "Model": "Grass",
       "StartPositionForFaction": -1,
+      "MovementCost": 1,
       "ValidForMovement": true
     },
     {
       "PositionOnGrid": 34,
       "Model": "Grass",
       "StartPositionForFaction": -1,
+      "MovementCost": 1,
       "ValidForMovement": true
     },
     {
       "PositionOnGrid": 35,
       "Model": "Grass",
       "StartPositionForFaction": -1,
+      "MovementCost": 1,
       "ValidForMovement": true
     },
     {
       "PositionOnGrid": 36,
       "Model": "Grass",
       "StartPositionForFaction": -1,
+      "MovementCost": 1,
       "ValidForMovement": true
     },
     {
       "PositionOnGrid": 37,
       "Model": "Grass",
       "StartPositionForFaction": -1,
+      "MovementCost": 1,
       "ValidForMovement": true
     },
     {
       "PositionOnGrid": 38,
       "Model": "Grass",
-      "StartPositionForFaction": -1,
+      "StartPositionForFaction": 1,
+      "MovementCost": 1,
       "ValidForMovement": true
     },
     {
       "PositionOnGrid": 39,
       "Model": "Grass",
-      "StartPositionForFaction": -1,
+      "StartPositionForFaction": 1,
+      "MovementCost": 1,
       "ValidForMovement": true
     },
     {
       "PositionOnGrid": 40,
       "Model": "Grass",
-      "StartPositionForFaction": -1,
+      "StartPositionForFaction": 0,
+      "MovementCost": 1,
       "ValidForMovement": true
     },
     {
       "PositionOnGrid": 41,
       "Model": "Grass",
-      "StartPositionForFaction": -1,
+      "StartPositionForFaction": 0,
+      "MovementCost": 1,
       "ValidForMovement": true
     },
     {
       "PositionOnGrid": 42,
       "Model": "Grass",
       "StartPositionForFaction": -1,
+      "MovementCost": 1,
       "ValidForMovement": true
     },
     {
       "PositionOnGrid": 43,
       "Model": "Grass",
       "StartPositionForFaction": -1,
+      "MovementCost": 1,
       "ValidForMovement": true
     },
     {
       "PositionOnGrid": 44,
       "Model": "Grass",
       "StartPositionForFaction": -1,
+      "MovementCost": 1,
       "ValidForMovement": true
     },
     {
       "PositionOnGrid": 45,
       "Model": "Grass",
       "StartPositionForFaction": -1,
+      "MovementCost": 1,
       "ValidForMovement": true
     },
     {
       "PositionOnGrid": 46,
       "Model": "Grass",
       "StartPositionForFaction": -1,
+      "MovementCost": 1,
       "ValidForMovement": true
     },
     {
       "PositionOnGrid": 47,
       "Model": "Grass",
       "StartPositionForFaction": -1,
+      "MovementCost": 1,
       "ValidForMovement": true
     },
     {
       "PositionOnGrid": 48,
       "Model": "Grass",
-      "StartPositionForFaction": -1,
+      "StartPositionForFaction": 1,
+      "MovementCost": 1,
       "ValidForMovement": true
     },
     {
       "PositionOnGrid": 49,
       "Model": "Grass",
-      "StartPositionForFaction": -1,
+      "StartPositionForFaction": 1,
+      "MovementCost": 1,
       "ValidForMovement": true
     },
     {
       "PositionOnGrid": 50,
       "Model": "Grass",
-      "StartPositionForFaction": -1,
+      "StartPositionForFaction": 0,
+      "MovementCost": 1,
       "ValidForMovement": true
     },
     {
       "PositionOnGrid": 51,
       "Model": "Grass",
-      "StartPositionForFaction": -1,
+      "StartPositionForFaction": 0,
+      "MovementCost": 1,
       "ValidForMovement": true
     },
     {
       "PositionOnGrid": 52,
       "Model": "Grass",
       "StartPositionForFaction": -1,
+      "MovementCost": 1,
       "ValidForMovement": true
     },
     {
       "PositionOnGrid": 53,
       "Model": "Grass",
       "StartPositionForFaction": -1,
+      "MovementCost": 1,
       "ValidForMovement": true
     },
     {
       "PositionOnGrid": 54,
       "Model": "Grass",
       "StartPositionForFaction": -1,
+      "MovementCost": 1,
       "ValidForMovement": true
     },
     {
       "PositionOnGrid": 55,
       "Model": "Grass",
       "StartPositionForFaction": -1,
+      "MovementCost": 1,
       "ValidForMovement": true
     },
     {
       "PositionOnGrid": 56,
       "Model": "Grass",
       "StartPositionForFaction": -1,
+      "MovementCost": 1,
       "ValidForMovement": true
     },
     {
       "PositionOnGrid": 57,
       "Model": "Grass",
       "StartPositionForFaction": -1,
+      "MovementCost": 1,
       "ValidForMovement": true
     },
     {
       "PositionOnGrid": 58,
       "Model": "Grass",
-      "StartPositionForFaction": -1,
+      "StartPositionForFaction": 1,
+      "MovementCost": 1,
       "ValidForMovement": true
     },
     {
       "PositionOnGrid": 59,
       "Model": "Grass",
-      "StartPositionForFaction": -1,
+      "StartPositionForFaction": 1,
+      "MovementCost": 1,
       "ValidForMovement": true
     },
     {
       "PositionOnGrid": 60,
       "Model": "Grass",
-      "StartPositionForFaction": -1,
+      "StartPositionForFaction": 0,
+      "MovementCost": 1,
       "ValidForMovement": true
     },
     {
       "PositionOnGrid": 61,
       "Model": "Grass",
-      "StartPositionForFaction": -1,
+      "StartPositionForFaction": 0,
+      "MovementCost": 1,
       "ValidForMovement": true
     },
     {
       "PositionOnGrid": 62,
       "Model": "Grass",
       "StartPositionForFaction": -1,
+      "MovementCost": 1,
       "ValidForMovement": true
     },
     {
       "PositionOnGrid": 63,
       "Model": "Grass",
       "StartPositionForFaction": -1,
+      "MovementCost": 1,
       "ValidForMovement": true
     },
     {
       "PositionOnGrid": 64,
       "Model": "Grass",
       "StartPositionForFaction": -1,
+      "MovementCost": 1,
       "ValidForMovement": true
     },
     {
       "PositionOnGrid": 65,
       "Model": "Grass",
       "StartPositionForFaction": -1,
+      "MovementCost": 1,
       "ValidForMovement": true
     },
     {
       "PositionOnGrid": 66,
       "Model": "Grass",
       "StartPositionForFaction": -1,
+      "MovementCost": 1,
       "ValidForMovement": true
     },
     {
       "PositionOnGrid": 67,
       "Model": "Grass",
       "StartPositionForFaction": -1,
+      "MovementCost": 1,
       "ValidForMovement": true
     },
     {
       "PositionOnGrid": 68,
       "Model": "Grass",
-      "StartPositionForFaction": -1,
+      "StartPositionForFaction": 1,
+      "MovementCost": 1,
       "ValidForMovement": true
     },
     {
       "PositionOnGrid": 69,
       "Model": "Grass",
-      "StartPositionForFaction": -1,
+      "StartPositionForFaction": 1,
+      "MovementCost": 1,
       "ValidForMovement": true
     },
     {
       "PositionOnGrid": 70,
       "Model": "Grass",
       "StartPositionForFaction": -1,
+      "MovementCost": 1,
       "ValidForMovement": true
     },
     {
       "PositionOnGrid": 71,
       "Model": "Grass",
       "StartPositionForFaction": -1,
+      "MovementCost": 1,
       "ValidForMovement": true
     },
     {
       "PositionOnGrid": 72,
       "Model": "Grass",
       "StartPositionForFaction": -1,
+      "MovementCost": 1,
       "ValidForMovement": true
     },
     {
       "PositionOnGrid": 73,
       "Model": "Grass",
       "StartPositionForFaction": -1,
+      "MovementCost": 1,
       "ValidForMovement": true
     },
     {
       "PositionOnGrid": 74,
       "Model": "Grass",
       "StartPositionForFaction": -1,
+      "MovementCost": 1,
       "ValidForMovement": true
     },
     {
       "PositionOnGrid": 75,
       "Model": "Grass",
       "StartPositionForFaction": -1,
+      "MovementCost": 1,
       "ValidForMovement": true
     },
     {
       "PositionOnGrid": 76,
       "Model": "Grass",
       "StartPositionForFaction": -1,
+      "MovementCost": 1,
       "ValidForMovement": true
     },
     {
       "PositionOnGrid": 77,
       "Model": "Grass",
       "StartPositionForFaction": -1,
+      "MovementCost": 1,
       "ValidForMovement": true
     },
     {
       "PositionOnGrid": 78,
       "Model": "Grass",
       "StartPositionForFaction": -1,
+      "MovementCost": 1,
       "ValidForMovement": true
     },
     {
       "PositionOnGrid": 79,
       "Model": "Grass",
       "StartPositionForFaction": -1,
+      "MovementCost": 1,
       "ValidForMovement": true
     },
     {
       "PositionOnGrid": 80,
       "Model": "Grass",
       "StartPositionForFaction": -1,
+      "MovementCost": 1,
       "ValidForMovement": true
     },
     {
       "PositionOnGrid": 81,
       "Model": "Grass",
       "StartPositionForFaction": -1,
+      "MovementCost": 1,
       "ValidForMovement": true
     },
     {
       "PositionOnGrid": 82,
       "Model": "Grass",
       "StartPositionForFaction": -1,
+      "MovementCost": 1,
       "ValidForMovement": true
     },
     {
       "PositionOnGrid": 83,
       "Model": "Grass",
       "StartPositionForFaction": -1,
+      "MovementCost": 1,
       "ValidForMovement": true
     },
     {
       "PositionOnGrid": 84,
       "Model": "Grass",
       "StartPositionForFaction": -1,
+      "MovementCost": 1,
       "ValidForMovement": true
     },
     {
       "PositionOnGrid": 85,
       "Model": "Grass",
       "StartPositionForFaction": -1,
+      "MovementCost": 1,
       "ValidForMovement": true
     },
     {
       "PositionOnGrid": 86,
       "Model": "Grass",
       "StartPositionForFaction": -1,
+      "MovementCost": 1,
       "ValidForMovement": true
     },
     {
       "PositionOnGrid": 87,
       "Model": "Grass",
       "StartPositionForFaction": -1,
+      "MovementCost": 1,
       "ValidForMovement": true
     },
     {
       "PositionOnGrid": 88,
       "Model": "Grass",
       "StartPositionForFaction": -1,
+      "MovementCost": 1,
       "ValidForMovement": true
     },
     {
       "PositionOnGrid": 89,
       "Model": "Grass",
       "StartPositionForFaction": -1,
+      "MovementCost": 1,
       "ValidForMovement": true
     },
     {
       "PositionOnGrid": 90,
       "Model": "Grass",
       "StartPositionForFaction": -1,
+      "MovementCost": 1,
       "ValidForMovement": true
     },
     {
       "PositionOnGrid": 91,
       "Model": "Grass",
       "StartPositionForFaction": -1,
+      "MovementCost": 1,
       "ValidForMovement": true
     },
     {
       "PositionOnGrid": 92,
       "Model": "Grass",
       "StartPositionForFaction": -1,
+      "MovementCost": 1,
       "ValidForMovement": true
     },
     {
       "PositionOnGrid": 93,
       "Model": "Grass",
       "StartPositionForFaction": -1,
+      "MovementCost": 1,
       "ValidForMovement": true
     },
     {
       "PositionOnGrid": 94,
       "Model": "Grass",
       "StartPositionForFaction": -1,
+      "MovementCost": 1,
       "ValidForMovement": true
     },
     {
       "PositionOnGrid": 95,
       "Model": "Grass",
       "StartPositionForFaction": -1,
+      "MovementCost": 1,
       "ValidForMovement": true
     },
     {
       "PositionOnGrid": 96,
       "Model": "Grass",
       "StartPositionForFaction": -1,
+      "MovementCost": 1,
       "ValidForMovement": true
     },
     {
       "PositionOnGrid": 97,
       "Model": "Grass",
       "StartPositionForFaction": -1,
+      "MovementCost": 1,
       "ValidForMovement": true
     },
     {
       "PositionOnGrid": 98,
       "Model": "Grass",
       "StartPositionForFaction": -1,
+      "MovementCost": 1,
       "ValidForMovement": true
     },
     {
       "PositionOnGrid": 99,
       "Model": "Grass",
       "StartPositionForFaction": -1,
+      "MovementCost": 1,
       "ValidForMovement": true
     }
   ],

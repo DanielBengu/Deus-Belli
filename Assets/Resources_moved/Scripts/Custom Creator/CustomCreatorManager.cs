@@ -66,7 +66,7 @@ public class CustomCreatorManager : MonoBehaviour
 
 		Level level = new();
 		level.StartLevel(0);
-		level.GenerateTerrain(true, parent, mapLayout);
+		//level.GenerateTerrain(true, parent, mapLayout);
 		int xPositionForMap = isPreview ? 800 : level.TopLeftSquarePositionX;
 		_structureManager.GenerateFightTiles(level.tilesDict, null, xPositionForMap, level.YPosition, level.TopLeftSquarePositionZ, mapRows, mapColumns);
 	}

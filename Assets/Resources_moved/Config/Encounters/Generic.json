@@ -8,7 +8,7 @@
           "Name": "Genghis Khan",
           "ModelName": "Bandit",
           "PortraitName": "Genghis_Khan",
-          "Faction": 0,
+          "Faction": 1,
           "Stats": {
             "Hp": 10,
             "Movement": 4,
@@ -25,7 +25,7 @@
           "Name": "Generic Bandit 1",
           "ModelName": "Bandit",
           "PortraitName": "Archer",
-          "Faction": 0,
+          "Faction": 1,
           "Stats": {
             "Hp": 6,
             "Movement": 3,
@@ -40,7 +40,7 @@
           "Name": "Generic Bandit 2",
           "ModelName": "Bandit",
           "PortraitName": "Warrior",
-          "Faction": 0,
+          "Faction": 2,
           "Stats": {
             "Hp": 4,
             "Movement": 2,

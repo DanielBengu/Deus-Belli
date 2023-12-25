@@ -7,17 +7,19 @@
       "PositionOnGrid": 0, //Position of the tile in the grid, in a 3x3 map the first tile is 0 and the last one is 8
       "Model": "Grass", //Name of the 3D model in the addressable group
       "StartPositionForFaction": -1, // -1 means no unit can start here, 0 is for player units, 1 and more for enemies
+      "MovementCost": 1, //How much movement it costs for a unit to move to this tile
       "ValidForMovement": true //whether units can move in this tile or not
     },
     {
       "PositionOnGrid": 1,
       "Model": "Grass",
       "StartPositionForFaction": 0,
+      "MovementCost": 1,
       "ValidForMovement": true
     }
   ],
   //If you don't specify all tiles needed in the Tile List, the remaining holes will be filled with this tile. 
-  //If you want to leave a hole put an empty object { }
+  //If you want to leave a hole put null
   "FillRemainingTilesWith": {
     "Model": "Grass",
     "ValidForMovement": true

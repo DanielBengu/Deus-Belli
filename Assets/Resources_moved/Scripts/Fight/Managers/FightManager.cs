@@ -127,7 +127,7 @@ public class FightManager : MonoBehaviour
 		for (int i = 0; i < tiles.Count; i++)
             tiles[i].transform.parent = fightObjects;
 
-        var units = GenerateUnits(tiles, level.mapData.Columns, level.seed);
+        var units = GenerateUnits(level);
         structureManager.gameData = new(tiles, units, level.mapData.Rows, level.mapData.Columns);
 
         SetupTiles = SetupUnitPosition();
@@ -150,26 +150,22 @@ public class FightManager : MonoBehaviour
         return tileList.Select(t => t.tileNumber).ToArray();
     }
 
-    List<Unit> GenerateUnits(Dictionary<int, Tile> mapTiles, int VerticalTiles, int seed)
+    List<Unit> GenerateUnits(Level level)
     {
 		List<Unit> unitList = new();
+        List<UnitData> unitsOnMap = generalManager.PlayerUnits;
+        unitsOnMap.AddRange(level.enemyList.Select(e => e.Value).ToList());
 		Transform unitsParent = GameObject.Find("Fight Units").transform;
 
-		//First part of the where clause removes unavailable terrain (like mountains), the second selects all the tiles of the first two columns of the game
-		int[] possiblePlayerStartingUnits = mapTiles.Where(k => k.Value.IsPassable &&
-		(k.Key % VerticalTiles == 0 || k.Key % VerticalTiles == 1)).Select(k => k.Key).ToArray();
-		UnitData[] playerUnits = generalManager.PlayerUnits.ToArray();
+        int[] factionsPresent = unitsOnMap.DistinctBy(u => u.Faction).Select(u => u.Faction).ToArray();
 
-		//Player units
-		unitList.AddRange(GenerateListOfUnits(possiblePlayerStartingUnits, playerUnits, seed, unitsParent));
-
-		//First part of the where clause removes unavailable terrain (like mountains), the second selects all the tiles of the last two columns of the game
-		int[] possibleEnemyStartingUnits = mapTiles.Where(k => k.Value.IsPassable &&
-		(k.Key % VerticalTiles == VerticalTiles - 1 || k.Key % VerticalTiles == VerticalTiles - 2)).Select(k => k.Key).ToArray();
-		UnitData[] enemyUnits = level.enemyList.Values.ToArray();
-
-		//Enemy units
-		unitList.AddRange(GenerateListOfUnits(possibleEnemyStartingUnits, enemyUnits, seed, unitsParent));
+        for (int i = 0; i < factionsPresent.Count(); i++)
+        {
+            int faction = factionsPresent[i];
+            UnitData[] unitsOfFaction = unitsOnMap.Where(u => u.Faction == faction).ToArray();
+            int[] possibleStartingTiles = level.GetValidStartingPositionForFaction(faction);
+			unitList.AddRange(GenerateListOfUnits(possibleStartingTiles, unitsOfFaction, level.seed, unitsParent));
+		}
 
         return unitList;
     }
