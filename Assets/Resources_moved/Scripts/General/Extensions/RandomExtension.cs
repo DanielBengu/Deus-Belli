@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using UERandom =  UnityEngine;
 
 public static class RandomManager

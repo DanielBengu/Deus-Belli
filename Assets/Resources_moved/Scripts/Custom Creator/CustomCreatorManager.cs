@@ -34,7 +34,7 @@ public class CustomCreatorManager : MonoBehaviour
 		mapCanvas.SetActive(true);
 		Level baseLevel = new();
 
-		baseLevel.StartLevel(0, mapRows);
+		baseLevel.StartLevel(0);
 		baseLevel.GenerateTerrain(true, mapObjects);
 		var tiles = _structureManager.GenerateFightTiles(baseLevel.tilesDict, null, baseLevel.TopLeftSquarePositionX, baseLevel.YPosition, baseLevel.TopLeftSquarePositionZ, mapRows, mapColumns);
 		_mapEditorManager.mapRows = mapRows;
@@ -65,7 +65,7 @@ public class CustomCreatorManager : MonoBehaviour
 		int mapColumns = int.Parse(mapData[1]);
 
 		Level level = new();
-		level.StartLevel(0, mapRows);
+		level.StartLevel(0);
 		level.GenerateTerrain(true, parent, mapLayout);
 		int xPositionForMap = isPreview ? 800 : level.TopLeftSquarePositionX;
 		_structureManager.GenerateFightTiles(level.tilesDict, null, xPositionForMap, level.YPosition, level.TopLeftSquarePositionZ, mapRows, mapColumns);

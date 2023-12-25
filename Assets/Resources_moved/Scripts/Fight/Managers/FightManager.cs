@@ -118,17 +118,17 @@ public class FightManager : MonoBehaviour
         level.GenerateTerrain(false, null);
 
         // Setup the terrain based on the level information
-        var tiles = structureManager.SetupFightSection(level.tilesDict, this, level.TopLeftSquarePositionX, level.YPosition, level.TopLeftSquarePositionZ, level.HorizontalTiles, level.VerticalTiles);
+        var tiles = structureManager.SetupFightSection(level.tilesDict, this, level.TopLeftSquarePositionX, level.YPosition, level.TopLeftSquarePositionZ, level.mapData.Rows, level.mapData.Columns);
 
-        Transform lastTile = tiles[level.VerticalTiles * level.HorizontalTiles - 1].transform;
+        Transform lastTile = tiles[level.mapData.Columns * level.mapData.Rows - 1].transform;
         float rotatorX = (tiles[0].transform.position.x + lastTile.position.x) / 2;
         float rotatorZ = (tiles[0].transform.position.z + lastTile.position.z) / 2;
         fightObjects.transform.position = new Vector3(rotatorX, fightObjectsRotator.transform.position.y, rotatorZ);
 		for (int i = 0; i < tiles.Count; i++)
             tiles[i].transform.parent = fightObjects;
 
-        var units = GenerateUnits(tiles, level.VerticalTiles, level.seed);
-        structureManager.gameData = new(tiles, units, level.HorizontalTiles, level.VerticalTiles);
+        var units = GenerateUnits(tiles, level.mapData.Columns, level.seed);
+        structureManager.gameData = new(tiles, units, level.mapData.Rows, level.mapData.Columns);
 
         SetupTiles = SetupUnitPosition();
     }
@@ -136,11 +136,11 @@ public class FightManager : MonoBehaviour
     public int[] SetupUnitPosition()
 	{
         List<Tile> tileList = new();
-		for (int i = 0; i < level.HorizontalTiles; i++)
+		for (int i = 0; i < level.mapData.Rows; i++)
 		{
 			for (int j = 0; j < 2; j++)
 			{
-                Tile tile = structureManager.gameData.mapTiles[(i * level.HorizontalTiles) + j];
+                Tile tile = structureManager.gameData.mapTiles[(i * level.mapData.Rows) + j];
                 if (tile.IsPassable)
                     tileList.Add(tile);
 			}
@@ -152,58 +152,47 @@ public class FightManager : MonoBehaviour
 
     List<Unit> GenerateUnits(Dictionary<int, Tile> mapTiles, int VerticalTiles, int seed)
     {
-        Transform unitsParent = GameObject.Find("Fight Units").transform;
-        List<Unit> unitList = new();
-        List<UnitData> playerUnits = generalManager.PlayerUnits;
-        List<int> alreadyOccupiedTiles = new();
-		for (int i = 0; i < playerUnits.Count; i++)
-		{
-            var unit = playerUnits[i];
-            //First part of the where clause removes unavailable terrain (like mountains), the second selects all the tiles of the first two columns of the game
-            int[] possiblePlayerStartingUnits = mapTiles.Where(k => 
-            (k.Value.IsPassable && !alreadyOccupiedTiles.Contains(k.Key)) && 
-            (k.Key % VerticalTiles == 0 || k.Key % VerticalTiles == 1)).Select(k => k.Key).ToArray();
+		List<Unit> unitList = new();
+		Transform unitsParent = GameObject.Find("Fight Units").transform;
 
-            Tile unitTile = null;
-            bool exitClause = true;
-            while (exitClause)
-            {
-                int startingTile = RandomManager.GetRandomValue(seed * (i + 1), 0, possiblePlayerStartingUnits.Length);
-                unitTile = GameObject.Find($"Terrain_{possiblePlayerStartingUnits[startingTile]}").GetComponent<Tile>();
-                alreadyOccupiedTiles.Add(unitTile.tileNumber);
-                unitList.Add(GenerateSingleUnit(unit, unitTile, unitsParent));
-                exitClause = !(unitTile != null && unitTile.IsPassable && possiblePlayerStartingUnits.Length > 0);
-            }
-        }
+		//First part of the where clause removes unavailable terrain (like mountains), the second selects all the tiles of the first two columns of the game
+		int[] possiblePlayerStartingUnits = mapTiles.Where(k => k.Value.IsPassable &&
+		(k.Key % VerticalTiles == 0 || k.Key % VerticalTiles == 1)).Select(k => k.Key).ToArray();
+		UnitData[] playerUnits = generalManager.PlayerUnits.ToArray();
 
-        UnitData[] enemyUnits = level.enemyList.Values.ToArray();
-        for (int i = 0; i < enemyUnits.Length; i++)
-        {
-			UnitData unit = enemyUnits[i];
-            //First part of the where clause removes unavailable terrain (like mountains), the second selects all the tiles of the last two columns of the game
-            int[] possiblePlayerStartingUnits = mapTiles.Where(k =>
-            (k.Value.IsPassable && !alreadyOccupiedTiles.Contains(k.Key)) &&
-            (k.Key % VerticalTiles == VerticalTiles - 1 || k.Key % VerticalTiles == VerticalTiles - 2)).Select(k => k.Key).ToArray();
+		//Player units
+		unitList.AddRange(GenerateListOfUnits(possiblePlayerStartingUnits, playerUnits, seed, unitsParent));
 
-            Tile unitTile = null;
-            bool exitClause = true;
-            while (exitClause)
-            {
-                int startingTile = RandomManager.GetRandomValue(seed * (i + 1), 0, possiblePlayerStartingUnits.Length);
-                unitTile = GameObject.Find($"Terrain_{possiblePlayerStartingUnits[startingTile]}").GetComponent<Tile>();
-                alreadyOccupiedTiles.Add(unitTile.tileNumber);
-                unitList.Add(GenerateSingleUnit(unit, unitTile, unitsParent));
-                exitClause = !(unitTile != null && unitTile.IsPassable && possiblePlayerStartingUnits.Length > 0);
-            }
-        }
+		//First part of the where clause removes unavailable terrain (like mountains), the second selects all the tiles of the last two columns of the game
+		int[] possibleEnemyStartingUnits = mapTiles.Where(k => k.Value.IsPassable &&
+		(k.Key % VerticalTiles == VerticalTiles - 1 || k.Key % VerticalTiles == VerticalTiles - 2)).Select(k => k.Key).ToArray();
+		UnitData[] enemyUnits = level.enemyList.Values.ToArray();
+
+		//Enemy units
+		unitList.AddRange(GenerateListOfUnits(possibleEnemyStartingUnits, enemyUnits, seed, unitsParent));
 
         return unitList;
     }
 
-    void GenerateListOfUnits(int[] possibleLocations)
+    List<Unit> GenerateListOfUnits(int[] possiblePlayerStartingUnits, UnitData[] playerUnits, int seed, Transform unitsParent)
     {
-
-    }
+        List<Unit> unitList = new();
+		List<int> alreadyOccupiedTiles = new();
+		for (int i = 0; i < playerUnits.Length; i++)
+		{
+			var unit = playerUnits[i];
+			bool exitClause = true;
+			while (exitClause)
+			{
+				int startingTile = RandomManager.GetRandomValue(seed * (i + 1), 0, possiblePlayerStartingUnits.Length);
+				Tile unitTile = GameObject.Find($"Terrain_{possiblePlayerStartingUnits[startingTile]}").GetComponent<Tile>();
+				alreadyOccupiedTiles.Add(unitTile.tileNumber);
+				unitList.Add(GenerateSingleUnit(unit, unitTile, unitsParent));
+				exitClause = !(unitTile != null && unitTile.IsPassable && possiblePlayerStartingUnits.Length > 0);
+			}
+		}
+        return unitList;
+	}
 
     Unit GenerateSingleUnit(UnitData unit, Tile tile, Transform parent)
     {

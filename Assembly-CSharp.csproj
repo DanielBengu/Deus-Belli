@@ -86,7 +86,6 @@
     <Compile Include="Assets\Resources_moved\Scripts\General\Manager\GeneralManager.cs" />
     <Compile Include="Assets\Resources_moved\Scripts\GodsArchive\Gods\None\BanditLord.cs" />
     <Compile Include="Assets\Resources_moved\Scripts\General\Classes\ActionPerformer.cs" />
-    <Compile Include="Assets\Resources_moved\Scripts\UnitsArchive.cs" />
     <Compile Include="Assets\Resources_moved\Scripts\GodsArchive\InterfacesAndClasses\Encounter.cs" />
     <Compile Include="Assets\Polyart\PolyartStudio\SharedResources\CritiasFoliage\Code\FoliageRenderer.cs" />
     <Compile Include="Assets\Resources_moved\Scripts\GodsArchive\Religions\Agbara.cs" />
@@ -133,6 +132,7 @@
     <Compile Include="Assets\Polyart\PolyartStudio\SharedResources\Scripts\Misc\FPS_Counter.cs" />
     <Compile Include="Assets\RFA\Common\Scripts\Jumping.cs" />
     <Compile Include="Assets\Polyart\PolyartStudio\SharedResources\CritiasFoliage\Code\FoliageInstance.cs" />
+    <Compile Include="Assets\Resources_moved\Scripts\General\Classes\Validator.cs" />
     <Compile Include="Assets\Resources_moved\Scripts\Fight\Classes\FightInput.cs" />
     <Compile Include="Assets\Polyart\PolyartStudio\SharedResources\CritiasFoliage\Code\FoliagePainterRuntime.cs" />
     <Compile Include="Assets\Polyart\PolyartStudio\SharedResources\CritiasFoliage\Examples\ExampleRuntimeTreeAdder.cs" />
@@ -142,6 +142,7 @@
     <Compile Include="Assets\Polyart\PolyartStudio\SharedResources\Scripts\Gameplay\MillRotate.cs" />
     <Compile Include="Assets\Polyart\PolyartStudio\SharedResources\CritiasFoliage\Code\Foliage.cs" />
     <Compile Include="Assets\Resources_moved\Scripts\Fight\Classes\Unit\UnitMovement.cs" />
+    <Compile Include="Assets\Resources_moved\Scripts\Fight\Classes\Encounters\Maps.cs" />
     <Compile Include="Assets\Polyart\PolyartStudio\SharedResources\CritiasFoliage\Examples\ExampleRuntimeTreeRemover.cs" />
     <Compile Include="Assets\Resources_moved\Scripts\Fight\Classes\Unit\Unit JSON.cs" />
     <Compile Include="Assets\Polyart\PolyartStudio\SharedResources\CritiasFoliage\Code\FoliageTerrainUtilities.cs" />

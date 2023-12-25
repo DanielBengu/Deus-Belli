@@ -60,10 +60,11 @@ public class Merchant
 
 	MerchantItem GenerateMerchantItem(int seed)
 	{
-		int enumLength = Enum.GetValues(typeof(UnitsArchive.Units)).Length;
+		/*int enumLength = Enum.GetValues(typeof(UnitsArchive.Units)).Length;
 		int unitType = RandomManager.GetRandomValue(seed, 0, enumLength);
 		Unit unit = UnitsArchive.GetUnit((UnitsArchive.Units)unitType).GetComponent<Unit>();
-		return new(unit, unit.name, 50);
+		return new(unit, unit.name, 50);*/
+		return new();
 	}
 
 	string[] GetMerchantItems()

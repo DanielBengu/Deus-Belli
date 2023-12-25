@@ -6,11 +6,11 @@ using static Unit;
 
 public class Level
 {
-    public int TopLeftSquarePositionX;
+	public TileMapData mapData;
+
+	public int TopLeftSquarePositionX;
     public int TopLeftSquarePositionZ;
     public int YPosition;
-    public int HorizontalTiles;
-    public int VerticalTiles;
 
     //Key represents tile number
     public Dictionary<int, GameObject> tilesDict = new();
@@ -20,24 +20,23 @@ public class Level
 
 	public int seed;
 
-    public void StartLevel(int seed, int customSize = -1)
+    public void StartLevel(int seed)
     {
 		this.seed = seed;
-		int mapSize = customSize == -1 ? RandomManager.GetRandomValue(seed, 10, 10) : customSize;
+		mapData = FileManager.GetRandomGenericMap(seed);
 		TopLeftSquarePositionX = 250;
         TopLeftSquarePositionZ = 1800;
         YPosition = 170;
-        HorizontalTiles = mapSize;
-        VerticalTiles = mapSize;
         SetupEnemies();
-    }
+		
+	}
 
 	// if isEdit is true then the map generated will be a basic map with only grass
 	public void GenerateTerrain(bool isEdit, Transform objectsParent)
 	{
-		for (int i = 0; i < HorizontalTiles * VerticalTiles; i++)
+		for (int i = 0; i < mapData.Rows * mapData.Columns; i++)
 		{
-			GameObject objectToSpawn = ObjectsManager.GetObject("Grass1");
+			GameObject objectToSpawn = ObjectsManager.GetObject(mapData.TileList[i].Model);
 			GameObject tileObject = UnityEngine.Object.Instantiate(objectToSpawn, objectsParent);
 
 			LoadTile(tileObject, $"Terrain_{i}", objectToSpawn.name, isEdit, true);
@@ -52,7 +51,7 @@ public class Level
 			if (!models.Any(m => m.name.Equals(customMap[i])))
 				models.Add(ObjectsManager.GetObject(customMap[i]));
 
-		for (int i = 0; i < HorizontalTiles * VerticalTiles; i++)
+		for (int i = 0; i < mapData.Rows * mapData.Columns; i++)
 		{
 			GameObject objectToSpawn = models.First(m => m.name == customMap[i]);
 			GameObject tileObject = UnityEngine.Object.Instantiate(objectToSpawn, objectsParent);
