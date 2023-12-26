@@ -15,39 +15,14 @@ public class Movement
     private Transform objectMovingTransform;
 
     Vector3 startingPosition;
-
     Vector3 targetPosition;
+
+    bool isRotationEnabled;
+    Quaternion startingRotation;
+    Quaternion targetRotation;
 
     //List of steps necessary to go from point A to B
     public List<Transform> movementSteps = new();
-
-    /*public void MovementTick(float speed, Action callback)
-    {
-        if (!IsObjectMoving)
-            return;
-
-		//Unit arrived at destination
-		if (Vector3.Distance(objectMovingTransform.position, targetPosition) < 0.1f)
-		{
-			if (movementSteps.Count > 0)
-			{
-				SetNewMovementStep(objectMovingTransform);
-				return;
-			}
-
-			IsObjectMoving = false;
-			AnimationPerformer.PerformAnimation(Animation.Idle, objectMovingTransform.gameObject);
-			callback();
-			return;
-		}
-
-
-		float distanceCovered = (Time.time - startTime) * speed;
-		float fractionOfJourney = distanceCovered / journeyLength;
-		if (fractionOfJourney > 0)
-			objectMovingTransform.position = Vector3.Lerp(startingPosition, targetPosition, fractionOfJourney);
-		
-	}*/
 
 	public void MovementTick(float speed, Action callback)
 	{
@@ -63,6 +38,11 @@ public class Movement
 		// Lerp position continuously until reaching the target
 		objectMovingTransform.position = Vector3.Lerp(startingPosition, targetPosition, fractionOfJourney);
 
+        if (isRotationEnabled)
+		    // Interpolate the rotation using Quaternion.Lerp
+		    objectMovingTransform.rotation = Quaternion.Lerp(startingRotation, targetRotation, fractionOfJourney);
+
+
 		// Check if the object has reached the destination
 		if (Vector3.Distance(objectMovingTransform.position, targetPosition) < 0.1f)
 		{
@@ -73,12 +53,12 @@ public class Movement
 			}
 
 			IsObjectMoving = false;
-			AnimationPerformer.PerformAnimation(Animation.Idle, objectMovingTransform.gameObject);
+            AnimationPerformer.PerformAnimation(Animation.Idle, objectMovingTransform.gameObject);
 			callback();
 		}
 	}
 
-	public bool StartObjectMovement(Transform starting, Transform target)
+	public bool StartObjectMovement(Transform starting, Transform target, bool rotationEnabled)
     {
         //Something else is already moving
         if (IsObjectMoving)
@@ -89,10 +69,15 @@ public class Movement
         startTime = Time.time;
         startingPosition = starting.position;
 
-        //Unit needs to stay at same Y
         targetPosition = target.position;
-        targetPosition.y = startingPosition.y;
         journeyLength = Vector3.Distance(startingPosition, targetPosition);
+
+        isRotationEnabled = rotationEnabled;
+        if(isRotationEnabled)
+        {
+            startingRotation = starting.rotation;
+            targetRotation = target.rotation;
+        }
 
         AnimationPerformer.PerformAnimation(Animation.Move, objectMovingTransform.gameObject);
 
@@ -142,7 +127,7 @@ public class Movement
         }
             
         movingUnit.transform.LookAt(nextTile, Vector3.up);
-        StartObjectMovement(movingUnit.transform, nextTile);
+        StartObjectMovement(movingUnit.transform, nextTile, false);
     }
 
     public void TeleportUnit(Unit unit, Tile tile)

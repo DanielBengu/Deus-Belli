@@ -162,15 +162,16 @@ public class GeneralManager : MonoBehaviour
                 Options.name = "Options";
                 IsOptionOpen = true;
             }
-        } else
-        if (Input.GetMouseButtonDown(SCROLL_WHEEL_BUTTON))
+        } else if (Input.GetMouseButtonDown(SCROLL_WHEEL_BUTTON))
         {
             IsScrollButtonDown = true;
-        }
-        else if (Input.GetMouseButtonUp(SCROLL_WHEEL_BUTTON))
+        } else if (Input.GetMouseButtonUp(SCROLL_WHEEL_BUTTON))
         {
             IsScrollButtonDown = false;
-        }
+        } else if (Input.GetKeyDown(KeyCode.P))
+        {
+            cameraManager.CameraFocus(structureManager);
+		}
     }
 
     bool IsGameInStandbyMethod()

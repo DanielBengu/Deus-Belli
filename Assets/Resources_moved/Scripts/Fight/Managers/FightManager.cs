@@ -50,7 +50,9 @@ public class FightManager : MonoBehaviour
     public int CurrentTurnCount { get; set; }
     public List<Unit> UnitsOnField { get { return structureManager.gameData.unitsOnField; } }
 	public FightInput FightInput { get; set; }
-	#endregion
+    #endregion
+
+	internal Transform leftUnitShowcase;
 
 	#region Update Methods
 
@@ -94,9 +96,10 @@ public class FightManager : MonoBehaviour
 	{
         Debug.Log("START FIGHT MANAGER SETUP");
 
-        structureManager = sm;
+		leftUnitShowcase = GameObject.Find("Left Character Position").transform;
+		structureManager = sm;
         cameraManager = cm;
-        generalManager = gm;
+		generalManager = gm;
         structureManager.uiManager.SetFightVariables(gm.GodSelected);
         structureManager.spriteManager.fightManager = this;
         FightInput = new FightInput(this, structureManager);
@@ -383,5 +386,6 @@ public enum ActionPerformed
     RogueMovement,
     FightTeleport,
     Attack,
+    CameraFocus,
     Default,
 }

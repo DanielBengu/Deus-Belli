@@ -29,6 +29,7 @@ public class FightInput
 			case ObjectClickedEnum.UnitTile:
 				var unitSelected = reference.GetComponent<Unit>();
 				ManageClick_UnitSelected(unitSelected);
+				_structureManager.ShowcaseLeftUnit(unitSelected, _fightManager.cameraManager.transform, _fightManager.leftUnitShowcase);
 				_structureManager.SetInfoPanel(true, unitSelected);
 				break;
 

@@ -2,9 +2,12 @@ using UnityEngine;
 
 public static class AnimationPerformer
 {
-    public static void PerformAnimation(Animation animation, GameObject unit)
+    public static void PerformAnimation(Animation animation, GameObject obj)
     {
-        string animationToPlay = "";
+        if (!obj.TryGetComponent<Animator>(out var animator))
+            return;
+
+		string animationToPlay = "";
 
         switch (animation)
         {
@@ -26,7 +29,7 @@ public static class AnimationPerformer
                 break;
         }
 
-        unit.GetComponent<Animator>().Play(animationToPlay);
+		animator.Play(animationToPlay);
     }
 }
 

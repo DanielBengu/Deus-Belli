@@ -14,9 +14,17 @@ public class CameraManager : MonoBehaviour
 
 	public static float scrollSpeed = 25000f;
 
-    Vector3 defaultCameraPosition = new(670, 1070, 73);
+	Vector3 defaultCameraPosition = new(670, 1070, 73);
     Quaternion defaultCameraRotation = Quaternion.Euler((float)33.3, 0, 0);
-    public static void UpdatePositionOrRotation(Transform objectToMove, CurrentSection section, CameraMovementOptions options = null)
+
+	bool isOutOfFocus = false;
+
+	Vector3 cameraPositionOutOfFocus = new(670, 560, 350);
+	Quaternion rotationOutOfFocus = Quaternion.Euler(8, 0, 0);
+	Vector3 cameraPositionOnFocus = new(735, 930, 700);
+	Quaternion rotationOnFocus = Quaternion.Euler(51, 0, 0);
+
+	public static void UpdatePositionOrRotation(Transform objectToMove, CurrentSection section, CameraMovementOptions options = null)
     {
         switch (section)
 		{
@@ -114,28 +122,19 @@ public class CameraManager : MonoBehaviour
     }
 
 	#region Switch Camera Focus (legacy)
-	/*
-	
-	bool isOutOfFocus = false;
-
-	Vector3 cameraPositionOutOfFocus = new(670, 300, 640);
-	Quaternion rotationOutOfFocus = Quaternion.Euler(0, 0, 0);
-	Vector3 cameraPositionOnFocus = new(670, 690, 650);
-	Quaternion rotationOnFocus = Quaternion.Euler(40, 0, 0);
 
 	//Switch between the two camera states: In and Out of focus
-	public void CameraFocus(){
-    Transform cameraStart = cameraManager.GetCameraPosition();
-    Transform cameraTarget = cameraManager.GetCameraSwitchFocus();
-    if(IsCameraFocused){
-	    structureManager.ClearSelectedTiles();
-	    structureManager.SetInfoPanel(false, UnitSelected, infoPanel);
-    }
-    structureManager.StartObjectMovement(cameraStart, cameraTarget, 2500);
-    GameObject.Destroy(cameraTarget.gameObject);
+	public void CameraFocus(StructureManager structureManager){
+        Transform cameraStart = this.transform; //cameraManager.GetCameraPosition();
+        Transform cameraTarget = GetCameraSwitchFocus();
+        if(!isOutOfFocus)
+	        structureManager.ClearSelection(true);
+
+        structureManager.actionPerformer.StartAction(ActionPerformed.CameraFocus, cameraStart.gameObject, cameraTarget.gameObject);
+        Destroy(cameraTarget.gameObject);
     }
 
-        public Transform GetCameraSwitchFocus(){
+    public Transform GetCameraSwitchFocus(){
         Transform cameraTarget = new GameObject().transform;
         if(isOutOfFocus){
             cameraTarget.SetPositionAndRotation(cameraPositionOnFocus, rotationOnFocus);
@@ -154,9 +153,6 @@ public class CameraManager : MonoBehaviour
     public void SetCameraFocusStatus(bool status){
         isOutOfFocus = status;
     }
-
-    */
-
 	#endregion
 }
 

@@ -34,7 +34,10 @@ public class ActionPerformer
                 var targetTileTeleport = target.GetComponent<Tile>();
                 SetupFightTeleport(unitScriptTeleport, targetTileTeleport);
                 break;
-            case ActionPerformed.Default:
+            case ActionPerformed.CameraFocus:
+				SetupCameraMovement(source.transform, target.transform);
+                break;
+			case ActionPerformed.Default:
                 break;
         }
     }
@@ -67,7 +70,12 @@ public class ActionPerformer
         Attack(attacker, defender);
     }
 
-    void Attack(Unit attacker, Unit defender)
+	public void SetupCameraMovement(Transform start, Transform target)
+	{
+		movement.StartObjectMovement(start, target, true);
+	}
+
+	void Attack(Unit attacker, Unit defender)
     {
         enemyInQueueForAnimation = defender;
         defender.transform.LookAt(attacker.Movement.CurrentTile.transform, Vector3.up);
