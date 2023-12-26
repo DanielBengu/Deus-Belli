@@ -23,13 +23,14 @@ public class FightInput
 		{
 			case ObjectClickedEnum.EmptyTile:
 				ManageClick_EmptyTileSelected(reference.GetComponent<Tile>());
+				_structureManager.ClearShowcase(_fightManager.leftUnitShowcaseParent);
 				_structureManager.SetInfoPanel(false, _fightManager.UnitSelected);
 				break;
 
 			case ObjectClickedEnum.UnitTile:
 				var unitSelected = reference.GetComponent<Unit>();
 				ManageClick_UnitSelected(unitSelected);
-				_structureManager.ShowcaseLeftUnit(unitSelected, _fightManager.cameraManager.transform, _fightManager.leftUnitShowcase);
+				_structureManager.ShowcaseLeftUnit(unitSelected, _fightManager.leftUnitShowcasePosition, _fightManager.leftUnitShowcaseParent);
 				_structureManager.SetInfoPanel(true, unitSelected);
 				break;
 

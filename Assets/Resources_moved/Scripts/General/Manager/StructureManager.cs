@@ -138,11 +138,18 @@ public class StructureManager : MonoBehaviour
         return path;
     }
 
-    public void ShowcaseLeftUnit(Unit unit, Transform parent, Transform positionOfShowcase)
+    public void ShowcaseLeftUnit(Unit unit, Transform positionOfShowcase, Transform parent)
     {
-        var unitShowcase = Instantiate(unit, parent);
+        ClearShowcase(parent);
+		var unitShowcase = Instantiate(unit, parent);
         unitShowcase.transform.SetPositionAndRotation(positionOfShowcase.position, positionOfShowcase.rotation);
     }
+
+    public void ClearShowcase(Transform parent)
+    {
+		for (int i = 0; i < parent.childCount; i++)
+			Destroy(parent.GetChild(i).gameObject);
+	}
 
     public List<Tile> GeneratePossibleMovementForUnit(Unit unit, bool selectTiles){
         List<Tile> possibleMovements = CalculateMapTilesDistance(unit);

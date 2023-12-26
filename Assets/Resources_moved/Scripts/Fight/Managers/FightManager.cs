@@ -52,7 +52,8 @@ public class FightManager : MonoBehaviour
 	public FightInput FightInput { get; set; }
     #endregion
 
-	internal Transform leftUnitShowcase;
+	internal Transform leftUnitShowcasePosition;
+	internal Transform leftUnitShowcaseParent;
 
 	#region Update Methods
 
@@ -96,7 +97,8 @@ public class FightManager : MonoBehaviour
 	{
         Debug.Log("START FIGHT MANAGER SETUP");
 
-		leftUnitShowcase = GameObject.Find("Left Character Position").transform;
+		leftUnitShowcasePosition = GameObject.Find("Left Character Position").transform;
+		leftUnitShowcaseParent = GameObject.Find("ShowcaseChildren").transform;
 		structureManager = sm;
         cameraManager = cm;
 		generalManager = gm;
