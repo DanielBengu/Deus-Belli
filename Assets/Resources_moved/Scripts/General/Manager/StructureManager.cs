@@ -138,10 +138,10 @@ public class StructureManager : MonoBehaviour
         return path;
     }
 
-    public void ShowcaseLeftUnit(Unit unit, Transform positionOfShowcase, Transform parent)
+    public void ShowcaseUnit(Unit unit, Transform positionOfShowcase, Transform parent)
     {
-        ClearShowcase(parent);
 		var unitShowcase = Instantiate(unit, parent);
+        Destroy(unitShowcase.GetComponent<Unit>());
         unitShowcase.transform.SetPositionAndRotation(positionOfShowcase.position, positionOfShowcase.rotation);
     }
 

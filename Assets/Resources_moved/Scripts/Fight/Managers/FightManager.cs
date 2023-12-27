@@ -54,6 +54,8 @@ public class FightManager : MonoBehaviour
 
 	internal Transform leftUnitShowcasePosition;
 	internal Transform leftUnitShowcaseParent;
+	internal Transform rightUnitShowcasePosition;
+	internal Transform rightUnitShowcaseParent;
 
 	#region Update Methods
 
@@ -98,7 +100,9 @@ public class FightManager : MonoBehaviour
         Debug.Log("START FIGHT MANAGER SETUP");
 
 		leftUnitShowcasePosition = GameObject.Find("Left Character Position").transform;
-		leftUnitShowcaseParent = GameObject.Find("ShowcaseChildren").transform;
+		leftUnitShowcaseParent = GameObject.Find("ShowcaseChildrenLeft").transform;
+		rightUnitShowcasePosition = GameObject.Find("Right Character Position").transform;
+		rightUnitShowcaseParent = GameObject.Find("ShowcaseChildrenRight").transform;
 		structureManager = sm;
         cameraManager = cm;
 		generalManager = gm;
@@ -308,12 +312,31 @@ public class FightManager : MonoBehaviour
         structureManager.ClearSelection(true);
     }
 
+    public void HandleShowcase(Unit unitSelected, bool putOnLeftShowcase, bool clearLeftShowcase, bool clearRightShowcase)
+    {
+        if(clearLeftShowcase)
+            structureManager.ClearShowcase(leftUnitShowcaseParent);
+        if(clearRightShowcase)
+			structureManager.ClearShowcase(rightUnitShowcaseParent);
+
+        Transform showcase = putOnLeftShowcase ? leftUnitShowcaseParent : rightUnitShowcaseParent;
+        Transform position = putOnLeftShowcase ? leftUnitShowcasePosition : rightUnitShowcasePosition;
+		structureManager.ShowcaseUnit(unitSelected, position, showcase);
+	}
+
+    public void ClearShowcase()
+    {
+		structureManager.ClearShowcase(leftUnitShowcaseParent);
+		structureManager.ClearShowcase(rightUnitShowcaseParent);
+	}
+
     public void ResetGameState(bool resetUnitSelected)
     {
         if (resetUnitSelected) UnitSelected = null;
         IsShowingPath = false;
         structureManager.ClearSelection(true);
         structureManager.SetInfoPanel(false);
+        ClearShowcase();
         ActionInQueue = ActionPerformed.Default;
         PossibleAttacks = new();
     }

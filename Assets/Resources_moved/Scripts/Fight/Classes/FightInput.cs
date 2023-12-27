@@ -30,7 +30,6 @@ public class FightInput
 			case ObjectClickedEnum.UnitTile:
 				var unitSelected = reference.GetComponent<Unit>();
 				ManageClick_UnitSelected(unitSelected);
-				_structureManager.ShowcaseLeftUnit(unitSelected, _fightManager.leftUnitShowcasePosition, _fightManager.leftUnitShowcaseParent);
 				_structureManager.SetInfoPanel(true, unitSelected);
 				break;
 
@@ -68,6 +67,7 @@ public class FightInput
 		if (HasUnitAlreadyPerformedAction())
 		{
 			EmptyActionTileClick(unit.Movement.CurrentTile, false);
+			_fightManager.HandleShowcase(unit, true, true, true);
 			return;
 		}
 
@@ -77,6 +77,7 @@ public class FightInput
 			_fightManager.ResetGameState(false);
 			List<Tile> possibleMovements = _structureManager.GeneratePossibleMovementForUnit(_fightManager.UnitSelected, true);
 			_fightManager.PossibleAttacks = _fightManager.structureManager.GetPossibleAttacksForUnit(_fightManager.UnitSelected, true, possibleMovements);
+			_fightManager.HandleShowcase(unit, true, true, true);
 			return;
 		}
 
@@ -85,6 +86,7 @@ public class FightInput
 		if (!_fightManager.UnitSelected || !IsAttackPossible(_fightManager.UnitSelected, unit))
 		{
 			EmptyActionTileClick(unit.Movement.CurrentTile, true);
+			_fightManager.HandleShowcase(unit, false, true, true);
 			return;
 		}
 
@@ -93,11 +95,13 @@ public class FightInput
 		if (!_fightManager.IsShowingPath)
 		{
 			AskForMovementConfirmation(tileToMoveTo);
+			_fightManager.HandleShowcase(unit, false, false, true);
 			return;
 		}
 
 		//User confirmed the action
 		_fightManager.QueueAttack(_fightManager.UnitSelected, unit, tileToMoveTo);
+		_fightManager.ClearShowcase();
 	}
 
 	void EmptyActionTileClick(Tile currentTile, bool resetGameState)
@@ -162,10 +166,18 @@ public class FightInput
 	{
 		_fightManager.ResetGameState(false);
 		_fightManager.SetupUnitPosition();
-		if (unitSelected.unitData.Faction == FightManager.ENEMY_FACTION)
-			_fightManager.UnitSelected = null;
 		_structureManager.SelectTiles(unitSelected.Movement.CurrentTile.ToList(), false, TileType.Selected);
 		_structureManager.SetInfoPanel(true, unitSelected);
+		if (unitSelected.unitData.Faction != FightManager.USER_FACTION)
+		{
+			_fightManager.UnitSelected = null;
+			_fightManager.HandleShowcase(unitSelected, false, true, true);
+		}
+		else
+		{
+			_fightManager.HandleShowcase(unitSelected, true, true, true);
+		}
+
 	}
 	bool Setup_IsTeleportValid(Tile tileSelected)
 	{
