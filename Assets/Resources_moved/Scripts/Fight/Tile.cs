@@ -6,11 +6,6 @@ using static FightInput;
 
 public class Tile : MonoBehaviour, IComparable<Tile>
 {
-    #region Stats
-        public bool IsPassable = true;
-        public float MovementCost = 1;
-    #endregion
-
     #region Dijkstra
         public bool IsVisited = false;
         public float tentativeCost = 99999;
@@ -20,12 +15,10 @@ public class Tile : MonoBehaviour, IComparable<Tile>
 
     FightManager manager;
 
-    public int tileNumber;
-
     public bool isEdit;
-    public string modelName;
+    public TileData data;
 
-    public void OnMouseDown()
+	public void OnMouseDown()
     {
         //We are on the custom map editor
 		if (isEdit)

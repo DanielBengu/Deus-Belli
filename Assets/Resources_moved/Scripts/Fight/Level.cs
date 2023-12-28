@@ -8,9 +8,7 @@ public class Level
 {
 	public TileMapData mapData;
 
-	public int TopLeftSquarePositionX;
-    public int TopLeftSquarePositionZ;
-    public int YPosition;
+	public Vector3 spawnPosition;
 
     //Key represents tile number
     public Dictionary<int, GameObject> tilesDict = new();
@@ -24,9 +22,7 @@ public class Level
     {
 		this.seed = seed;
 		mapData = FileManager.GetRandomGenericMap(seed);
-		TopLeftSquarePositionX = 250;
-        TopLeftSquarePositionZ = 1800;
-        YPosition = 170;
+		spawnPosition = new(250, 170, 1800);
         SetupEnemies();
 	}
 
@@ -48,10 +44,8 @@ public class Level
 		tile.name = name;
 
 		Tile script = tile.GetComponent<Tile>();
+		script.data = tileData;
 		script.isEdit = isEdit;
-		script.modelName = tileData.Model;
-		script.IsPassable = tileData.ValidForMovement;
-		script.MovementCost = tileData.MovementCost;
 	}
 
 	public void SetupEnemies()

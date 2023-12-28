@@ -138,7 +138,7 @@ public class FightInput
 	public void AskForMovementConfirmation(Tile destinationTile)
 	{
 		_structureManager.ClearSelection(false);
-		List<Tile> path = _structureManager.FindPathToDestination(destinationTile, false, _fightManager.UnitSelected.Movement.CurrentTile.tileNumber);
+		List<Tile> path = _structureManager.FindPathToDestination(destinationTile, false, _fightManager.UnitSelected.Movement.CurrentTile.data.PositionOnGrid);
 		List<Tile> attackTiles = path.ToList();
 		path = path.Skip(1).ToList();
 		_structureManager.SelectTiles(path, true, TileType.Selected);
@@ -182,8 +182,8 @@ public class FightInput
 	bool Setup_IsTeleportValid(Tile tileSelected)
 	{
 		bool isTileSelectedEmpty = tileSelected.unitOnTile == null;
-		bool isTileSelectedPassable = tileSelected.IsPassable;
-		bool isTileSelectedInsideSetupRange = _fightManager.SetupTiles.Contains(tileSelected.tileNumber);
+		bool isTileSelectedPassable = tileSelected.data.ValidForMovement;
+		bool isTileSelectedInsideSetupRange = _fightManager.SetupTiles.Contains(tileSelected.data.PositionOnGrid);
 
 		return isTileSelectedEmpty && isTileSelectedPassable && isTileSelectedInsideSetupRange;
 	}
@@ -211,7 +211,7 @@ public class FightInput
 	{
 		_fightManager.ResetGameState(true);
 		_structureManager.ClearSelection(true);
-		_fightManager.SetupUnitPosition();
+		_fightManager.ClearShowcase();
 		_structureManager.SelectTiles(tileSelected.ToList(), false);
 	}
 

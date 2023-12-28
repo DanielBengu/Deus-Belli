@@ -60,7 +60,7 @@ public class ActionPerformer
 
     public void MoveUnit(Unit unit, Tile targetTile)
     {
-        List<Tile> tilesPath = pathfinding.FindPathToDestination(targetTile, out float cost, unit.Movement.CurrentTile.tileNumber);
+        List<Tile> tilesPath = pathfinding.FindPathToDestination(targetTile, out float cost, unit.Movement.CurrentTile.data.PositionOnGrid);
         movement.MoveUnit(unit.transform, tilesPath.Select(t => t.transform).ToList(), true);
     }
 

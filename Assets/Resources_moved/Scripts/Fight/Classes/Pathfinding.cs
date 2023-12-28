@@ -26,9 +26,9 @@ public class Pathfinding
 
         Tile FindLeftTile(Tile startingTile){
             Tile leftTile = null;
-            int tileToFind = startingTile.tileNumber - 1;
+            int tileToFind = startingTile.data.PositionOnGrid - 1;
 
-            if(startingTile.tileNumber % Y_Length != 0)
+            if(startingTile.data.PositionOnGrid % Y_Length != 0)
                 leftTile = mapTiles[tileToFind];
 
             return leftTile;
@@ -36,9 +36,9 @@ public class Pathfinding
 
         Tile FindRightTile(Tile startingTile){
             Tile rightTile = null;
-            int tileToFind = startingTile.tileNumber + 1;
+            int tileToFind = startingTile.data.PositionOnGrid + 1;
 
-            if(startingTile.tileNumber % X_Length != X_Length - 1)
+            if(startingTile.data.PositionOnGrid % X_Length != X_Length - 1)
                 rightTile = mapTiles[tileToFind];
 
             return rightTile;
@@ -46,7 +46,7 @@ public class Pathfinding
 
         Tile FindUpTile(Tile startingTile){
             Tile upTile = null;
-            int tileToFind = startingTile.tileNumber - Y_Length;
+            int tileToFind = startingTile.data.PositionOnGrid - Y_Length;
             
             if(tileToFind >= 0)
                 upTile = mapTiles[tileToFind];
@@ -56,7 +56,7 @@ public class Pathfinding
 
         Tile FindDownTile(Tile startingTile){
             Tile downTile = null;
-            int tileToFind = startingTile.tileNumber + Y_Length;
+            int tileToFind = startingTile.data.PositionOnGrid + Y_Length;
 
             if(tileToFind <= (X_Length * Y_Length) - 1)
                 downTile = mapTiles[tileToFind];
@@ -101,7 +101,7 @@ public class Pathfinding
                 break;
             }
 
-            lowestTileIndex = mapTiles.Select(t => t.Value).ToList().Find(t => t == unvisitedTiles.Min()).tileNumber;
+            lowestTileIndex = mapTiles.Select(t => t.Value).ToList().Find(t => t == unvisitedTiles.Min()).data.PositionOnGrid;
 
             //true when we calculated all possible movements for this unit, only unreachable locations remain
             if(lowestTileIndex == OUT_OF_BOUND_VALUE)
@@ -213,9 +213,9 @@ public class Pathfinding
 
     public void CalculateCost(Unit sourceUnit, Tile source, Tile neighbourTile)
     {
-        if (neighbourTile && neighbourTile.IsPassable && !(neighbourTile.unitOnTile && neighbourTile.unitOnTile.unitData.Faction != sourceUnit.unitData.Faction))
+        if (neighbourTile && neighbourTile.data.ValidForMovement && !(neighbourTile.unitOnTile && neighbourTile.unitOnTile.unitData.Faction != sourceUnit.unitData.Faction))
         {
-            float newTentativeCost = source.tentativeCost + neighbourTile.MovementCost;
+            float newTentativeCost = source.tentativeCost + neighbourTile.data.MovementCost;
             if (newTentativeCost < neighbourTile.tentativeCost)
                 neighbourTile.tentativeCost = newTentativeCost;
         }
@@ -242,10 +242,10 @@ public class Pathfinding
             }
 
             failSafe++;
-            if(failSafe == FAIL_SAFE_MAX || startingTileNumber == result.Last().tileNumber)
+            if(failSafe == FAIL_SAFE_MAX || startingTileNumber == result.Last().data.PositionOnGrid)
                 break;
             
-            Debug.Log($"Finding path: next tile n.{lowestTile.tileNumber}");
+            Debug.Log($"Finding path: next tile n.{lowestTile.data.PositionOnGrid}");
             result.Add(lowestTile);
         }
         result.Reverse();

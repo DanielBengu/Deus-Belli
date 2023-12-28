@@ -83,7 +83,7 @@ public class AIManager : MonoBehaviour
 
         int randomChoice = RandomManager.GetRandomValue(seed, 0, possibleAttacks.Count);
         PossibleAttack attackTarget = possibleAttacks[randomChoice]; //Attack at random possible targets
-        Debug.Log($"AI ATTACKING TILE N.{attackTarget.tileToAttack.tileNumber}");
+        Debug.Log($"AI ATTACKING TILE N.{attackTarget.tileToAttack.data.PositionOnGrid}");
         fightManager.UnitSelected = unit;
         fightManager.QueueAttack(unit, attackTarget.tileToAttack.unitOnTile, attackTarget.tileToMoveTo);
     }
@@ -95,8 +95,8 @@ public class AIManager : MonoBehaviour
 
         //Enemy AI Randomness is NOT based on run seed and performs casually every time, even if 2 players do the same things
         int randomInt = Random.Range(0, possibleMovements.Count);
-        Debug.Log($"AI MOVING TO TILE N.{possibleMovements[randomInt].tileNumber}");
-        Tile destinationTile = GameObject.Find($"Terrain_{possibleMovements[randomInt].tileNumber}").GetComponent<Tile>();
+        Debug.Log($"AI MOVING TO TILE N.{possibleMovements[randomInt].data.PositionOnGrid}");
+        Tile destinationTile = GameObject.Find($"Terrain_{possibleMovements[randomInt].data.PositionOnGrid}").GetComponent<Tile>();
         structureManager.CalculateMapTilesDistance(unit);
         structureManager.MoveUnit(unit, destinationTile, false);
     }

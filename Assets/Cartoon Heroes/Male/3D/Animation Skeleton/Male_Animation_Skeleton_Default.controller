@@ -352,7 +352,7 @@ AnimatorState:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: Male Idle
+  m_Name: Showcase Idle
   m_Speed: 1
   m_CycleOffset: 0
   m_Transitions: []
@@ -770,7 +770,7 @@ AnimatorStateMachine:
     m_Position: {x: 1008, y: 72, z: 0}
   - serializedVersion: 1
     m_State: {fileID: 1102414701294786830}
-    m_Position: {x: 360, y: 24, z: 0}
+    m_Position: {x: 360, y: 30, z: 0}
   - serializedVersion: 1
     m_State: {fileID: 1102723739437390148}
     m_Position: {x: 1224, y: 72, z: 0}

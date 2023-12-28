@@ -123,9 +123,9 @@ public class MapEditorManager : MonoBehaviour
 		newTile.name = tile.name;
 		newTile.transform.SetPositionAndRotation(tile.transform.position, tile.transform.rotation);
 		Tile tileScript = newTile.GetComponent<Tile>();
-		tileScript.tileNumber = tile.tileNumber;
+		tileScript.data.PositionOnGrid = tile.data.PositionOnGrid;
 		tileScript.isEdit = tile.isEdit;
-		tileScript.modelName = itemSelected.name;
+		tileScript.data.Model = itemSelected.name;
 		Destroy(tile.gameObject);
 	}
 
@@ -157,31 +157,6 @@ public class MapEditorManager : MonoBehaviour
 
 	public void SaveMap()
 	{
-		if (IsStandby(CustomSection.Edit_Custom_Map))
-			return;
-
-		try
-		{
-			using (StreamWriter writer = File.AppendText(mapArchivePath))
-			{
-				//The first part indicates the name of the custom map
-				writer.Write($"Map1-");
-				writer.Write($"{mapRows};{mapColumns}#");
-				for (int i = 0; i < tileParents.childCount; i++)
-				{
-					Tile tile = GameObject.Find($"Terrain_{i}").GetComponent<Tile>();
-					writer.Write(tile.modelName);
-					if (i != tileParents.childCount - 1)
-						writer.Write(";");
-				}
-				writer.WriteLine();
-			}
-			Debug.Log("Map saved succesfully.");
-		}
-		catch (IOException e)
-		{
-			Debug.LogError("Error while saving custom map: " + e.Message);
-		}
 	}
 
 	public void LoadMap()

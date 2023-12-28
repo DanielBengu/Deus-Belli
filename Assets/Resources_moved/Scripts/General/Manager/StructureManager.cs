@@ -8,7 +8,15 @@ using static Pathfinding;
 
 public class StructureManager : MonoBehaviour
 {
-    public UIManager uiManager;
+    const int FIGHT_TILES_DISTANCE = 100;
+	const int ROGUE_TILES_DISTANCE = 5;
+    const int ROGUE_TILES_RANDOM_DIFFERENCE_MIN = 3;
+	const int ROGUE_TILES_RANDOM_DIFFERENCE_MAX = 6;
+    const int ROGUE_TILES_FIGHT_WEIGHT = 6;
+	const int ROGUE_TILES_MERCHANT_WEIGHT = 1;
+	const int ROGUE_TILES_EVENT_WEIGHT = 2;
+
+	public UIManager uiManager;
     public SpriteManager spriteManager;
     public ActionPerformer actionPerformer;
 
@@ -23,51 +31,65 @@ public class StructureManager : MonoBehaviour
         actionPerformer = new() { structureManager = this, movement = new(), spriteManager = spriteManager };
     }
 
-	public Dictionary<int, Tile> SetupFightSection(Dictionary<int, GameObject> tileList, FightManager manager, int topX, int y, int topZ, int X_Length, int Y_Length)
+	public Dictionary<int, Tile> SetupFightSection(Level level, FightManager manager)
 	{
-        var mapTiles = GenerateFightTiles(tileList, manager, topX, y, topZ, X_Length, Y_Length);
-        pathfinding = new(mapTiles, X_Length, Y_Length);
+        var mapTiles = GenerateFightTiles(level.tilesDict, manager, level.spawnPosition, level.mapData.Rows, level.mapData.Columns);
+        pathfinding = new(mapTiles, level.mapData.Rows, level.mapData.Columns);
         actionPerformer.pathfinding = pathfinding;
         return mapTiles;
     }
 
-    public Dictionary<int, Tile> GenerateFightTiles(Dictionary<int, GameObject> tileList, FightManager manager, int topX, int y, int topZ, int XLength, int YLength)
+    public Dictionary<int, Tile> GenerateFightTiles(Dictionary<int, GameObject> tileList, FightManager manager, Vector3 spawnPosition, int rows, int columns)
     {
         Dictionary<int, Tile> mapTiles = new();
         Debug.Log("START TILE GENERATION");
-        for(int i=0;i< YLength;i++)
+        for(int i=0;i< columns;i++)
         {
-            for(int x=0; x< XLength; x++){
-                Tile tile = SetupFightTile(topX, topZ, x, y, XLength, YLength, i, manager, tileList);
-                mapTiles.Add(tile.tileNumber, tile);
+            for(int x=0; x< rows; x++){
+                Tile tile = SetupFightTile(spawnPosition, rows, columns, x, i, manager, tileList);
+                mapTiles.Add(tile.data.PositionOnGrid, tile);
             }
         }
         Debug.Log("END TILE GENERATION");
         return mapTiles;
     }
 
-    Tile SetupFightTile(int positionX, int positionZ, int index_X, int index_Y, int XLength, int YLength, int i, FightManager manager, Dictionary<int, GameObject> tileList)
+    Tile SetupFightTile(Vector3 baseSpawnPosition, int rows, int columns, int positionInRow, int positionInColumn, FightManager manager, Dictionary<int, GameObject> tileList)
     {
-		Vector3 spawnPosition = new(positionX + (index_X * 100), index_Y, positionZ - (i * 100));
-		GameObject tile = tileList[index_X + (i * YLength)]; 
-		tile.transform.position = spawnPosition;
-		Tile tileScript = tile.GetComponent<Tile>();
+        int index = positionInRow + (positionInColumn * columns);
+		GameObject tile = tileList[index];
+		
+		tile.transform.position = GetFightTileSpawnPosition(baseSpawnPosition, positionInRow, positionInColumn);
 
+		Tile tileScript = tile.GetComponent<Tile>();
 		tileScript.SetupManager(manager);
-		tileScript.tileNumber = index_X + (i * XLength);
+		tileScript.data.PositionOnGrid = positionInRow + (positionInColumn * rows);
         return tileScript;
 	}
 
-    public RogueNode GenerateRogueTile(int currentRow, int positionOnRow, int maxRowOnMap, int nodeIndex, int nodeSeed, Transform origin, Transform firstNode, RogueManager rm)
-	{
-        int randomLength = RandomManager.GetRandomValue(nodeSeed, 3, 6);
-        Vector3 tilePosition = origin.localPosition;
-        float precedentRowX = firstNode.transform.position.x + (15 * (currentRow - 1));
-        tilePosition.x = precedentRowX + 5 + (randomLength); //sourceTile.transform.position.x + 150 + (50 * randomLength);
-        tilePosition.y = firstNode.transform.position.y;
-        tilePosition.z = firstNode.transform.position.z + 5 - (5 * positionOnRow);
+    Vector3 GetFightTileSpawnPosition(Vector3 baseSpawnPosition, int positionInRow, int positionInColumn)
+    {
+		float spawnPositionX = baseSpawnPosition.x + (positionInRow * FIGHT_TILES_DISTANCE);
+		float spawnPositionY = baseSpawnPosition.y;
+		float spawnPositionZ = baseSpawnPosition.z - (positionInColumn * FIGHT_TILES_DISTANCE);
+        return new(spawnPositionX, spawnPositionY, spawnPositionZ);
+	}
 
-        GameObject newTile = Instantiate(origin.gameObject, tilePosition, Quaternion.identity, firstNode);
+	Vector3 GetRogueTileSpawnPosition(Vector3 baseSpawnPosition, int currentRow, int positionInRow, int nodeSeed)
+	{
+		int randomLength = RandomManager.GetRandomValue(nodeSeed, ROGUE_TILES_RANDOM_DIFFERENCE_MIN, ROGUE_TILES_RANDOM_DIFFERENCE_MAX);
+		float precedentRowX = baseSpawnPosition.x + (15 * (currentRow - 1));
+
+		float spawnPositionX = precedentRowX + randomLength + ROGUE_TILES_DISTANCE;
+		float spawnPositionY = baseSpawnPosition.y;
+		float spawnPositionZ = baseSpawnPosition.z - (ROGUE_TILES_DISTANCE * (positionInRow - 1));
+		return new(spawnPositionX, spawnPositionY, spawnPositionZ);
+	}
+
+	public RogueNode GenerateRogueTile(int currentRow, int positionOnRow, int maxRowOnMap, int nodeIndex, int nodeSeed, Transform origin, Transform firstNode, RogueManager rm)
+	{
+		Vector3 tileSpawnPosition = GetRogueTileSpawnPosition(firstNode.transform.position, currentRow, positionOnRow, nodeSeed);
+        GameObject newTile = Instantiate(origin.gameObject, tileSpawnPosition, Quaternion.identity, firstNode);
         RogueNode newTileScript = newTile.GetComponent<RogueNode>();
         RogueTileType typeOfNode = GenerateRogueNodeType(currentRow, maxRowOnMap, rm, nodeIndex);
         newTileScript.SetupTile(rm, typeOfNode, currentRow, positionOnRow, nodeIndex, nodeSeed);
@@ -89,26 +111,14 @@ public class StructureManager : MonoBehaviour
 
         seed = rm.seedList[RogueManager.SeedType.RogueTile] * (nodeIndex + 1);
 
-        int weightOfFightEncounter = 6;
-        int weightOffEventEncounter = 2;
-        int weightOffMerchantEncounter = 1;
-        int offset = 0;
-        RogueTileType[] weights = new RogueTileType[weightOfFightEncounter + weightOffEventEncounter + weightOffMerchantEncounter];
-
-        for (int i = 0; i < weightOfFightEncounter; i++)
-            weights[offset + i] = RogueTileType.Fight;
-        offset += weightOfFightEncounter;
-        for (int i = 0; i < weightOffEventEncounter; i++)
-            weights[offset + i] = RogueTileType.Event;
-        offset += weightOffEventEncounter;
-        for (int i = 0; i < weightOffMerchantEncounter; i++)
-            weights[offset + i] = RogueTileType.Merchant;
-
-        int weightIndex = RandomManager.GetRandomValue(seed, 0, weights.Length);
-        RogueTileType rogueTileType = weights[weightIndex];
-
-        return rogueTileType;
-    }
+        Dictionary<RogueTileType, int> weights = new()
+        {
+            { RogueTileType.Fight, ROGUE_TILES_FIGHT_WEIGHT },
+			{ RogueTileType.Event, ROGUE_TILES_EVENT_WEIGHT },
+			{ RogueTileType.Merchant, ROGUE_TILES_MERCHANT_WEIGHT },
+		};
+        return RandomManager.GetRandomValueWithWeights(seed, weights);
+	}
 
     public void GenerateRogueLine(List<RogueNode> tileList)
 	{
@@ -141,8 +151,9 @@ public class StructureManager : MonoBehaviour
     public void ShowcaseUnit(Unit unit, Transform positionOfShowcase, Transform parent)
     {
 		var unitShowcase = Instantiate(unit, parent);
-        Destroy(unitShowcase.GetComponent<Unit>());
+        Destroy(unitShowcase);
         unitShowcase.transform.SetPositionAndRotation(positionOfShowcase.position, positionOfShowcase.rotation);
+        AnimationPerformer.PerformAnimation(Animation.ShowcaseIdle, unitShowcase.gameObject);
     }
 
     public void ClearShowcase(Transform parent)
@@ -180,7 +191,7 @@ public class StructureManager : MonoBehaviour
     }
     public void MoveUnit(Unit unit, Tile targetTile, bool isTeleport)
     {
-        if (unit.Movement.CurrentTile.tileNumber == targetTile.tileNumber)
+        if (unit.Movement.CurrentTile.data.PositionOnGrid == targetTile.data.PositionOnGrid)
             return;
         ActionPerformed action = isTeleport ? ActionPerformed.FightTeleport : ActionPerformed.FightMovement;
         actionPerformer.StartAction(action, unit.gameObject, targetTile.gameObject);
@@ -194,7 +205,7 @@ public class StructureManager : MonoBehaviour
         if (!attacker || !defender)
             return false;
 
-        bool noAttacksInRange = !attacker.Movement.GetPossibleAttacks().Any(a => a.tileToAttack.tileNumber == defender.Movement.CurrentTile.tileNumber);
+        bool noAttacksInRange = !attacker.Movement.GetPossibleAttacks().Any(a => a.tileToAttack.data.PositionOnGrid == defender.Movement.CurrentTile.data.PositionOnGrid);
 
 		if(noAttacksInRange)
             return false;
@@ -243,9 +254,9 @@ public class StructureManager : MonoBehaviour
     {
         Tile lowestTile = possibleAttacks.First().tileToMoveTo;
         float lowestCost = OUT_OF_BOUND_VALUE;
-		foreach (PossibleAttack possibleAttack in possibleAttacks.Where(a => a.tileToAttack.tileNumber == defender.Movement.CurrentTile.tileNumber))
+		foreach (PossibleAttack possibleAttack in possibleAttacks.Where(a => a.tileToAttack.data.PositionOnGrid == defender.Movement.CurrentTile.data.PositionOnGrid))
         {
-            Tile tile = pathfinding.FindPathToDestination(possibleAttack.tileToMoveTo, out float cost, attacker.Movement.CurrentTile.tileNumber).Last();
+            Tile tile = pathfinding.FindPathToDestination(possibleAttack.tileToMoveTo, out float cost, attacker.Movement.CurrentTile.data.PositionOnGrid).Last();
             //If true, we found a cheaper road
             if(cost < lowestCost)
             {

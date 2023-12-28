@@ -127,7 +127,7 @@ public class FightManager : MonoBehaviour
         level.GenerateTerrain(false, null);
 
         // Setup the terrain based on the level information
-        var tiles = structureManager.SetupFightSection(level.tilesDict, this, level.TopLeftSquarePositionX, level.YPosition, level.TopLeftSquarePositionZ, level.mapData.Rows, level.mapData.Columns);
+        var tiles = structureManager.SetupFightSection(level, this);
 
         Transform lastTile = tiles[level.mapData.Columns * level.mapData.Rows - 1].transform;
         float rotatorX = (tiles[0].transform.position.x + lastTile.position.x) / 2;
@@ -144,19 +144,11 @@ public class FightManager : MonoBehaviour
 
     public int[] SetupUnitPosition()
 	{
-        List<Tile> tileList = new();
-		for (int i = 0; i < level.mapData.Rows; i++)
-		{
-			for (int j = 0; j < 2; j++)
-			{
-                Tile tile = structureManager.gameData.mapTiles[(i * level.mapData.Rows) + j];
-                if (tile.IsPassable)
-                    tileList.Add(tile);
-			}
-		}
+        //We retrieve the Tiles that have StartPositionForFaction = 1 and ValidForMovement = true in the map config
+		List<Tile> tileList = structureManager.gameData.mapTiles.Where(t => t.Value.data.StartPositionForFaction == USER_FACTION && t.Value.data.ValidForMovement).Select(t => t.Value).ToList();
 
-        structureManager.SelectTiles(tileList, false, TileType.Positionable);
-        return tileList.Select(t => t.tileNumber).ToArray();
+		structureManager.SelectTiles(tileList, false, TileType.Positionable);
+        return tileList.Select(t => t.data.PositionOnGrid).ToArray();
     }
 
     List<Unit> GenerateUnits(Level level)
@@ -191,9 +183,9 @@ public class FightManager : MonoBehaviour
 			{
 				int startingTile = RandomManager.GetRandomValue(seed * (i + 1), 0, possiblePlayerStartingUnits.Length);
 				Tile unitTile = GameObject.Find($"Terrain_{possiblePlayerStartingUnits[startingTile]}").GetComponent<Tile>();
-				alreadyOccupiedTiles.Add(unitTile.tileNumber);
+				alreadyOccupiedTiles.Add(unitTile.data.PositionOnGrid);
 				unitList.Add(GenerateSingleUnit(unit, unitTile, unitsParent));
-				exitClause = !(unitTile != null && unitTile.IsPassable && possiblePlayerStartingUnits.Length > 0);
+				exitClause = !(unitTile != null && unitTile.data.ValidForMovement && possiblePlayerStartingUnits.Length > 0);
 			}
 		}
         return unitList;
@@ -295,14 +287,14 @@ public class FightManager : MonoBehaviour
 
     public void QueueAttack(Unit attacker, Unit defender, Tile tileToMoveTo)
     {
-        List<Tile> path = structureManager.FindPathToDestination(tileToMoveTo, false, attacker.Movement.CurrentTile.tileNumber).ToList();
+        List<Tile> path = structureManager.FindPathToDestination(tileToMoveTo, false, attacker.Movement.CurrentTile.data.PositionOnGrid).ToList();
 
         int targetMovementTileIndex = path.Count - 1;
         if (targetMovementTileIndex < 0) targetMovementTileIndex = 0;
 
         Tile targetTile = attacker.Movement.CurrentTile;
         if(path.Count > 0)
-            targetTile = structureManager.gameData.mapTiles[path[targetMovementTileIndex].tileNumber];
+            targetTile = structureManager.gameData.mapTiles[path[targetMovementTileIndex].data.PositionOnGrid];
 
 		structureManager.MoveUnit(UnitSelected, targetTile, false);
 		ActionInQueue = ActionPerformed.Attack;

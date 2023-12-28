@@ -36,12 +36,12 @@ public class CustomCreatorManager : MonoBehaviour
 
 		baseLevel.StartLevel(0);
 		baseLevel.GenerateTerrain(true, mapObjects);
-		var tiles = _structureManager.GenerateFightTiles(baseLevel.tilesDict, null, baseLevel.TopLeftSquarePositionX, baseLevel.YPosition, baseLevel.TopLeftSquarePositionZ, mapRows, mapColumns);
+		var tiles = _structureManager.GenerateFightTiles(baseLevel.tilesDict, null, baseLevel.spawnPosition, mapRows, mapColumns);
 		_mapEditorManager.mapRows = mapRows;
 		_mapEditorManager.mapColumns = mapColumns;
 		_mapEditorManager.currentSection = MapEditorManager.CustomSection.Edit_Custom_Map;
-		Transform topLeftTile = tiles.Values.First(t => t.tileNumber == 0).transform;
-		Transform bottomRightTile = tiles.Values.First(t => t.tileNumber == (mapRows * mapColumns) - 1).transform;
+		Transform topLeftTile = tiles.Values.First(t => t.data.PositionOnGrid == 0).transform;
+		Transform bottomRightTile = tiles.Values.First(t => t.data.PositionOnGrid == (mapRows * mapColumns) - 1).transform;
 		//We find the exact center of this new board
 		_mapEditorManager.rotator.position = new((topLeftTile.position.x + bottomRightTile.position.x) / 2, topLeftTile.position.y, (topLeftTile.position.z + bottomRightTile.position.z) / 2);
 		mapObjects.parent = _mapEditorManager.rotator;
@@ -67,8 +67,8 @@ public class CustomCreatorManager : MonoBehaviour
 		Level level = new();
 		level.StartLevel(0);
 		//level.GenerateTerrain(true, parent, mapLayout);
-		int xPositionForMap = isPreview ? 800 : level.TopLeftSquarePositionX;
-		_structureManager.GenerateFightTiles(level.tilesDict, null, xPositionForMap, level.YPosition, level.TopLeftSquarePositionZ, mapRows, mapColumns);
+		int xPositionForMap = isPreview ? 800 : (int)level.spawnPosition.x;
+		_structureManager.GenerateFightTiles(level.tilesDict, null, level.spawnPosition, mapRows, mapColumns);
 	}
 
 	#endregion
