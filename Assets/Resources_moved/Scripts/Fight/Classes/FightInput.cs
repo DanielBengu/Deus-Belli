@@ -106,8 +106,24 @@ public class FightInput
 
 	void EmptyActionTileClick(Tile currentTile, bool resetGameState)
 	{
+		List<Tile> tiles = new List<Tile>();
 		_fightManager.ResetGameState(resetGameState);
-		_structureManager.SelectTiles(currentTile.ToList(), true);
+		TileType typeOfSelection = TileType.Default;
+        if (currentTile.unitOnTile != null)
+		{
+			if(currentTile.unitOnTile.unitData.Faction == FightManager.USER_FACTION)
+			{
+				typeOfSelection = TileType.Ally;
+				tiles = currentTile.ToList();
+			}
+			else
+			{
+				typeOfSelection = TileType.Enemy;
+				tiles = _structureManager.GeneratePossibleMovementForUnit(currentTile.unitOnTile, true);
+			}
+		}
+
+        _structureManager.SelectTiles(tiles, true, typeOfSelection);
 	}
 
 	public bool HasUnitAlreadyPerformedAction()
@@ -212,7 +228,7 @@ public class FightInput
 		_fightManager.ResetGameState(true);
 		_structureManager.ClearSelection(true);
 		_fightManager.ClearShowcase();
-		_structureManager.SelectTiles(tileSelected.ToList(), false);
+		_structureManager.SelectTiles(tileSelected.ToList(), true, TileType.Selected);
 	}
 
 	#endregion

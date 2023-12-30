@@ -91,7 +91,6 @@
     <Compile Include="Assets\Resources_moved\Scripts\GodsArchive\Religions\Agbara.cs" />
     <Compile Include="Assets\Resources_moved\Scripts\Rogue\Classes\EventOption.cs" />
     <Compile Include="Assets\Resources_moved\Scripts\Rogue\Classes\Merchant.cs" />
-    <Compile Include="Assets\Resources_moved\Scripts\TerrainArchive\TerrainArchive.cs" />
     <Compile Include="Assets\Resources_moved\Scripts\Fight\Managers\FightManager.cs" />
     <Compile Include="Assets\Polyart\PolyartStudio\SharedResources\CritiasFoliage\Code\FoliagePainterEditTime.cs" />
     <Compile Include="Assets\RFA\Common\Scripts\Movement.cs" />

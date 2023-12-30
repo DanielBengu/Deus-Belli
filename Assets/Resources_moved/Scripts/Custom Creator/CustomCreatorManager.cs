@@ -55,20 +55,8 @@ public class CustomCreatorManager : MonoBehaviour
 			Destroy(mapObjects.GetChild(i).gameObject);
 	}
 
-	public void LoadCustomMap(string map, Transform parent, bool isPreview)
-	{
-		string mapWithoutName = map.Split('-')[1];
-		string[] mapData = mapWithoutName.Split('#')[0].Split(';');
-		string[] mapLayout = mapWithoutName.Split('#')[1].Split(';');
+	public void LoadCustomMap() { 
 
-		int mapRows = int.Parse(mapData[0]);
-		int mapColumns = int.Parse(mapData[1]);
-
-		Level level = new();
-		level.StartLevel(0);
-		//level.GenerateTerrain(true, parent, mapLayout);
-		int xPositionForMap = isPreview ? 800 : (int)level.spawnPosition.x;
-		_structureManager.GenerateFightTiles(level.tilesDict, null, level.spawnPosition, mapRows, mapColumns);
 	}
 
 	#endregion

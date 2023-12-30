@@ -139,18 +139,21 @@ public class StructureManager : MonoBehaviour
     public void ClearSelection(bool closeInfoPanel){
         if(closeInfoPanel)
             uiManager.SetInfoPanel(false);
+        SelectTiles(gameData.GetTileList(), true, TileType.Default);
     }
 
     public List<Tile> FindPathToDestination(Tile targetTile, bool selectTiles, int startingTileNumber){
 		List<Tile> path = pathfinding.FindPathToDestination(targetTile, out _, startingTileNumber);
-        if(selectTiles)
-            spriteManager.GenerateTileSelection(path);
+        if (selectTiles)
+            SelectTiles(path, false);
         return path;
     }
 
     public void ShowcaseUnit(Unit unit, Transform positionOfShowcase, Transform parent)
     {
 		var unitShowcase = Instantiate(unit, parent);
+        if (unitShowcase.TryGetComponent<BoxCollider>(out var component))
+            Destroy(component);
         Destroy(unitShowcase);
         unitShowcase.transform.SetPositionAndRotation(positionOfShowcase.position, positionOfShowcase.rotation);
         AnimationPerformer.PerformAnimation(Animation.ShowcaseIdle, unitShowcase.gameObject);
@@ -166,7 +169,10 @@ public class StructureManager : MonoBehaviour
         List<Tile> possibleMovements = CalculateMapTilesDistance(unit);
 
         if (selectTiles)
-            SelectTiles(possibleMovements, false);
+        {
+            TileType tileType = unit.unitData.Faction == FightManager.USER_FACTION ? TileType.Ally : TileType.Enemy;
+			SelectTiles(possibleMovements, false, tileType);
+		}
 
         return possibleMovements;
     }
@@ -241,7 +247,6 @@ public class StructureManager : MonoBehaviour
     }
     public List<PossibleAttack> GetPossibleAttacksForUnit(Unit unit, bool selectTiles, List<Tile> possibleMovements = null)
 	{
-        //List<Tile> possibleAttacks = pathfinding.FindPossibleAttacks(unit);
         List<PossibleAttack> possible = pathfinding.FindPossibleAttacks_New(unit, possibleMovements);
 
 		if (selectTiles)
@@ -271,11 +276,12 @@ public class StructureManager : MonoBehaviour
     {
         uiManager.SetInfoPanel(active, unit);
     }
-    public void SelectTiles(List<Tile> tilelist, bool clearBeforeSelecting, TileType tileType = TileType.Default)
+    public void SelectTiles(List<Tile> tilelist, bool clearBeforeSelecting, TileType tileType = TileType.Base)
     {
-        //if (clearBeforeSelecting)
+        if (clearBeforeSelecting)
+			spriteManager.GenerateTileSelection(gameData.GetTileList(), gameData.IsSetup, TileType.Default);
 
-        spriteManager.GenerateTileSelection(tilelist, tileType);
+		spriteManager.GenerateTileSelection(tilelist, gameData.IsSetup, tileType);
     }
 
     #endregion
@@ -286,15 +292,50 @@ public struct FightGameData
     public Dictionary<int, Tile> mapTiles;
     public List<Unit> unitsOnField;
 
-    public int Map_X_Length;
-    public int Map_Y_Length;
+    public int Map_Rows;
+    public int Map_Columns;
 
-    public FightGameData(Dictionary<int, Tile> mapTiles, List<Unit> unitsOnField, int Map_X_Length, int Map_Y_Length)
+    float Map_MaxLeft_Position;
+	float Map_MaxRight_Position;
+	float Map_MaxUpward_Position;
+	float Map_MaxDownward_Position;
+
+    public bool IsSetup { get; set; }
+
+    public FightGameData(Dictionary<int, Tile> mapTiles, List<Unit> unitsOnField, int Map_Rows, int Map_Columns)
     {
-        this.mapTiles = mapTiles;
+		this.mapTiles = mapTiles;
         this.unitsOnField = unitsOnField;
-        this.Map_X_Length = Map_X_Length;
-        this.Map_Y_Length = Map_Y_Length;
+        this.Map_Rows = Map_Rows;
+        this.Map_Columns = Map_Columns;
+
+		int maxTile = mapTiles.Max(t => t.Key);
+		Tile[] tiles =  new[] { mapTiles.First(t => t.Key == 0).Value, mapTiles.First(t => t.Key == maxTile).Value };
+
+		Vector3 firstTile = tiles[0].transform.position;
+		Vector3 lastTile = tiles[1].transform.position;
+
+		Map_MaxLeft_Position = firstTile.x;
+		Map_MaxRight_Position = lastTile.x;
+		Map_MaxUpward_Position = firstTile.z;
+		Map_MaxDownward_Position = lastTile.z;
+
+        IsSetup = true;
+	}
+
+    public void SetIsSetup(bool isSetup)
+    {
+        IsSetup = isSetup;
+    }
+
+    public readonly List<Tile> GetTileList()
+    {
+        return mapTiles.Values.ToList();
+    }
+
+    public readonly float[] GetMapBounds()
+    {
+        return new float[] { Map_MaxLeft_Position, Map_MaxRight_Position, Map_MaxDownward_Position, Map_MaxUpward_Position };
     }
 }
 

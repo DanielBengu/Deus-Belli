@@ -16,7 +16,7 @@ public class MapEditorManager : MonoBehaviour
 	static readonly string CUSTOM_MAP_ARCHIVE = "CustomMapArchive";
 	Image[] carouselList = null;
 	GameObject[] objectsList;
-	Image currentCarousel;
+	//Image currentCarousel;
 
 	[SerializeField] Transform tileParents;
 
@@ -42,7 +42,7 @@ public class MapEditorManager : MonoBehaviour
 	public int mapRows;
 
 	public CustomSection currentSection;
-	List<TextMeshProUGUI> mapsList = new();
+	readonly List<TextMeshProUGUI> mapsList = new();
 
 	void Start()
 	{
@@ -89,7 +89,7 @@ public class MapEditorManager : MonoBehaviour
 			carouselList[i] = carouseilImage;
 		}
 
-		currentCarousel = carouselList[0];
+		//currentCarousel = carouselList[0];
 		itemSelected = objectsList[0];
 	}
 
@@ -227,7 +227,7 @@ public class MapEditorManager : MonoBehaviour
 	{
 		Transform parent = isPreview ? mapLoadPreviewParent : tileParents;
 		ClearMap(parent);
-		manager.LoadCustomMap(mapSelected, parent, isPreview);
+		manager.LoadCustomMap();
 	}
 
 	void ClearMap(Transform parent)

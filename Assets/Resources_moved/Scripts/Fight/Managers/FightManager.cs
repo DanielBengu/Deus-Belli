@@ -44,12 +44,13 @@ public class FightManager : MonoBehaviour
     public bool IsShowingPath { get; set; }
     public ActionPerformed ActionInQueue { get; set; }
     public GameObject ActionTarget { get; set; }
-	public bool IsSetup { get; set; }
+	public bool IsSetup { get { return structureManager.gameData.IsSetup; } }
     public int[] SetupTiles { get; set; }
 
     public int CurrentTurnCount { get; set; }
     public List<Unit> UnitsOnField { get { return structureManager.gameData.unitsOnField; } }
-	public FightInput FightInput { get; set; }
+    public List<Tile> TileList { get { return structureManager.gameData.GetTileList(); } }
+    public FightInput FightInput { get; set; }
     #endregion
 
 	internal Transform leftUnitShowcasePosition;
@@ -104,7 +105,10 @@ public class FightManager : MonoBehaviour
 		rightUnitShowcasePosition = GameObject.Find("Right Character Position").transform;
 		rightUnitShowcaseParent = GameObject.Find("ShowcaseChildrenRight").transform;
 		structureManager = sm;
+
         cameraManager = cm;
+        cameraManager.SetupFightCamera(cameraManager.transform);
+
 		generalManager = gm;
         structureManager.uiManager.SetFightVariables(gm.GodSelected);
         structureManager.spriteManager.fightManager = this;
@@ -122,8 +126,6 @@ public class FightManager : MonoBehaviour
 
     void StartLevel(Level level)
     {
-        IsSetup = true;
-
         level.GenerateTerrain(false, null);
 
         // Setup the terrain based on the level information
@@ -147,7 +149,7 @@ public class FightManager : MonoBehaviour
         //We retrieve the Tiles that have StartPositionForFaction = 1 and ValidForMovement = true in the map config
 		List<Tile> tileList = structureManager.gameData.mapTiles.Where(t => t.Value.data.StartPositionForFaction == USER_FACTION && t.Value.data.ValidForMovement).Select(t => t.Value).ToList();
 
-		structureManager.SelectTiles(tileList, false, TileType.Positionable);
+		structureManager.SelectTiles(tileList, true, TileType.Positionable);
         return tileList.Select(t => t.data.PositionOnGrid).ToArray();
     }
 
@@ -337,9 +339,9 @@ public class FightManager : MonoBehaviour
 	{
         if (IsSetup)
         {
-            IsSetup = false;
-            List<Tile> tileList = structureManager.gameData.mapTiles.Values.ToList();
-            structureManager.SelectTiles(tileList, false, TileType.Base);
+            structureManager.gameData.IsSetup = false;
+            List<Tile> tileList = structureManager.gameData.GetTileList();
+            structureManager.SelectTiles(tileList, false);
             structureManager.UpdateFightEndPhaseButton();
             return;
         }

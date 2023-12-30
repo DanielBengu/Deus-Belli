@@ -1,3 +1,6 @@
+using Microsoft.Win32.SafeHandles;
+using System.Collections.Generic;
+using System.Linq;
 using Unity.VisualScripting;
 using UnityEngine;
 using static GeneralManager;
@@ -10,7 +13,6 @@ public class CameraManager : MonoBehaviour
     public float maxDistance = 10f;
 
     private static readonly float speedMod = 30.0f;//a speed modifier
-	private static readonly float fightSpeedMod = 300.0f;//a speed modifier
 
 	public static float scrollSpeed = 25000f;
 
@@ -30,11 +32,16 @@ public class CameraManager : MonoBehaviour
 		{
 			case CurrentSection.Fight:
                 if (Input.GetMouseButton((int)MouseButton.Right))
-                RotateItem(objectToMove);
-                break;
+                    RotateItem(objectToMove);
+				else if (Input.GetMouseButton((int)MouseButton.Middle))
+				{
+					float[] clampValuesCustom = options.ClampValues;
+					MoveItemByMouseInput(objectToMove, clampValuesCustom, section);
+				}
+				break;
 			case CurrentSection.Rogue:
                 float[] clampValues = GetCameraClamp(options.MapLength);
-                MoveItemByMouseInput(objectToMove, clampValues[0], clampValues[1]);
+                MoveItemByMouseInput(objectToMove, clampValues, section);
                 break;
 			case CurrentSection.Custom:
                 if (Input.GetMouseButton((int)MouseButton.Right))
@@ -42,7 +49,7 @@ public class CameraManager : MonoBehaviour
                 else if (Input.GetMouseButton((int)MouseButton.Middle))
 				{
                     float[] clampValuesCustom = options.GetMovementClamp();
-                    MoveItemByMouseInput(objectToMove, clampValuesCustom[0], clampValuesCustom[1]);
+                    MoveItemByMouseInput(objectToMove, clampValuesCustom, section);
                 }
                 else
                     return;
@@ -52,14 +59,41 @@ public class CameraManager : MonoBehaviour
 		}
     }
 
-    static void MoveItemByMouseInput(Transform objectToMove, float xMin, float xMax)
+    static void MoveItemByMouseInput(Transform objectToMove, float[] clampValues, CurrentSection section)
 	{
-        float moveHorizontalRogue = Input.GetAxis("Mouse X");
+        bool movingX = false;
+        bool movingZ = false;
 
-        Vector3 position = objectToMove.position;
-        position.x += moveHorizontalRogue * movementSpeed;
+        switch (section)
+        {
+            case CurrentSection.Fight:
+			case CurrentSection.Custom:
+                movingX = true;
+                movingZ = true;
+				break;
+            case CurrentSection.Rogue:
+                movingX = true;
+                break;
+            default:
+                break;
+        }
 
-        position.x = Mathf.Clamp(position.x, xMin, xMax);
+		Vector3 position = objectToMove.position;
+
+		if (movingX)
+        {
+			float moveHorizontal = Input.GetAxis("Mouse X");
+			position.x += moveHorizontal * movementSpeed;
+			position.x = Mathf.Clamp(position.x, clampValues[0], clampValues[1]);
+		}
+
+        if (movingZ)
+        {
+			float moveVertical = Input.GetAxis("Mouse Y");
+			position.z += moveVertical * movementSpeed;
+			position.z = Mathf.Clamp(position.z, clampValues[2], clampValues[3]);
+		}
+        
         objectToMove.position = position;
     }
     static void TeleportItemToPosition(Transform objectToMove, float targetX)
@@ -69,6 +103,11 @@ public class CameraManager : MonoBehaviour
 
         objectToMove.position = position;
     }
+
+    public void SetupFightCamera(Transform camera)
+    {
+        camera.SetPositionAndRotation(cameraPositionOnFocus, rotationOnFocus);
+	}
 
     static void MoveItem(Transform objectToMove, Vector3 direction, float scrollInput)
     {
@@ -163,6 +202,8 @@ public class CameraMovementOptions
 
     public int MapLength { get; set; } = -1;
     public Transform Rotator { get; set; } = null;
+    public List<Tile> Tiles { get; set; } = null;
+    public float[] ClampValues { get; set; }
 
 	#region Constructors
 	public CameraMovementOptions()
@@ -171,8 +212,14 @@ public class CameraMovementOptions
 	}
 	public CameraMovementOptions(float minClamp, float maxClamp)
     {
+        ClampValues = new float[] { minClamp, maxClamp };
         _minMovementValue = minClamp;
         _maxMovementValue = maxClamp;
+    }
+
+    public CameraMovementOptions(float[] clampValues)
+    {
+        ClampValues = clampValues;
     }
 
     public CameraMovementOptions(float minClamp, float maxClamp, Transform rotator)

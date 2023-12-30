@@ -119,7 +119,7 @@ public class GeneralManager : MonoBehaviour
         }
 
         if(currentSection == CurrentSection.Fight)
-            CameraManager.UpdatePositionOrRotation(fightManager.fightObjects, currentSection, new() { Rotator = fightManager.fightObjectsRotator });
+            CameraManager.UpdatePositionOrRotation(fightManager.fightObjects, currentSection, new(structureManager.gameData.GetMapBounds()) { Rotator = fightManager.fightObjectsRotator, Tiles = fightManager.TileList });
     }
 
     RunData LoadRunData()
