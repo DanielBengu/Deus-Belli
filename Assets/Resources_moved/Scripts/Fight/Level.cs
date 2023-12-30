@@ -43,9 +43,16 @@ public class Level
 	{
 		tile.name = name;
 
-		Tile script = tile.GetComponent<Tile>();
-		script.data = tileData;
-		script.isEdit = isEdit;
+		try
+		{
+			Tile script = tile.GetComponent<Tile>();
+			script.data = tileData;
+			script.isEdit = isEdit;
+		}
+		catch
+		{
+			Debug.LogError("Missing \"Tile\" script on Prefab " + tile.name);
+		}
 	}
 
 	public void SetupEnemies()

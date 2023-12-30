@@ -5,11 +5,13 @@ public class SpriteManager : MonoBehaviour
 {
     public FightManager fightManager;
 
+    //Use RGB 0-1, not RGB 0-255
     readonly Color COLOR_ALLY = Color.yellow;
 	readonly Color COLOR_ENEMY = Color.red;
     readonly Color COLOR_SELECTED = Color.blue;
-    readonly Color COLOR_POSITIONABLE = new(1.0f, 0.5f, 0.0f, 1.0f); //orange
-    readonly Color COLOR_POSSIBLE = Color.magenta;
+    readonly Color COLOR_POSITIONABLE = new(0.04f, 0.75f, 0.05f, 1.0f); //new(1.0f, 0.5f, 0.0f, 1.0f); //orange
+
+	readonly Color COLOR_POSSIBLE = Color.magenta;
     readonly Color COLOR_BASE = Color.white; //This removes all previous colors and leaves the default textures
 
 	void Start()

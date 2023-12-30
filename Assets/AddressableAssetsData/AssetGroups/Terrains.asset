@@ -21,34 +21,57 @@ MonoBehaviour:
     m_Address: Terrains
     m_ReadOnly: 0
     m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 638cad1328606a043ba6907bcfc8dff5
     m_Address: Terrains
     m_ReadOnly: 0
     m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 7809dc9331c05c4418bbf92c2805bacd
     m_Address: Terrains
     m_ReadOnly: 0
     m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: ca77371fc3eef2c49a298cd33bf103c3
     m_Address: Terrains
     m_ReadOnly: 0
     m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 1db8f79c490383041a31299f12c12e36
     m_Address: Terrains
     m_ReadOnly: 0
     m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: d315bfc834d901a4dba4ae8d5465e318
     m_Address: Terrains
     m_ReadOnly: 0
     m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 7914a034d62081b4b86603a4cc2a24f9
     m_Address: Terrains
     m_ReadOnly: 0
     m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: e344f0778d097b14e9e34847643a9671
     m_Address: Terrains
     m_ReadOnly: 0
     m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 39754df76d678184583204a50dce93e2
+    m_Address: Terrains
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 7f62e47c358156f4eaf7b1c308afa1cd
+    m_Address: Terrains
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: ed784f01087caa044bf2d78e84531fca
+    m_Address: Terrains
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
   m_ReadOnly: 0
   m_Settings: {fileID: 11400000, guid: 42fa5884c9964964993dbdd708fbd850, type: 2}
   m_SchemaSet:

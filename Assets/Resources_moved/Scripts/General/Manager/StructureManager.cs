@@ -56,15 +56,23 @@ public class StructureManager : MonoBehaviour
 
     Tile SetupFightTile(Vector3 baseSpawnPosition, int rows, int columns, int positionInRow, int positionInColumn, FightManager manager, Dictionary<int, GameObject> tileList)
     {
-        int index = positionInRow + (positionInColumn * columns);
+		int index = positionInRow + (positionInColumn * columns);
 		GameObject tile = tileList[index];
-		
-		tile.transform.position = GetFightTileSpawnPosition(baseSpawnPosition, positionInRow, positionInColumn);
 
-		Tile tileScript = tile.GetComponent<Tile>();
-		tileScript.SetupManager(manager);
-		tileScript.data.PositionOnGrid = positionInRow + (positionInColumn * rows);
-        return tileScript;
+		try
+        {
+			tile.transform.position = GetFightTileSpawnPosition(baseSpawnPosition, positionInRow, positionInColumn);
+
+			Tile tileScript = tile.GetComponent<Tile>();
+			tileScript.SetupManager(manager);
+			tileScript.data.PositionOnGrid = positionInRow + (positionInColumn * rows);
+			return tileScript;
+		}
+        catch (Exception)
+        {
+            Debug.LogError("Missing \"Tile\" script on Prefab " + tile.name);
+            return null;
+        }
 	}
 
     Vector3 GetFightTileSpawnPosition(Vector3 baseSpawnPosition, int positionInRow, int positionInColumn)
