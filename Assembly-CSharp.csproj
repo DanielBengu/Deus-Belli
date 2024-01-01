@@ -149,7 +149,6 @@
     <Compile Include="Assets\Polyart\PolyartStudio\SharedResources\CritiasFoliage\Code\FoliageData.cs" />
     <Compile Include="Assets\Polyart\PolyartStudio\SharedResources\CritiasFoliage\Code\FoliageCell.cs" />
     <Compile Include="Assets\Polyart\PolyartStudio\SharedResources\Scripts\Misc\Flythrough.cs" />
-    <Compile Include="Assets\C&amp;C_Pack\Goblin_rouge\Script\Goblin_ro_ctrl.cs" />
     <Compile Include="Assets\Polyart\PolyartStudio\Scripts\NatureManager.cs" />
     <Compile Include="Assets\MapLineScript.cs" />
     <Compile Include="Assets\Resources_moved\Scripts\General\Manager\AchievementManager.cs" />
@@ -226,7 +225,6 @@
     <None Include="Assets\Polyart\PolyartStudio\DreamscapeMeadows\Readme.txt" />
     <None Include="Assets\Resources\Materials\Diffuse NotEqualOne.shader" />
     <None Include="Assets\TextMesh Pro\Shaders\TMP_SDF-Mobile Masking.shader" />
-    <None Include="Assets\Ork berserker\materials\Standard_Two_Sided .shader" />
     <None Include="Assets\Documentation\Player Data.txt" />
     <None Include="Assets\Polyart\PolyartStudio\SharedResources\Shaders\Effects\PA_CloudShader.shader" />
     <None Include="Assets\Resources_moved\Scripts\General\Player Data\Unit list.txt" />
@@ -238,7 +236,6 @@
     <None Include="Assets\Polyart\PolyartStudio\Shaders\Dreamscape_StonesDetail.shader" />
     <None Include="Assets\TextMesh Pro\Fonts\LiberationSans - OFL.txt" />
     <None Include="Assets\Polyart\PolyartStudio\Shaders\Dreamscape_Surface_Coverage.shader" />
-    <None Include="Assets\C&amp;C_Pack\Goblin_rouge\readme.txt" />
     <None Include="Assets\TextMesh Pro\Shaders\TMP_SDF-Mobile.shader" />
     <None Include="Assets\Resources\TXT\Gods\Agbara\Ataiku.txt" />
     <None Include="Assets\Polyart\PolyartStudio\SharedResources\Shaders\Terrain\PA_DistantTerrain.shader" />
