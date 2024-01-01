@@ -22,18 +22,8 @@ MonoBehaviour:
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: 5b107b5554d982148ab8856c0213a244
-    m_Address: Units/Goblin_Green
-    m_ReadOnly: 0
-    m_SerializedLabels: []
-    FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: cb48efe15540447479e9ec9eaa28b9bc
-    m_Address: Units/Goblin_Red
-    m_ReadOnly: 0
-    m_SerializedLabels: []
-    FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: d4425c481d4fa004f944309f564a676e
-    m_Address: Units/Goblin_Yellow
+  - m_GUID: 3d85f2c1372aed749a28997e5a70824d
+    m_Address: Units/King
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
@@ -69,6 +59,11 @@ MonoBehaviour:
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 15f9a6dab4c749943af11a085056ea56
     m_Address: Units/Lisa
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: d2b80ef1c5cb7d1408dbf1cdb1b70626
+    m_Address: Units/Skeleton
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0

@@ -198,11 +198,11 @@ public class FightManager : MonoBehaviour
         Quaternion rotation = new(0, 180, 0, 0);
         GameObject model = AddressablesManager.LoadResource<GameObject>(AddressablesManager.TypeOfResource.Units, unit.ModelName);
 		var unitGenerated = Instantiate(model, tile.transform.position, rotation, parent);
-		var unitScript = unitGenerated.GetComponent<Unit>();
+		var unitScript = unitGenerated.AddComponent<Unit>();
 		unitScript.Load(unit);
 		unitScript.FightManager = this;
 		unitScript.Movement.CurrentTile = tile;
-        unitScript.fightData = new(unit.PortraitName, unit.Stats.Hp, unit.Stats.Movement);
+        unitScript.FightData = new(unit.PortraitName, unit.Stats.Hp, unit.Stats.Movement);
         tile.unitOnTile = unitScript;
         return unitScript;
     }
@@ -221,7 +221,7 @@ public class FightManager : MonoBehaviour
 
     void ManageVictory()
     {
-		bool isFightWon = UnitsOnField.Count(u => u.unitData.Faction == ENEMY_FACTION) == 0;
+		bool isFightWon = UnitsOnField.Count(u => u.UnitData.Faction == ENEMY_FACTION) == 0;
 
         if (!isFightWon) return;
 
@@ -233,7 +233,7 @@ public class FightManager : MonoBehaviour
 
     bool ManageDefeat()
     {
-		bool isFightLost = UnitsOnField.Count(u => u.unitData.Faction == USER_FACTION) == 0;
+		bool isFightLost = UnitsOnField.Count(u => u.UnitData.Faction == USER_FACTION) == 0;
 
         if(!isFightLost) return false;
 
@@ -260,9 +260,9 @@ public class FightManager : MonoBehaviour
         CurrentTurnCount = USER_FACTION;
         ResetGameState(true);
         structureManager.SetEndTurnButton(true);
-        foreach (var unit in UnitsOnField.Where(u => u.unitData.Faction == USER_FACTION))
+        foreach (var unit in UnitsOnField.Where(u => u.UnitData.Faction == USER_FACTION))
         {
-            unit.fightData.currentMovement = unit.unitData.Stats.Movement;
+            unit.FightData.currentMovement = unit.UnitData.Stats.Movement;
             unit.Movement.HasPerformedMainAction = false;
         }
     }
@@ -306,16 +306,33 @@ public class FightManager : MonoBehaviour
         structureManager.ClearSelection(true);
     }
 
-    public void HandleShowcase(Unit unitSelected, bool putOnLeftShowcase, bool clearLeftShowcase, bool clearRightShowcase)
+    public void HandleShowcase(Unit unitSelected, bool putOnLeftShowcase, bool clearLeftShowcase, Animation animation)
     {
-        if(clearLeftShowcase)
+        //For now we always clear right showcase, add parameters if needed to change
+		structureManager.ClearShowcase(rightUnitShowcaseParent);
+
+		if (clearLeftShowcase)
             structureManager.ClearShowcase(leftUnitShowcaseParent);
-        if(clearRightShowcase)
-			structureManager.ClearShowcase(rightUnitShowcaseParent);
 
         Transform showcase = putOnLeftShowcase ? leftUnitShowcaseParent : rightUnitShowcaseParent;
         Transform position = putOnLeftShowcase ? leftUnitShowcasePosition : rightUnitShowcasePosition;
-		structureManager.ShowcaseUnit(unitSelected, position, showcase);
+		structureManager.InstantiateShowcaseUnit(unitSelected, position, showcase, animation);
+        HandleShowcaseAnimations(animation, true, true);
+	}
+
+    void HandleShowcaseAnimations(Animation animation, bool animateLeft, bool animateRight)
+    {
+		if (animateLeft && leftUnitShowcaseParent.childCount > 0)
+		{
+			GameObject unitOnLeft = leftUnitShowcaseParent.GetChild(0).gameObject;
+			structureManager.StartShowcaseAnimation(unitOnLeft, animation);
+		}
+
+		if (animateRight && rightUnitShowcaseParent.childCount > 0)
+		{
+			GameObject unitOnRight = rightUnitShowcaseParent.GetChild(0).gameObject;
+			structureManager.StartShowcaseAnimation(unitOnRight, animation);
+		}
 	}
 
     public void ClearShowcase()

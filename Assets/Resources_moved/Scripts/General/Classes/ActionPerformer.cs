@@ -83,7 +83,7 @@ public class ActionPerformer
 
         AnimationPerformer.PerformAnimation(Animation.Attack, attacker.gameObject);
         
-        defender.fightData.currentHp -= attacker.unitData.Stats.Attack;
+        defender.FightData.currentHp -= attacker.UnitData.Stats.Attack;
     }
 
     void KillUnit(Unit unitToKill)
@@ -94,13 +94,13 @@ public class ActionPerformer
 
     void RemoveMovementFromUnit(Unit unit, int movementToRemove)
     {
-        unit.fightData.currentMovement -= movementToRemove;
-        if (unit.fightData.currentMovement < 0) unit.fightData.currentMovement = 0;
+        unit.FightData.currentMovement -= movementToRemove;
+        if (unit.FightData.currentMovement < 0) unit.FightData.currentMovement = 0;
     }
 
     public void StartTakeDamageAnimation()
 	{
-        if (enemyInQueueForAnimation.fightData.currentHp <= 0)
+        if (enemyInQueueForAnimation.FightData.currentHp <= 0)
             KillUnit(enemyInQueueForAnimation);
         else
             AnimationPerformer.PerformAnimation(Animation.TakeDamage, enemyInQueueForAnimation.gameObject);

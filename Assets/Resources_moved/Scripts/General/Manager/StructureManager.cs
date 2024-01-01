@@ -157,15 +157,19 @@ public class StructureManager : MonoBehaviour
         return path;
     }
 
-    public void ShowcaseUnit(Unit unit, Transform positionOfShowcase, Transform parent)
+    public void InstantiateShowcaseUnit(Unit unit, Transform positionOfShowcase, Transform parent, Animation animation)
     {
 		var unitShowcase = Instantiate(unit, parent);
         if (unitShowcase.TryGetComponent<BoxCollider>(out var component))
             Destroy(component);
         Destroy(unitShowcase);
         unitShowcase.transform.SetPositionAndRotation(positionOfShowcase.position, positionOfShowcase.rotation);
-        AnimationPerformer.PerformAnimation(Animation.ShowcaseIdle, unitShowcase.gameObject);
     }
+
+    public void StartShowcaseAnimation(GameObject unit, Animation animation)
+    {
+		AnimationPerformer.PerformAnimation(animation, unit);
+	}
 
     public void ClearShowcase(Transform parent)
     {
@@ -178,7 +182,7 @@ public class StructureManager : MonoBehaviour
 
         if (selectTiles)
         {
-            TileType tileType = unit.unitData.Faction == FightManager.USER_FACTION ? TileType.Ally : TileType.Enemy;
+            TileType tileType = unit.UnitData.Faction == FightManager.USER_FACTION ? TileType.Ally : TileType.Enemy;
 			SelectTiles(possibleMovements, false, tileType);
 		}
 

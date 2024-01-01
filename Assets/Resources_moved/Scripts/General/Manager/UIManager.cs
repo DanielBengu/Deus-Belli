@@ -27,8 +27,8 @@ public class UIManager : MonoBehaviour
     #endregion
 
 	public void SetFightVariables(IGod god){
-        string godSelected = god.GetName();
-        string religionSelected = god.GetReligion().Name;
+        string godSelected = god.ToString();
+        //string religionSelected = god.GetReligion().Name;
         Title = GameObject.Find("GOD_RUN").GetComponent<TextMeshProUGUI>();
         Title.text = $"{godSelected} Run";
 
@@ -103,33 +103,33 @@ public class UIManager : MonoBehaviour
             for (int i = 0; i < traitParent.childCount; i++)
             {
 				Transform traitBox = traitParent.GetChild(i);
-				if (unit.unitData.Traits.Count > i)
+				if (unit.UnitData.Traits.Count > i)
                 {
-                    traitBox.GetComponent<Image>().sprite = AddressablesManager.LoadResource<Sprite>(AddressablesManager.TypeOfResource.Sprite, unit.unitData.Traits[i]);
+                    traitBox.GetComponent<Image>().sprite = AddressablesManager.LoadResource<Sprite>(AddressablesManager.TypeOfResource.Sprite, unit.UnitData.Traits[i]);
 					traitBox.gameObject.SetActive(true);
 				}
                 else
                     traitBox.gameObject.SetActive(false);
             }
 
-            nameText.text = unit.unitData.Name;
-            unitImage.sprite = unit.fightData.sprite;
+            nameText.text = unit.UnitData.Name;
+            unitImage.sprite = unit.FightData.sprite;
 			for (int i = 0; i < statsParent.childCount; i++)
 			{
                 TextMeshProUGUI stat = statsParent.GetChild(i).GetComponent<TextMeshProUGUI>();
                 switch (stat.name)
 				{
                     case "HP":
-                        stat.text = $"{unit.fightData.currentHp}/{unit.unitData.Stats.Hp}";
+                        stat.text = $"{unit.FightData.currentHp}/{unit.UnitData.Stats.Hp}";
                         break;
                     case "Movement":
-                        stat.text = $"{unit.fightData.currentMovement}/{unit.unitData.Stats.Movement}";
+                        stat.text = $"{unit.FightData.currentMovement}/{unit.UnitData.Stats.Movement}";
                         break;
                     case "Attack":
-                        stat.text = unit.unitData.Stats.Attack.ToString();
+                        stat.text = unit.UnitData.Stats.Attack.ToString();
                         break;
                     case "Range":
-                        stat.text = unit.unitData.Stats.Range.ToString();
+                        stat.text = unit.UnitData.Stats.Range.ToString();
                         break;
                     default:
 						break;

@@ -36,7 +36,7 @@ public class Tile : MonoBehaviour, IComparable<Tile>
 
         if (unitOnTile)
         {
-            if (unitOnTile.unitData.Faction == FightManager.USER_FACTION)
+            if (unitOnTile.UnitData.Faction == FightManager.USER_FACTION)
                 manager.UnitSelected = unitOnTile.GetComponent<Unit>();
             objClicked = ObjectClickedEnum.UnitTile;
             objectToManage = unitOnTile.gameObject;

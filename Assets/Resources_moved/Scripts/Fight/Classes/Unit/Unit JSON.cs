@@ -12,7 +12,7 @@ public class UnitData
 	public string Name;
 	public string ModelName;
 	public string PortraitName;
-	public Stats Stats;
+	public Stats Stats = new();
 	public bool RandomizedTraits;
 	public List<string> Traits;
 	public int Faction;

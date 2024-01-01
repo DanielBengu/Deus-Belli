@@ -67,17 +67,14 @@ public class FightInput
 		if (HasUnitAlreadyPerformedAction())
 		{
 			EmptyActionTileClick(unit.Movement.CurrentTile, false);
-			_fightManager.HandleShowcase(unit, true, true, true);
+			_fightManager.HandleShowcase(unit, true, true, Animation.ShowcaseIdle);
 			return;
 		}
 
 		//We selected an allied unit that can still perform an action
-		if (unit.unitData.Faction == FightManager.USER_FACTION)
+		if (unit.UnitData.Faction == FightManager.USER_FACTION)
 		{
-			_fightManager.ResetGameState(false);
-			List<Tile> possibleMovements = _structureManager.GeneratePossibleMovementForUnit(_fightManager.UnitSelected, true);
-			_fightManager.PossibleAttacks = _fightManager.structureManager.GetPossibleAttacksForUnit(_fightManager.UnitSelected, true, possibleMovements);
-			_fightManager.HandleShowcase(unit, true, true, true);
+			PossibleActionsForUnit(unit);
 			return;
 		}
 
@@ -86,7 +83,7 @@ public class FightInput
 		if (!_fightManager.UnitSelected || !IsAttackPossible(_fightManager.UnitSelected, unit))
 		{
 			EmptyActionTileClick(unit.Movement.CurrentTile, true);
-			_fightManager.HandleShowcase(unit, false, true, true);
+			_fightManager.HandleShowcase(unit, false, true, Animation.ShowcaseIdle);
 			return;
 		}
 
@@ -95,7 +92,7 @@ public class FightInput
 		if (!_fightManager.IsShowingPath)
 		{
 			AskForMovementConfirmation(tileToMoveTo);
-			_fightManager.HandleShowcase(unit, false, false, true);
+			_fightManager.HandleShowcase(unit, false, false, Animation.ShowcaseAttack);
 			return;
 		}
 
@@ -111,7 +108,7 @@ public class FightInput
 		TileType typeOfSelection = TileType.Default;
         if (currentTile.unitOnTile != null)
 		{
-			if(currentTile.unitOnTile.unitData.Faction == FightManager.USER_FACTION)
+			if(currentTile.unitOnTile.UnitData.Faction == FightManager.USER_FACTION)
 			{
 				typeOfSelection = TileType.Ally;
 				tiles = currentTile.ToList();
@@ -124,6 +121,14 @@ public class FightInput
 		}
 
         _structureManager.SelectTiles(tiles, true, typeOfSelection);
+	}
+
+	void PossibleActionsForUnit(Unit currentUnit)
+	{
+		_fightManager.ResetGameState(false);
+		List<Tile> possibleMovements = _structureManager.GeneratePossibleMovementForUnit(_fightManager.UnitSelected, true);
+		_fightManager.PossibleAttacks = _fightManager.structureManager.GetPossibleAttacksForUnit(_fightManager.UnitSelected, true, possibleMovements);
+		_fightManager.HandleShowcase(currentUnit, true, true, Animation.ShowcaseIdle);
 	}
 
 	public bool HasUnitAlreadyPerformedAction()
@@ -184,14 +189,14 @@ public class FightInput
 		_fightManager.SetupUnitPosition();
 		_structureManager.SelectTiles(unitSelected.Movement.CurrentTile.ToList(), false, TileType.Selected);
 		_structureManager.SetInfoPanel(true, unitSelected);
-		if (unitSelected.unitData.Faction != FightManager.USER_FACTION)
+		if (unitSelected.UnitData.Faction != FightManager.USER_FACTION)
 		{
 			_fightManager.UnitSelected = null;
-			_fightManager.HandleShowcase(unitSelected, false, true, true);
+			_fightManager.HandleShowcase(unitSelected, false, true, Animation.ShowcaseIdle);
 		}
 		else
 		{
-			_fightManager.HandleShowcase(unitSelected, true, true, true);
+			_fightManager.HandleShowcase(unitSelected, true, true, Animation.ShowcaseIdle);
 		}
 
 	}

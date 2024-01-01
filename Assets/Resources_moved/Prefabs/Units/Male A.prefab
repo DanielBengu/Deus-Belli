@@ -2901,7 +2901,6 @@ GameObject:
   m_Component:
   - component: {fileID: 4927973787200604}
   - component: {fileID: 95844511793012932}
-  - component: {fileID: 8320240924755144858}
   - component: {fileID: 114380782822982968}
   - component: {fileID: 5191589021913496811}
   m_Layer: 0
@@ -2953,30 +2952,6 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
---- !u!114 &8320240924755144858
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1668188202801692}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 32f75263af4039848bdcbfad0a330509, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  unitData:
-    Name: 
-    ModelName: 
-    PortraitName: 
-    Stats:
-      Hp: 0
-      Movement: 0
-      Attack: 0
-      Range: 0
-    RandomizedTraits: 0
-    Traits: []
-    Faction: 0
 --- !u!114 &114380782822982968
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -6,25 +6,25 @@ public class Unit : MonoBehaviour
 
     public FightManager FightManager { get; set; }
 
-    public UnitData unitData;
-    public UnitFightData fightData;
+    public UnitData UnitData { get; set; } = new();
+	public UnitFightData FightData { get; set; }
 
 	public void Load(UnitData unit)
 	{
-        unitData.Name = unit.Name;
-        unitData.Traits = unit.Traits;
+        UnitData.Name = unit.Name;
+        UnitData.Traits = unit.Traits;
         Movement = new(this);
         LoadStats(unit);
 	}
 
 	void LoadStats(UnitData unit)
 	{
-        unitData.Traits = unit.Traits;
-		unitData.Stats.Hp = unit.Stats.Hp;
-		unitData.Stats.Movement = unit.Stats.Movement;
-		unitData.Stats.Attack = unit.Stats.Attack;
-		unitData.Faction = unit.Faction;
-		unitData.Stats.Range = unit.Stats.Range;
+        UnitData.Traits = unit.Traits;
+		UnitData.Stats.Hp = unit.Stats.Hp;
+		UnitData.Stats.Movement = unit.Stats.Movement;
+		UnitData.Stats.Attack = unit.Stats.Attack;
+		UnitData.Faction = unit.Faction;
+		UnitData.Stats.Range = unit.Stats.Range;
 	}
 
     public void OnMouseDown()

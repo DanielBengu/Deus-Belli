@@ -54,7 +54,7 @@ public class NewGameManager : MonoBehaviour
     
     public void LoadGods(IReligion religionSelected)
 	{
-        string[] playableGods = religionSelected.PlayableGods.Select(g => g.GetName()).ToArray();
+        string[] playableGods = religionSelected.PlayableGods.Select(g => g.ToString()).ToArray();
 
 		GameObject.Find("Character A Text").GetComponent<TextMeshProUGUI>().text = playableGods[0];
         GameObject.Find("Character B Text").GetComponent<TextMeshProUGUI>().text = playableGods[1];
@@ -64,7 +64,7 @@ public class NewGameManager : MonoBehaviour
 
     public void SelectGod(int god)
 	{
-        string godName = religionSelected.PlayableGods[god].GetName();
+        string godName = religionSelected.PlayableGods[god].ToString();
         godSelected = godName;
         godData.text = $"{godName}";
 

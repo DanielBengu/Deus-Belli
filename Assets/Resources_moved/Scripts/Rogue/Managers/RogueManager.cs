@@ -65,7 +65,7 @@ public class RogueManager : MonoBehaviour
         gm.CurrentPositionInRow = currentPositionOnRow;
 
         StructureManager = sm;
-        StructureManager.uiManager.SetRogueVariables(gm.Gold, gm.GodSelected.GetName(), gm.runData.masterSeed);
+        StructureManager.uiManager.SetRogueVariables(gm.Gold, gm.GodSelected.ToString(), gm.runData.masterSeed);
 
         seedList.Add(SeedType.Master, masterSeed);
         seedList.Add(SeedType.RogueTile, RandomManager.GetRandomValue(masterSeed, 0, 99999));

@@ -26,7 +26,10 @@ public static class AnimationPerformer
             case Animation.ShowcaseIdle:
                 animationToPlay = "Showcase Idle";
                 break;
-            case Animation.Default:
+			case Animation.ShowcaseAttack:
+				animationToPlay = "Showcase Attack";
+				break;
+			case Animation.Default:
                 break;
             default:
                 break;
@@ -43,5 +46,6 @@ public enum Animation
     Move,
     Idle,
     ShowcaseIdle,
+    ShowcaseAttack,
     Default
 }
