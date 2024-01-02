@@ -33,11 +33,6 @@ public class Unit : MonoBehaviour
     {
 		Movement.CurrentTile.OnMouseDown();
     }
-    //Called at the end of an attack animation
-    public void StartDamageForOpponent()
-	{
-        FightManager.MakeUnitTakeDamage();
-	}
 
     public enum TraitsEnum
 	{

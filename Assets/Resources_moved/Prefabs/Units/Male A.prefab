@@ -2902,6 +2902,7 @@ GameObject:
   - component: {fileID: 4927973787200604}
   - component: {fileID: 95844511793012932}
   - component: {fileID: 114380782822982968}
+  - component: {fileID: 4031385682199877326}
   - component: {fileID: 5191589021913496811}
   m_Layer: 0
   m_Name: Male A
@@ -2994,6 +2995,18 @@ MonoBehaviour:
     - prefab: {fileID: 100000, guid: 790f4551bb671cc43bea7a0943c1162f, type: 3}
     slots: 4
   disabledGraySkeleton: {fileID: 0}
+--- !u!114 &4031385682199877326
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1668188202801692}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a78f443295924454791461cbb5c93103, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!65 &5191589021913496811
 BoxCollider:
   m_ObjectHideFlags: 0

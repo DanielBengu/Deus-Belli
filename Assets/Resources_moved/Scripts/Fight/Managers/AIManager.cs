@@ -25,7 +25,7 @@ public class AIManager : MonoBehaviour
     }
 
     void Update(){
-        if(fightManager.CurrentTurnCount == FightManager.USER_FACTION || fightManager.IsAnyUnitMoving)
+        if(fightManager.CurrentTurn == FightManager.USER_FACTION || fightManager.IsAnyUnitMoving || structureManager.ObjectsAnimating.Count > 0)
             return;
 
         if (unitQueue.Count > 0)
@@ -35,7 +35,7 @@ public class AIManager : MonoBehaviour
             return;
         }
 
-        Debug.Log($"END AI TURN FOR FACTION {fightManager.CurrentTurnCount}");
+        Debug.Log($"END AI TURN FOR FACTION {fightManager.CurrentTurn}");
 
         if(turnQueue.Count > 0)
         {
@@ -43,7 +43,7 @@ public class AIManager : MonoBehaviour
             return;
 		}
 
-        fightManager.EndTurn(fightManager.CurrentTurnCount);
+        fightManager.TurnManager.EndTurn(fightManager.CurrentTurn);
     }
 
     public void StartAITurn(){
@@ -61,7 +61,7 @@ public class AIManager : MonoBehaviour
     {
 		Debug.Log($"START AI TURN FOR FACTION {faction}");
 
-		fightManager.CurrentTurnCount = faction;
+		fightManager.CurrentTurn = faction;
 		
 		foreach (var unit in structureManager.gameData.unitsOnField.Where(u => u.UnitData.Faction == faction))
 		{

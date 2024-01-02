@@ -47,10 +47,12 @@ public class FightManager : MonoBehaviour
 	public bool IsSetup { get { return structureManager.gameData.IsSetup; } }
     public int[] SetupTiles { get; set; }
 
-    public int CurrentTurnCount { get; set; }
+    public int CurrentTurn { get { return TurnManager.CurrentTurn; } set { TurnManager.CurrentTurn = value; } }
+    public int TurnCount { get; set; } = 0;
     public List<Unit> UnitsOnField { get { return structureManager.gameData.unitsOnField; } }
     public List<Tile> TileList { get { return structureManager.gameData.GetTileList(); } }
     public FightInput FightInput { get; set; }
+    public TurnManager TurnManager { get; set; }
     #endregion
 
 	internal Transform leftUnitShowcasePosition;
@@ -64,7 +66,7 @@ public class FightManager : MonoBehaviour
     {
         ManageEndGame();
         ManageMovements();
-        ManageInputs();
+        FightInput.ManageInputs();
     }
 
     void ManageEndGame()
@@ -78,19 +80,6 @@ public class FightManager : MonoBehaviour
 		    ManageVictory();
     }
 
-    #endregion
-
-    #region Key Input Management
-    void ManageInputs(){
-        if (!IsGameInStandby && Input.anyKeyDown)
-            ManageKeysDown();
-    }
-
-    //Method that manages the press of a key (only for the frame it is clicked)
-    void ManageKeysDown(){
-        /*if (Input.GetMouseButtonDown((int)MouseButton.Middle))
-            ResetGameState(true);*/
-    }
     #endregion
 
     #region Startup Methods
@@ -112,14 +101,16 @@ public class FightManager : MonoBehaviour
 		generalManager = gm;
         structureManager.uiManager.SetFightVariables(gm.GodSelected);
         structureManager.spriteManager.fightManager = this;
-        FightInput = new FightInput(this, structureManager);
 
         this.level = level;
 
         aiManager = GetComponent<AIManager>();
         aiManager.seed = level.seed;
 
-        StartLevel(level);
+		FightInput = new FightInput(this, structureManager);
+		TurnManager = new(this, structureManager, aiManager);
+
+		StartLevel(level);
 
         Debug.Log("END FIGHT MANAGER SETUP");
     }
@@ -138,7 +129,7 @@ public class FightManager : MonoBehaviour
 		for (int i = 0; i < tiles.Count; i++)
             tiles[i].transform.parent = fightObjects;
 
-        var units = GenerateUnits(level);
+        var units = GenerateUnitsOnField(level);
         structureManager.gameData = new(tiles, units, level.mapData.Rows, level.mapData.Columns);
 
         SetupTiles = SetupUnitPosition();
@@ -153,7 +144,7 @@ public class FightManager : MonoBehaviour
         return tileList.Select(t => t.data.PositionOnGrid).ToArray();
     }
 
-    List<Unit> GenerateUnits(Level level)
+    List<Unit> GenerateUnitsOnField(Level level)
     {
 		List<Unit> unitList = new();
         List<UnitData> unitsOnMap = generalManager.PlayerUnits;
@@ -212,10 +203,10 @@ public class FightManager : MonoBehaviour
 	#region Manage Methods
 	void ManageAction()
 	{
-		if (ActionInQueue != ActionPerformed.Attack)
+		if (ActionInQueue != ActionPerformed.SimpleAttack)
 			return;
 
-		structureManager.actionPerformer.StartAction(ActionPerformed.Attack, UnitSelected.gameObject, ActionTarget.GetComponent<Unit>().Movement.CurrentTile.gameObject);
+		structureManager.actionPerformer.StartAction(ActionPerformed.SimpleAttack, UnitSelected.gameObject, ActionTarget.GetComponent<Unit>().Movement.CurrentTile.gameObject);
 		ResetGameState(true);
 	}
 
@@ -250,30 +241,6 @@ public class FightManager : MonoBehaviour
 
 	#endregion
 
-	public void SetIsOptionOpen(bool isOptionOpen)
-	{
-        generalManager.IsOptionOpen = isOptionOpen;
-	}
-
-    void StartUserTurn()
-    {
-        CurrentTurnCount = USER_FACTION;
-        ResetGameState(true);
-        structureManager.SetEndTurnButton(true);
-        foreach (var unit in UnitsOnField.Where(u => u.UnitData.Faction == USER_FACTION))
-        {
-            unit.FightData.currentMovement = unit.UnitData.Stats.Movement;
-            unit.Movement.HasPerformedMainAction = false;
-        }
-    }
-
-    void EndUserTurn(){
-        CurrentTurnCount = ENEMY_FACTION;
-        ResetGameState(true);
-        structureManager.SetEndTurnButton(false);
-        aiManager.StartAITurn();
-    }
-
     int GenerateAndAddGold()
 	{
         int goldGenerated = 100;
@@ -299,7 +266,7 @@ public class FightManager : MonoBehaviour
             targetTile = structureManager.gameData.mapTiles[path[targetMovementTileIndex].data.PositionOnGrid];
 
 		structureManager.MoveUnit(UnitSelected, targetTile, false);
-		ActionInQueue = ActionPerformed.Attack;
+		ActionInQueue = ActionPerformed.SimpleAttack;
         ActionTarget = defender.gameObject;
         UnitSelected = attacker;
         IsShowingPath = false;
@@ -352,33 +319,6 @@ public class FightManager : MonoBehaviour
         PossibleAttacks = new();
     }
 
-    void EndPhase(int faction)
-	{
-        if (IsSetup)
-        {
-            structureManager.gameData.IsSetup = false;
-            List<Tile> tileList = structureManager.gameData.GetTileList();
-            structureManager.SelectTiles(tileList, false);
-            structureManager.UpdateFightEndPhaseButton();
-            return;
-        }
-
-        EndTurn(faction);
-	}
-
-    public void EndTurn(int faction){
-        switch (faction)
-        {
-            case USER_FACTION:
-                EndUserTurn();
-                break;
-            case ENEMY_FACTION:
-			default:
-				StartUserTurn();
-                break;
-        }
-    }
-
     public void DisableFightSection()
 	{
 		foreach (var tile in structureManager.gameData.mapTiles.Values)
@@ -399,18 +339,30 @@ public class FightManager : MonoBehaviour
         return structureManager.GeneratePossibleMovementForUnit(unit, false);
     }
 
+    public void ApplyDamage()
+    {
+
+    }
+
 	#region Button Calls
 	//Called by "End Turn" button of UI
 	public void EndTurnButton(int faction)
 	{
 		FightManager fm = GameObject.Find(GeneralManager.FIGHT_MANAGER_OBJ_NAME).GetComponent<FightManager>();
-		fm.EndPhase(faction);
+		fm.TurnManager.EndPhase(faction, fm.IsSetup);
 	}
 
 	public void MakeUnitTakeDamage()
 	{
 		structureManager.actionPerformer.StartTakeDamageAnimation();
 	}
+
+    public void UnitDies(Unit unit)
+    {
+        structureManager.FinishAnimation(unit.gameObject);
+		structureManager.KillUnit(unit);
+    }
+
 	#endregion
 }
 public enum ActionPerformed
@@ -418,7 +370,8 @@ public enum ActionPerformed
     FightMovement,
     RogueMovement,
     FightTeleport,
-    Attack,
+    SimpleAttack, //Attack that don't spawn anything else
+    ProjectileAttack, //all attacks that spawns some kind of projectile or effect
     CameraFocus,
     Default,
 }

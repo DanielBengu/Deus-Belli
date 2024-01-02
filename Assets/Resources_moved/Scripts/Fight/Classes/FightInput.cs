@@ -238,6 +238,19 @@ public class FightInput
 
 	#endregion
 
+	public void ManageInputs()
+	{
+		if (!_fightManager.IsGameInStandby && Input.anyKeyDown)
+			ManageKeysDown();
+	}
+
+	//Method that manages the press of a key (only for the frame it is clicked)
+	void ManageKeysDown()
+	{
+		/*if (Input.GetMouseButtonDown((int)MouseButton.Middle))
+            ResetGameState(true);*/
+	}
+
 	public enum ObjectClickedEnum
 	{
 		EmptyTile,

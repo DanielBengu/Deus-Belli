@@ -178,7 +178,7 @@ public class GeneralManager : MonoBehaviour
 	{
 		return currentSection switch
 		{
-			CurrentSection.Fight => fightManager.IsAnyUnitMoving || IsOptionOpen || fightManager.CurrentTurnCount != 0 || fightManager.isGameOver,
+			CurrentSection.Fight => fightManager.IsAnyUnitMoving || IsOptionOpen || fightManager.CurrentTurn != 0 || fightManager.isGameOver,
 			CurrentSection.Rogue => rogueManager.IsAnyUnitMoving || rogueManager.IsGameOver || IsOptionOpen,
 			_ => false,
 		};

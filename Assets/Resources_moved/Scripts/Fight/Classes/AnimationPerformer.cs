@@ -17,7 +17,10 @@ public static class AnimationPerformer
             case Animation.TakeDamage:
                 animationToPlay = "Damage Light";
                 break;
-            case Animation.Move:
+			case Animation.Die:
+				animationToPlay = "Die";
+				break;
+			case Animation.Move:
                 animationToPlay = "Walk";
                 break;
             case Animation.Idle:
@@ -43,6 +46,7 @@ public enum Animation
 {
     Attack,
     TakeDamage,
+    Die,
     Move,
     Idle,
     ShowcaseIdle,

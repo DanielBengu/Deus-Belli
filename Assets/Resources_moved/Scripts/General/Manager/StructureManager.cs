@@ -26,9 +26,11 @@ public class StructureManager : MonoBehaviour
 
     public bool IsObjectMoving { get{ return actionPerformer.movement.IsObjectMoving;}}
 
+    public List<Tuple<GameObject, Animation>> ObjectsAnimating { get; set; } = new();
+
 	private void Start()
 	{
-        actionPerformer = new() { structureManager = this, movement = new(), spriteManager = spriteManager };
+        actionPerformer = new(this, spriteManager);
     }
 
 	public Dictionary<int, Tile> SetupFightSection(Level level, FightManager manager)
@@ -168,7 +170,7 @@ public class StructureManager : MonoBehaviour
 
     public void StartShowcaseAnimation(GameObject unit, Animation animation)
     {
-		AnimationPerformer.PerformAnimation(animation, unit);
+        actionPerformer.PerformAnimation(unit, animation);
 	}
 
     public void ClearShowcase(Transform parent)
@@ -189,8 +191,19 @@ public class StructureManager : MonoBehaviour
         return possibleMovements;
     }
 
-    #region Method Forwarding
-    public void UpdateFightEndPhaseButton()
+	public void KillUnit(Unit unitToKill)
+	{
+		gameData.unitsOnField.Remove(unitToKill);
+		Destroy(unitToKill.gameObject);
+	}
+
+    public void FinishAnimation(GameObject target)
+    {
+        actionPerformer.FinishAnimation(target);
+    }
+
+	#region Method Forwarding
+	public void UpdateEndPhaseButtonText()
 	{
         uiManager.SetFightEndPhaseButton();
     }
@@ -202,7 +215,6 @@ public class StructureManager : MonoBehaviour
     {
         return pathfinding.CalculateMapTilesDistance(startingUnit);
     }
-    // -1 if nothing was queued for movement, 0 if object is still moving, 1 if object is done moving
     public void MovementTick(float speed, Action callback)
     {
         actionPerformer.movement.MovementTick(speed, callback);

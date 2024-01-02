@@ -61,6 +61,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Assets\Polyart\PolyartStudio\SharedResources\Scripts\Misc\SmoothMouseLook.cs" />
+    <Compile Include="Assets\Resources_moved\Scripts\General\Manager\MovementManager.cs" />
     <Compile Include="Assets\Resources_moved\Scripts\General\Manager\SpriteManager.cs" />
     <Compile Include="Assets\Resources_moved\Scripts\Menu\CharactersButtonScript.cs" />
     <Compile Include="Assets\Resources_moved\Scripts\General\Manager\ObjectsManager.cs" />
@@ -112,7 +113,6 @@
     <Compile Include="Assets\RFA\Common\Scripts\Orbit.cs" />
     <Compile Include="Assets\Polyart\PolyartStudio\SharedResources\Scripts\Gameplay\Character\FirstPersonController_Dreamscape.cs" />
     <Compile Include="Assets\Resources_moved\Scripts\Rogue\Classes\DB_Event.cs" />
-    <Compile Include="Assets\Resources_moved\Scripts\Fight\Classes\FirstStageArchive.cs" />
     <Compile Include="Assets\RFA\Common\Scripts\PlayerInput.cs" />
     <Compile Include="Assets\Resources_moved\Scripts\General\Manager\ScenesManager.cs" />
     <Compile Include="Assets\Cartoon Heroes\Scripts\SetCharacter\SetCharacter.cs" />
@@ -127,6 +127,7 @@
     <Compile Include="Assets\Resources_moved\Scripts\General\Entity\EventEntity.cs" />
     <Compile Include="Assets\Resources_moved\Scripts\Fight\Classes\Encounters\Encounters.cs" />
     <Compile Include="Assets\Resources_moved\Scripts\General\Manager\AddressablesManager.cs" />
+    <Compile Include="Assets\Resources_moved\Scripts\General\Classes\AnimationEventHandler.cs" />
     <Compile Include="Assets\Polyart\PolyartStudio\SharedResources\CritiasFoliage\Code\FoliageDataRuntime.cs" />
     <Compile Include="Assets\Polyart\PolyartStudio\SharedResources\Scripts\Misc\FPS_Counter.cs" />
     <Compile Include="Assets\RFA\Common\Scripts\Jumping.cs" />
@@ -153,7 +154,6 @@
     <Compile Include="Assets\MapLineScript.cs" />
     <Compile Include="Assets\Resources_moved\Scripts\General\Manager\AchievementManager.cs" />
     <Compile Include="Assets\RFA\Common\Scripts\AimingController.cs" />
-    <Compile Include="Assets\Resources_moved\Scripts\Fight\Classes\Movement.cs" />
     <Compile Include="Assets\Polyart\PolyartStudio\SharedResources\Scripts\Misc\Cull_Lights.cs" />
     <Compile Include="Assets\Polyart\PolyartStudio\SharedResources\CritiasFoliage\Code\FoliageColliderData.cs" />
     <Compile Include="Assets\Resources_moved\Scripts\Fight\Classes\Pathfinding.cs" />
