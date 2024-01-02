@@ -197,13 +197,13 @@ public class FightManager : MonoBehaviour
     {
         Quaternion rotation = new(0, 180, 0, 0);
         GameObject model = AddressablesManager.LoadResource<GameObject>(AddressablesManager.TypeOfResource.Units, unit.ModelName);
+
 		var unitGenerated = Instantiate(model, tile.transform.position, rotation, parent);
 		var unitScript = unitGenerated.AddComponent<Unit>();
-		unitScript.Load(unit);
-		unitScript.FightManager = this;
-		unitScript.Movement.CurrentTile = tile;
-        unitScript.FightData = new(unit.PortraitName, unit.Stats.Hp, unit.Stats.Movement);
+		unitScript.Load(unit, this, tile);
+
         tile.unitOnTile = unitScript;
+
         return unitScript;
     }
 
@@ -373,11 +373,8 @@ public class FightManager : MonoBehaviour
                 EndUserTurn();
                 break;
             case ENEMY_FACTION:
-                StartUserTurn();
-                break;
-            case 2://For neutral armies
-                break;
-            default:
+			default:
+				StartUserTurn();
                 break;
         }
     }

@@ -9,7 +9,8 @@ public class AIManager : MonoBehaviour
 
     StructureManager structureManager;
     FightManager fightManager;
-    readonly Queue<Unit> unitsToCalculate = new();
+	readonly Queue<int> turnQueue = new();
+	readonly Queue<Unit> unitQueue = new();
     public int seed = 0;
     public Unit currentUnitTurn;
     
@@ -27,30 +28,55 @@ public class AIManager : MonoBehaviour
         if(fightManager.CurrentTurnCount == FightManager.USER_FACTION || fightManager.IsAnyUnitMoving)
             return;
 
-        if(unitsToCalculate.Count > 0){
-            currentUnitTurn = unitsToCalculate.Dequeue();
+        if (unitQueue.Count > 0)
+        {
+            currentUnitTurn = unitQueue.Dequeue();
             CalculateTurnForUnit(currentUnitTurn);
-        }else{
-            Debug.Log($"END AI TURN FOR FACTION {fightManager.CurrentTurnCount}");
-            fightManager.EndTurn(fightManager.CurrentTurnCount);
+            return;
         }
+
+        Debug.Log($"END AI TURN FOR FACTION {fightManager.CurrentTurnCount}");
+
+        if(turnQueue.Count > 0)
+        {
+			CalculateFaction(turnQueue.Dequeue());
+            return;
+		}
+
+        fightManager.EndTurn(fightManager.CurrentTurnCount);
     }
 
     public void StartAITurn(){
-        Debug.Log($"START AI TURN FOR FACTION {fightManager.CurrentTurnCount}");
-        foreach (var unit in structureManager.gameData.unitsOnField.Where(u => u.UnitData.Faction == fightManager.CurrentTurnCount))
-        {
-            unit.FightData.currentMovement = unit.UnitData.Stats.Movement;
-            unitsToCalculate.Enqueue(unit);
-        }
+        int[] differentFactionsOtherThanPlayer = structureManager.gameData.unitsOnField.Where(u => u.UnitData.Faction != FightManager.USER_FACTION).Select(u => u.UnitData.Faction).Distinct().ToArray();
 
-        if (unitsToCalculate.Count > 0)
-            CalculateTurnForUnit(unitsToCalculate.Dequeue());
-    }
+        for (int i = 0; i < differentFactionsOtherThanPlayer.Length; i++)
+        {
+            turnQueue.Enqueue(differentFactionsOtherThanPlayer[i]);
+		}
+
+        CalculateFaction(turnQueue.Dequeue());
+	}
+
+    void CalculateFaction(int faction)
+    {
+		Debug.Log($"START AI TURN FOR FACTION {faction}");
+
+		fightManager.CurrentTurnCount = faction;
+		
+		foreach (var unit in structureManager.gameData.unitsOnField.Where(u => u.UnitData.Faction == faction))
+		{
+			unit.FightData.StartOfTurnEffects();
+			unitQueue.Enqueue(unit);
+		}
+
+		if (unitQueue.Count > 0)
+			CalculateTurnForUnit(unitQueue.Dequeue());
+	}
 
     void CalculateTurnForUnit(Unit unit){
         Debug.Log($"CALCULATING MOVE FOR UNIT {unit.UnitData.Name}");
-        List<Tile> possibleMovements = unit.Movement.PossibleMovements;
+        //We force the unit to move to a different tile, it cant stay still
+        List<Tile> possibleMovements = unit.Movement.PossibleMovements.Where(t => t.data.PositionOnGrid != unit.Movement.CurrentTile.data.PositionOnGrid).ToList();
         List<PossibleAttack> possibleAttacks = unit.Movement.GetPossibleAttacks(possibleMovements);
 
         ActionAI action = DecideAction(possibleMovements,possibleAttacks);

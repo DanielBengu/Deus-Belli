@@ -2,16 +2,24 @@ using UnityEngine;
 
 public class UnitFightData
 {
+    Unit parent;
 	public Sprite sprite;
 	public int currentHp;
 	public int currentMovement;
 
-    public UnitFightData(string portraitName, int hp, int movement)
+    public UnitFightData(Unit parent)
     {
-        Sprite unitSprite = AddressablesManager.LoadResource<Sprite>(AddressablesManager.TypeOfResource.Sprite, portraitName);
+        this.parent = parent;
 
+        Sprite unitSprite = AddressablesManager.LoadResource<Sprite>(AddressablesManager.TypeOfResource.Sprite, parent.UnitData.PortraitName);
 		sprite = unitSprite;
-        currentHp = hp;
-        currentMovement = movement;
+
+        currentHp = parent.UnitData.Stats.Hp;
+        currentMovement = parent.UnitData.Stats.Movement;
+    }
+
+    public void StartOfTurnEffects()
+    {
+        currentMovement = parent.UnitData.Stats.Movement;
     }
 }

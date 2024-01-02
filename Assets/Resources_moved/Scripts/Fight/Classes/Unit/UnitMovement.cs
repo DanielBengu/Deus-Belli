@@ -14,9 +14,10 @@ public class UnitMovement
 
     public List<Tile> PossibleMovements { get { return GetPossibleMovements(); } }
 
-	public UnitMovement(Unit parent)
+	public UnitMovement(Unit parent, Tile currentTile)
 	{
         Parent = parent;
+        CurrentTile = currentTile;
 	}
 
 	public List<PossibleAttack> GetPossibleAttacks(List<Tile> possibleMovements = null)

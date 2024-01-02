@@ -9,12 +9,14 @@ public class Unit : MonoBehaviour
     public UnitData UnitData { get; set; } = new();
 	public UnitFightData FightData { get; set; }
 
-	public void Load(UnitData unit)
+	public void Load(UnitData UnitData, FightManager manager, Tile currentTile)
 	{
-        UnitData.Name = unit.Name;
-        UnitData.Traits = unit.Traits;
-        Movement = new(this);
-        LoadStats(unit);
+        this.UnitData.Name = UnitData.Name;
+        this.UnitData.PortraitName = UnitData.PortraitName;
+        Movement = new(this, currentTile);
+		LoadStats(UnitData);
+		FightData = new(this);
+		FightManager = manager;
 	}
 
 	void LoadStats(UnitData unit)
