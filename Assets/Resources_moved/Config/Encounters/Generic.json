@@ -6,7 +6,7 @@
       "EnemyList": [
         {
           "Name": "Genghis Khan",
-          "ModelName": "Skeleton",
+          "ModelName": "Bandit",
           "PortraitName": "Genghis_Khan",
           "Faction": 1,
           "Stats": {
@@ -38,7 +38,7 @@
         },
         {
           "Name": "Generic Bandit 2",
-          "ModelName": "Bandit",
+          "ModelName": "Skeleton",
           "PortraitName": "Warrior",
           "Faction": 2,
           "Stats": {

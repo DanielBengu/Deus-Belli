@@ -3,6 +3,7 @@ using UnityEngine;
 public class AnimationEventHandler : MonoBehaviour
 {
 	FightManager fm;
+
 	private void Start()
 	{
 		fm = GameObject.Find(GeneralManager.FIGHT_MANAGER_OBJ_NAME).GetComponent<FightManager>();

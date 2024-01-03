@@ -318,7 +318,6 @@ public class FightManager : MonoBehaviour
         ClearShowcase();
         ActionInQueue = ActionPerformed.Default;
         PossibleAttacks = new();
-        structureManager.ObjectsAnimating.Clear();
 	}
 
     public void DisableFightSection()
