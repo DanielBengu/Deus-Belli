@@ -25,7 +25,7 @@ public class AIManager : MonoBehaviour
     }
 
     void Update(){
-        if(fightManager.CurrentTurn == FightManager.USER_FACTION || fightManager.IsAnyUnitMoving || structureManager.ObjectsAnimating.Count > 0)
+        if(IsManagerWaiting())
             return;
 
         if (unitQueue.Count > 0)
@@ -126,6 +126,15 @@ public class AIManager : MonoBehaviour
         structureManager.CalculateMapTilesDistance(unit);
         structureManager.MoveUnit(unit, destinationTile, false);
     }
+
+    bool IsManagerWaiting()
+    {
+        bool isNotAITurn = fightManager.CurrentTurn == FightManager.USER_FACTION;
+        bool isAnyUnitMoving = fightManager.IsAnyUnitMoving;
+        bool isAnyObjectAnimating = structureManager.ObjectsAnimating.Count > 0;
+
+		return isNotAITurn || isAnyUnitMoving || isAnyObjectAnimating;
+	}
 }
 
 enum ActionAI

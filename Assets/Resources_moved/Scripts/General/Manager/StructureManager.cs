@@ -221,8 +221,6 @@ public class StructureManager : MonoBehaviour
     }
     public void MoveUnit(Unit unit, Tile targetTile, bool isTeleport)
     {
-        if (unit.Movement.CurrentTile.data.PositionOnGrid == targetTile.data.PositionOnGrid)
-            return;
         ActionPerformed action = isTeleport ? ActionPerformed.FightTeleport : ActionPerformed.FightMovement;
         actionPerformer.StartAction(action, unit.gameObject, targetTile.gameObject);
     }

@@ -4,34 +4,36 @@
       "Name": "Wario Warrior",
       "ModelName": "Male A",
       "PortraitName": "Warrior",
-      "Faction": 0,
       "Stats": {
         "Hp": 10,
         "Movement": 4,
         "Attack": 2,
         "Range": 1
       },
+      "RandomizedTraits": false,
       "Traits": [
         "Speedy",
         "Floaty",
         "Overload"
-      ]
+      ],
+      "Faction": 0
     },
     {
       "Name": "Archie Archer",
       "ModelName": "Male B",
       "PortraitName": "Archer",
-      "Faction": 0,
       "Stats": {
         "Hp": 6,
         "Movement": 3,
         "Attack": 2,
         "Range": 2
       },
+      "RandomizedTraits": false,
       "Traits": [
         "Strong",
         "Tanky"
-      ]
+      ],
+      "Faction": 0
     }
   ]
 }

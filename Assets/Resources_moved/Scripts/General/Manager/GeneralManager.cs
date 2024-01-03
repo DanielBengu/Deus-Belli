@@ -266,11 +266,11 @@ public class GeneralManager : MonoBehaviour
                 GenerateRogueSection(isDefeat);
                 break;
 			case RogueTileType.Merchant:
-                structureManager.uiManager.SetRogueVariables(Gold, GodSelected.ToString(), runData.masterSeed);
+                structureManager.uiManager.SetRogueVariables(Gold, GodSelected.ToString());
                 Destroy(merchantSectionInstance);
                 break;
 			case RogueTileType.Event:
-                structureManager.uiManager.SetRogueVariables(Gold, GodSelected.ToString(), runData.masterSeed);
+                structureManager.uiManager.SetRogueVariables(Gold, GodSelected.ToString());
                 Destroy(eventSectionInstance);
                 break;
 		}

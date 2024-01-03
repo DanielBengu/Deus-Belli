@@ -161,7 +161,7 @@ public class FightInput
 		_structureManager.ClearSelection(false);
 		List<Tile> path = _structureManager.FindPathToDestination(destinationTile, false, _fightManager.UnitSelected.Movement.CurrentTile.data.PositionOnGrid);
 		List<Tile> attackTiles = path.ToList();
-		path = path.Skip(1).ToList();
+		path = path.ToList();
 		_structureManager.SelectTiles(path, true, TileType.Selected);
 		_structureManager.SelectTiles(attackTiles, false, TileType.Enemy);
 		_fightManager.IsShowingPath = true;

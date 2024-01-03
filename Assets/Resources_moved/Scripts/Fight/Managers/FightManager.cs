@@ -147,7 +147,8 @@ public class FightManager : MonoBehaviour
     List<Unit> GenerateUnitsOnField(Level level)
     {
 		List<Unit> unitList = new();
-        List<UnitData> unitsOnMap = generalManager.PlayerUnits;
+        List<UnitData> unitsOnMap = new();
+        unitsOnMap.AddRange(generalManager.PlayerUnits);
         unitsOnMap.AddRange(level.enemyList.Select(e => e.Value).ToList());
 		Transform unitsParent = GameObject.Find("Fight Units").transform;
 
@@ -317,7 +318,8 @@ public class FightManager : MonoBehaviour
         ClearShowcase();
         ActionInQueue = ActionPerformed.Default;
         PossibleAttacks = new();
-    }
+        structureManager.ObjectsAnimating.Clear();
+	}
 
     public void DisableFightSection()
 	{

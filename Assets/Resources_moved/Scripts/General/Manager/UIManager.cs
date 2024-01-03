@@ -13,7 +13,7 @@ public class UIManager : MonoBehaviour
 
     GameObject rogueCanvas;
     GameObject infoPanel;
-    GameObject endTurnButton;
+	GameObject endTurnButton;
     GameObject fightVictoryScreen;
     GameObject fightDefeatScreen;
     GameObject rogueVictoryScreen;
@@ -33,8 +33,8 @@ public class UIManager : MonoBehaviour
         Title.text = $"{godSelected} Run";
 
         infoPanel = GameObject.Find("Info");
-        endTurnButton = GameObject.Find("End Turn Button");
-        fightVictoryScreen = AddressablesManager.LoadResource<GameObject>(AddressablesManager.TypeOfResource.Prefab, fightVictoryScreenPrefabName);
+		endTurnButton = GameObject.Find("End Phase Button");
+		fightVictoryScreen = AddressablesManager.LoadResource<GameObject>(AddressablesManager.TypeOfResource.Prefab, fightVictoryScreenPrefabName);
         fightDefeatScreen = AddressablesManager.LoadResource<GameObject>(AddressablesManager.TypeOfResource.Prefab, fightDefeatScreenPrefabName);
 
         traitParent = infoPanel.transform.Find("Traits");
@@ -45,13 +45,12 @@ public class UIManager : MonoBehaviour
     }
     public void SetFightEndPhaseButton()
     {
-        endTurnButton = GameObject.Find("End Phase TEXT");
-        TextMeshProUGUI buttonText = endTurnButton.GetComponent<TextMeshProUGUI>();
+		TextMeshProUGUI buttonText = endTurnButton.transform.GetChild(0).GetComponent<TextMeshProUGUI>();
         buttonText.text = $"End Turn";
         SetInfoPanel(false);
     }
 
-    public void SetRogueVariables(int gold, string godSelected, int seed)
+    public void SetRogueVariables(int gold, string godSelected)
 	{
         rogueCanvas = GameObject.Find("RogueCanvas");
         rogueVictoryScreen = AddressablesManager.LoadResource<GameObject>(AddressablesManager.TypeOfResource.Prefab, rogueVictoryScreenPrefabName);
@@ -97,46 +96,13 @@ public class UIManager : MonoBehaviour
 
     public void SetInfoPanel(bool active, Unit unit = null){
         SetGameObject(infoPanel, active);
-        if (active && unit != null){
 
-            //We setup the traits in the info panel
-            for (int i = 0; i < traitParent.childCount; i++)
-            {
-				Transform traitBox = traitParent.GetChild(i);
-				if (unit.UnitData.Traits.Count > i)
-                {
-                    traitBox.GetComponent<Image>().sprite = AddressablesManager.LoadResource<Sprite>(AddressablesManager.TypeOfResource.Sprite, unit.UnitData.Traits[i]);
-					traitBox.gameObject.SetActive(true);
-				}
-                else
-                    traitBox.gameObject.SetActive(false);
-            }
+        if (!active || !Validator.ValidateUnit(unit))
+            return;
 
-            nameText.text = unit.UnitData.Name;
-            unitImage.sprite = unit.FightData.sprite;
-			for (int i = 0; i < statsParent.childCount; i++)
-			{
-                TextMeshProUGUI stat = statsParent.GetChild(i).GetComponent<TextMeshProUGUI>();
-                switch (stat.name)
-				{
-                    case "HP":
-                        stat.text = $"{unit.FightData.currentHp}/{unit.UnitData.Stats.Hp}";
-                        break;
-                    case "Movement":
-                        stat.text = $"{unit.FightData.currentMovement}/{unit.UnitData.Stats.Movement}";
-                        break;
-                    case "Attack":
-                        stat.text = unit.UnitData.Stats.Attack.ToString();
-                        break;
-                    case "Range":
-                        stat.text = unit.UnitData.Stats.Range.ToString();
-                        break;
-                    default:
-						break;
-				}
-			}
-        }
-    }
+        SetupTraitsOnInfoPanel(unit);
+        SetupStatsOnInfoPanel(unit);
+	}
 
     public void SetEndTurnButton(bool active)
 	{
@@ -168,4 +134,50 @@ public class UIManager : MonoBehaviour
 	{
         gameObject.SetActive(active);
     }
+
+	#region Private Methods
+
+	void SetupTraitsOnInfoPanel(Unit unit)
+	{
+		for (int i = 0; i < traitParent.childCount; i++)
+		{
+			Transform traitBox = traitParent.GetChild(i);
+			if (unit.UnitData.Traits.Count > i)
+			{
+				traitBox.GetComponent<Image>().sprite = AddressablesManager.LoadResource<Sprite>(AddressablesManager.TypeOfResource.Sprite, unit.UnitData.Traits[i]);
+				traitBox.gameObject.SetActive(true);
+			}
+			else
+				traitBox.gameObject.SetActive(false);
+		}
+	}
+
+	void SetupStatsOnInfoPanel(Unit unit)
+	{
+		nameText.text = unit.UnitData.Name;
+		unitImage.sprite = unit.FightData.sprite;
+		for (int i = 0; i < statsParent.childCount; i++)
+		{
+			TextMeshProUGUI stat = statsParent.GetChild(i).GetComponent<TextMeshProUGUI>();
+			switch (stat.name)
+			{
+				case "HP":
+					stat.text = $"{unit.FightData.currentHp}/{unit.UnitData.Stats.Hp}";
+					break;
+				case "Movement":
+					stat.text = $"{unit.FightData.currentMovement}/{unit.UnitData.Stats.Movement}";
+					break;
+				case "Attack":
+					stat.text = unit.UnitData.Stats.Attack.ToString();
+					break;
+				case "Range":
+					stat.text = unit.UnitData.Stats.Range.ToString();
+					break;
+				default:
+					break;
+			}
+		}
+	}
+
+	#endregion
 }

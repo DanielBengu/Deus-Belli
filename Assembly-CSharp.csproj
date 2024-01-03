@@ -9,7 +9,8 @@
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProductVersion>10.0.20506</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
-    <RootNamespace></RootNamespace>
+    <RootNamespace>
+    </RootNamespace>
     <ProjectGuid>{03C08551-717E-8DA5-9C6F-BEBDE0510031}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
@@ -162,6 +163,7 @@
     <Compile Include="Assets\Resources_moved\Scripts\Menu\OptionsMenu.cs" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="Assets\Resources_moved\Scripts\General\Player Data\Unit list.json" />
     <None Include="Assets\TextMesh Pro\Shaders\TMPro.cginc" />
     <None Include="Assets\Polyart\PolyartStudio\SharedResources\Shaders\Foliage\PA_Grass.shader" />
     <None Include="Assets\TextMesh Pro\Shaders\TMP_SDF-Mobile Overlay.shader" />
@@ -235,7 +237,6 @@
     <None Include="Assets\TextMesh Pro\Shaders\TMP_SDF-Mobile Masking.shader" />
     <None Include="Assets\Documentation\Player Data.txt" />
     <None Include="Assets\Polyart\PolyartStudio\SharedResources\Shaders\Effects\PA_CloudShader.shader" />
-    <None Include="Assets\Resources_moved\Scripts\General\Player Data\Unit list.txt" />
     <None Include="Assets\Documentation\Events Management.txt" />
     <None Include="Assets\Polytope Studio\Lowpoly_Characters\Sources\Modular_Armors\Shaders\PT_Armors_Shader_Toon.shader" />
     <None Include="Assets\Polyart\PolyartStudio\SharedResources\Shaders\Water\PA_Water_Lake.shader" />
@@ -1365,8 +1366,7 @@
       <Private>False</Private>
     </Reference>
   </ItemGroup>
-  <ItemGroup>
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="GenerateTargetFrameworkMonikerAttribute" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it.
