@@ -14,7 +14,8 @@ public class CameraManager : MonoBehaviour
 
     private static readonly float speedMod = 30.0f;//a speed modifier
 
-	public static float scrollSpeed = 25000f;
+	public static float fightscrollSpeed = 25000f;
+	public static float rogueScrollSpeed = 3000f;
 
 	Vector3 defaultCameraPosition = new(670, 1070, 73);
     Quaternion defaultCameraRotation = Quaternion.Euler((float)33.3, 0, 0);
@@ -109,10 +110,10 @@ public class CameraManager : MonoBehaviour
         camera.SetPositionAndRotation(cameraPositionOnFocus, rotationOnFocus);
 	}
 
-    static void MoveItem(Transform objectToMove, Vector3 direction, float scrollInput)
+    static void MoveItem(Transform objectToMove, Vector3 direction, float scrollInput, float speed)
     {
 		// Calculate the new distance based on the mouse wheel input
-		float distance = scrollInput * scrollSpeed;
+		float distance = scrollInput * speed;
 
 		// Move the camera along the blue axis by the distance
 		objectToMove.Translate(distance * Time.deltaTime * direction);
@@ -132,7 +133,8 @@ public class CameraManager : MonoBehaviour
     public void HandleScroll(float scroll, Transform objectToMove, CurrentSection section, int mapLength)
 	{
 		Vector3 direction = section == CurrentSection.Rogue ? Vector3.right : Vector3.forward;
-		MoveItem(objectToMove, direction, scroll);
+        float speed = section == CurrentSection.Rogue ? rogueScrollSpeed : fightscrollSpeed;
+		MoveItem(objectToMove, direction, scroll, speed);
 
         if(section == CurrentSection.Rogue)
         {

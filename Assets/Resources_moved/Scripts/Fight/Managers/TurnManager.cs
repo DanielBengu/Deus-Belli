@@ -50,7 +50,8 @@ public class TurnManager
 		fightManager.TurnCount++;
 		fightManager.ResetGameState(true);
 		structureManager.SetEndTurnButton(true);
-		foreach (var unit in fightManager.UnitsOnField.Where(u => u.UnitData.Faction == FightManager.USER_FACTION))
+		//We reset the enemies' movement too for calculations and player's effects that may influence them
+		foreach (var unit in fightManager.UnitsOnField)
 		{
 			unit.FightData.currentMovement = unit.UnitData.Stats.Movement;
 			unit.Movement.HasPerformedMainAction = false;

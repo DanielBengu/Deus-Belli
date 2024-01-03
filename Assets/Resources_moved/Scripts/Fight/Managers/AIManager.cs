@@ -74,57 +74,60 @@ public class AIManager : MonoBehaviour
 	}
 
     void CalculateTurnForUnit(Unit unit){
-        Debug.Log($"CALCULATING MOVE FOR UNIT {unit.UnitData.Name}");
+        Debug.Log($"CALCULATING AI MOVE FOR UNIT {unit.UnitData.Name}");
         //We force the unit to move to a different tile, it cant stay still
         List<Tile> possibleMovements = unit.Movement.PossibleMovements.Where(t => t.data.PositionOnGrid != unit.Movement.CurrentTile.data.PositionOnGrid).ToList();
         List<PossibleAttack> possibleAttacks = unit.Movement.GetPossibleAttacks(possibleMovements);
 
         ActionAI action = DecideAction(possibleMovements,possibleAttacks);
-
-		switch (action)
-		{
-			case ActionAI.Flee:
-                Flee(possibleMovements, unit);
-                break;
-			case ActionAI.Attack:
-                Attack(possibleAttacks, unit);
-                break;
-		} 
-    }
+        ManageAIAction(unit, action, possibleMovements, possibleAttacks);
+	}
 
     ActionAI DecideAction(List<Tile> possibleMovements, List<PossibleAttack> possibleAttacks)
     {
-        ActionAI action = ActionAI.Skip;
+        if (possibleAttacks.Count > 0) 
+            return ActionAI.Attack;
 
-        if (possibleAttacks.Count > 0) action = ActionAI.Attack;
-        else if (possibleMovements.Count > 0) action = ActionAI.Flee;
+        if (possibleMovements.Count > 0) 
+            return ActionAI.JustMove;
 
-        return action;
+        return ActionAI.Skip;
     }
+
+    void ManageAIAction(Unit unit, ActionAI action, List<Tile> possibleMovements, List<PossibleAttack> possibleAttacks)
+    {
+		switch (action)
+		{
+			case ActionAI.JustMove:
+				Move(possibleMovements, unit);
+				break;
+			case ActionAI.Attack:
+				Attack(possibleAttacks, unit);
+				break;
+			case ActionAI.Skip:
+			default:
+				break;
+		}
+	}
 
     public void Attack(List<PossibleAttack> possibleAttacks, Unit unit)
     {
         if (possibleAttacks.Count == 0)
             return;
 
-        int randomChoice = RandomManager.GetRandomValue(seed, 0, possibleAttacks.Count);
-        PossibleAttack attackTarget = possibleAttacks[randomChoice]; //Attack at random possible targets
-        Debug.Log($"AI ATTACKING TILE N.{attackTarget.tileToAttack.data.PositionOnGrid}");
-        fightManager.UnitSelected = unit;
+        PossibleAttack attackTarget = FindRandomAttackTarget(possibleAttacks);  //Attack at random possible targets
         fightManager.QueueAttack(unit, attackTarget.tileToAttack.unitOnTile, attackTarget.tileToMoveTo);
     }
 
-    public void Flee(List<Tile> possibleMovements, Unit unit)
+    public void Move(List<Tile> possibleMovements, Unit unit)
     {
         if (possibleMovements.Count == 0)
             return;
 
-        //Enemy AI Randomness is NOT based on run seed and performs casually every time, even if 2 players do the same things
-        int randomInt = Random.Range(0, possibleMovements.Count);
-        Debug.Log($"AI MOVING TO TILE N.{possibleMovements[randomInt].data.PositionOnGrid}");
-        Tile destinationTile = GameObject.Find($"Terrain_{possibleMovements[randomInt].data.PositionOnGrid}").GetComponent<Tile>();
+        Tile destination = FindRandomMovementTarget(possibleMovements);
+
         structureManager.CalculateMapTilesDistance(unit);
-        structureManager.MoveUnit(unit, destinationTile, false);
+        structureManager.MoveUnit(unit, destination, false);
     }
 
     bool IsManagerWaiting()
@@ -135,11 +138,24 @@ public class AIManager : MonoBehaviour
 
 		return isNotAITurn || isAnyUnitMoving || isAnyObjectAnimating;
 	}
+
+    PossibleAttack FindRandomAttackTarget(List<PossibleAttack> possibleAttacks)
+    {
+		int randomChoice = RandomManager.GetRandomValue(seed, 0, possibleAttacks.Count);
+        return possibleAttacks[randomChoice];
+	}
+
+    Tile FindRandomMovementTarget(List<Tile> possibleMovements)
+    {
+		//Enemy AI Randomness is NOT based on run seed and performs casually every time, even if 2 players do the same things
+		int randomInt = Random.Range(0, possibleMovements.Count);
+		return GameObject.Find($"Terrain_{possibleMovements[randomInt].data.PositionOnGrid}").GetComponent<Tile>();
+	}
 }
 
 enum ActionAI
 {
-    Flee,
+    JustMove,
     Attack, 
     Skip
 }

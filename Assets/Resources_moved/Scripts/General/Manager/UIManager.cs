@@ -1,7 +1,6 @@
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
-
 public class UIManager : MonoBehaviour
 {
     const string fightVictoryScreenPrefabName = "Fight Victory";
@@ -162,10 +161,10 @@ public class UIManager : MonoBehaviour
 			switch (stat.name)
 			{
 				case "HP":
-					stat.text = $"{unit.FightData.currentHp}/{unit.UnitData.Stats.Hp}";
+                    stat.text = $"{unit.FightData.currentHp}/{unit.UnitData.Stats.Hp}";
 					break;
 				case "Movement":
-					stat.text = $"{unit.FightData.currentMovement}/{unit.UnitData.Stats.Movement}";
+					stat.text = ManageStatBetweenFactions(unit.UnitData.Faction, unit.FightData.currentMovement, unit.UnitData.Stats.Movement);
 					break;
 				case "Attack":
 					stat.text = unit.UnitData.Stats.Attack.ToString();
@@ -178,6 +177,15 @@ public class UIManager : MonoBehaviour
 			}
 		}
 	}
+
+    //We hide the current value of certain stats for the enemies since its not necessary
+    string ManageStatBetweenFactions(int faction, int currentStat, int maxStat)
+    {
+        if(faction == FightManager.USER_FACTION)
+            return $"{currentStat}/{maxStat}";
+
+        return maxStat.ToString();
+    }
 
 	#endregion
 }

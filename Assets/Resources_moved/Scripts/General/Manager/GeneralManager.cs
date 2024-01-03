@@ -95,34 +95,51 @@ public class GeneralManager : MonoBehaviour
 
 	private void Update()
 	{
-        if (!IsGameInStandby && (Input.anyKeyDown || IsScrollButtonDown))
+        if (IsGameInStandby)
+            return;
+
+        if (Input.anyKeyDown || IsScrollButtonDown)
             ManageKeysDown();
 
-        float scrollWheelInput = Input.GetAxis("Mouse ScrollWheel");
-        if (scrollWheelInput != 0f)
-            switch (currentSection)
-            {
-                case CurrentSection.Fight:
-                    cameraManager.HandleScroll(scrollWheelInput, cameraManager.transform, currentSection, -1);
-                    break;
-                case CurrentSection.Rogue:
-                    cameraManager.HandleScroll(scrollWheelInput, rogueSectionInstance.transform, currentSection, rogueManager.MapLength);
-                    rogueManager.GenerateNewNodeLines();
-                    break;
-            }
-
-        if(IsScrollButtonDown && currentSection == CurrentSection.Rogue)
-		{
-            Transform objectToMove = rogueSectionInstance.transform.GetChild(0);
-            CameraManager.UpdatePositionOrRotation(objectToMove, currentSection, new() { MapLength = rogueManager.MapLength });
-            rogueManager.GenerateNewNodeLines();
+        switch (currentSection)
+        {
+            case CurrentSection.Fight:
+				HandleFightSectionUpdate();
+				break;
+            case CurrentSection.Rogue:
+				HandleRogueSectionUpdate();
+				break;
+            case CurrentSection.Custom:
+            default:
+                break;
         }
-
-        if(currentSection == CurrentSection.Fight)
-            CameraManager.UpdatePositionOrRotation(fightManager.fightObjects, currentSection, new(structureManager.gameData.GetMapBounds()) { Rotator = fightManager.fightObjectsRotator, Tiles = fightManager.TileList });
     }
 
-    RunData LoadRunData()
+    void HandleFightSectionUpdate()
+    {
+		float scrollWheelInput = Input.GetAxis("Mouse ScrollWheel");
+		if (scrollWheelInput != 0f)
+			cameraManager.HandleScroll(scrollWheelInput, cameraManager.transform, currentSection, -1);
+
+		CameraManager.UpdatePositionOrRotation(fightManager.fightObjects, currentSection, new(structureManager.gameData.GetMapBounds()) { Rotator = fightManager.fightObjectsRotator, Tiles = fightManager.TileList });
+	}
+	void HandleRogueSectionUpdate()
+	{
+		float scrollWheelInput = Input.GetAxis("Mouse ScrollWheel");
+		if (scrollWheelInput != 0f)
+			cameraManager.HandleScroll(scrollWheelInput, cameraManager.transform, currentSection, -1);
+		rogueManager.GenerateNewNodeLines();
+
+		if (IsScrollButtonDown)
+        {
+			Transform objectToMove = rogueSectionInstance.transform.GetChild(0);
+			CameraManager.UpdatePositionOrRotation(objectToMove, currentSection, new() { MapLength = rogueManager.MapLength });
+			rogueManager.GenerateNewNodeLines();
+		}
+
+	}
+
+	RunData LoadRunData()
 	{
         int masterSeed = PlayerPrefs.GetInt(SEED);
         string godSelected = PlayerPrefs.GetString(GOD_SELECTED_PP);
@@ -178,7 +195,7 @@ public class GeneralManager : MonoBehaviour
 	{
 		return currentSection switch
 		{
-			CurrentSection.Fight => fightManager.IsAnyUnitMoving || IsOptionOpen || fightManager.CurrentTurn != 0 || fightManager.isGameOver,
+			CurrentSection.Fight => fightManager.IsAnyUnitMoving || IsOptionOpen || fightManager.CurrentTurn != 0 || fightManager.isGameOver || structureManager.ObjectsAnimating.Count > 0,
 			CurrentSection.Rogue => rogueManager.IsAnyUnitMoving || rogueManager.IsGameOver || IsOptionOpen,
 			_ => false,
 		};

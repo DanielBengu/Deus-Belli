@@ -53,7 +53,8 @@ public class ActionPerformer
 
     public void SetupFightMovement(Unit source, Tile targetTile)
     {
-        RemoveMovementFromUnit(source, (int)targetTile.tentativeCost);
+		Debug.Log($"UNIT {source.UnitData.Name} MOVING FROM TILE {source.Movement.CurrentTile.data.PositionOnGrid} TO TILE {targetTile.data.PositionOnGrid}");
+		RemoveMovementFromUnit(source, (int)targetTile.tentativeCost);
         MoveUnit(source, targetTile);
     }
 
@@ -92,12 +93,13 @@ public class ActionPerformer
 
 		defender.FightData.currentHp -= attacker.UnitData.Stats.Attack;
 
-		PerformAnimation(attacker.gameObject, Animation.Attack);
+		PerformAnimation(attacker.gameObject, Animation.Attack, true);
     }
 
-    public void PerformAnimation(GameObject target, Animation animation)
+    public void PerformAnimation(GameObject target, Animation animation, bool countTowardsObjectsAnimating)
     {
-        structureManager.ObjectsAnimating.Add(new(target, animation));
+        if(countTowardsObjectsAnimating)
+            structureManager.ObjectsAnimating.Add(new(target, animation));
 		AnimationPerformer.PerformAnimation(animation, target);
 	}
 
@@ -117,6 +119,6 @@ public class ActionPerformer
 	{
         Animation animation = enemyInQueueForAnimation.FightData.currentHp <= 0 ? Animation.Die : Animation.TakeDamage;
 
-        PerformAnimation(enemyInQueueForAnimation.gameObject, animation);
+        PerformAnimation(enemyInQueueForAnimation.gameObject, animation, true);
     }
 }

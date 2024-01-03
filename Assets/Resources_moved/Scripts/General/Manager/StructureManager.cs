@@ -159,7 +159,7 @@ public class StructureManager : MonoBehaviour
         return path;
     }
 
-    public void InstantiateShowcaseUnit(Unit unit, Transform positionOfShowcase, Transform parent, Animation animation)
+    public void InstantiateShowcaseUnit(Unit unit, Transform positionOfShowcase, Transform parent)
     {
 		var unitShowcase = Instantiate(unit, parent);
         if (unitShowcase.TryGetComponent<BoxCollider>(out var component))
@@ -168,15 +168,18 @@ public class StructureManager : MonoBehaviour
         unitShowcase.transform.SetPositionAndRotation(positionOfShowcase.position, positionOfShowcase.rotation);
     }
 
-    public void StartShowcaseAnimation(GameObject unit, Animation animation)
+    public void StartShowcaseAnimation(GameObject unit, Animation animation, bool countsTowardsObjectsAnimating)
     {
-        actionPerformer.PerformAnimation(unit, animation);
+        actionPerformer.PerformAnimation(unit, animation, countsTowardsObjectsAnimating);
 	}
 
     public void ClearShowcase(Transform parent)
     {
-		for (int i = 0; i < parent.childCount; i++)
-			Destroy(parent.GetChild(i).gameObject);
+        //Unity doesnt automatically update childCount after the destroy method
+		foreach (Transform child in parent)
+		{
+			Destroy(child.gameObject);
+		}
 	}
 
     public List<Tile> GeneratePossibleMovementForUnit(Unit unit, bool selectTiles){
@@ -317,10 +320,10 @@ public struct FightGameData
     public int Map_Rows;
     public int Map_Columns;
 
-    float Map_MaxLeft_Position;
-	float Map_MaxRight_Position;
-	float Map_MaxUpward_Position;
-	float Map_MaxDownward_Position;
+	readonly float Map_MaxLeft_Position;
+	readonly float Map_MaxRight_Position;
+	readonly float Map_MaxUpward_Position;
+	readonly float Map_MaxDownward_Position;
 
     public bool IsSetup { get; set; }
 
@@ -337,9 +340,9 @@ public struct FightGameData
 		Vector3 firstTile = tiles[0].transform.position;
 		Vector3 lastTile = tiles[1].transform.position;
 
-		Map_MaxLeft_Position = firstTile.x;
-		Map_MaxRight_Position = lastTile.x;
-		Map_MaxUpward_Position = firstTile.z;
+		Map_MaxLeft_Position = firstTile.x + 200;
+		Map_MaxRight_Position = lastTile.x - 200;
+		Map_MaxUpward_Position = firstTile.z - 400;
 		Map_MaxDownward_Position = lastTile.z;
 
         IsSetup = true;

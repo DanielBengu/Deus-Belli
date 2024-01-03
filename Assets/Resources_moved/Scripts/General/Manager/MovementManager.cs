@@ -38,6 +38,10 @@ public class MovementManager
 
     void MoveObject(float speed)
     {
+        //Unit didn't move
+        if (journeyLength == 0)
+            return;
+
 		float distanceCovered = (Time.time - startTime) * speed;
 		float fractionOfJourney = distanceCovered / journeyLength;
 
@@ -99,7 +103,7 @@ public class MovementManager
             targetRotation = target.rotation;
         }
 
-        actionPerformer.PerformAnimation(objectMovingTransform.gameObject, Animation.Move);
+        actionPerformer.PerformAnimation(objectMovingTransform.gameObject, Animation.Move, true);
 
         Debug.Log("Started movement to " + targetPosition);
         return true;
@@ -109,23 +113,8 @@ public class MovementManager
     {
         PrepareMovementQueue(tilesPath, isFightSection);
 
-        if (isFightSection)
-		{
-            Unit unitScript = unit.GetComponent<Unit>();
-
-            if (movementSteps.Count == 0)
-            {
-                IsObjectMoving = true; //Even if not moving we set it true to trigger the movement tick in update
-			}
-			else
-			{
-                Tile targetTile = tilesPath.Last().GetComponent<Tile>();
-
-                unitScript.Movement.CurrentTile.unitOnTile = null;
-                targetTile.unitOnTile = unitScript;
-                unitScript.Movement.CurrentTile = targetTile;
-            }
-        }
+        if (isFightSection && movementSteps.Count > 0)
+            UpdateUnitsCurrentTileData(unit, tilesPath);	
 
         SetNewMovementStep(unit);
     }
@@ -140,6 +129,15 @@ public class MovementManager
             movementSteps.Enqueue(tile);
         }
     }
+    void UpdateUnitsCurrentTileData(Transform unit, List<Transform> tilesPath)
+    {
+		Unit unitScript = unit.GetComponent<Unit>();
+		Tile targetTile = tilesPath.Last().GetComponent<Tile>();
+
+		unitScript.Movement.CurrentTile.unitOnTile = null;
+		targetTile.unitOnTile = unitScript;
+		unitScript.Movement.CurrentTile = targetTile;
+	}
 
     void SetNewMovementStep(Transform movingUnit)
     {

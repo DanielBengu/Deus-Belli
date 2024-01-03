@@ -103,7 +103,7 @@ public class FightInput
 
 	void EmptyActionTileClick(Tile currentTile, bool resetGameState)
 	{
-		List<Tile> tiles = new List<Tile>();
+		List<Tile> tiles = new();
 		_fightManager.ResetGameState(resetGameState);
 		TileType typeOfSelection = TileType.Default;
         if (currentTile.unitOnTile != null)

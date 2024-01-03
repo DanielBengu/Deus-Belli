@@ -1,9 +1,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using System.Linq;
-using System.IO;
 using Unity.VisualScripting;
-using UnityEngine.Device;
 using static Pathfinding;
 using static FightInput;
 
@@ -257,16 +255,11 @@ public class FightManager : MonoBehaviour
 
     public void QueueAttack(Unit attacker, Unit defender, Tile tileToMoveTo)
     {
-        List<Tile> path = structureManager.FindPathToDestination(tileToMoveTo, false, attacker.Movement.CurrentTile.data.PositionOnGrid).ToList();
+		Debug.Log($"UNIT {attacker.UnitData.Name} ATTACKING UNIT {defender.UnitData.Name}");
 
-        int targetMovementTileIndex = path.Count - 1;
-        if (targetMovementTileIndex < 0) targetMovementTileIndex = 0;
+        Tile targetTile = FindTargetTileForAttack(attacker, tileToMoveTo);
+		structureManager.MoveUnit(attacker, targetTile, false);
 
-        Tile targetTile = attacker.Movement.CurrentTile;
-        if(path.Count > 0)
-            targetTile = structureManager.gameData.mapTiles[path[targetMovementTileIndex].data.PositionOnGrid];
-
-		structureManager.MoveUnit(UnitSelected, targetTile, false);
 		ActionInQueue = ActionPerformed.SimpleAttack;
         ActionTarget = defender.gameObject;
         UnitSelected = attacker;
@@ -284,23 +277,36 @@ public class FightManager : MonoBehaviour
 
         Transform showcase = putOnLeftShowcase ? leftUnitShowcaseParent : rightUnitShowcaseParent;
         Transform position = putOnLeftShowcase ? leftUnitShowcasePosition : rightUnitShowcasePosition;
-		structureManager.InstantiateShowcaseUnit(unitSelected, position, showcase, animation);
+		structureManager.InstantiateShowcaseUnit(unitSelected, position, showcase);
         HandleShowcaseAnimations(animation, true, true);
+	}
+
+    Tile FindTargetTileForAttack(Unit attacker, Tile tileToMoveTo)
+    {
+		List<Tile> path = structureManager.FindPathToDestination(tileToMoveTo, false, attacker.Movement.CurrentTile.data.PositionOnGrid).ToList();
+
+        //Failsafe, should not be needed
+        if(path.Count == 0)
+			return attacker.Movement.CurrentTile;
+
+        // ^1 is the same as path.Count - 1
+		return structureManager.gameData.mapTiles[path[^1].data.PositionOnGrid];
 	}
 
     void HandleShowcaseAnimations(Animation animation, bool animateLeft, bool animateRight)
     {
 		if (animateLeft && leftUnitShowcaseParent.childCount > 0)
-		{
-			GameObject unitOnLeft = leftUnitShowcaseParent.GetChild(0).gameObject;
-			structureManager.StartShowcaseAnimation(unitOnLeft, animation);
-		}
+            StartShowcaseAnimation(leftUnitShowcaseParent, animation);
 
 		if (animateRight && rightUnitShowcaseParent.childCount > 0)
-		{
-			GameObject unitOnRight = rightUnitShowcaseParent.GetChild(0).gameObject;
-			structureManager.StartShowcaseAnimation(unitOnRight, animation);
-		}
+			StartShowcaseAnimation(rightUnitShowcaseParent, animation);
+	}
+
+    void StartShowcaseAnimation(Transform parent, Animation animation)
+    {
+		int lastUnitOnShowcase = parent.childCount - 1;
+		GameObject unitOnLeft = parent.GetChild(lastUnitOnShowcase).gameObject;
+		structureManager.StartShowcaseAnimation(unitOnLeft, animation, false);
 	}
 
     public void ClearShowcase()

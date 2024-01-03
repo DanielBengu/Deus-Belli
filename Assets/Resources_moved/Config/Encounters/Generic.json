@@ -37,63 +37,10 @@
           ]
         },
         {
-          "Name": "Generic Bandit 2",
+          "Name": "Jack Skellington",
           "ModelName": "Skeleton",
           "PortraitName": "Warrior",
           "Faction": 2,
-          "Stats": {
-            "Hp": 4,
-            "Movement": 2,
-            "Attack": 4,
-            "Range": 1
-          },
-          "RandomizedTraits": true,
-          "Traits": [
-          ]
-        }
-      ]
-    },
-    {
-      "Name": "Bandit_Ambush_Lisa",
-      "Map": "Road_Ambush_Lisa",
-      "EnemyList": [
-        {
-          "Name": "Lisa",
-          "ModelName": "Lisa",
-          "PortraitName": "Lisa",
-          "Faction": 1,
-          "Stats": {
-            "Hp": 10,
-            "Movement": 4,
-            "Attack": 3,
-            "Range": 1
-          },
-          "RandomizedTraits": false,
-          "Traits": [
-            "Floaty",
-            "Second_Wind"
-          ]
-        },
-        {
-          "Name": "Generic Bandit 1",
-          "ModelName": "Bandit",
-          "PortraitName": "Archer",
-          "Faction": 1,
-          "Stats": {
-            "Hp": 6,
-            "Movement": 3,
-            "Attack": 2,
-            "Range": 2
-          },
-          "RandomizedTraits": true,
-          "Traits": [
-          ]
-        },
-        {
-          "Name": "Generic Bandit 2",
-          "ModelName": "Bandit",
-          "PortraitName": "Archer",
-          "Faction": 1,
           "Stats": {
             "Hp": 4,
             "Movement": 2,
@@ -149,6 +96,59 @@
           "ModelName": "Bandit",
           "PortraitName": "Archer",
           "Faction": 0,
+          "Stats": {
+            "Hp": 4,
+            "Movement": 2,
+            "Attack": 4,
+            "Range": 1
+          },
+          "RandomizedTraits": true,
+          "Traits": [
+          ]
+        }
+      ]
+    },
+    {
+      "Name": "Bandit_Ambush_Lisa",
+      "Map": "Road_Ambush_Lisa",
+      "EnemyList": [
+        {
+          "Name": "Lisa",
+          "ModelName": "Lisa",
+          "PortraitName": "Lisa",
+          "Faction": 1,
+          "Stats": {
+            "Hp": 10,
+            "Movement": 4,
+            "Attack": 3,
+            "Range": 1
+          },
+          "RandomizedTraits": false,
+          "Traits": [
+            "Floaty",
+            "Second_Wind"
+          ]
+        },
+        {
+          "Name": "Generic Bandit 1",
+          "ModelName": "Bandit",
+          "PortraitName": "Archer",
+          "Faction": 1,
+          "Stats": {
+            "Hp": 6,
+            "Movement": 3,
+            "Attack": 2,
+            "Range": 2
+          },
+          "RandomizedTraits": true,
+          "Traits": [
+          ]
+        },
+        {
+          "Name": "Generic Bandit 2",
+          "ModelName": "Bandit",
+          "PortraitName": "Archer",
+          "Faction": 1,
           "Stats": {
             "Hp": 4,
             "Movement": 2,
