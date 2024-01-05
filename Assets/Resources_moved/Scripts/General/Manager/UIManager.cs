@@ -40,7 +40,7 @@ public class UIManager : MonoBehaviour
         statsParent = infoPanel.transform.Find("Stats");
         unitImage = infoPanel.transform.Find("Image").gameObject.GetComponent<Image>();
         nameText = infoPanel.transform.Find("Unit title").gameObject.GetComponent<TextMeshProUGUI>();
-        SetInfoPanel(false);
+		SetInfoPanel(false);
     }
     public void SetFightEndPhaseButton()
     {
@@ -145,6 +145,8 @@ public class UIManager : MonoBehaviour
 			{
 				traitBox.GetComponent<Image>().sprite = AddressablesManager.LoadResource<Sprite>(AddressablesManager.TypeOfResource.Sprite, unit.UnitData.Traits[i]);
 				traitBox.gameObject.SetActive(true);
+				TooltipManager tooltipData = traitBox.GetComponentInChildren<TooltipManager>();
+                tooltipData.trait = unit.FightData.traitList[i];
 			}
 			else
 				traitBox.gameObject.SetActive(false);

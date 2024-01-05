@@ -100,6 +100,7 @@
     <Compile Include="Assets\Resources_moved\Scripts\General\Manager\UIManager.cs" />
     <Compile Include="Assets\Scripts\Steamworks.NET\SteamManager.cs" />
     <Compile Include="Assets\Resources_moved\Scripts\General\Manager\SaveManager.cs" />
+    <Compile Include="Assets\Resources_moved\Scripts\Fight\Managers\TooltipManager.cs" />
     <Compile Include="Assets\Resources_moved\Scripts\GodsArchive\Gods\Agbara\Ataiku.cs" />
     <Compile Include="Assets\Polyart\PolyartStudio\SharedResources\Scripts\Tools\FoliageInteractor.cs" />
     <Compile Include="Assets\Resources_moved\Scripts\Rogue\Managers\RogueManager.cs" />

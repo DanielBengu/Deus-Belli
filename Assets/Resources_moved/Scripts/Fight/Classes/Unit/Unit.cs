@@ -47,4 +47,18 @@ public class Unit : MonoBehaviour
         Tanky,
         Wealthy
 	}
+
+	public struct Trait
+	{
+		public string name;
+		public string description;
+		public int level;
+
+		public Trait(string name, string description, int level)
+		{
+			this.name = name;
+			this.description = description;
+			this.level = level;
+		}
+	}
 }

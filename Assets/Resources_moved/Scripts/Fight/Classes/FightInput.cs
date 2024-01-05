@@ -105,22 +105,12 @@ public class FightInput
 	{
 		List<Tile> tiles = new();
 		_fightManager.ResetGameState(resetGameState);
-		TileType typeOfSelection = TileType.Default;
         if (currentTile.unitOnTile != null)
 		{
-			if(currentTile.unitOnTile.UnitData.Faction == FightManager.USER_FACTION)
-			{
-				typeOfSelection = TileType.Ally;
-				tiles = currentTile.ToList();
-			}
-			else
-			{
-				typeOfSelection = TileType.Enemy;
-				tiles = _structureManager.GeneratePossibleMovementForUnit(currentTile.unitOnTile, true);
-			}
+			_fightManager.UnitSelected = currentTile.unitOnTile;
+			PossibleActionsForUnit(currentTile.unitOnTile);
+			//tiles = _structureManager.GeneratePossibleMovementForUnit(currentTile.unitOnTile, true);
 		}
-
-        _structureManager.SelectTiles(tiles, true, typeOfSelection);
 	}
 
 	void PossibleActionsForUnit(Unit currentUnit)
