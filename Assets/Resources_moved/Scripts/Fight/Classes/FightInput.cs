@@ -91,7 +91,7 @@ public class FightInput
 		//User wants to attack an enemy, we confirm the action and the path to take
 		if (!_fightManager.IsShowingPath)
 		{
-			AskForMovementConfirmation(tileToMoveTo);
+			AskForMovementConfirmation(unit.Movement.CurrentTile, tileToMoveTo);
 			_fightManager.HandleShowcase(unit, false, false, Animation.ShowcaseAttack);
 			return;
 		}
@@ -156,12 +156,12 @@ public class FightInput
 		return _structureManager.IsAttackPossible(attacker, defender);
 	}
 
-	public void AskForMovementConfirmation(Tile destinationTile)
+	public void AskForMovementConfirmation(Tile destinationTile, Tile tileToMoveTo = null)
 	{
 		_structureManager.ClearSelection(false);
-		List<Tile> path = _structureManager.FindPathToDestination(destinationTile, false, _fightManager.UnitSelected.Movement.CurrentTile.data.PositionOnGrid);
-		List<Tile> attackTiles = path.ToList();
-		path = path.ToList();
+		Tile tileToReach = tileToMoveTo != null ? tileToMoveTo : destinationTile;
+		List<Tile> path = _structureManager.FindPathToDestination(tileToReach, false, _fightManager.UnitSelected.Movement.CurrentTile.data.PositionOnGrid);
+		List<Tile> attackTiles = destinationTile.ToList();
 		_structureManager.SelectTiles(path, true, TileType.Selected);
 		_structureManager.SelectTiles(attackTiles, false, TileType.Enemy);
 		_fightManager.IsShowingPath = true;
@@ -170,7 +170,7 @@ public class FightInput
 
 	#region Setup
 
-	void ManageSetupInput(ObjectClickedEnum oc, GameObject reference)
+	void ManageSetupInput(ObjectClickedEnum oc, GameObject reference) 
 	{
 		switch (oc)
 		{
@@ -187,7 +187,7 @@ public class FightInput
 	{
 		_fightManager.ResetGameState(false);
 		_fightManager.SetupUnitPosition();
-		_structureManager.SelectTiles(unitSelected.Movement.CurrentTile.ToList(), false, TileType.Selected);
+		_structureManager.SelectTiles(unitSelected.Movement.CurrentTile, false, TileType.Selected);
 		_structureManager.SetInfoPanel(true, unitSelected);
 		if (unitSelected.UnitData.Faction != FightManager.USER_FACTION)
 		{
@@ -233,7 +233,7 @@ public class FightInput
 		_fightManager.ResetGameState(true);
 		_structureManager.ClearSelection(true);
 		_fightManager.ClearShowcase();
-		_structureManager.SelectTiles(tileSelected.ToList(), true, TileType.Selected);
+		_structureManager.SelectTiles(tileSelected, true, TileType.Selected);
 	}
 
 	#endregion

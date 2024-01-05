@@ -184,11 +184,15 @@ public class StructureManager : MonoBehaviour
 
     public List<Tile> GeneratePossibleMovementForUnit(Unit unit, bool selectTiles){
         List<Tile> possibleMovements = CalculateMapTilesDistance(unit);
+        List<Tile> tilesWithAllies = possibleMovements.FindAll(t => t.unitOnTile && t.unitOnTile.UnitData.Faction == unit.UnitData.Faction && t.unitOnTile != unit);
+        possibleMovements.RemoveAll(t => tilesWithAllies.Contains(t));
 
         if (selectTiles)
         {
-            TileType tileType = unit.UnitData.Faction == FightManager.USER_FACTION ? TileType.Ally : TileType.Enemy;
+            TileType tileType = unit.UnitData.Faction == FightManager.USER_FACTION ? TileType.PossibleAlly : TileType.PossibleEnemy;
 			SelectTiles(possibleMovements, false, tileType);
+            SelectTiles(tilesWithAllies, false, TileType.Ally);
+            SelectTiles(unit.Movement.CurrentTile, false, TileType.Selected);
 		}
 
         return possibleMovements;
@@ -275,7 +279,7 @@ public class StructureManager : MonoBehaviour
         List<PossibleAttack> possible = pathfinding.FindPossibleAttacks_New(unit, possibleMovements);
 
 		if (selectTiles)
-            SelectTiles(possible.Select(a => a.tileToAttack).ToList(), false);
+            SelectTiles(possible.Select(a => a.tileToAttack).ToList(), false, TileType.Enemy);
 
         return possible;
     }
@@ -309,7 +313,15 @@ public class StructureManager : MonoBehaviour
 		spriteManager.GenerateTileSelection(tilelist, gameData.IsSetup, tileType);
     }
 
-    #endregion
+	public void SelectTiles(Tile tile, bool clearBeforeSelecting, TileType tileType = TileType.Base)
+	{
+		if (clearBeforeSelecting)
+			spriteManager.GenerateTileSelection(gameData.GetTileList(), gameData.IsSetup, TileType.Default);
+
+		spriteManager.GenerateTileSelection(tile, gameData.IsSetup, tileType);
+	}
+
+	#endregion
 }
 
 public struct FightGameData

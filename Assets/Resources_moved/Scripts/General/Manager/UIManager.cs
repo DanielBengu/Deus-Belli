@@ -96,7 +96,7 @@ public class UIManager : MonoBehaviour
     public void SetInfoPanel(bool active, Unit unit = null){
         SetGameObject(infoPanel, active);
 
-        if (!active || !Validator.ValidateUnit(unit))
+        if (!active || !Validator.Validate(unit))
             return;
 
         SetupTraitsOnInfoPanel(unit);

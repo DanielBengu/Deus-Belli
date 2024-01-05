@@ -14,13 +14,13 @@ public static class Validator
 		};
 	}
 
-	public static bool ValidateMap(TileMapData obj)
+	static bool ValidateMap(TileMapData obj)
 	{
 		bool isCountCorrect = obj.TileList.DistinctBy(t => t.PositionOnGrid).Count() == obj.Rows * obj.Columns;
 		return isCountCorrect;
 	}
 
-	public static bool ValidateUnit(Unit unit)
+	static bool ValidateUnit(Unit unit)
 	{
 		return IsUnitValuedCorrectly(unit) && IsUnitStatsValid(unit);
 	}
