@@ -87,27 +87,7 @@ public class FightManager : MonoBehaviour
 	{
         Debug.Log("START FIGHT MANAGER SETUP");
 
-		leftUnitShowcasePosition = GameObject.Find("Left Character Position").transform;
-		leftUnitShowcaseParent = GameObject.Find("ShowcaseChildrenLeft").transform;
-		rightUnitShowcasePosition = GameObject.Find("Right Character Position").transform;
-		rightUnitShowcaseParent = GameObject.Find("ShowcaseChildrenRight").transform;
-		structureManager = sm;
-
-        cameraManager = cm;
-        cameraManager.SetupFightCamera(cameraManager.transform);
-
-		generalManager = gm;
-        structureManager.uiManager.SetFightVariables(gm.GodSelected);
-        structureManager.spriteManager.fightManager = this;
-
-        this.level = level;
-
-        aiManager = GetComponent<AIManager>();
-        aiManager.seed = level.seed;
-
-		FightInput = new FightInput(this, structureManager);
-		TurnManager = new(this, structureManager, aiManager);
-
+        LoadVariables(sm, cm, gm, level);
 		StartLevel(level);
 
         Debug.Log("END FIGHT MANAGER SETUP");
@@ -117,21 +97,14 @@ public class FightManager : MonoBehaviour
     {
         level.GenerateTerrain(false, null);
 
-        // Setup the terrain based on the level information
-        var tiles = structureManager.SetupFightSection(level, this);
+        var tiles = GetMapTiles();
+		var units = GenerateUnitsOnField(level);
 
-        Transform lastTile = tiles[level.mapData.Columns * level.mapData.Rows - 1].transform;
-        float rotatorX = (tiles[0].transform.position.x + lastTile.position.x) / 2;
-        float rotatorZ = (tiles[0].transform.position.z + lastTile.position.z) / 2;
-        fightObjects.transform.position = new Vector3(rotatorX, fightObjectsRotator.transform.position.y, rotatorZ);
-		for (int i = 0; i < tiles.Count; i++)
-            tiles[i].transform.parent = fightObjects;
-
-        var units = GenerateUnitsOnField(level);
         structureManager.gameData = new(tiles, units, level.mapData.Rows, level.mapData.Columns);
 
         SetupTiles = SetupUnitPosition();
-    }
+		TurnManager.StartUserTurn();
+	}
 
     public int[] SetupUnitPosition()
 	{
@@ -293,22 +266,6 @@ public class FightManager : MonoBehaviour
 		return structureManager.gameData.mapTiles[path[^1].data.PositionOnGrid];
 	}
 
-    void HandleShowcaseAnimations(Animation animation, bool animateLeft, bool animateRight)
-    {
-		if (animateLeft && leftUnitShowcaseParent.childCount > 0)
-            StartShowcaseAnimation(leftUnitShowcaseParent, animation);
-
-		if (animateRight && rightUnitShowcaseParent.childCount > 0)
-			StartShowcaseAnimation(rightUnitShowcaseParent, animation);
-	}
-
-    void StartShowcaseAnimation(Transform parent, Animation animation)
-    {
-		int lastUnitOnShowcase = parent.childCount - 1;
-		GameObject unitOnLeft = parent.GetChild(lastUnitOnShowcase).gameObject;
-		structureManager.StartShowcaseAnimation(unitOnLeft, animation, false);
-	}
-
     public void ClearShowcase()
     {
 		structureManager.ClearShowcase(leftUnitShowcaseParent);
@@ -321,6 +278,7 @@ public class FightManager : MonoBehaviour
         IsShowingPath = false;
         structureManager.ClearSelection(true);
         structureManager.SetInfoPanel(false);
+        structureManager.ClearTooltips();
         ClearShowcase();
         ActionInQueue = ActionPerformed.Default;
         PossibleAttacks = new();
@@ -350,6 +308,70 @@ public class FightManager : MonoBehaviour
     {
 
     }
+
+	#region Private Methods
+
+	void LoadVariables(StructureManager sm, CameraManager cm, GeneralManager gm, Level level)
+	{
+		leftUnitShowcasePosition = GameObject.Find("Left Character Position").transform;
+		leftUnitShowcaseParent = GameObject.Find("ShowcaseChildrenLeft").transform;
+		rightUnitShowcasePosition = GameObject.Find("Right Character Position").transform;
+		rightUnitShowcaseParent = GameObject.Find("ShowcaseChildrenRight").transform;
+
+		structureManager = sm;
+		cameraManager = cm;
+		generalManager = gm;
+		aiManager = GetComponent<AIManager>();
+		FightInput = new FightInput(this, structureManager);
+		TurnManager = new(this, structureManager, aiManager);
+		this.level = level;
+
+		cameraManager.SetupFightCamera(cameraManager.transform);
+		structureManager.uiManager.SetFightVariables(gm.GodSelected);
+		structureManager.spriteManager.fightManager = this;
+		aiManager.seed = level.seed;
+	}
+
+	void HandleShowcaseAnimations(Animation animation, bool animateLeft, bool animateRight)
+	{
+		if (animateLeft && leftUnitShowcaseParent.childCount > 0)
+			StartShowcaseAnimation(leftUnitShowcaseParent, animation);
+
+		if (animateRight && rightUnitShowcaseParent.childCount > 0)
+			StartShowcaseAnimation(rightUnitShowcaseParent, animation);
+	}
+
+	void StartShowcaseAnimation(Transform parent, Animation animation)
+	{
+		int lastUnitOnShowcase = parent.childCount - 1;
+		GameObject unitOnLeft = parent.GetChild(lastUnitOnShowcase).gameObject;
+		structureManager.StartShowcaseAnimation(unitOnLeft, animation, false);
+	}
+
+    Vector3 GetFightObjectPosition(Dictionary<int, Tile> tiles)
+    {
+        Vector3 firstTile = tiles[0].transform.position;
+        Vector3 lastTile = tiles[tiles.Count - 1].transform.position;
+
+		float rotatorX = (firstTile.x + lastTile.x) / 2;
+		float rotatorZ = (firstTile.z + lastTile.z) / 2;
+
+		return new Vector3(rotatorX, fightObjectsRotator.transform.position.y, rotatorZ);
+	}
+
+    Dictionary<int, Tile> GetMapTiles()
+    {
+		var tiles = structureManager.SetupFightSection(level, this);
+		fightObjects.transform.position = GetFightObjectPosition(tiles);
+
+		for (int i = 0; i < tiles.Count; i++)
+			tiles[i].transform.parent = fightObjects;
+
+        return tiles;
+	}
+
+	#endregion
+
 
 	#region Button Calls
 	//Called by "End Turn" button of UI

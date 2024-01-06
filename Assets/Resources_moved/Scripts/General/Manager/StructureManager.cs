@@ -305,7 +305,11 @@ public class StructureManager : MonoBehaviour
     {
         uiManager.SetInfoPanel(active, unit);
     }
-    public void SelectTiles(List<Tile> tilelist, bool clearBeforeSelecting, TileType tileType = TileType.Base)
+	public void ClearTooltips()
+	{
+		uiManager.ClearTooltip();
+	}
+	public void SelectTiles(List<Tile> tilelist, bool clearBeforeSelecting, TileType tileType = TileType.Base)
     {
         if (clearBeforeSelecting)
 			spriteManager.GenerateTileSelection(gameData.GetTileList(), gameData.IsSetup, TileType.Default);

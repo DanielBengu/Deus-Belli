@@ -19,10 +19,10 @@ public class UIManager : MonoBehaviour
     GameObject rogueDefeatScreen;
 
     #region Info Panel
-    Image unitImage;
     Transform traitParent;
     Transform statsParent;
     TextMeshProUGUI nameText;
+    GameObject tooltipParent;
     #endregion
 
 	public void SetFightVariables(IGod god){
@@ -38,8 +38,8 @@ public class UIManager : MonoBehaviour
 
         traitParent = infoPanel.transform.Find("Traits");
         statsParent = infoPanel.transform.Find("Stats");
-        unitImage = infoPanel.transform.Find("Image").gameObject.GetComponent<Image>();
         nameText = infoPanel.transform.Find("Unit title").gameObject.GetComponent<TextMeshProUGUI>();
+        tooltipParent = GameObject.Find("TooltipParent");
 		SetInfoPanel(false);
     }
     public void SetFightEndPhaseButton()
@@ -133,9 +133,15 @@ public class UIManager : MonoBehaviour
 	{
         gameObject.SetActive(active);
     }
-
+	public void ClearTooltip()
+	{
+		for (int i = 0; i < tooltipParent.transform.childCount; i++)
+		{
+			GameObject tooltip = tooltipParent.transform.GetChild(i).gameObject;
+			Destroy(tooltip);
+		}
+	}
 	#region Private Methods
-
 	void SetupTraitsOnInfoPanel(Unit unit)
 	{
 		for (int i = 0; i < traitParent.childCount; i++)
@@ -156,23 +162,26 @@ public class UIManager : MonoBehaviour
 	void SetupStatsOnInfoPanel(Unit unit)
 	{
 		nameText.text = unit.UnitData.Name;
-		unitImage.sprite = unit.FightData.sprite;
 		for (int i = 0; i < statsParent.childCount; i++)
 		{
 			TextMeshProUGUI stat = statsParent.GetChild(i).GetComponent<TextMeshProUGUI>();
 			switch (stat.name)
 			{
 				case "HP":
-                    stat.text = $"{unit.FightData.currentHp}/{unit.UnitData.Stats.Hp}";
+                    stat.text = LoadStatText(unit.FightData.currentHp, unit.FightData.baseHp);
+                    stat.color = GetColor(unit.FightData.currentHp, unit.UnitData.Stats.Hp);
 					break;
 				case "Movement":
-					stat.text = ManageStatBetweenFactions(unit.UnitData.Faction, unit.FightData.currentMovement, unit.UnitData.Stats.Movement);
+					stat.text = LoadStatText(unit.FightData.currentMovement);
+					stat.color = GetColor(unit.FightData.currentMovement, unit.UnitData.Stats.Movement);
 					break;
 				case "Attack":
-					stat.text = unit.UnitData.Stats.Attack.ToString();
+					stat.text = LoadStatText(unit.FightData.currentAttack);
+					stat.color = GetColor(unit.FightData.currentAttack, unit.UnitData.Stats.Attack);
 					break;
 				case "Range":
-					stat.text = unit.UnitData.Stats.Range.ToString();
+                    stat.text = LoadStatText(unit.FightData.currentRange);
+                    stat.color = GetColor(unit.FightData.currentRange, unit.UnitData.Stats.Range);
 					break;
 				default:
 					break;
@@ -180,14 +189,22 @@ public class UIManager : MonoBehaviour
 		}
 	}
 
-    //We hide the current value of certain stats for the enemies since its not necessary
-    string ManageStatBetweenFactions(int faction, int currentStat, int maxStat)
+    string LoadStatText(int currentValue, int maxValue = -1)
     {
-        if(faction == FightManager.USER_FACTION)
-            return $"{currentStat}/{maxStat}";
+		if (maxValue != -1)
+			return $"{currentValue}/{maxValue}";
 
-        return maxStat.ToString();
+		return currentValue.ToString();
+	}
+
+    Color GetColor(int currentValue, int maxValue)
+    {
+        if (currentValue > maxValue)
+            return Color.green;
+        if(currentValue < maxValue) 
+            return Color.red;
+
+        return Color.white;
     }
-
 	#endregion
 }

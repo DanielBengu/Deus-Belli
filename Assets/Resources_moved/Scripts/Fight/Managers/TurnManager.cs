@@ -44,7 +44,7 @@ public class TurnManager
 		}
 	}
 
-	void StartUserTurn()
+	public void StartUserTurn()
 	{
 		CurrentTurn = FightManager.USER_FACTION;
 		fightManager.TurnCount++;
@@ -53,8 +53,8 @@ public class TurnManager
 		//We reset the enemies' movement too for calculations and player's effects that may influence them
 		foreach (var unit in fightManager.UnitsOnField)
 		{
-			unit.FightData.currentMovement = unit.UnitData.Stats.Movement;
 			unit.Movement.HasPerformedMainAction = false;
+			unit.FightData.StartOfTurnEffects();
 		}
 	}
 

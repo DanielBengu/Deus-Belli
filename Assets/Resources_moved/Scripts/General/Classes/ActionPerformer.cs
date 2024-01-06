@@ -88,10 +88,11 @@ public class ActionPerformer
 	void Attack(Unit attacker, Unit defender)
     {
         enemyInQueueForAnimation = defender;
+
         defender.transform.LookAt(attacker.Movement.CurrentTile.transform, Vector3.up);
         attacker.transform.LookAt(defender.Movement.CurrentTile.transform, Vector3.up);
 
-		defender.FightData.currentHp -= attacker.UnitData.Stats.Attack;
+        defender.FightData.TakeDamage(attacker.FightData.currentAttack);
 
 		PerformAnimation(attacker.gameObject, Animation.Attack, true);
     }
