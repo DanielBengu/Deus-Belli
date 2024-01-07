@@ -74,51 +74,13 @@ public class Pathfinding
             return null;
         }
 
-        Debug.Log("Starting Dijkstra calculation");
+        PerformDijkstraAlgorithm(startingUnit);
 
-        ResetMapTilesTentativeCost();
-
-		float maxMovementCost = startingUnit.FightData.currentMovement;
-		startingUnit.Movement.CurrentTile.tentativeCost = 0;
-        bool pathFound = false;
-        int lowestTileIndex = 0;
-        Tile tileToCalculate;
-
-        int failSafe = 0;
-        while (!pathFound && failSafe < FAIL_SAFE_MAX)
-        {
-            List<Tile> unvisitedTiles = mapTiles.Select(t => t.Value).Where(t => !t.IsVisited).ToList();
-
-            if(unvisitedTiles.Count == 0){
-                pathFound = true;
-                Debug.Log("CALCULATED EVERY TILE COST");
-                break;
-            }
-
-            lowestTileIndex = mapTiles.Select(t => t.Value).ToList().Find(t => t == unvisitedTiles.Min()).data.PositionOnGrid;
-
-            //true when we calculated all possible movements for this unit, only unreachable locations remain
-            if(lowestTileIndex == OUT_OF_BOUND_VALUE)
-                pathFound = true;
-
-            tileToCalculate = mapTiles[lowestTileIndex];
-            if(tileToCalculate.tentativeCost < maxMovementCost)
-                FindNeighbours(startingUnit, tileToCalculate, true);
-
-            tileToCalculate.IsVisited = true;
-            failSafe++;
-        }
-
-        if (failSafe >= FAIL_SAFE_MAX)
-            Debug.LogError("FAILSAFE TRIGGERED!");
-
-        Debug.Log("Ending Dijkstra calculation");
-
-        return mapTiles.Select(t => t.Value).Where(t => t.tentativeCost <= startingUnit.FightData.currentMovement && !(t.unitOnTile && t.unitOnTile.UnitData.Faction != startingUnit.UnitData.Faction)).ToList();
-    }
+        return GetPath(startingUnit);
+	}
 
     //If needed we can optimize by removing from the search the tiles already searched in previous loops, somehow
-	public List<PossibleAttack> FindPossibleAttacks_New(Unit attacker, List<Tile> possibleMovements)
+	public List<PossibleAttack> FindPossibleAttacks(Unit attacker, List<Tile> possibleMovements)
 	{
         //If no list of possible movements was passed, we generate it
         possibleMovements ??= CalculateMapTilesDistance(attacker);
@@ -222,13 +184,73 @@ public class Pathfinding
 		return result;
     }
 
-    void ResetMapTilesTentativeCost()
+    void PerformDijkstraAlgorithm(Unit startingUnit)
+    {
+		Debug.Log("Starting Dijkstra calculation");
+
+		ResetMapTilesTentativeCost();
+		CalculateTiles(startingUnit);
+
+		Debug.Log("Ending Dijkstra calculation");
+	}
+
+    List<Tile> GetPath(Unit startingUnit)
+    {
+		return mapTiles.Where(t => t.Value.tentativeCost <= startingUnit.FightData.currentMovement && !EnemyIsBlockingTile(startingUnit, t.Value)).Select(t => t.Value).ToList();
+	}
+
+    bool EnemyIsBlockingTile(Unit source, Tile target) {
+        return (target.unitOnTile && target.unitOnTile.UnitData.Faction != source.UnitData.Faction);
+    }
+	void ResetMapTilesTentativeCost()
     {
 		for (int i = 0; i < mapTiles.Count; i++)
 		{
 			mapTiles[i].tentativeCost = OUT_OF_BOUND_VALUE;
 			mapTiles[i].IsVisited = false;
 		}
+	}
+
+    void CalculateTiles(Unit startingUnit)
+    {
+		float maxMovementCost = startingUnit.Movement.GetUnitsMovementForPathfindingCalculations();
+		startingUnit.Movement.CurrentTile.tentativeCost = 0;
+
+		bool pathFound = false;
+		int lowestTileIndex = 0;
+		Tile tileToCalculate;
+
+		int failSafe = 0;
+		while (!pathFound && failSafe < FAIL_SAFE_MAX)
+		{
+			List<Tile> unvisitedTiles = mapTiles.Select(t => t.Value).Where(t => !t.IsVisited).ToList();
+
+			if (unvisitedTiles.Count == 0)
+			{
+				pathFound = true;
+				Debug.Log("CALCULATED EVERY TILE COST");
+				break;
+			}
+
+			lowestTileIndex = mapTiles.Select(t => t.Value).ToList().Find(t => t == unvisitedTiles.Min()).data.PositionOnGrid;
+
+			//true when we calculated all possible movements for this unit, only unreachable locations remain
+			if (lowestTileIndex == OUT_OF_BOUND_VALUE)
+			{
+				pathFound = true;
+				break;
+			}
+
+			tileToCalculate = mapTiles[lowestTileIndex];
+			if (tileToCalculate.tentativeCost < maxMovementCost)
+				FindNeighbours(startingUnit, tileToCalculate, true);
+
+			tileToCalculate.IsVisited = true;
+			failSafe++;
+		}
+
+		if (failSafe >= FAIL_SAFE_MAX)
+			Debug.LogError("FAILSAFE TRIGGERED!");
 	}
 
     public struct PossibleAttack

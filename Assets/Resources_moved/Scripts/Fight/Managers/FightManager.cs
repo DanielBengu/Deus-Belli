@@ -164,6 +164,7 @@ public class FightManager : MonoBehaviour
 		var unitGenerated = Instantiate(model, tile.transform.position, rotation, parent);
 		var unitScript = unitGenerated.AddComponent<Unit>();
 		unitScript.Load(unit, this, tile);
+        unitGenerated.name = unitScript.UnitData.Name;
 
         tile.unitOnTile = unitScript;
 

@@ -22,14 +22,14 @@
       "Model": "Mountain",
       "StartPositionForFaction": -1,
       "MovementCost": -1,
-      "ValidForMovement": false
+      "ValidForMovement": true
     },
     {
       "PositionOnGrid": 3,
       "Model": "StonePath",
       "StartPositionForFaction": -1,
       "MovementCost": 1,
-      "ValidForMovement": true
+      "ValidForMovement": false
     },
     {
       "PositionOnGrid": 4,

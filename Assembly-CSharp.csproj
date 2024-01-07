@@ -9,8 +9,7 @@
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProductVersion>10.0.20506</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
-    <RootNamespace>
-    </RootNamespace>
+    <RootNamespace></RootNamespace>
     <ProjectGuid>{03C08551-717E-8DA5-9C6F-BEBDE0510031}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
@@ -164,18 +163,6 @@
     <Compile Include="Assets\Resources_moved\Scripts\Menu\OptionsMenu.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Assets\Resources_moved\Config\Encounters.meta" />
-    <None Include="Assets\Resources_moved\Config\Encounters\Generic.json" />
-    <None Include="Assets\Resources_moved\Config\Encounters\Generic.json.meta" />
-    <None Include="Assets\Resources_moved\Config\Gods\Agbara.json" />
-    <None Include="Assets\Resources_moved\Config\Maps.meta" />
-    <None Include="Assets\Resources_moved\Config\Maps\Custom.meta" />
-    <None Include="Assets\Resources_moved\Config\Maps\Generic.meta" />
-    <None Include="Assets\Resources_moved\Config\Maps\Generic\Road_Ambush.json" />
-    <None Include="Assets\Resources_moved\Config\Maps\Generic\Road_Ambush.json.meta" />
-    <None Include="Assets\Resources_moved\Config\Maps\Map Template.json" />
-    <None Include="Assets\Resources_moved\Config\Maps\Map Template.json.meta" />
-    <None Include="Assets\Resources_moved\Config\Maps\Special.meta" />
     <None Include="Assets\TextMesh Pro\Shaders\TMPro.cginc" />
     <None Include="Assets\Polyart\PolyartStudio\SharedResources\Shaders\Foliage\PA_Grass.shader" />
     <None Include="Assets\TextMesh Pro\Shaders\TMP_SDF-Mobile Overlay.shader" />
@@ -1379,8 +1366,6 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Assets\Resources_moved\Config\Maps\Custom\" />
-    <Folder Include="Assets\Resources_moved\Config\Maps\Special\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="GenerateTargetFrameworkMonikerAttribute" />

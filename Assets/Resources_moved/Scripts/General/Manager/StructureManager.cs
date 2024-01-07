@@ -276,7 +276,7 @@ public class StructureManager : MonoBehaviour
     }
     public List<PossibleAttack> GetPossibleAttacksForUnit(Unit unit, bool selectTiles, List<Tile> possibleMovements = null)
 	{
-        List<PossibleAttack> possible = pathfinding.FindPossibleAttacks_New(unit, possibleMovements);
+        List<PossibleAttack> possible = pathfinding.FindPossibleAttacks(unit, possibleMovements);
 
 		if (selectTiles)
             SelectTiles(possible.Select(a => a.tileToAttack).ToList(), false, TileType.Enemy);

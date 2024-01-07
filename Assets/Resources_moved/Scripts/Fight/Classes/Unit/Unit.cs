@@ -114,5 +114,11 @@ public class Unit : MonoBehaviour
 			int OVERLOAD_BONUS_VALUE = level + 1;
 			return damage * OVERLOAD_BONUS_VALUE;
 		}
+
+		public static int GetRegenerationAmount(int baseHp, int level)
+		{
+			int REGENERATION_BONUS_VALUE = 5 * level; //percentage of hp restored
+			return baseHp * REGENERATION_BONUS_VALUE / 100;
+		}
 	}
 }

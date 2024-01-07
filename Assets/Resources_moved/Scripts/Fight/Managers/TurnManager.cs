@@ -50,7 +50,6 @@ public class TurnManager
 		fightManager.TurnCount++;
 		fightManager.ResetGameState(true);
 		structureManager.SetEndTurnButton(true);
-		//We reset the enemies' movement too for calculations and player's effects that may influence them
 		foreach (var unit in fightManager.UnitsOnField)
 		{
 			unit.Movement.HasPerformedMainAction = false;

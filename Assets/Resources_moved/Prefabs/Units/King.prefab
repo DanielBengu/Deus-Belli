@@ -1451,11 +1451,11 @@ Animator:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8662277069511987880}
   m_Enabled: 1
-  m_Avatar: {fileID: 9000000, guid: 7e30eee73c241d5448ce0ac372cf6602, type: 3}
+  m_Avatar: {fileID: 9000000, guid: 05dd2e86dee1d5943a581855ace37232, type: 3}
   m_Controller: {fileID: 9100000, guid: d7c55390ab0320c47b84f63184ecb1b9, type: 2}
-  m_CullingMode: 0
+  m_CullingMode: 1
   m_UpdateMode: 0
-  m_ApplyRootMotion: 1
+  m_ApplyRootMotion: 0
   m_LinearVelocityBlending: 0
   m_StabilizeFeet: 0
   m_WarningMessage: 
@@ -1475,18 +1475,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 32f75263af4039848bdcbfad0a330509, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  unitData:
-    Name: 
-    ModelName: 
-    PortraitName: 
-    Stats:
-      Hp: 0
-      Movement: 0
-      Attack: 0
-      Range: 0
-    RandomizedTraits: 0
-    Traits: []
-    Faction: 0
 --- !u!65 &7589067898745069862
 BoxCollider:
   m_ObjectHideFlags: 0

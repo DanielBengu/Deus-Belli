@@ -75,8 +75,10 @@ public class AIManager : MonoBehaviour
 
     void CalculateTurnForUnit(Unit unit){
         Debug.Log($"CALCULATING AI MOVE FOR UNIT {unit.UnitData.Name}");
-        //We force the unit to move to a different tile, it cant stay still
+        //We force the unit to move to a different tile if possible
         List<Tile> possibleMovements = unit.Movement.PossibleMovements.Where(t => t.data.PositionOnGrid != unit.Movement.CurrentTile.data.PositionOnGrid).ToList();
+        if (possibleMovements.Count == 0)
+            possibleMovements = unit.Movement.CurrentTile.ToList();
         List<PossibleAttack> possibleAttacks = unit.Movement.GetPossibleAttacks(possibleMovements);
 
         ActionAI action = DecideAction(possibleMovements,possibleAttacks);

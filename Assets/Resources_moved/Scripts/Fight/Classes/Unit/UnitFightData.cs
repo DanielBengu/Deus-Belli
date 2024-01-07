@@ -36,10 +36,24 @@ public class UnitFightData
 			currentHp -= damage;
 	}
 
+	public void Heal(int healAmount)
+	{
+		currentHp += healAmount;
+		if(currentHp > baseHp)
+			currentHp = baseHp;
+	}
+
+	public void ResetMovement()
+	{
+		currentMovement = LoadMovement();
+	}
+
     public void StartOfTurnEffects()
     {
-        currentMovement = LoadMovement();
-    }
+		ResetMovement();
+		if (ContainsTrait(TraitsEnum.Regeneration, out int levelRegen))
+			Heal(Trait.GetRegenerationAmount(baseHp, levelRegen));
+	}
 
     public void LoadTraits(List<string> traitFromJSON)
     {
