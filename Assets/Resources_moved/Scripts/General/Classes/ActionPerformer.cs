@@ -54,7 +54,7 @@ public class ActionPerformer
     public void SetupFightMovement(Unit source, Tile targetTile)
     {
 		Debug.Log($"UNIT {source.UnitData.Name} MOVING FROM TILE {source.Movement.CurrentTile.data.PositionOnGrid} TO TILE {targetTile.data.PositionOnGrid}");
-		RemoveMovementFromUnit(source, (int)targetTile.tentativeCost);
+		source.FightData.RemoveMovement((int)targetTile.tentativeCost);
         MoveUnit(source, targetTile);
     }
 
@@ -92,7 +92,7 @@ public class ActionPerformer
         defender.transform.LookAt(attacker.Movement.CurrentTile.transform, Vector3.up);
         attacker.transform.LookAt(defender.Movement.CurrentTile.transform, Vector3.up);
 
-        defender.FightData.TakeDamage(attacker.FightData.currentAttack);
+        defender.FightData.TakeDamage(attacker.FightData.currentStats.ATTACK, attacker.FightData.currentStats.ATTACK_TYPE);
 
 		PerformAnimation(attacker.gameObject, Animation.Attack, true);
     }
@@ -110,15 +110,9 @@ public class ActionPerformer
 		AnimationPerformer.PerformAnimation(Animation.Idle, target);
 	}
 
-    void RemoveMovementFromUnit(Unit unit, int movementToRemove)
-    {
-        unit.FightData.currentMovement -= movementToRemove;
-        if (unit.FightData.currentMovement < 0) unit.FightData.currentMovement = 0;
-    }
-
     public void StartTakeDamageAnimation()
 	{
-        Animation animation = enemyInQueueForAnimation.FightData.currentHp <= 0 ? Animation.Die : Animation.TakeDamage;
+        Animation animation = enemyInQueueForAnimation.FightData.currentStats.CURRENT_HP <= 0 ? Animation.Die : Animation.TakeDamage;
 
         PerformAnimation(enemyInQueueForAnimation.gameObject, animation, true);
     }

@@ -9,11 +9,8 @@ public class UnitFightData
 {
 	readonly Unit parent;
 	public Sprite sprite;
-	public int baseHp;
-	public int currentHp;
-	public int currentMovement;
-	public int currentAttack;
-	public int currentRange;
+	public readonly BaseStats baseStats;
+	public CurrentStats currentStats;
     public List<Trait> traitList = new();
 
     public UnitFightData(Unit parent)
@@ -22,77 +19,88 @@ public class UnitFightData
 
         Sprite unitSprite = AddressablesManager.LoadResource<Sprite>(AddressablesManager.TypeOfResource.Sprite, parent.UnitData.PortraitName);
 		sprite = unitSprite;
-
+		baseStats = new(parent);
+		currentStats = new();
 		LoadTraits(parent.UnitData.Traits);
 		LoadStats();
 	}
 
-	public void TakeDamage(int damage)
+	public void TakeDamage(int damage, AttackType typeOfDamage)
 	{
+		damage -= ApplyArmor(damage, typeOfDamage);
+
 		if (ContainsTrait(TraitsEnum.Overload, out int levelOverload))
 			damage = Trait.GetOverloadBonusDamageTaken(damage, levelOverload);
 
 		if (damage > 0)
-			currentHp -= damage;
+			currentStats.CURRENT_HP -= damage;
 	}
 
 	public void Heal(int healAmount)
 	{
-		currentHp += healAmount;
-		if(currentHp > baseHp)
-			currentHp = baseHp;
+		currentStats.CURRENT_HP += healAmount;
+		if(currentStats.CURRENT_HP > currentStats.MAXIMUM_HP)
+			currentStats.CURRENT_HP = currentStats.MAXIMUM_HP;
 	}
 
 	public void ResetMovement()
 	{
-		currentMovement = LoadMovement();
+		currentStats.MOVEMENT = LoadMovement();
 	}
 
-    public void StartOfTurnEffects()
+	public void RemoveMovement(int movementToRemove)
+	{
+		currentStats.MOVEMENT -= movementToRemove;
+		if (currentStats.MOVEMENT < 0) currentStats.MOVEMENT = 0;
+	}
+
+	public void StartOfTurnEffects()
     {
 		ResetMovement();
 		if (ContainsTrait(TraitsEnum.Regeneration, out int levelRegen))
-			Heal(Trait.GetRegenerationAmount(baseHp, levelRegen));
+			Heal(Trait.GetRegenerationAmount(currentStats.MAXIMUM_HP, levelRegen));
 	}
 
-    public void LoadTraits(List<string> traitFromJSON)
+    public void LoadTraits(List<Traits> traitFromJSON)
     {
         foreach (var trait in traitFromJSON)
         {
-            TraitsEnum traitEnum = (TraitsEnum)Enum.Parse(typeof(TraitsEnum), trait);
+            TraitsEnum traitEnum = (TraitsEnum)Enum.Parse(typeof(TraitsEnum), trait.Name);
+			string description = string.Empty;
 			switch (traitEnum)
 			{
 				case TraitsEnum.Floaty:
-					traitList.Add(new Trait(traitEnum, "Floaty", "User ignores terrain condition", 1));
+					description = "User ignores terrain condition"; //Implemented
 					break;
 				case TraitsEnum.Healthy:
-					traitList.Add(new Trait(traitEnum, "Healthy", "x2 HP", 1)); //Implemented
+					description = "x2 HP"; //Implemented
 					break;
 				case TraitsEnum.Magic_Defence:
-					traitList.Add(new Trait(traitEnum, "Magic Defence", "Magical damage is halved", 2));
+					description = "Increase Ward by 50%"; //Implemented
 					break;
 				case TraitsEnum.Overload:
-					traitList.Add(new Trait(traitEnum, "Overload", "x3 base Attack but x2 damage received", 1)); //Implemented, need testing
+					description = "x3 base Attack but x2 damage received"; //Implemented
 					break;
 				case TraitsEnum.Regeneration:
-					traitList.Add(new Trait(traitEnum, "Regeneration", "Heals 10% of HP at the start of turn", 3));
+					description = "Heals 10% of HP at the start of turn"; //Implemented
 					break;
 				case TraitsEnum.Second_Wind:
-					traitList.Add(new Trait(traitEnum, "Second Wind", "On death revives with 50% HP", 1));
+					description = "On death revives with 50% HP";
 					break;
 				case TraitsEnum.Speedy:
-					traitList.Add(new Trait(traitEnum, "Speedy", "+2 movement", 1)); //Implemented
+					description = "+2 movement"; //Implemented
 					break;
 				case TraitsEnum.Strong:
-					traitList.Add(new Trait(traitEnum, "Strong", "x2 base attack", 1)); //Implemented
+					description = "x2 base attack"; //Implemented
 					break;
 				case TraitsEnum.Tanky:
-					traitList.Add(new Trait(traitEnum, "Tanky", "+1 attack, +2 hp", 1)); //Implemented
+					description = "+1 attack, +2 hp"; //Implemented
 					break;
 				case TraitsEnum.Wealthy:
-					traitList.Add(new Trait(traitEnum, "Wealthy", "Drops double gold on death", 1));
+					description = "Drops double gold on death";
 					break;
 			}
+			traitList.Add(new Trait(traitEnum, trait.Name, description, trait.Level));
 		}
 	}
 
@@ -110,22 +118,24 @@ public class UnitFightData
 			return false;
 		}
 	}
-
 	void LoadStats()
 	{
-		baseHp = LoadHp();
-		currentHp = baseHp;
-		currentMovement = LoadMovement();
-		currentAttack = LoadAttack();
-		currentRange = parent.UnitData.Stats.Range;
+		currentStats.MAXIMUM_HP = LoadHp();
+		currentStats.CURRENT_HP = currentStats.MAXIMUM_HP;
+		currentStats.MOVEMENT = LoadMovement();
+		currentStats.ATTACK = LoadAttack();
+		currentStats.RANGE = parent.UnitData.Stats.Range;
+		currentStats.ARMOR = LoadArmor();
+		currentStats.WARD = LoadWard();
+		currentStats.ATTACK_TYPE = (AttackType)Enum.Parse(typeof(AttackType), parent.UnitData.AttackType);
 	}
 	int LoadHp()
 	{
-		int hp = parent.UnitData.Stats.Hp;
+		int hp = baseStats.HP;
 		if (ContainsTrait(TraitsEnum.Tanky, out int level))
 			hp = Trait.GetTankyBonusHp(hp, level);
 		if (ContainsTrait(TraitsEnum.Healthy, out int levelHealthy))
-			hp += Trait.GetHealthyBonusHp(parent.UnitData.Stats.Hp, levelHealthy);
+			hp += Trait.GetHealthyBonusHp(baseStats.HP, levelHealthy);
 
 		return hp;
 	}
@@ -139,14 +149,75 @@ public class UnitFightData
 	}
 	int LoadAttack()
 	{
-		int attack = parent.UnitData.Stats.Attack;
+		int attack = baseStats.ATTACK;
 		if (ContainsTrait(TraitsEnum.Strong, out int levelStrong))
-			attack += Trait.GetStrongBonus(parent.UnitData.Stats.Attack, levelStrong);
+			attack += Trait.GetStrongBonus(baseStats.ATTACK, levelStrong);
 		if (ContainsTrait(TraitsEnum.Overload, out int levelOverload))
-			attack += Trait.GetOverloadBonus(parent.UnitData.Stats.Attack, levelOverload);
+			attack += Trait.GetOverloadBonus(baseStats.ATTACK, levelOverload);
 		if (ContainsTrait(TraitsEnum.Tanky, out int levelTanky))
 			attack = Trait.GetTankyBonusAttack(attack, levelTanky);
 
 		return attack;
 	}
+	int LoadArmor()
+	{
+		int armor = baseStats.ARMOR;
+		return armor;
+	}
+	int LoadWard()
+	{
+		int ward = baseStats.WARD;
+		if (ContainsTrait(TraitsEnum.Magic_Defence, out int levelDefence))
+			ward += Trait.GetMagicDefenceBonus(baseStats.WARD, levelDefence);
+
+		return ward;
+	}
+	int ApplyArmor(int damage, AttackType attackType)
+	{
+		switch (attackType)
+		{
+			case AttackType.Physical:
+				damage -= currentStats.ARMOR;
+				break;
+			case AttackType.Elemental:
+				damage -= currentStats.WARD;
+				break;
+			case AttackType.Arcane:
+			default:
+				break;
+		}
+		return damage;
+	}
+}
+
+public class BaseStats
+{
+	public readonly int HP;
+	public readonly int ATTACK;
+	public readonly int ARMOR;
+	public readonly int WARD;
+	public readonly int MOVEMENT;
+	public readonly int RANGE;
+	public readonly AttackType ATTACK_TYPE;
+	public BaseStats(Unit parent)
+    {
+		HP = parent.UnitData.Stats.Hp;
+		ATTACK = parent.UnitData.Stats.Attack;
+		ARMOR = parent.UnitData.Stats.Armor;
+		WARD = parent.UnitData.Stats.Ward;
+		RANGE = parent.UnitData.Stats.Range;
+		ATTACK_TYPE = (AttackType)Enum.Parse(typeof(AttackType), parent.UnitData.AttackType);
+	}
+}
+
+public class CurrentStats
+{
+	public int MAXIMUM_HP;
+	public int CURRENT_HP;
+	public int ATTACK;
+	public int ARMOR;
+	public int WARD;
+	public int MOVEMENT;
+	public int RANGE;
+	public AttackType ATTACK_TYPE;
 }

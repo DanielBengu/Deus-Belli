@@ -141,7 +141,7 @@ public class Pathfinding
     {
         if (neighbourTile && neighbourTile.data.ValidForMovement && !IsTileOccupiedByAnotherFaction(sourceUnit, neighbourTile))
         {
-            float newTentativeCost = source.tentativeCost + neighbourTile.data.MovementCost;
+            float newTentativeCost = source.tentativeCost + GetMovementCost(neighbourTile, sourceUnit);
             if (newTentativeCost < neighbourTile.tentativeCost)
                 neighbourTile.tentativeCost = newTentativeCost;
         }
@@ -196,9 +196,8 @@ public class Pathfinding
 
     List<Tile> GetPath(Unit startingUnit)
     {
-		return mapTiles.Where(t => t.Value.tentativeCost <= startingUnit.FightData.currentMovement && !EnemyIsBlockingTile(startingUnit, t.Value)).Select(t => t.Value).ToList();
+		return mapTiles.Where(t => t.Value.tentativeCost <= startingUnit.FightData.currentStats.MOVEMENT && !EnemyIsBlockingTile(startingUnit, t.Value)).Select(t => t.Value).ToList();
 	}
-
     bool EnemyIsBlockingTile(Unit source, Tile target) {
         return (target.unitOnTile && target.unitOnTile.UnitData.Faction != source.UnitData.Faction);
     }
@@ -217,29 +216,14 @@ public class Pathfinding
 		startingUnit.Movement.CurrentTile.tentativeCost = 0;
 
 		bool pathFound = false;
-		int lowestTileIndex = 0;
 		Tile tileToCalculate;
-
 		int failSafe = 0;
 		while (!pathFound && failSafe < FAIL_SAFE_MAX)
 		{
-			List<Tile> unvisitedTiles = mapTiles.Select(t => t.Value).Where(t => !t.IsVisited).ToList();
+            int lowestTileIndex = GetNextUnvisitedTileIndex(out bool calculatedEveryCost);
 
-			if (unvisitedTiles.Count == 0)
-			{
-				pathFound = true;
-				Debug.Log("CALCULATED EVERY TILE COST");
-				break;
-			}
-
-			lowestTileIndex = mapTiles.Select(t => t.Value).ToList().Find(t => t == unvisitedTiles.Min()).data.PositionOnGrid;
-
-			//true when we calculated all possible movements for this unit, only unreachable locations remain
-			if (lowestTileIndex == OUT_OF_BOUND_VALUE)
-			{
-				pathFound = true;
-				break;
-			}
+            if (calculatedEveryCost || lowestTileIndex == OUT_OF_BOUND_VALUE)
+                break;
 
 			tileToCalculate = mapTiles[lowestTileIndex];
 			if (tileToCalculate.tentativeCost < maxMovementCost)
@@ -251,6 +235,29 @@ public class Pathfinding
 
 		if (failSafe >= FAIL_SAFE_MAX)
 			Debug.LogError("FAILSAFE TRIGGERED!");
+	}
+
+    int GetNextUnvisitedTileIndex(out bool calculatedEveryCost)
+    {
+		List<Tile> unvisitedTiles = mapTiles.Select(t => t.Value).Where(t => !t.IsVisited).ToList(); //Could be optimized by using a fixed list and removing each loop instead of selecting from the full list each time
+        calculatedEveryCost = false;
+
+		if (unvisitedTiles.Count == 0)
+		{
+			calculatedEveryCost = true;
+			Debug.Log("CALCULATED EVERY TILE COST");
+            return -1;
+		}
+
+		return mapTiles.Select(t => t.Value).ToList().Find(t => t == unvisitedTiles.Min()).data.PositionOnGrid;
+	}
+
+    int GetMovementCost(Tile neighbourTile, Unit unit)
+    {
+		if (unit.FightData.ContainsTrait(Unit.TraitsEnum.Floaty, out _))
+            return 1;
+
+		return neighbourTile.data.MovementCost;
 	}
 
     public struct PossibleAttack

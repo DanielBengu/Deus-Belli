@@ -23,10 +23,13 @@ public class Unit : MonoBehaviour
 	{
         UnitData.Traits = unit.Traits;
 		UnitData.Stats.Hp = unit.Stats.Hp;
+		UnitData.Stats.Armor = unit.Stats.Armor;
+		UnitData.Stats.Ward = unit.Stats.Ward;
 		UnitData.Stats.Movement = unit.Stats.Movement;
 		UnitData.Stats.Attack = unit.Stats.Attack;
-		UnitData.Faction = unit.Faction;
 		UnitData.Stats.Range = unit.Stats.Range;
+		UnitData.Faction = unit.Faction;
+		UnitData.AttackType = unit.AttackType;
 	}
 
     public void OnMouseDown()
@@ -109,6 +112,16 @@ public class Unit : MonoBehaviour
 		}
 		#endregion
 
+		#region Ward Traits
+
+		public static int GetMagicDefenceBonus(int baseWard, int level)
+		{
+			int DEFENCE_BONUS_VALUE = 20 + (10 * level); //percentage of hp restored
+			return baseWard * DEFENCE_BONUS_VALUE / 100;
+		}
+
+		#endregion
+
 		public static int GetOverloadBonusDamageTaken(int damage, int level)
 		{
 			int OVERLOAD_BONUS_VALUE = level + 1;
@@ -120,5 +133,12 @@ public class Unit : MonoBehaviour
 			int REGENERATION_BONUS_VALUE = 5 * level; //percentage of hp restored
 			return baseHp * REGENERATION_BONUS_VALUE / 100;
 		}
+	}
+
+	public enum AttackType
+	{
+		Physical,
+		Elemental,
+		Arcane, //Special attack type, value isn't affected by bonus or malus
 	}
 }

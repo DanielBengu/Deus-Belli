@@ -73,19 +73,24 @@ public class Level
 
 	public void SetupEnemy(UnitData unit, int enemySeed)
 	{
-		SetRandomTraits(unit, enemySeed);
+		if(unit.RandomizedTraits)
+			SetRandomTraits(unit, enemySeed);
 	}
 
 	public void SetRandomTraits(UnitData unit, int enemySeed)
 	{
-		List<string> unitTraits = new();
+		List<Traits> unitTraits = new();
 		int seed = (enemySeed * unit.Stats.Attack / unit.Stats.Hp * unit.Stats.Range + unit.Stats.Movement);
 		int numOfTraits = RandomManager.GetRandomValue(seed, 0, 6);
 		for (int i = 0; i < numOfTraits; i++)
 		{
 			int traitSeed = RandomManager.GetRandomValue(seed * (i + 1), 0, 10000000);
 			TraitsEnum trait = (TraitsEnum)RandomManager.GetRandomValue(traitSeed, 0, Enum.GetNames(typeof(TraitsEnum)).Length);
-			unitTraits.Add(trait.ToString());
+			int traitLevel = RandomManager.GetRandomValue(traitSeed, 0, 3);
+			unitTraits.Add(new(){
+				Name = trait.ToString(),
+				Level = traitLevel
+			});
 		}
 		unit.Traits = unitTraits;
 	}

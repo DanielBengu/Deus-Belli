@@ -9,16 +9,25 @@
           "ModelName": "Bandit",
           "PortraitName": "Genghis_Khan",
           "Faction": 1,
+          "AttackType": "Physical",
           "Stats": {
             "Hp": 10,
+            "Armor": 2,
+            "Ward": 2,
             "Movement": 4,
             "Attack": 3,
             "Range": 1
           },
           "RandomizedTraits": false,
           "Traits": [
-            "Floaty",
-            "Second_Wind"
+            {
+              "Name": "Floaty",
+              "Level": 1
+            },
+            {
+              "Name": "Magic_Defence",
+              "Level": 3
+            }
           ]
         },
         {
@@ -26,8 +35,11 @@
           "ModelName": "Bandit",
           "PortraitName": "Archer",
           "Faction": 1,
+          "AttackType": "Arcane",
           "Stats": {
             "Hp": 6,
+            "Armor": 2,
+            "Ward": 1,
             "Movement": 3,
             "Attack": 2,
             "Range": 2
@@ -41,8 +53,11 @@
           "ModelName": "Skeleton",
           "PortraitName": "Warrior",
           "Faction": 2,
+          "AttackType": "Elemental",
           "Stats": {
             "Hp": 4,
+            "Armor": 1,
+            "Ward": 2,
             "Movement": 2,
             "Attack": 4,
             "Range": 1
@@ -55,111 +70,5 @@
     }
   ],
   "SpecialEncounterList": [
-    {
-      "Name": "Bandit_Ambush_GenghisKhan",
-      "Map": "Road_Ambush_GenghisKhan",
-      "EnemyList": [
-        {
-          "Name": "Genghis Khan",
-          "ModelName": "Bandit",
-          "PortraitName": "Archer",
-          "Faction": 0,
-          "Stats": {
-            "Hp": 10,
-            "Movement": 4,
-            "Attack": 3,
-            "Range": 1
-          },
-          "RandomizedTraits": false,
-          "Traits": [
-            "Floaty",
-            "Second_Wind"
-          ]
-        },
-        {
-          "Name": "Generic Bandit 1",
-          "ModelName": "Bandit",
-          "PortraitName": "Archer",
-          "Faction": 0,
-          "Stats": {
-            "Hp": 6,
-            "Movement": 3,
-            "Attack": 2,
-            "Range": 2
-          },
-          "RandomizedTraits": true,
-          "Traits": [
-          ]
-        },
-        {
-          "Name": "Generic Bandit 2",
-          "ModelName": "Bandit",
-          "PortraitName": "Archer",
-          "Faction": 0,
-          "Stats": {
-            "Hp": 4,
-            "Movement": 2,
-            "Attack": 4,
-            "Range": 1
-          },
-          "RandomizedTraits": true,
-          "Traits": [
-          ]
-        }
-      ]
-    },
-    {
-      "Name": "Bandit_Ambush_Lisa",
-      "Map": "Road_Ambush_Lisa",
-      "EnemyList": [
-        {
-          "Name": "Lisa",
-          "ModelName": "Lisa",
-          "PortraitName": "Lisa",
-          "Faction": 1,
-          "Stats": {
-            "Hp": 10,
-            "Movement": 4,
-            "Attack": 3,
-            "Range": 1
-          },
-          "RandomizedTraits": false,
-          "Traits": [
-            "Floaty",
-            "Second_Wind"
-          ]
-        },
-        {
-          "Name": "Generic Bandit 1",
-          "ModelName": "Bandit",
-          "PortraitName": "Archer",
-          "Faction": 1,
-          "Stats": {
-            "Hp": 6,
-            "Movement": 3,
-            "Attack": 2,
-            "Range": 2
-          },
-          "RandomizedTraits": true,
-          "Traits": [
-          ]
-        },
-        {
-          "Name": "Generic Bandit 2",
-          "ModelName": "Bandit",
-          "PortraitName": "Archer",
-          "Faction": 1,
-          "Stats": {
-            "Hp": 4,
-            "Movement": 2,
-            "Attack": 4,
-            "Range": 1
-          },
-          "RandomizedTraits": true,
-          "Traits": [
-          ]
-        }
-      ]
-    }
   ]
 }

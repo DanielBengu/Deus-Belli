@@ -43,8 +43,8 @@ public class UnitMovement
     //This method returns the current movement for players units and the maximum movement for units of other factions, for movement previsions
     public int GetUnitsMovementForPathfindingCalculations()
     {
-        if(Parent.UnitData.Faction == FightManager.USER_FACTION)
-            return Parent.FightData.currentMovement;
+        if (Parent.UnitData.Faction == FightManager.USER_FACTION)
+            return Parent.FightData.currentStats.MOVEMENT;
 
         return Parent.UnitData.Stats.Movement;
     }

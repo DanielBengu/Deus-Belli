@@ -149,7 +149,7 @@ public class UIManager : MonoBehaviour
 			Transform traitBox = traitParent.GetChild(i);
 			if (unit.UnitData.Traits.Count > i)
 			{
-				traitBox.GetComponent<Image>().sprite = AddressablesManager.LoadResource<Sprite>(AddressablesManager.TypeOfResource.Sprite, unit.UnitData.Traits[i]);
+				traitBox.GetComponent<Image>().sprite = AddressablesManager.LoadResource<Sprite>(AddressablesManager.TypeOfResource.Sprite, unit.UnitData.Traits[i].Name);
 				traitBox.gameObject.SetActive(true);
 				TooltipManager tooltipData = traitBox.GetComponentInChildren<TooltipManager>();
                 tooltipData.trait = unit.FightData.traitList[i];
@@ -168,20 +168,28 @@ public class UIManager : MonoBehaviour
 			switch (stat.name)
 			{
 				case "HP":
-                    stat.text = LoadStatText(unit.FightData.currentHp, unit.FightData.baseHp);
-                    stat.color = GetColor(unit.FightData.currentHp, unit.UnitData.Stats.Hp);
+                    stat.text = LoadStatText(unit.FightData.currentStats.CURRENT_HP, unit.FightData.currentStats.MAXIMUM_HP);
+                    stat.color = GetColor(unit.FightData.currentStats.CURRENT_HP, unit.FightData.baseStats.HP);
 					break;
 				case "Movement":
-					stat.text = LoadStatText(unit.FightData.currentMovement);
-					stat.color = GetColor(unit.FightData.currentMovement, unit.UnitData.Stats.Movement);
+					stat.text = LoadStatText(unit.FightData.currentStats.MOVEMENT);
+					stat.color = GetColor(unit.FightData.currentStats.MOVEMENT, unit.UnitData.Stats.Movement);
 					break;
 				case "Attack":
-					stat.text = LoadStatText(unit.FightData.currentAttack);
-					stat.color = GetColor(unit.FightData.currentAttack, unit.UnitData.Stats.Attack);
+					stat.text = LoadStatText(unit.FightData.currentStats.ATTACK);
+					stat.color = GetColor(unit.FightData.currentStats.ATTACK, unit.FightData.baseStats.ATTACK);
 					break;
 				case "Range":
-                    stat.text = LoadStatText(unit.FightData.currentRange);
-                    stat.color = GetColor(unit.FightData.currentRange, unit.UnitData.Stats.Range);
+                    stat.text = LoadStatText(unit.FightData.currentStats.RANGE);
+                    stat.color = GetColor(unit.FightData.currentStats.RANGE, unit.UnitData.Stats.Range);
+					break;
+                case "Armor":
+					stat.text = LoadStatText(unit.FightData.currentStats.ARMOR);
+					stat.color = GetColor(unit.FightData.currentStats.ARMOR, unit.FightData.baseStats.ARMOR);
+					break;
+                case "Ward":
+					stat.text = LoadStatText(unit.FightData.currentStats.WARD);
+					stat.color = GetColor(unit.FightData.currentStats.WARD, unit.FightData.baseStats.WARD);
 					break;
 				default:
 					break;
