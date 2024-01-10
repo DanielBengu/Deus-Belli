@@ -190,7 +190,7 @@ public class FightManager : MonoBehaviour
         if (!isFightWon) return;
 
 		isGameOver = true;
-		int goldGenerated = GenerateAndAddGold();
+        int goldGenerated = level.goldReward;
 		generalManager.SaveGameProgress(GeneralManager.GameStatus.Won);
 		structureManager.GetGameScreen(GameScreens.FightVictoryScreen, goldGenerated);
 	}
@@ -303,11 +303,6 @@ public class FightManager : MonoBehaviour
     public List<Tile> GetPossibleMovements(Unit unit)
     {
         return structureManager.GeneratePossibleMovementForUnit(unit, false);
-    }
-
-    public void ApplyDamage()
-    {
-
     }
 
 	#region Private Methods

@@ -96,6 +96,7 @@
     <Compile Include="Assets\Polyart\PolyartStudio\SharedResources\CritiasFoliage\Code\FoliagePainterEditTime.cs" />
     <Compile Include="Assets\RFA\Common\Scripts\Movement.cs" />
     <Compile Include="Assets\Resources_moved\Scripts\Fight\Tile.cs" />
+    <Compile Include="Assets\Resources_moved\Scripts\Fight\Classes\Unit\Trait.cs" />
     <Compile Include="Assets\Polyart\PolyartStudio\Scripts\Flythrough.cs" />
     <Compile Include="Assets\Resources_moved\Scripts\General\Manager\UIManager.cs" />
     <Compile Include="Assets\Scripts\Steamworks.NET\SteamManager.cs" />

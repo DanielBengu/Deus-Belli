@@ -114,6 +114,6 @@ public class ActionPerformer
 	{
         Animation animation = enemyInQueueForAnimation.FightData.currentStats.CURRENT_HP <= 0 ? Animation.Die : Animation.TakeDamage;
 
-        PerformAnimation(enemyInQueueForAnimation.gameObject, animation, true);
+		PerformAnimation(enemyInQueueForAnimation.gameObject, animation, true);
     }
 }

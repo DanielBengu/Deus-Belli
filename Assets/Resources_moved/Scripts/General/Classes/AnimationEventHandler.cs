@@ -19,11 +19,6 @@ public class AnimationEventHandler : MonoBehaviour
 		fm.MakeUnitTakeDamage();
 	}
 
-	public void TakeDamage()
-	{
-		fm.ApplyDamage();
-	}
-
 	public void FinishTakingDamage()
 	{
 		FinishAnimation();

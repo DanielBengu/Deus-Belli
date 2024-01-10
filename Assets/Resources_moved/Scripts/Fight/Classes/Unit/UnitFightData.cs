@@ -30,10 +30,14 @@ public class UnitFightData
 		damage -= ApplyArmor(damage, typeOfDamage);
 
 		if (ContainsTrait(TraitsEnum.Overload, out int levelOverload))
-			damage = Trait.GetOverloadBonusDamageTaken(damage, levelOverload);
+			damage = Trait.GetBonus(TraitsEnum.Overload, levelOverload, StatsType.HP, damage);
 
 		if (damage > 0)
 			currentStats.CURRENT_HP -= damage;
+
+		if (ContainsTrait(TraitsEnum.Second_Wind, out int levelSecondWind))
+			currentStats.CURRENT_HP = Trait.GetBonus(TraitsEnum.Second_Wind, levelSecondWind, StatsType.HP, baseStats.HP);
+
 	}
 
 	public void Heal(int healAmount)
@@ -58,7 +62,7 @@ public class UnitFightData
     {
 		ResetMovement();
 		if (ContainsTrait(TraitsEnum.Regeneration, out int levelRegen))
-			Heal(Trait.GetRegenerationAmount(currentStats.MAXIMUM_HP, levelRegen));
+			Heal(Trait.GetBonus(TraitsEnum.Regeneration, levelRegen, StatsType.HP, baseStats.HP));
 	}
 
     public void LoadTraits(List<Traits> traitFromJSON)
@@ -66,41 +70,7 @@ public class UnitFightData
         foreach (var trait in traitFromJSON)
         {
             TraitsEnum traitEnum = (TraitsEnum)Enum.Parse(typeof(TraitsEnum), trait.Name);
-			string description = string.Empty;
-			switch (traitEnum)
-			{
-				case TraitsEnum.Floaty:
-					description = "User ignores terrain condition"; //Implemented
-					break;
-				case TraitsEnum.Healthy:
-					description = "x2 HP"; //Implemented
-					break;
-				case TraitsEnum.Magic_Defence:
-					description = "Increase Ward by 50%"; //Implemented
-					break;
-				case TraitsEnum.Overload:
-					description = "x3 base Attack but x2 damage received"; //Implemented
-					break;
-				case TraitsEnum.Regeneration:
-					description = "Heals 10% of HP at the start of turn"; //Implemented
-					break;
-				case TraitsEnum.Second_Wind:
-					description = "On death revives with 50% HP";
-					break;
-				case TraitsEnum.Speedy:
-					description = "+2 movement"; //Implemented
-					break;
-				case TraitsEnum.Strong:
-					description = "x2 base attack"; //Implemented
-					break;
-				case TraitsEnum.Tanky:
-					description = "+1 attack, +2 hp"; //Implemented
-					break;
-				case TraitsEnum.Wealthy:
-					description = "Drops double gold on death";
-					break;
-			}
-			traitList.Add(new Trait(traitEnum, trait.Name, description, trait.Level));
+			traitList.Add(new Trait(traitEnum, trait.Name, trait.Level));
 		}
 	}
 
@@ -133,17 +103,18 @@ public class UnitFightData
 	{
 		int hp = baseStats.HP;
 		if (ContainsTrait(TraitsEnum.Tanky, out int level))
-			hp = Trait.GetTankyBonusHp(hp, level);
+			hp += Trait.GetBonus(TraitsEnum.Tanky, level, StatsType.HP);
 		if (ContainsTrait(TraitsEnum.Healthy, out int levelHealthy))
-			hp += Trait.GetHealthyBonusHp(baseStats.HP, levelHealthy);
+			hp += Trait.GetBonus(TraitsEnum.Healthy, levelHealthy, StatsType.HP, baseStats.HP);
 
 		return hp;
 	}
 	int LoadMovement()
 	{
 		int movement = parent.UnitData.Stats.Movement;
+
 		if (ContainsTrait(TraitsEnum.Speedy, out int level))
-			movement = Trait.GetSpeedyBonus(movement, level);
+			movement += Trait.GetBonus(TraitsEnum.Speedy, level);
 
 		return movement;
 	}
@@ -151,11 +122,11 @@ public class UnitFightData
 	{
 		int attack = baseStats.ATTACK;
 		if (ContainsTrait(TraitsEnum.Strong, out int levelStrong))
-			attack += Trait.GetStrongBonus(baseStats.ATTACK, levelStrong);
+			attack += Trait.GetBonus(TraitsEnum.Strong, levelStrong, StatsType.Attack, baseStats.ATTACK);
 		if (ContainsTrait(TraitsEnum.Overload, out int levelOverload))
-			attack += Trait.GetOverloadBonus(baseStats.ATTACK, levelOverload);
+			attack += Trait.GetBonus(TraitsEnum.Overload, levelOverload, StatsType.Attack, baseStats.ATTACK);
 		if (ContainsTrait(TraitsEnum.Tanky, out int levelTanky))
-			attack = Trait.GetTankyBonusAttack(attack, levelTanky);
+			attack += Trait.GetBonus(TraitsEnum.Tanky, levelTanky, StatsType.Attack);
 
 		return attack;
 	}
@@ -168,7 +139,7 @@ public class UnitFightData
 	{
 		int ward = baseStats.WARD;
 		if (ContainsTrait(TraitsEnum.Magic_Defence, out int levelDefence))
-			ward += Trait.GetMagicDefenceBonus(baseStats.WARD, levelDefence);
+			ward += Trait.GetBonus(TraitsEnum.Magic_Defence, levelDefence, StatsType.Ward, baseStats.WARD);
 
 		return ward;
 	}
@@ -188,6 +159,17 @@ public class UnitFightData
 		}
 		return damage;
 	}
+
+	public string GetStatText(int baseStat, int currentStat)
+	{
+		int difference = baseStat - currentStat;
+		if (difference > 0)
+			return $"{baseStat} - {difference}";
+		if(difference < 0)
+			return $"{baseStat} + {Math.Abs(difference)}";
+
+		return baseStat.ToString();
+	}
 }
 
 public class BaseStats
@@ -206,6 +188,7 @@ public class BaseStats
 		ARMOR = parent.UnitData.Stats.Armor;
 		WARD = parent.UnitData.Stats.Ward;
 		RANGE = parent.UnitData.Stats.Range;
+		MOVEMENT = parent.UnitData.Stats.Movement;
 		ATTACK_TYPE = (AttackType)Enum.Parse(typeof(AttackType), parent.UnitData.AttackType);
 	}
 }

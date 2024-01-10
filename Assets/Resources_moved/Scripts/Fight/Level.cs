@@ -2,10 +2,9 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
-using static Unit;
-
 public class Level
 {
+	const int BASE_ENEMY_GOLD_REWARD = 100;
 	public TileMapData mapData;
 
 	public Vector3 spawnPosition;
@@ -16,6 +15,8 @@ public class Level
     //Key represents the assigned tile number of the unit
     public Dictionary<int, UnitData> enemyList;
 
+	public int goldReward;
+
 	public int seed;
 
     public void StartLevel(int seed)
@@ -24,6 +25,7 @@ public class Level
 		mapData = FileManager.GetRandomGenericMap(seed);
 		spawnPosition = new(250, 170, 1800);
         SetupEnemies();
+		SetupLevelRewards();
 	}
 
 	// if isEdit is true then the map generated will be a basic map with only grass
@@ -71,6 +73,19 @@ public class Level
 		enemyList = result;
 	}
 
+	void SetupLevelRewards()
+	{
+		foreach (var enemy in enemyList.Values)
+		{
+			int baseGold = BASE_ENEMY_GOLD_REWARD;
+
+			Traits wealthyTrait = enemy.Traits.Find(t => t.Name == TraitsEnum.Wealthy.ToString());
+
+			if (wealthyTrait != null)
+				baseGold += Trait.GetBonus(TraitsEnum.Wealthy, wealthyTrait.Level);
+		}
+	}
+
 	public void SetupEnemy(UnitData unit, int enemySeed)
 	{
 		if(unit.RandomizedTraits)
@@ -86,7 +101,7 @@ public class Level
 		{
 			int traitSeed = RandomManager.GetRandomValue(seed * (i + 1), 0, 10000000);
 			TraitsEnum trait = (TraitsEnum)RandomManager.GetRandomValue(traitSeed, 0, Enum.GetNames(typeof(TraitsEnum)).Length);
-			int traitLevel = RandomManager.GetRandomValue(traitSeed, 0, 3);
+			int traitLevel = RandomManager.GetRandomValue(traitSeed, 1, 4);
 			unitTraits.Add(new(){
 				Name = trait.ToString(),
 				Level = traitLevel

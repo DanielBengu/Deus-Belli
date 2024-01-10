@@ -1,6 +1,7 @@
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
+using System;
 public class UIManager : MonoBehaviour
 {
     const string fightVictoryScreenPrefabName = "Fight Victory";
@@ -149,10 +150,11 @@ public class UIManager : MonoBehaviour
 			Transform traitBox = traitParent.GetChild(i);
 			if (unit.UnitData.Traits.Count > i)
 			{
-				traitBox.GetComponent<Image>().sprite = AddressablesManager.LoadResource<Sprite>(AddressablesManager.TypeOfResource.Sprite, unit.UnitData.Traits[i].Name);
+                Traits currentTrait = unit.UnitData.Traits[i];
+                TraitsEnum traitsEnum = (TraitsEnum)Enum.Parse(typeof(TraitsEnum), currentTrait.Name);
+				traitBox.GetComponent<Image>().sprite = AddressablesManager.LoadResource<Sprite>(AddressablesManager.TypeOfResource.Sprite, currentTrait.Name);
 				traitBox.gameObject.SetActive(true);
-				TooltipManager tooltipData = traitBox.GetComponentInChildren<TooltipManager>();
-                tooltipData.trait = unit.FightData.traitList[i];
+                SetupTooltip(traitBox.gameObject, TraitText.GetTraitText(traitsEnum, currentTrait.Level));
 			}
 			else
 				traitBox.gameObject.SetActive(false);
@@ -168,33 +170,41 @@ public class UIManager : MonoBehaviour
 			switch (stat.name)
 			{
 				case "HP":
-                    stat.text = LoadStatText(unit.FightData.currentStats.CURRENT_HP, unit.FightData.currentStats.MAXIMUM_HP);
-                    stat.color = GetColor(unit.FightData.currentStats.CURRENT_HP, unit.FightData.baseStats.HP);
+                    SetupStat(stat, unit, unit.FightData.baseStats.HP, unit.FightData.currentStats.CURRENT_HP, unit.FightData.currentStats.MAXIMUM_HP);
 					break;
 				case "Movement":
-					stat.text = LoadStatText(unit.FightData.currentStats.MOVEMENT);
-					stat.color = GetColor(unit.FightData.currentStats.MOVEMENT, unit.UnitData.Stats.Movement);
+                    SetupStat(stat, unit, unit.FightData.baseStats.MOVEMENT, unit.FightData.currentStats.MOVEMENT);
 					break;
 				case "Attack":
-					stat.text = LoadStatText(unit.FightData.currentStats.ATTACK);
-					stat.color = GetColor(unit.FightData.currentStats.ATTACK, unit.FightData.baseStats.ATTACK);
+					SetupStat(stat, unit, unit.FightData.baseStats.ATTACK, unit.FightData.currentStats.ATTACK);
 					break;
 				case "Range":
-                    stat.text = LoadStatText(unit.FightData.currentStats.RANGE);
-                    stat.color = GetColor(unit.FightData.currentStats.RANGE, unit.UnitData.Stats.Range);
+					SetupStat(stat, unit, unit.FightData.baseStats.RANGE, unit.FightData.currentStats.RANGE);
 					break;
                 case "Armor":
-					stat.text = LoadStatText(unit.FightData.currentStats.ARMOR);
-					stat.color = GetColor(unit.FightData.currentStats.ARMOR, unit.FightData.baseStats.ARMOR);
+					SetupStat(stat, unit, unit.FightData.baseStats.ARMOR, unit.FightData.currentStats.ARMOR);
 					break;
                 case "Ward":
-					stat.text = LoadStatText(unit.FightData.currentStats.WARD);
-					stat.color = GetColor(unit.FightData.currentStats.WARD, unit.FightData.baseStats.WARD);
+					SetupStat(stat, unit, unit.FightData.baseStats.WARD, unit.FightData.currentStats.WARD);
 					break;
 				default:
 					break;
 			}
 		}
+	}
+
+    void SetupStat(TextMeshProUGUI stat, Unit unit, int baseStat, int currentStat, int currentMaximum = -1)
+    {
+		stat.text = LoadStatText(currentStat, currentMaximum);
+		stat.color = GetColor(currentStat, baseStat);
+        string tooltipText = unit.FightData.GetStatText(baseStat, currentStat);
+		SetupTooltip(stat.gameObject, tooltipText);
+	}
+
+    void SetupTooltip(GameObject item, string tooltipText)
+    {
+		TooltipManager tooltipData = item.GetComponentInChildren<TooltipManager>();
+        tooltipData.text = tooltipText;
 	}
 
     string LoadStatText(int currentValue, int maxValue = -1)
