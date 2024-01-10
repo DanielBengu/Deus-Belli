@@ -72,16 +72,16 @@ public static class TraitText
 	{
 		return traitEnum switch
 		{
-			TraitsEnum.Floaty => $"User ignores terrain condition",
-			TraitsEnum.Healthy => $"Base HP x{Trait.GetBonus(traitEnum, level + 1)}",
-			TraitsEnum.Magic_Defence => $"Increase Ward by {Trait.GetBonus(traitEnum, level, StatsType.Ward, 100)}%",
-			TraitsEnum.Overload => $"x{Trait.GetBonus(traitEnum, level, StatsType.Attack)} base Attack but x{Trait.GetBonus(traitEnum, level, StatsType.HP)} damage received",
-			TraitsEnum.Regeneration => $"Heals {Trait.GetBonus(traitEnum, level, StatsType.HP, 100)}% of HP at the start of turn",
-			TraitsEnum.Second_Wind => $"On death revives with {Trait.GetBonus(traitEnum, level, StatsType.HP, 100)}% HP",
-			TraitsEnum.Speedy => $"+{Trait.GetBonus(traitEnum, level)} movement",
-			TraitsEnum.Strong => $"Base Attack increase by x{Trait.GetBonus(traitEnum, level + 1)}",
-			TraitsEnum.Tanky => $"+{Trait.GetBonus(traitEnum, level, StatsType.Attack)} Attack and +{Trait.GetBonus(traitEnum, level, StatsType.HP)} HP",
-			TraitsEnum.Wealthy => $"Drops another {Trait.GetBonus(traitEnum, level)}g on death",
+			TraitsEnum.Floaty => $"{traitEnum} lv.{level}\nUser ignores terrain condition",
+			TraitsEnum.Healthy => $"{traitEnum} lv.{level}\nBase HP x{Trait.GetBonus(traitEnum, level + 1)}",
+			TraitsEnum.Magic_Defence => $"{traitEnum} lv.{level}\nIncrease Ward by {Trait.GetBonus(traitEnum, level, StatsType.Ward, 100)}%",
+			TraitsEnum.Overload => $"{traitEnum} lv.{level}\nx{Trait.GetBonus(traitEnum, level, StatsType.Attack)} base Attack but x{Trait.GetBonus(traitEnum, level, StatsType.HP)} damage received",
+			TraitsEnum.Regeneration => $"{traitEnum} lv.{level}\nHeals {Trait.GetBonus(traitEnum, level, StatsType.HP, 100)}% of HP at the start of turn",
+			TraitsEnum.Second_Wind => $"{traitEnum} lv.{level}\nOn death revives with {Trait.GetBonus(traitEnum, level, StatsType.HP, 100)}% HP",
+			TraitsEnum.Speedy => $"{traitEnum} lv.{level}\n+{Trait.GetBonus(traitEnum, level)} movement",
+			TraitsEnum.Strong => $"{traitEnum} lv.{level}\nBase Attack increase by x{Trait.GetBonus(traitEnum, level + 1)}",
+			TraitsEnum.Tanky => $"{traitEnum} lv.{level}\n+{Trait.GetBonus(traitEnum, level, StatsType.Attack)} Attack and +{Trait.GetBonus(traitEnum, level, StatsType.HP)} HP",
+			TraitsEnum.Wealthy => $"{traitEnum} lv.{level}\nDrops another {Trait.GetBonus(traitEnum, level)}g on death",
 			_ => string.Empty,
 		};
 	}

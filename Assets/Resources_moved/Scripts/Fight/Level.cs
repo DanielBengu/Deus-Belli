@@ -15,7 +15,7 @@ public class Level
     //Key represents the assigned tile number of the unit
     public Dictionary<int, UnitData> enemyList;
 
-	public int goldReward;
+	public int goldReward = 0;
 
 	public int seed;
 
@@ -77,12 +77,14 @@ public class Level
 	{
 		foreach (var enemy in enemyList.Values)
 		{
-			int baseGold = BASE_ENEMY_GOLD_REWARD;
+			int goldDroppedByUnit = BASE_ENEMY_GOLD_REWARD;
 
 			Traits wealthyTrait = enemy.Traits.Find(t => t.Name == TraitsEnum.Wealthy.ToString());
 
 			if (wealthyTrait != null)
-				baseGold += Trait.GetBonus(TraitsEnum.Wealthy, wealthyTrait.Level);
+				goldDroppedByUnit += Trait.GetBonus(TraitsEnum.Wealthy, wealthyTrait.Level);
+
+			goldReward += goldDroppedByUnit;
 		}
 	}
 
