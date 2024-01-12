@@ -12,6 +12,7 @@ public class TooltipManager : MonoBehaviour, IPointerEnterHandler, IPointerExitH
 	// Calculate an offset to position the tooltip above the cursor
 	Vector3 offset = new(0f, 105f, 0f);
 
+	public string header;
 	public string text;
 
 	public void OnPointerEnter(PointerEventData eventData)
@@ -20,7 +21,8 @@ public class TooltipManager : MonoBehaviour, IPointerEnterHandler, IPointerExitH
 		currentTooltip = Instantiate(tooltipPrefab, Input.mousePosition + offset, tooltipParent.transform.rotation, tooltipParent);
 
 		currentTooltip.transform.position = Input.mousePosition + offset;
-		currentTooltip.GetComponentInChildren<TextMeshProUGUI>().text = text;
+		currentTooltip.transform.GetChild(1).GetComponent<TextMeshProUGUI>().text = header;
+		currentTooltip.transform.GetChild(2).GetComponent<TextMeshProUGUI>().text = text;
 	}
 
 	void Update()

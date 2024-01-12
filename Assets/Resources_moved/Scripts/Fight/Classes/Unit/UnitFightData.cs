@@ -27,17 +27,13 @@ public class UnitFightData
 
 	public void TakeDamage(int damage, AttackType typeOfDamage)
 	{
-		damage -= ApplyArmor(damage, typeOfDamage);
-
-		if (ContainsTrait(TraitsEnum.Overload, out int levelOverload))
-			damage = Trait.GetBonus(TraitsEnum.Overload, levelOverload, StatsType.HP, damage);
+		damage = GetUpdatedDamage(damage, typeOfDamage);
 
 		if (damage > 0)
 			currentStats.CURRENT_HP -= damage;
 
 		if (ContainsTrait(TraitsEnum.Second_Wind, out int levelSecondWind))
 			currentStats.CURRENT_HP = Trait.GetBonus(TraitsEnum.Second_Wind, levelSecondWind, StatsType.HP, baseStats.HP);
-
 	}
 
 	public void Heal(int healAmount)
@@ -88,6 +84,15 @@ public class UnitFightData
 			return false;
 		}
 	}
+	int GetUpdatedDamage(int incomingDamage, AttackType attackType)
+	{
+		if (ContainsTrait(TraitsEnum.Overload, out int levelOverload))
+			incomingDamage = Trait.GetBonus(TraitsEnum.Overload, levelOverload, StatsType.HP, incomingDamage);
+
+		incomingDamage = ApplyArmor(incomingDamage, attackType);
+
+		return incomingDamage;
+	}
 	void LoadStats()
 	{
 		currentStats.MAXIMUM_HP = LoadHp();
@@ -125,14 +130,16 @@ public class UnitFightData
 			attack += Trait.GetBonus(TraitsEnum.Strong, levelStrong, StatsType.Attack, baseStats.ATTACK);
 		if (ContainsTrait(TraitsEnum.Overload, out int levelOverload))
 			attack += Trait.GetBonus(TraitsEnum.Overload, levelOverload, StatsType.Attack, baseStats.ATTACK);
-		if (ContainsTrait(TraitsEnum.Tanky, out int levelTanky))
-			attack += Trait.GetBonus(TraitsEnum.Tanky, levelTanky, StatsType.Attack);
 
 		return attack;
 	}
 	int LoadArmor()
 	{
 		int armor = baseStats.ARMOR;
+
+		if (ContainsTrait(TraitsEnum.Tanky, out int levelTanky))
+			armor += Trait.GetBonus(TraitsEnum.Tanky, levelTanky, StatsType.Armor);
+
 		return armor;
 	}
 	int LoadWard()
@@ -162,13 +169,14 @@ public class UnitFightData
 
 	public string GetStatText(int baseStat, int currentStat)
 	{
+		string baseStatText = $"Base {baseStat}";
 		int difference = baseStat - currentStat;
 		if (difference > 0)
-			return $"{baseStat} - {difference}";
+			return $"{baseStatText} - {difference}";
 		if(difference < 0)
-			return $"{baseStat} + {Math.Abs(difference)}";
+			return $"{baseStatText} + {Math.Abs(difference)}";
 
-		return baseStat.ToString();
+		return baseStatText;
 	}
 }
 

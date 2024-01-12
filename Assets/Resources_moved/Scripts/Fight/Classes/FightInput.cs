@@ -74,7 +74,9 @@ public class FightInput
 		//We selected an allied unit that can still perform an action
 		if (unit.UnitData.Faction == FightManager.USER_FACTION)
 		{
+			_fightManager.ResetGameState(false);
 			PossibleActionsForUnit(unit);
+			_fightManager.HandleShowcase(unit, true, true, Animation.ShowcaseIdle);
 			return;
 		}
 
@@ -89,7 +91,7 @@ public class FightInput
 
 		Tile tileToMoveTo = _structureManager.CheapestTileToMoveTo(_fightManager.PossibleAttacks, _fightManager.UnitSelected, unit);
 		//User wants to attack an enemy, we confirm the action and the path to take
-		if (!_fightManager.IsShowingPath)
+		if (!_fightManager.ShowingPathToTile || _fightManager.ShowingPathToTile.data.PositionOnGrid != unit.Movement.CurrentTile.data.PositionOnGrid)
 		{
 			AskForMovementConfirmation(unit.Movement.CurrentTile, tileToMoveTo);
 			_fightManager.HandleShowcase(unit, false, false, Animation.ShowcaseAttack);
@@ -103,22 +105,19 @@ public class FightInput
 
 	void EmptyActionTileClick(Tile currentTile, bool resetGameState)
 	{
-		List<Tile> tiles = new();
 		_fightManager.ResetGameState(resetGameState);
         if (currentTile.unitOnTile != null)
 		{
 			_fightManager.UnitSelected = currentTile.unitOnTile;
 			PossibleActionsForUnit(currentTile.unitOnTile);
-			//tiles = _structureManager.GeneratePossibleMovementForUnit(currentTile.unitOnTile, true);
+			_fightManager.HandleShowcase(currentTile.unitOnTile, true, true, Animation.ShowcaseIdle);
 		}
 	}
 
 	void PossibleActionsForUnit(Unit currentUnit)
 	{
-		_fightManager.ResetGameState(false);
-		List<Tile> possibleMovements = _structureManager.GeneratePossibleMovementForUnit(_fightManager.UnitSelected, true);
-		_fightManager.PossibleAttacks = _fightManager.structureManager.GetPossibleAttacksForUnit(_fightManager.UnitSelected, true, possibleMovements);
-		_fightManager.HandleShowcase(currentUnit, true, true, Animation.ShowcaseIdle);
+		List<Tile> possibleMovements = _structureManager.GeneratePossibleMovementForUnit(currentUnit, true);
+		_fightManager.PossibleAttacks = _fightManager.structureManager.GetPossibleAttacksForUnit(currentUnit, true, possibleMovements);
 	}
 
 	public bool HasUnitAlreadyPerformedAction()
@@ -131,13 +130,12 @@ public class FightInput
 
 	void Click_TileInsideRange(Tile tileSelected)
 	{
-		if (_fightManager.IsShowingPath)
+		if (_fightManager.ShowingPathToTile && _fightManager.ShowingPathToTile.data.PositionOnGrid == tileSelected.data.PositionOnGrid)
 		{
 			_structureManager.MoveUnit(_fightManager.UnitSelected, tileSelected, false);
 			_fightManager.ResetGameState(true);
 			return;
 		}
-
 		AskForMovementConfirmation(tileSelected);
 	}
 
@@ -148,13 +146,13 @@ public class FightInput
 
 	public void AskForMovementConfirmation(Tile destinationTile, Tile tileToMoveTo = null)
 	{
-		_structureManager.ClearSelection(false);
+		PossibleActionsForUnit(_fightManager.UnitSelected);
 		Tile tileToReach = tileToMoveTo != null ? tileToMoveTo : destinationTile;
 		List<Tile> path = _structureManager.FindPathToDestination(tileToReach, false, _fightManager.UnitSelected.Movement.CurrentTile.data.PositionOnGrid);
 		List<Tile> attackTiles = destinationTile.ToList();
-		_structureManager.SelectTiles(path, true, TileType.Selected);
+		_structureManager.SelectTiles(path, false, TileType.Selected);
 		_structureManager.SelectTiles(attackTiles, false, TileType.Enemy);
-		_fightManager.IsShowingPath = true;
+		_fightManager.ShowingPathToTile = destinationTile;
 	}
 
 
@@ -175,14 +173,16 @@ public class FightInput
 
 	void Setup_UnitSelected(Unit unitSelected)
 	{
+		_fightManager.UnitSelected = unitSelected;
 		_fightManager.ResetGameState(false);
 		_fightManager.SetupUnitPosition();
 		_structureManager.SelectTiles(unitSelected.Movement.CurrentTile, false, TileType.Selected);
 		_structureManager.SetInfoPanel(true, unitSelected);
 		if (unitSelected.UnitData.Faction != FightManager.USER_FACTION)
 		{
+			PossibleActionsForUnit(unitSelected);
+			_fightManager.HandleShowcase(unitSelected, true, true, Animation.ShowcaseIdle);
 			_fightManager.UnitSelected = null;
-			_fightManager.HandleShowcase(unitSelected, false, true, Animation.ShowcaseIdle);
 		}
 		else
 		{

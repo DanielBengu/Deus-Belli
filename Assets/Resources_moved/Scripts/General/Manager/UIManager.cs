@@ -154,7 +154,9 @@ public class UIManager : MonoBehaviour
                 TraitsEnum traitsEnum = (TraitsEnum)Enum.Parse(typeof(TraitsEnum), currentTrait.Name);
 				traitBox.GetComponent<Image>().sprite = AddressablesManager.LoadResource<Sprite>(AddressablesManager.TypeOfResource.Sprite, currentTrait.Name);
 				traitBox.gameObject.SetActive(true);
-                SetupTooltip(traitBox.gameObject, TraitText.GetTraitText(traitsEnum, currentTrait.Level));
+                string tooltipHeader = TraitText.GetTraitHeader(traitsEnum, currentTrait.Level);
+                string tooltipText = TraitText.GetTraitText(traitsEnum, currentTrait.Level);
+				SetupTooltip(traitBox.gameObject, tooltipHeader, tooltipText);
 			}
 			else
 				traitBox.gameObject.SetActive(false);
@@ -197,13 +199,15 @@ public class UIManager : MonoBehaviour
     {
 		stat.text = LoadStatText(currentStat, currentMaximum);
 		stat.color = GetColor(currentStat, baseStat);
+        string tooltipHeader = stat.name.ToUpper();
         string tooltipText = unit.FightData.GetStatText(baseStat, currentStat);
-		SetupTooltip(stat.gameObject, tooltipText);
+		SetupTooltip(stat.gameObject, tooltipHeader, tooltipText);
 	}
 
-    void SetupTooltip(GameObject item, string tooltipText)
+    void SetupTooltip(GameObject item, string tooltipHeader, string tooltipText)
     {
 		TooltipManager tooltipData = item.GetComponentInChildren<TooltipManager>();
+        tooltipData.header = tooltipHeader;
         tooltipData.text = tooltipText;
 	}
 

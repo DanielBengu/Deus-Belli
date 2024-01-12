@@ -39,7 +39,7 @@ public class FightManager : MonoBehaviour
 	//public bool IsCameraFocused { get{return cameraManager.GetCameraFocusStatus();} set{cameraManager.SetCameraFocusStatus(value);} }
 	public bool IsAnyUnitMoving { get{return structureManager.IsObjectMoving;}}
     public bool IsGameInStandby { get{return generalManager.IsGameInStandby;}}
-    public bool IsShowingPath { get; set; }
+    public Tile ShowingPathToTile { get; set; }
     public ActionPerformed ActionInQueue { get; set; }
     public GameObject ActionTarget { get; set; }
 	public bool IsSetup { get { return structureManager.gameData.IsSetup; } }
@@ -191,6 +191,7 @@ public class FightManager : MonoBehaviour
 
 		isGameOver = true;
         int goldGenerated = level.goldReward;
+        AddGold(goldGenerated);
 		generalManager.SaveGameProgress(GeneralManager.GameStatus.Won);
 		structureManager.GetGameScreen(GameScreens.FightVictoryScreen, goldGenerated);
 	}
@@ -214,9 +215,8 @@ public class FightManager : MonoBehaviour
 
 	#endregion
 
-    int GenerateAndAddGold()
+    int AddGold(int goldGenerated)
 	{
-        int goldGenerated = 100;
         generalManager.Gold += goldGenerated;
         PlayerPrefs.SetInt("Gold", generalManager.Gold);
         return goldGenerated;
@@ -237,7 +237,7 @@ public class FightManager : MonoBehaviour
 		ActionInQueue = ActionPerformed.SimpleAttack;
         ActionTarget = defender.gameObject;
         UnitSelected = attacker;
-        IsShowingPath = false;
+        ShowingPathToTile = null;
         structureManager.ClearSelection(true);
     }
 
@@ -276,7 +276,7 @@ public class FightManager : MonoBehaviour
     public void ResetGameState(bool resetUnitSelected)
     {
         if (resetUnitSelected) UnitSelected = null;
-        IsShowingPath = false;
+        ShowingPathToTile = null;
         structureManager.ClearSelection(true);
         structureManager.SetInfoPanel(false);
         structureManager.ClearTooltips();
