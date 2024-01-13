@@ -36,6 +36,11 @@ public class UnitFightData
 			currentStats.CURRENT_HP = Trait.GetBonus(TraitsEnum.Second_Wind, levelSecondWind, StatsType.HP, baseStats.HP);
 	}
 
+	public bool IsDead()
+	{
+		return currentStats.CURRENT_HP <= 0;
+	}
+
 	public void Heal(int healAmount)
 	{
 		currentStats.CURRENT_HP += healAmount;

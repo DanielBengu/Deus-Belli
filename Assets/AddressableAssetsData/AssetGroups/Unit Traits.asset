@@ -77,6 +77,11 @@ MonoBehaviour:
     m_SerializedLabels:
     - Trait
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 04f3655ee4f66ce478971772c8e25c30
+    m_Address: Sprite/Swift_Attack
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
   m_ReadOnly: 0
   m_Settings: {fileID: 11400000, guid: 42fa5884c9964964993dbdd708fbd850, type: 2}
   m_SchemaSet:

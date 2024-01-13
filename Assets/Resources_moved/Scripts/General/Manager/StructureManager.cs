@@ -303,8 +303,14 @@ public class StructureManager : MonoBehaviour
     }
     public void SetInfoPanel(bool active, Unit unit = null)
     {
-        uiManager.SetInfoPanel(active, unit);
+		uiManager.SetAttackPanel(false);
+		uiManager.SetInfoPanel(active, unit);
     }
+	public void SetAttackPanel(bool active, Unit playerUnit = null, Unit enemyUnit = null)
+	{
+		uiManager.SetInfoPanel(false);
+		uiManager.SetAttackPanel(active, playerUnit, enemyUnit);
+	}
 	public void ClearTooltips()
 	{
 		uiManager.ClearTooltip();

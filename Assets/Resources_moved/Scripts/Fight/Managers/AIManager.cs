@@ -21,7 +21,7 @@ public class AIManager : MonoBehaviour
     void Start()
     {
         fightManager = GetComponent<FightManager>();
-        structureManager = fightManager.structureManager;
+        structureManager = fightManager.StructureManager;
     }
 
     void Update(){

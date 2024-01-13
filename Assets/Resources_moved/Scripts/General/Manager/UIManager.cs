@@ -13,6 +13,7 @@ public class UIManager : MonoBehaviour
 
     GameObject rogueCanvas;
     GameObject infoPanel;
+	GameObject attackPanel;
 	GameObject endTurnButton;
     GameObject fightVictoryScreen;
     GameObject fightDefeatScreen;
@@ -32,7 +33,8 @@ public class UIManager : MonoBehaviour
         Title = GameObject.Find("GOD_RUN").GetComponent<TextMeshProUGUI>();
         Title.text = $"{godSelected} Run";
 
-        infoPanel = GameObject.Find("Info");
+        infoPanel = GameObject.Find("InfoPanel");
+        attackPanel = GameObject.Find("AttackPanel");
 		endTurnButton = GameObject.Find("End Phase Button");
 		fightVictoryScreen = AddressablesManager.LoadResource<GameObject>(AddressablesManager.TypeOfResource.Prefab, fightVictoryScreenPrefabName);
         fightDefeatScreen = AddressablesManager.LoadResource<GameObject>(AddressablesManager.TypeOfResource.Prefab, fightDefeatScreenPrefabName);
@@ -97,11 +99,16 @@ public class UIManager : MonoBehaviour
     public void SetInfoPanel(bool active, Unit unit = null){
         SetGameObject(infoPanel, active);
 
-        if (!active || !Validator.Validate(unit))
-            return;
+        if (active && Validator.Validate(unit))
+            SetupInfoPanel(unit);
+	}
 
-        SetupTraitsOnInfoPanel(unit);
-        SetupStatsOnInfoPanel(unit);
+    public void SetAttackPanel(bool active, Unit playerUnit = null, Unit enemyUnit = null)
+    {
+		SetGameObject(attackPanel, active);
+
+		if (active && Validator.Validate(playerUnit) && Validator.Validate(enemyUnit))
+			SetupAttackPanel(playerUnit, enemyUnit);
 	}
 
     public void SetEndTurnButton(bool active)
@@ -228,5 +235,21 @@ public class UIManager : MonoBehaviour
 
         return Color.white;
     }
+
+    void SetupInfoPanel(Unit unit)
+    {
+		SetupTraitsOnInfoPanel(unit);
+		SetupStatsOnInfoPanel(unit);
+	}
+    void SetupAttackPanel(Unit playerUnit, Unit enemyUnit)
+    {
+        Transform playerData = GameObject.Find("Player HP").transform;
+		Transform enemyData = GameObject.Find("Enemy HP").transform;
+
+        playerData.GetChild(0).GetComponent<TextMeshProUGUI>().text = playerUnit.FightData.currentStats.CURRENT_HP.ToString();
+		playerData.GetChild(1).GetComponent<TextMeshProUGUI>().text = playerUnit.FightData.currentStats.CURRENT_HP.ToString();
+		playerData.GetChild(0).GetComponent<TextMeshProUGUI>().text = enemyUnit.FightData.currentStats.CURRENT_HP.ToString();
+		playerData.GetChild(1).GetComponent<TextMeshProUGUI>().text = enemyUnit.FightData.currentStats.CURRENT_HP.ToString();
+	}
 	#endregion
 }

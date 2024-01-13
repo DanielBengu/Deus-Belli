@@ -1,6 +1,4 @@
-﻿using Unity.VisualScripting;
-using UnityEngine;
-using static Unit;
+﻿using static Unit;
 
 public enum TraitsEnum
 {
@@ -13,7 +11,8 @@ public enum TraitsEnum
 	Speedy,
 	Strong,
 	Tanky,
-	Wealthy
+	Wealthy,
+	Swift_Attack
 }
 
 public struct Trait
@@ -43,6 +42,7 @@ public struct Trait
 			TraitsEnum.Strong => level * baseValue,
 			TraitsEnum.Tanky => GetTankyBonus(statType, level),
 			TraitsEnum.Wealthy => level * 100,
+			TraitsEnum.Swift_Attack => -1,
 			_ => -1,
 		};
 	}
@@ -91,6 +91,7 @@ public static class TraitText
 			TraitsEnum.Strong => $"Base {ATTACK} increase by x{Trait.GetBonus(traitEnum, level + 1)}",
 			TraitsEnum.Tanky => $"+{Trait.GetBonus(traitEnum, level, StatsType.Armor)} {ARMOR} and +{Trait.GetBonus(traitEnum, level, StatsType.HP)} {HP}",
 			TraitsEnum.Wealthy => $"Drops another {Trait.GetBonus(traitEnum, level)}g on death",
+			TraitsEnum.Swift_Attack => $"Unit can't be retaliated during attacks",
 			_ => string.Empty,
 		};
 	}

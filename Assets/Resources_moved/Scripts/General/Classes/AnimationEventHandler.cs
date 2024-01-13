@@ -11,7 +11,7 @@ public class AnimationEventHandler : MonoBehaviour
 
 	public void FinishAnimation()
 	{
-		fm.structureManager.FinishAnimation(gameObject);
+		fm.StructureManager.FinishAnimation(gameObject);
 	}
 	public void FinishSimpleAttack()
 	{
@@ -22,6 +22,7 @@ public class AnimationEventHandler : MonoBehaviour
 	public void FinishTakingDamage()
 	{
 		FinishAnimation();
+		fm.MakeUnitRetaliate();
 	}
 
 	public void Die()

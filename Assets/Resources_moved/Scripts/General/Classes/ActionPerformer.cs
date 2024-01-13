@@ -12,7 +12,9 @@ public class ActionPerformer
     public Pathfinding pathfinding;
     public MovementManager movement;
 
-    public Unit enemyInQueueForAnimation;
+    public Unit unitInQueueForAnimation;
+    public Unit sourceOfAction;
+    ActionPerformed actionPerformed;
 
     public ActionPerformer(StructureManager structureManager, SpriteManager spriteManager)
     {
@@ -23,11 +25,14 @@ public class ActionPerformer
 
     public void StartAction(ActionPerformed action, GameObject source, GameObject target)
     {
+        actionPerformed = action;
         switch (action)
         {
             case ActionPerformed.SimpleAttack:
+            case ActionPerformed.RetaliationAttack:
                 var unitScriptAttack = source.GetComponent<Unit>();
-                var targetUnit = target.GetComponent<Tile>().unitOnTile;
+                Tile tileOfTarget = target.GetComponent<Tile>();
+				Unit targetUnit = tileOfTarget != null ? tileOfTarget.unitOnTile : target.GetComponent<Unit>();
                 SetupAttack(unitScriptAttack, targetUnit);
                 break;
             case ActionPerformed.FightMovement:
@@ -87,12 +92,11 @@ public class ActionPerformer
 
 	void Attack(Unit attacker, Unit defender)
     {
-        enemyInQueueForAnimation = defender;
+        unitInQueueForAnimation = defender;
+        sourceOfAction = attacker;
 
         defender.transform.LookAt(attacker.Movement.CurrentTile.transform, Vector3.up);
         attacker.transform.LookAt(defender.Movement.CurrentTile.transform, Vector3.up);
-
-        defender.FightData.TakeDamage(attacker.FightData.currentStats.ATTACK, attacker.FightData.currentStats.ATTACK_TYPE);
 
 		PerformAnimation(attacker.gameObject, Animation.Attack, true);
     }
@@ -110,10 +114,48 @@ public class ActionPerformer
 		AnimationPerformer.PerformAnimation(Animation.Idle, target);
 	}
 
-    public void StartTakeDamageAnimation()
-	{
-        Animation animation = enemyInQueueForAnimation.FightData.currentStats.CURRENT_HP <= 0 ? Animation.Die : Animation.TakeDamage;
+    public void ReceiveAttack()
+    {
+		unitInQueueForAnimation.FightData.TakeDamage(sourceOfAction.FightData.currentStats.ATTACK, unitInQueueForAnimation.FightData.currentStats.ATTACK_TYPE);
+        StartTakeDamageAnimation();
 
-		PerformAnimation(enemyInQueueForAnimation.gameObject, animation, true);
+        if (unitInQueueForAnimation.FightData.IsDead()) { 
+            ClearState(); 
+            return; 
+        }
+
+		//For simple attacks we need to retaliate
+		if (actionPerformed != ActionPerformed.SimpleAttack)
+        {
+			ClearState();
+		}
+	}
+
+	public void StartTakeDamageAnimation()
+	{
+        Animation animation = unitInQueueForAnimation.FightData.currentStats.CURRENT_HP <= 0 ? Animation.Die : Animation.TakeDamage;
+
+		PerformAnimation(unitInQueueForAnimation.gameObject, animation, true);
     }
+
+    public void ManageRetaliation()
+    {
+        if(IsRetaliationValid())
+		    StartAction(ActionPerformed.RetaliationAttack, unitInQueueForAnimation.gameObject, sourceOfAction.gameObject);
+    }
+
+    bool IsRetaliationValid()
+    {
+		bool doesAttackerHaveAntiRetaliation = sourceOfAction != null && sourceOfAction.FightData.ContainsTrait(TraitsEnum.Swift_Attack, out _);
+		bool isActionSimpleAttack = actionPerformed == ActionPerformed.SimpleAttack;
+
+		return isActionSimpleAttack && !doesAttackerHaveAntiRetaliation;
+	}
+
+    void ClearState()
+    {
+		unitInQueueForAnimation = null;
+        sourceOfAction = null;
+        actionPerformed = ActionPerformed.Default;
+	}
 }

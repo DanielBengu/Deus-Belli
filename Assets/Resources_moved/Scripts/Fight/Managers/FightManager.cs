@@ -4,6 +4,7 @@ using System.Linq;
 using Unity.VisualScripting;
 using static Pathfinding;
 using static FightInput;
+using static UnityEngine.UI.CanvasScaler;
 
 public class FightManager : MonoBehaviour
 {
@@ -16,7 +17,8 @@ public class FightManager : MonoBehaviour
     #region Fields
 
     public CameraManager cameraManager;
-    public StructureManager structureManager;
+    public StructureManager StructureManager { get; set; }
+    public ActionPerformer ActionPerformer { get{ return StructureManager.actionPerformer; }}
     AIManager aiManager;
 
     public Transform fightObjects;
@@ -37,18 +39,18 @@ public class FightManager : MonoBehaviour
     public List<PossibleAttack> PossibleAttacks { get; set; }
 
 	//public bool IsCameraFocused { get{return cameraManager.GetCameraFocusStatus();} set{cameraManager.SetCameraFocusStatus(value);} }
-	public bool IsAnyUnitMoving { get{return structureManager.IsObjectMoving;}}
+	public bool IsAnyUnitMoving { get{return StructureManager.IsObjectMoving;}}
     public bool IsGameInStandby { get{return generalManager.IsGameInStandby;}}
     public Tile ShowingPathToTile { get; set; }
     public ActionPerformed ActionInQueue { get; set; }
     public GameObject ActionTarget { get; set; }
-	public bool IsSetup { get { return structureManager.gameData.IsSetup; } }
+	public bool IsSetup { get { return StructureManager.gameData.IsSetup; } }
     public int[] SetupTiles { get; set; }
 
     public int CurrentTurn { get { return TurnManager.CurrentTurn; } set { TurnManager.CurrentTurn = value; } }
     public int TurnCount { get; set; } = 0;
-    public List<Unit> UnitsOnField { get { return structureManager.gameData.unitsOnField; } }
-    public List<Tile> TileList { get { return structureManager.gameData.GetTileList(); } }
+    public List<Unit> UnitsOnField { get { return StructureManager.gameData.unitsOnField; } }
+    public List<Tile> TileList { get { return StructureManager.gameData.GetTileList(); } }
     public FightInput FightInput { get; set; }
     public TurnManager TurnManager { get; set; }
     #endregion
@@ -100,7 +102,7 @@ public class FightManager : MonoBehaviour
         var tiles = GetMapTiles();
 		var units = GenerateUnitsOnField(level);
 
-        structureManager.gameData = new(tiles, units, level.mapData.Rows, level.mapData.Columns);
+        StructureManager.gameData = new(tiles, units, level.mapData.Rows, level.mapData.Columns);
 
         SetupTiles = SetupUnitPosition();
 		TurnManager.StartUserTurn();
@@ -109,9 +111,9 @@ public class FightManager : MonoBehaviour
     public int[] SetupUnitPosition()
 	{
         //We retrieve the Tiles that have StartPositionForFaction = 1 and ValidForMovement = true in the map config
-		List<Tile> tileList = structureManager.gameData.mapTiles.Where(t => t.Value.data.StartPositionForFaction == USER_FACTION && t.Value.data.ValidForMovement).Select(t => t.Value).ToList();
+		List<Tile> tileList = StructureManager.gameData.mapTiles.Where(t => t.Value.data.StartPositionForFaction == USER_FACTION && t.Value.data.ValidForMovement).Select(t => t.Value).ToList();
 
-		structureManager.SelectTiles(tileList, true, TileType.Positionable);
+		StructureManager.SelectTiles(tileList, true, TileType.Positionable);
         return tileList.Select(t => t.data.PositionOnGrid).ToArray();
     }
 
@@ -179,7 +181,7 @@ public class FightManager : MonoBehaviour
 		if (ActionInQueue != ActionPerformed.SimpleAttack)
 			return;
 
-		structureManager.actionPerformer.StartAction(ActionPerformed.SimpleAttack, UnitSelected.gameObject, ActionTarget.GetComponent<Unit>().Movement.CurrentTile.gameObject);
+		ActionPerformer.StartAction(ActionPerformed.SimpleAttack, UnitSelected.gameObject, ActionTarget.GetComponent<Unit>().Movement.CurrentTile.gameObject);
 		ResetGameState(true);
 	}
 
@@ -193,7 +195,7 @@ public class FightManager : MonoBehaviour
         int goldGenerated = level.goldReward;
         AddGold(goldGenerated);
 		generalManager.SaveGameProgress(GeneralManager.GameStatus.Won);
-		structureManager.GetGameScreen(GameScreens.FightVictoryScreen, goldGenerated);
+		StructureManager.GetGameScreen(GameScreens.FightVictoryScreen, goldGenerated);
 	}
 
     bool ManageDefeat()
@@ -204,13 +206,13 @@ public class FightManager : MonoBehaviour
 
 		isGameOver = true;
 		generalManager.SaveGameProgress(GeneralManager.GameStatus.Lost);
-		structureManager.GetGameScreen(GameScreens.FightVictoryScreen, -1);
+		StructureManager.GetGameScreen(GameScreens.FightVictoryScreen, -1);
         return true;
 	}
 
 	void ManageMovements()
 	{
-		structureManager.MovementTick(unitsSpeed, ManageAction);
+		StructureManager.MovementTick(unitsSpeed, ManageAction);
 	}
 
 	#endregion
@@ -231,55 +233,57 @@ public class FightManager : MonoBehaviour
     {
 		Debug.Log($"UNIT {attacker.UnitData.Name} ATTACKING UNIT {defender.UnitData.Name}");
 
-        Tile targetTile = FindTargetTileForAttack(attacker, tileToMoveTo);
-		structureManager.MoveUnit(attacker, targetTile, false);
+		Tile targetTile = FindTargetTileForAttack(attacker, tileToMoveTo);
+		StructureManager.MoveUnit(attacker, targetTile, false);
+
 
 		ActionInQueue = ActionPerformed.SimpleAttack;
-        ActionTarget = defender.gameObject;
-        UnitSelected = attacker;
-        ShowingPathToTile = null;
-        structureManager.ClearSelection(true);
-    }
+		ActionTarget = defender.gameObject;
+		UnitSelected = attacker;
+		ShowingPathToTile = null;
+		StructureManager.ClearSelection(true);
+	}
 
     public void HandleShowcase(Unit unitSelected, bool putOnLeftShowcase, bool clearLeftShowcase, Animation animation)
     {
         //For now we always clear right showcase, add parameters if needed to change
-		structureManager.ClearShowcase(rightUnitShowcaseParent);
+		StructureManager.ClearShowcase(rightUnitShowcaseParent);
 
 		if (clearLeftShowcase)
-            structureManager.ClearShowcase(leftUnitShowcaseParent);
+            StructureManager.ClearShowcase(leftUnitShowcaseParent);
 
         Transform showcase = putOnLeftShowcase ? leftUnitShowcaseParent : rightUnitShowcaseParent;
         Transform position = putOnLeftShowcase ? leftUnitShowcasePosition : rightUnitShowcasePosition;
-		structureManager.InstantiateShowcaseUnit(unitSelected, position, showcase);
+		StructureManager.InstantiateShowcaseUnit(unitSelected, position, showcase);
         HandleShowcaseAnimations(animation, true, true);
 	}
 
     Tile FindTargetTileForAttack(Unit attacker, Tile tileToMoveTo)
     {
-		List<Tile> path = structureManager.FindPathToDestination(tileToMoveTo, false, attacker.Movement.CurrentTile.data.PositionOnGrid).ToList();
+		List<Tile> path = StructureManager.FindPathToDestination(tileToMoveTo, false, attacker.Movement.CurrentTile.data.PositionOnGrid).ToList();
 
         //Failsafe, should not be needed
         if(path.Count == 0)
 			return attacker.Movement.CurrentTile;
 
         // ^1 is the same as path.Count - 1
-		return structureManager.gameData.mapTiles[path[^1].data.PositionOnGrid];
+		return StructureManager.gameData.mapTiles[path[^1].data.PositionOnGrid];
 	}
 
     public void ClearShowcase()
     {
-		structureManager.ClearShowcase(leftUnitShowcaseParent);
-		structureManager.ClearShowcase(rightUnitShowcaseParent);
+		StructureManager.ClearShowcase(leftUnitShowcaseParent);
+		StructureManager.ClearShowcase(rightUnitShowcaseParent);
 	}
 
     public void ResetGameState(bool resetUnitSelected)
     {
         if (resetUnitSelected) UnitSelected = null;
         ShowingPathToTile = null;
-        structureManager.ClearSelection(true);
-        structureManager.SetInfoPanel(false);
-        structureManager.ClearTooltips();
+        StructureManager.ClearSelection(true);
+        StructureManager.SetInfoPanel(false);
+		StructureManager.SetAttackPanel(false);
+		StructureManager.ClearTooltips();
         ClearShowcase();
         ActionInQueue = ActionPerformed.Default;
         PossibleAttacks = new();
@@ -287,7 +291,7 @@ public class FightManager : MonoBehaviour
 
     public void DisableFightSection()
 	{
-		foreach (var tile in structureManager.gameData.mapTiles.Values)
+		foreach (var tile in StructureManager.gameData.mapTiles.Values)
             Destroy(tile.gameObject);
 
 		foreach (var unit in UnitsOnField)
@@ -296,13 +300,13 @@ public class FightManager : MonoBehaviour
 
     public List<PossibleAttack> GetPossibleAttacksForUnit(Unit unit, List<Tile> possibleMovements)
 	{
-        return structureManager.GetPossibleAttacksForUnit(unit, false, possibleMovements);
+        return StructureManager.GetPossibleAttacksForUnit(unit, false, possibleMovements);
 	}
 
 
     public List<Tile> GetPossibleMovements(Unit unit)
     {
-        return structureManager.GeneratePossibleMovementForUnit(unit, false);
+        return StructureManager.GeneratePossibleMovementForUnit(unit, false);
     }
 
 	#region Private Methods
@@ -314,17 +318,17 @@ public class FightManager : MonoBehaviour
 		rightUnitShowcasePosition = GameObject.Find("Right Character Position").transform;
 		rightUnitShowcaseParent = GameObject.Find("ShowcaseChildrenRight").transform;
 
-		structureManager = sm;
+		StructureManager = sm;
 		cameraManager = cm;
 		generalManager = gm;
 		aiManager = GetComponent<AIManager>();
-		FightInput = new FightInput(this, structureManager);
-		TurnManager = new(this, structureManager, aiManager);
+		FightInput = new FightInput(this, StructureManager);
+		TurnManager = new(this, StructureManager, aiManager);
 		this.level = level;
 
 		cameraManager.SetupFightCamera(cameraManager.transform);
-		structureManager.uiManager.SetFightVariables(gm.GodSelected);
-		structureManager.spriteManager.fightManager = this;
+		StructureManager.uiManager.SetFightVariables(gm.GodSelected);
+		StructureManager.spriteManager.fightManager = this;
 		aiManager.seed = level.seed;
 	}
 
@@ -341,7 +345,7 @@ public class FightManager : MonoBehaviour
 	{
 		int lastUnitOnShowcase = parent.childCount - 1;
 		GameObject unitOnLeft = parent.GetChild(lastUnitOnShowcase).gameObject;
-		structureManager.StartShowcaseAnimation(unitOnLeft, animation, false);
+		StructureManager.StartShowcaseAnimation(unitOnLeft, animation, false);
 	}
 
     Vector3 GetFightObjectPosition(Dictionary<int, Tile> tiles)
@@ -357,7 +361,7 @@ public class FightManager : MonoBehaviour
 
     Dictionary<int, Tile> GetMapTiles()
     {
-		var tiles = structureManager.SetupFightSection(level, this);
+		var tiles = StructureManager.SetupFightSection(level, this);
 		fightObjects.transform.position = GetFightObjectPosition(tiles);
 
 		for (int i = 0; i < tiles.Count; i++)
@@ -379,13 +383,17 @@ public class FightManager : MonoBehaviour
 
 	public void MakeUnitTakeDamage()
 	{
-		structureManager.actionPerformer.StartTakeDamageAnimation();
+        ActionPerformer.ReceiveAttack();
+	}
+	public void MakeUnitRetaliate()
+    {
+		ActionPerformer.ManageRetaliation();
 	}
 
     public void UnitDies(Unit unit)
     {
-        structureManager.FinishAnimation(unit.gameObject);
-		structureManager.KillUnit(unit);
+        StructureManager.FinishAnimation(unit.gameObject);
+		StructureManager.KillUnit(unit);
     }
 
 	#endregion
@@ -395,8 +403,8 @@ public enum ActionPerformed
     FightMovement,
     RogueMovement,
     FightTeleport,
-    SimpleAttack, //Attack that don't spawn anything else
-    ProjectileAttack, //all attacks that spawns some kind of projectile or effect
+    SimpleAttack,
+    RetaliationAttack,
     CameraFocus,
     Default,
 }
