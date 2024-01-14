@@ -25,12 +25,13 @@ public class UnitFightData
 		LoadStats();
 	}
 
-	public void TakeDamage(int damage, AttackType typeOfDamage)
-	{
-		damage = GetUpdatedDamage(damage, typeOfDamage);
 
-		if (damage > 0)
-			currentStats.CURRENT_HP -= damage;
+	public void TakeDamage(int baseDamage, AttackType typeOfDamage)
+	{
+		int updatedDamage = CalculateDamage(baseDamage, typeOfDamage);
+
+		if (updatedDamage > 0)
+			currentStats.CURRENT_HP -= updatedDamage;
 
 		if (ContainsTrait(TraitsEnum.Second_Wind, out int levelSecondWind))
 			currentStats.CURRENT_HP = Trait.GetBonus(TraitsEnum.Second_Wind, levelSecondWind, StatsType.HP, baseStats.HP);
@@ -89,7 +90,7 @@ public class UnitFightData
 			return false;
 		}
 	}
-	int GetUpdatedDamage(int incomingDamage, AttackType attackType)
+	public int CalculateDamage(int incomingDamage, AttackType attackType)
 	{
 		if (ContainsTrait(TraitsEnum.Overload, out int levelOverload))
 			incomingDamage = Trait.GetBonus(TraitsEnum.Overload, levelOverload, StatsType.HP, incomingDamage);

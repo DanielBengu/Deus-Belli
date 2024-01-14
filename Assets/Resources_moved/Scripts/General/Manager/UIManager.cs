@@ -24,6 +24,7 @@ public class UIManager : MonoBehaviour
     Transform traitParent;
     Transform statsParent;
     TextMeshProUGUI nameText;
+    TextMeshProUGUI attackTypeText;
     GameObject tooltipParent;
     #endregion
 
@@ -41,8 +42,9 @@ public class UIManager : MonoBehaviour
 
         traitParent = infoPanel.transform.Find("Traits");
         statsParent = infoPanel.transform.Find("Stats");
-        nameText = infoPanel.transform.Find("Unit title").gameObject.GetComponent<TextMeshProUGUI>();
-        tooltipParent = GameObject.Find("TooltipParent");
+        nameText = infoPanel.transform.Find("Unit title").GetComponent<TextMeshProUGUI>();
+		attackTypeText = infoPanel.transform.Find("Unit attack type").GetComponent<TextMeshProUGUI>();
+		tooltipParent = GameObject.Find("TooltipParent");
 		SetInfoPanel(false);
     }
     public void SetFightEndPhaseButton()
@@ -63,7 +65,7 @@ public class UIManager : MonoBehaviour
         rogueGod.text = godSelected;
     }
 
-    public void SetMerchantVariables(int availableGold)
+    public void SetMerchantVariables()
 	{
     }
 
@@ -173,6 +175,7 @@ public class UIManager : MonoBehaviour
 	void SetupStatsOnInfoPanel(Unit unit)
 	{
 		nameText.text = unit.UnitData.Name;
+		attackTypeText.text = unit.UnitData.AttackType;
 		for (int i = 0; i < statsParent.childCount; i++)
 		{
 			TextMeshProUGUI stat = statsParent.GetChild(i).GetComponent<TextMeshProUGUI>();
@@ -245,11 +248,19 @@ public class UIManager : MonoBehaviour
     {
         Transform playerData = GameObject.Find("Player HP").transform;
 		Transform enemyData = GameObject.Find("Enemy HP").transform;
+        Transform playerTitles = GameObject.Find("Unit titles").transform;
 
-        playerData.GetChild(0).GetComponent<TextMeshProUGUI>().text = playerUnit.FightData.currentStats.CURRENT_HP.ToString();
-		playerData.GetChild(1).GetComponent<TextMeshProUGUI>().text = playerUnit.FightData.currentStats.CURRENT_HP.ToString();
-		playerData.GetChild(0).GetComponent<TextMeshProUGUI>().text = enemyUnit.FightData.currentStats.CURRENT_HP.ToString();
-		playerData.GetChild(1).GetComponent<TextMeshProUGUI>().text = enemyUnit.FightData.currentStats.CURRENT_HP.ToString();
+        SetupUnitAttackResults(playerData.GetChild(0).GetComponent<TextMeshProUGUI>(), playerData.GetChild(1).GetComponent<TextMeshProUGUI>(), playerTitles.GetChild(0).GetComponentInChildren<TextMeshProUGUI>(), playerUnit, enemyUnit);
+		SetupUnitAttackResults(enemyData.GetChild(0).GetComponent<TextMeshProUGUI>(), enemyData.GetChild(1).GetComponent<TextMeshProUGUI>(), playerTitles.GetChild(1).GetComponentInChildren<TextMeshProUGUI>(), enemyUnit, playerUnit);
+	}
+
+    void SetupUnitAttackResults(TextMeshProUGUI textBefore, TextMeshProUGUI textAfter, TextMeshProUGUI textName, Unit unit, Unit enemyUnit)
+    {
+        textName.text = unit.UnitData.Name;
+		int unitUpdatedHP = unit.FightData.currentStats.CURRENT_HP - unit.FightData.CalculateDamage(enemyUnit.FightData.currentStats.ATTACK, enemyUnit.FightData.currentStats.ATTACK_TYPE);
+		textBefore.text = unit.FightData.currentStats.CURRENT_HP.ToString();
+		textAfter.text = unitUpdatedHP.ToString();
+		textAfter.color = GetColor(unitUpdatedHP, unit.FightData.currentStats.CURRENT_HP);
 	}
 	#endregion
 }

@@ -62,30 +62,18 @@ public class FightInput
 
 	public void ManageClick_UnitSelected(Unit unit)
 	{
-		//We selected an allied unit that has already performed his action this turn
-		if (HasUnitAlreadyPerformedAction())
-		{
-			EmptyActionTileClick(unit.Movement.CurrentTile, false);
-			_structureManager.SetInfoPanel(true, unit);
-			_fightManager.HandleShowcase(unit, true, true, Animation.ShowcaseIdle);
-			return;
-		}
-
-		//We selected an allied unit that can still perform an action
 		if (unit.UnitData.Faction == FightManager.USER_FACTION)
-		{
-			_fightManager.ResetGameState(false);
-			PossibleActionsForUnit(unit);
-			_structureManager.SetInfoPanel(true, unit);
-			_fightManager.HandleShowcase(unit, true, true, Animation.ShowcaseIdle);
-			return;
-		}
+			ManagePlayerClick(unit);
+		else
+			ManageEnemyClick(unit);
+	}
 
-		///We either selected an enemy unit and didn't select an ally to perform an attack before,
-		///or we selected an enemy out of reach from the ally
-		if (!_fightManager.UnitSelected || !IsAttackPossible(_fightManager.UnitSelected, unit))
+	void ManageEnemyClick(Unit unit)
+	{
+		if(IsOutsidePlayerAttackRange(unit))
 		{
 			EmptyActionTileClick(unit.Movement.CurrentTile, true);
+			_structureManager.SetInfoPanel(true, unit);
 			_fightManager.HandleShowcase(unit, false, true, Animation.ShowcaseIdle);
 			return;
 		}
@@ -102,7 +90,26 @@ public class FightInput
 
 		//User confirmed the action
 		_fightManager.QueueAttack(_fightManager.UnitSelected, unit, tileToMoveTo);
+		_structureManager.SetInfoPanel(false, unit);
 		_fightManager.ClearShowcase();
+	}
+
+	void ManagePlayerClick(Unit unit)
+	{
+		//We selected an allied unit that has already performed his action this turn
+		if (HasUnitAlreadyPerformedAction())
+		{
+			EmptyActionTileClick(unit.Movement.CurrentTile, false);
+			_structureManager.SetInfoPanel(true, unit);
+			_fightManager.HandleShowcase(unit, true, true, Animation.ShowcaseIdle);
+			return;
+		}
+
+		//We selected an allied unit that can still perform an action
+		_fightManager.ResetGameState(false);
+		PossibleActionsForUnit(unit);
+		_structureManager.SetInfoPanel(true, unit);
+		_fightManager.HandleShowcase(unit, true, true, Animation.ShowcaseIdle);
 	}
 
 	void EmptyActionTileClick(Tile currentTile, bool resetGameState)
@@ -128,6 +135,17 @@ public class FightInput
 			return false;
 		
 		return _fightManager.UnitSelected.Movement.HasPerformedMainAction;
+	}
+
+	public bool IsOutsidePlayerAttackRange(Unit unit)
+	{
+		if (!_fightManager.UnitSelected)
+			return true;
+
+		bool isLastUnitSelectedAlly = _fightManager.UnitSelected.UnitData.Faction == FightManager.USER_FACTION;
+		bool isUnitOnAttackRange = IsAttackPossible(_fightManager.UnitSelected, unit);
+
+		return !(isLastUnitSelectedAlly && isUnitOnAttackRange);
 	}
 
 	void Click_TileInsideRange(Tile tileSelected)
