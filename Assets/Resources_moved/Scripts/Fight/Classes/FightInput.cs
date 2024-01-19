@@ -43,14 +43,16 @@ public class FightInput
 
 	public void ManageClick_EmptyTileSelected(Tile tileSelected)
 	{
-		if (!_fightManager.UnitSelected)
+		Unit unitSelected = _fightManager.UnitSelected;
+
+		if (!unitSelected)
 		{
 			EmptyActionTileClick(tileSelected, true);
 			return;
 		}
 
 		//If tile clicked is in range
-		if (_fightManager.UnitSelected.Movement.PossibleMovements.Contains(tileSelected))
+		if (unitSelected.Movement.PossibleMovements.Contains(tileSelected) && unitSelected.FightData.currentStats.FACTION == FightManager.USER_FACTION)
 		{
 			Click_TileInsideRange(tileSelected);
 			return;
@@ -62,7 +64,7 @@ public class FightInput
 
 	public void ManageClick_UnitSelected(Unit unit)
 	{
-		if (unit.UnitData.Faction == FightManager.USER_FACTION)
+		if (unit.FightData.currentStats.FACTION == FightManager.USER_FACTION)
 			ManagePlayerClick(unit);
 		else
 			ManageEnemyClick(unit);
@@ -142,7 +144,7 @@ public class FightInput
 		if (!_fightManager.UnitSelected)
 			return true;
 
-		bool isLastUnitSelectedAlly = _fightManager.UnitSelected.UnitData.Faction == FightManager.USER_FACTION;
+		bool isLastUnitSelectedAlly = _fightManager.UnitSelected.FightData.currentStats.FACTION == FightManager.USER_FACTION;
 		bool isUnitOnAttackRange = IsAttackPossible(_fightManager.UnitSelected, unit);
 
 		return !(isLastUnitSelectedAlly && isUnitOnAttackRange);
@@ -198,7 +200,7 @@ public class FightInput
 		_fightManager.SetupUnitPosition();
 		_structureManager.SelectTiles(unitSelected.Movement.CurrentTile, false, TileType.Selected);
 		_structureManager.SetInfoPanel(true, unitSelected);
-		if (unitSelected.UnitData.Faction != FightManager.USER_FACTION)
+		if (unitSelected.FightData.currentStats.FACTION != FightManager.USER_FACTION)
 		{
 			PossibleActionsForUnit(unitSelected);
 			_fightManager.HandleShowcase(unitSelected, false, true, Animation.ShowcaseIdle);

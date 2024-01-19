@@ -108,6 +108,7 @@ public class UnitFightData
 		currentStats.RANGE = parent.UnitData.Stats.Range;
 		currentStats.ARMOR = LoadArmor();
 		currentStats.WARD = LoadWard();
+		currentStats.FACTION = parent.UnitData.Faction;
 		currentStats.ATTACK_TYPE = (AttackType)Enum.Parse(typeof(AttackType), parent.UnitData.AttackType);
 	}
 	int LoadHp()
@@ -194,7 +195,9 @@ public class BaseStats
 	public readonly int WARD;
 	public readonly int MOVEMENT;
 	public readonly int RANGE;
+	public readonly int FACTION;
 	public readonly AttackType ATTACK_TYPE;
+
 	public BaseStats(Unit parent)
     {
 		HP = parent.UnitData.Stats.Hp;
@@ -203,6 +206,7 @@ public class BaseStats
 		WARD = parent.UnitData.Stats.Ward;
 		RANGE = parent.UnitData.Stats.Range;
 		MOVEMENT = parent.UnitData.Stats.Movement;
+		FACTION = parent.UnitData.Faction;
 		ATTACK_TYPE = (AttackType)Enum.Parse(typeof(AttackType), parent.UnitData.AttackType);
 	}
 }
@@ -216,5 +220,6 @@ public class CurrentStats
 	public int WARD;
 	public int MOVEMENT;
 	public int RANGE;
+	public int FACTION;
 	public AttackType ATTACK_TYPE;
 }

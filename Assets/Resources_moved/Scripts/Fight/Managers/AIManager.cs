@@ -47,7 +47,7 @@ public class AIManager : MonoBehaviour
     }
 
     public void StartAITurn(){
-        int[] differentFactionsOtherThanPlayer = structureManager.gameData.unitsOnField.Where(u => u.UnitData.Faction != FightManager.USER_FACTION).Select(u => u.UnitData.Faction).Distinct().ToArray();
+        int[] differentFactionsOtherThanPlayer = structureManager.gameData.unitsOnField.Where(u => u.FightData.currentStats.FACTION != FightManager.USER_FACTION).Select(u => u.FightData.currentStats.FACTION).Distinct().ToArray();
 
         for (int i = 0; i < differentFactionsOtherThanPlayer.Length; i++)
         {
@@ -63,7 +63,7 @@ public class AIManager : MonoBehaviour
 
 		fightManager.CurrentTurn = faction;
 		
-		foreach (var unit in structureManager.gameData.unitsOnField.Where(u => u.UnitData.Faction == faction))
+		foreach (var unit in structureManager.gameData.unitsOnField.Where(u => u.FightData.currentStats.FACTION == faction))
 		{
 			unit.FightData.StartOfTurnEffects();
 			unitQueue.Enqueue(unit);

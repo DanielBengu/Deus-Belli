@@ -184,12 +184,12 @@ public class StructureManager : MonoBehaviour
 
     public List<Tile> GeneratePossibleMovementForUnit(Unit unit, bool selectTiles){
         List<Tile> possibleMovements = CalculateMapTilesDistance(unit);
-        List<Tile> tilesWithAllies = possibleMovements.FindAll(t => t.unitOnTile && t.unitOnTile.UnitData.Faction == unit.UnitData.Faction && t.unitOnTile != unit);
+        List<Tile> tilesWithAllies = possibleMovements.FindAll(t => t.unitOnTile && t.unitOnTile.FightData.currentStats.FACTION == unit.FightData.currentStats.FACTION && t.unitOnTile != unit);
         possibleMovements.RemoveAll(t => tilesWithAllies.Contains(t));
 
         if (selectTiles)
         {
-            TileType tileType = unit.UnitData.Faction == FightManager.USER_FACTION ? TileType.PossibleAlly : TileType.PossibleEnemy;
+            TileType tileType = unit.FightData.currentStats.FACTION == FightManager.USER_FACTION ? TileType.PossibleAlly : TileType.PossibleEnemy;
 			SelectTiles(possibleMovements, false, tileType);
             SelectTiles(tilesWithAllies, false, TileType.Ally);
             SelectTiles(unit.Movement.CurrentTile, false, TileType.Selected);

@@ -187,7 +187,7 @@ public class FightManager : MonoBehaviour
 
     void ManageVictory()
     {
-		bool isFightWon = UnitsOnField.Count(u => u.UnitData.Faction == ENEMY_FACTION) == 0;
+		bool isFightWon = UnitsOnField.Count(u => u.FightData.currentStats.FACTION == ENEMY_FACTION) == 0;
 
         if (!isFightWon) return;
 
@@ -200,7 +200,7 @@ public class FightManager : MonoBehaviour
 
     bool ManageDefeat()
     {
-		bool isFightLost = UnitsOnField.Count(u => u.UnitData.Faction == USER_FACTION) == 0;
+		bool isFightLost = UnitsOnField.Count(u => u.FightData.currentStats.FACTION == USER_FACTION) == 0;
 
         if(!isFightLost) return false;
 

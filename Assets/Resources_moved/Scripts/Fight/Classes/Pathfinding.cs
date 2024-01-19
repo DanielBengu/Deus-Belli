@@ -99,7 +99,7 @@ public class Pathfinding
 					List<Tile> neighboursTile = FindNeighbours(attacker, tileToSearch, false).Where(t => t != null).ToList();
 					tempTiles.AddRange(neighboursTile);
 
-                    GetPossibleAttacksOnNeighbours(neighboursTile, tile, attacker.UnitData.Faction, possibleAttacks);
+                    GetPossibleAttacksOnNeighbours(neighboursTile, tile, attacker.FightData.currentStats.FACTION, possibleAttacks);
 				}
                 tilesToSearch.AddRange(tempTiles);
                 tempTiles= new();
@@ -122,7 +122,7 @@ public class Pathfinding
 	}
 
     bool NeighbourHasAnEnemy(Tile neighbour, int attackerFaction) {
-        return neighbour && neighbour.unitOnTile && neighbour.unitOnTile.UnitData.Faction != attackerFaction;
+        return neighbour && neighbour.unitOnTile && neighbour.unitOnTile.FightData.currentStats.FACTION != attackerFaction;
 	}
 
 	List<Tile> FindNeighbours(Unit sourceUnit, Tile source, bool calculateCosts){
@@ -149,7 +149,7 @@ public class Pathfinding
 
     bool IsTileOccupiedByAnotherFaction(Unit sourceUnit, Tile neighbourTile)
     {
-        return neighbourTile.unitOnTile && neighbourTile.unitOnTile.UnitData.Faction != sourceUnit.UnitData.Faction;
+        return neighbourTile.unitOnTile && neighbourTile.unitOnTile.FightData.currentStats.FACTION != sourceUnit.FightData.currentStats.FACTION;
 	}
 
     //Returns the list of steps necessary to reach the destination tile with the least movement cost
@@ -199,7 +199,7 @@ public class Pathfinding
 		return mapTiles.Where(t => t.Value.tentativeCost <= startingUnit.FightData.currentStats.MOVEMENT && !EnemyIsBlockingTile(startingUnit, t.Value)).Select(t => t.Value).ToList();
 	}
     bool EnemyIsBlockingTile(Unit source, Tile target) {
-        return (target.unitOnTile && target.unitOnTile.UnitData.Faction != source.UnitData.Faction);
+        return (target.unitOnTile && target.unitOnTile.FightData.currentStats.FACTION != source.FightData.currentStats.FACTION);
     }
 	void ResetMapTilesTentativeCost()
     {
