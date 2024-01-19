@@ -1,3 +1,4 @@
+using Assets.Resources_moved.Scripts.General.Classes;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -26,14 +27,14 @@ public class NewGameManager : MonoBehaviour
     GameObject GodsPrefab;
 
     private string godSelected;
-    private IReligion religionSelected;
+    private Religion religionSelected;
 
 	private void Update()
 	{
         startButton.enabled = seedInputField.text.Length == 0 || seedInputField.text.Length > 2;
 	}
 
-    public void SelectReligion(int religion)
+    public void SelectReligion(string religion)
     {
         religionSelected = LoadReligion(religion);
         ReligionSelectedText.SetActive(true);
@@ -43,30 +44,24 @@ public class NewGameManager : MonoBehaviour
         LoadGods(religionSelected);
     }
 
-    public IReligion LoadReligion(int religion)
+    public Religion LoadReligion(string religion)
 	{
-		return religion switch
-		{
-			0 => new Agbara(),
-			_ => new Agbara(),
-		};
+        return FileManager.GetGodOfReligion(religion);
 	}
     
-    public void LoadGods(IReligion religionSelected)
+    public void LoadGods(Religion religionSelected)
 	{
-        string[] playableGods = religionSelected.PlayableGods.Select(g => g.ToString()).ToArray();
-
-		GameObject.Find("Character A Text").GetComponent<TextMeshProUGUI>().text = playableGods[0];
-        GameObject.Find("Character B Text").GetComponent<TextMeshProUGUI>().text = playableGods[1];
-        GameObject.Find("Character C Text").GetComponent<TextMeshProUGUI>().text = playableGods[2];
-        GameObject.Find("Character D Text").GetComponent<TextMeshProUGUI>().text = playableGods[3];
+        char[] Characters = new char[4] { 'A', 'B', 'C', 'D' };
+        for(int i = 0; i < religionSelected.ListOfGods.Count && i < 4; i++)
+			GameObject.Find($"Character {Characters[i]} Text").GetComponent<TextMeshProUGUI>().text = religionSelected.ListOfGods[i].Name;
     }
 
     public void SelectGod(int god)
 	{
-        string godName = religionSelected.PlayableGods[god].ToString();
+        God godSelectedFromList = religionSelected.ListOfGods[god];
+		string godName = godSelectedFromList.Name.ToString();
         godSelected = godName;
-        godData.text = $"{godName}";
+        godData.text = $"{godSelectedFromList.BuffDescription}";
 
         if(godImage.color.a == 0f)
 		{
@@ -75,7 +70,7 @@ public class NewGameManager : MonoBehaviour
             godImage.color = currentColor;
         }
 
-        godImage.sprite = AddressablesManager.LoadResource<Sprite>(AddressablesManager.TypeOfResource.Sprite, godName);
+        godImage.sprite = AddressablesManager.LoadResource<Sprite>(AddressablesManager.TypeOfResource.Sprite, godSelectedFromList.Character_Sprite);
     }
     public void StartGame()
     {

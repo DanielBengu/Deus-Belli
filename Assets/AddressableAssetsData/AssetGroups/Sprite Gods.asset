@@ -21,10 +21,82 @@ MonoBehaviour:
     m_Address: Sprite/Ataiku
     m_ReadOnly: 0
     m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: c0136ee10a130df46834369ab65cd1c0
     m_Address: Sprite/Omi
     m_ReadOnly: 0
     m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: f2b950638f67a674da432924ec36bbc6
+    m_Address: Sprite/Pirate God
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 079178173c015744da623fa7c45d6ce3
+    m_Address: Sprite/Teriba
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: afc72131f7d94404490f46d9a128852a
+    m_Address: Sprite/Orin
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 473bd925ff5277d449467a50de1297dc
+    m_Address: Sprite/Valkyrie Pirate
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: d71dab48c530ef445bdfa280f98a2de9
+    m_Address: Sprite/Shogun Pirate
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 74f62f266bda35d45aca5349adf061a9
+    m_Address: Sprite/Old Pirate
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: c7f0dbce056afb54e81d9d5144a99682
+    m_Address: Sprite/Yokai
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 22cb961653463354bad2f92266c05011
+    m_Address: Sprite/Demn
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 530370ee50c210e4d86c33870bf1256b
+    m_Address: Sprite/Fox
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 873cccee53c9dfa45b9880d4e24a83ae
+    m_Address: Sprite/Primate
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 58d0e770d0787724db84e0c76ca35490
+    m_Address: Sprite/Fairy
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: c671d76deeae95f4595065f8370d3541
+    m_Address: Sprite/Elf
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 2e3f0d1b5f22b2f46adb23d5b09c8902
+    m_Address: Sprite/Orc
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 475ccc0eeb10e8247b2a93e0b7e9538d
+    m_Address: Sprite/Treant
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
   m_ReadOnly: 0
   m_Settings: {fileID: 11400000, guid: 42fa5884c9964964993dbdd708fbd850, type: 2}
   m_SchemaSet:

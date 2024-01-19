@@ -1,3 +1,4 @@
+using Assets.Resources_moved.Scripts.General.Classes;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -8,6 +9,7 @@ public static class FileManager
 	public const string PLAYER_UNITS_PATH = "Assets\\Resources_moved\\Scripts\\General\\Player Data\\Unit list.json";
 	public const string MAPS_PATH = "Assets\\Resources_moved\\Config\\Maps\\Generic";
 	public const string ENCOUNTERS_PATH = "Assets\\Resources_moved\\Config\\Encounters";
+	public const string GODS_PATH = "Assets\\Resources_moved\\Config\\Gods";
 	public static EncounterListData GetEncounters(EncounterTypes typeOfEncounter)
 	{
 		string data = File.ReadAllText($"{ENCOUNTERS_PATH}\\{typeOfEncounter}.json");
@@ -82,6 +84,13 @@ public static class FileManager
 			map = null;
 		return map;
 	}
+
+	public static Religion GetGodOfReligion(string religionName)
+	{
+		string data = File.ReadAllText($"{GODS_PATH}\\{religionName}.json");
+		return GetDataFromJSON<Religion>(data);
+	}
+
 	public static T GetDataFromJSON<T>(string jsonString)
 	{
 		T unitListData = JsonUtility.FromJson<T>(jsonString);

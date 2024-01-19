@@ -109,6 +109,7 @@
     <Compile Include="Assets\MapEditorManager.cs" />
     <Compile Include="Assets\RFA\Common\Scripts\Aiming.cs" />
     <Compile Include="Assets\Polyart\PolyartStudio\SharedResources\CritiasFoliage\Code\FoliageDataSerializer.cs" />
+    <Compile Include="Assets\Resources_moved\Scripts\General\Classes\Religion.cs" />
     <Compile Include="Assets\Polyart\PolyartStudio\SharedResources\CritiasFoliage\Code\FoliageWindTreeWind.cs" />
     <Compile Include="Assets\Polyart\PolyartStudio\DreamscapeCampsite\Scripts\Flickering.cs" />
     <Compile Include="Assets\Resources_moved\Scripts\GodsArchive\InterfacesAndClasses\IGod.cs" />

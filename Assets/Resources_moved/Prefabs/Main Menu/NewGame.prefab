@@ -66,7 +66,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: 432a3a340647b6744847feaec9549772, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 7e3cc2cd125f7624b8f9d0db833f80a7, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -123,13 +123,13 @@ MonoBehaviour:
       - m_Target: {fileID: 5499040054822099621}
         m_TargetAssemblyTypeName: NewGameManager, Assembly-CSharp
         m_MethodName: SelectReligion
-        m_Mode: 3
+        m_Mode: 5
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
           m_IntArgument: 1
           m_FloatArgument: 0
-          m_StringArgument: 
+          m_StringArgument: Pirate
           m_BoolArgument: 0
         m_CallState: 2
 --- !u!1 &1191643567271324111
@@ -198,7 +198,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: 3ba3af75d2767244cabc7c7a033cf1b0, type: 3}
+  m_Sprite: {fileID: 21300000, guid: d7b34de5080ad9a45bf88f1765d9fe12, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -255,13 +255,13 @@ MonoBehaviour:
       - m_Target: {fileID: 5499040054822099621}
         m_TargetAssemblyTypeName: NewGameManager, Assembly-CSharp
         m_MethodName: SelectReligion
-        m_Mode: 3
+        m_Mode: 5
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
           m_IntArgument: 3
           m_FloatArgument: 0
-          m_StringArgument: 
+          m_StringArgument: FantasyForest
           m_BoolArgument: 0
         m_CallState: 2
 --- !u!1 &1271167924931622431
@@ -300,7 +300,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 176.99994, y: 410.99988}
+  m_AnchoredPosition: {x: 176.99988, y: 410.99988}
   m_SizeDelta: {x: 160, y: 30}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &1489052856040123050
@@ -725,7 +725,7 @@ MonoBehaviour:
   godImage: {fileID: 4123487921011822159}
   ReligionsPrefab: {fileID: 4011948985970376859}
   ReligionSelectedText: {fileID: 8665726039170114934}
-  GodsPrefab: {fileID: 3653441032183683887, guid: 68ac13d8075c31e4d94ca37dc0d83d51, type: 3}
+  GodsPrefab: {fileID: 9196239699149817437, guid: 917d1fe6034ea5444bfe659b75797023, type: 3}
 --- !u!1 &3745772396740463039
 GameObject:
   m_ObjectHideFlags: 0
@@ -1454,7 +1454,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 959.99994, y: 828.9999}
+  m_AnchoredPosition: {x: 959.9999, y: 828.9999}
   m_SizeDelta: {x: 100, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &5455506714115519935
@@ -1575,7 +1575,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: dbd97af0f8830b04b8108132a738a0bf, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 930590d915e0e4e49a9553547c5f32bd, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -1632,13 +1632,13 @@ MonoBehaviour:
       - m_Target: {fileID: 5499040054822099621}
         m_TargetAssemblyTypeName: NewGameManager, Assembly-CSharp
         m_MethodName: SelectReligion
-        m_Mode: 3
+        m_Mode: 5
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
           m_IntArgument: 0
           m_FloatArgument: 0
-          m_StringArgument: 
+          m_StringArgument: Agbara
           m_BoolArgument: 0
         m_CallState: 2
 --- !u!1 &5907620485609042145
@@ -1678,7 +1678,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 184.99994, y: 535.99994}
+  m_AnchoredPosition: {x: 184.99988, y: 535.9999}
   m_SizeDelta: {x: 160, y: 30}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &282437514359298248
@@ -2017,7 +2017,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: 58215e39c7b426b46b02918278418024, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 23b822f056a0bdf409bc21e2adc62374, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -2074,13 +2074,13 @@ MonoBehaviour:
       - m_Target: {fileID: 5499040054822099621}
         m_TargetAssemblyTypeName: NewGameManager, Assembly-CSharp
         m_MethodName: SelectReligion
-        m_Mode: 3
+        m_Mode: 5
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 2
+          m_IntArgument: 0
           m_FloatArgument: 0
-          m_StringArgument: 
+          m_StringArgument: Yokai
           m_BoolArgument: 0
         m_CallState: 2
 --- !u!1 &7048840558436200652
@@ -2112,14 +2112,14 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
-  - {fileID: 2394935734316788565}
-  - {fileID: 2466277078639359623}
-  - {fileID: 8320142006270355443}
-  - {fileID: 4663729394270501104}
+  - {fileID: 6440950753679143880}
+  - {fileID: 3803867999463924487}
   - {fileID: 3750712490961565048}
   - {fileID: 4889161685699066204}
-  - {fileID: 3803867999463924487}
-  - {fileID: 6440950753679143880}
+  - {fileID: 4663729394270501104}
+  - {fileID: 8320142006270355443}
+  - {fileID: 2466277078639359623}
+  - {fileID: 2394935734316788565}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &7068722671889745983
@@ -2156,7 +2156,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 933.99994, y: 1316}
+  m_AnchoredPosition: {x: 933.9999, y: 1316}
   m_SizeDelta: {x: 200, y: 50}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &3227921857606776965
@@ -2501,7 +2501,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -343.34412, y: 329.31396}
+  m_AnchoredPosition: {x: -396, y: 329.31396}
   m_SizeDelta: {x: 200, y: 50}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &1647816080497342889
@@ -2564,7 +2564,7 @@ MonoBehaviour:
   m_fontSize: 50
   m_fontSizeBase: 50
   m_fontWeight: 400
-  m_enableAutoSizing: 0
+  m_enableAutoSizing: 1
   m_fontSizeMin: 18
   m_fontSizeMax: 72
   m_fontStyle: 0

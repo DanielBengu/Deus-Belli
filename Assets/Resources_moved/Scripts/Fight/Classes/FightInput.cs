@@ -155,7 +155,7 @@ public class FightInput
 		if (_fightManager.ShowingPathToTile && _fightManager.ShowingPathToTile.data.PositionOnGrid == tileSelected.data.PositionOnGrid)
 		{
 			_structureManager.MoveUnit(_fightManager.UnitSelected, tileSelected, false);
-			_fightManager.ResetGameState(true);
+			_fightManager.ResetGameState(true, false);
 			return;
 		}
 		AskForMovementConfirmation(tileSelected);

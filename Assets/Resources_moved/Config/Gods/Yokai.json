@@ -1,0 +1,145 @@
+{
+  "Name": "Yokai",
+  "ListOfGods": [
+    {
+      "Name": "Yokai",
+      "Character_Sprite": "Yokai",
+      "BuffDescription": "Test\nDescription",
+      "StartingCharacterUnits": [
+        {
+          "Name": "Paolo Pirata",
+          "ModelName": "Male A",
+          "PortraitName": "Warrior",
+          "Stats": {
+            "Hp": 10,
+            "Movement": 4,
+            "Attack": 2,
+            "Range": 1
+          },
+          "RandomizedTraits": false,
+          "Traits": [ "Speedy", "Floaty", "Overload" ],
+          "Faction": 0
+        },
+        {
+          "Name": "Carlo Capitano",
+          "ModelName": "Male B",
+          "PortraitName": "Archer",
+          "Stats": {
+            "Hp": 6,
+            "Movement": 3,
+            "Attack": 2,
+            "Range": 2
+          },
+          "RandomizedTraits": false,
+          "Traits": [ "Strong", "Tanky" ],
+          "Faction": 0
+        }
+      ]
+    },
+    {
+      "Name": "Demn",
+      "Character_Sprite": "Demn",
+      "BuffDescription": "Test\nDescription",
+      "StartingCharacterUnits": [
+        {
+          "Name": "Paolo Pirata",
+          "ModelName": "Male A",
+          "PortraitName": "Warrior",
+          "Stats": {
+            "Hp": 10,
+            "Movement": 4,
+            "Attack": 2,
+            "Range": 1
+          },
+          "RandomizedTraits": false,
+          "Traits": [ "Speedy", "Floaty", "Overload" ],
+          "Faction": 0
+        },
+        {
+          "Name": "Carlo Capitano",
+          "ModelName": "Male B",
+          "PortraitName": "Archer",
+          "Stats": {
+            "Hp": 6,
+            "Movement": 3,
+            "Attack": 2,
+            "Range": 2
+          },
+          "RandomizedTraits": false,
+          "Traits": [ "Strong", "Tanky" ],
+          "Faction": 0
+        }
+      ]
+    },
+    {
+      "Name": "Fox",
+      "Character_Sprite": "Fox",
+      "BuffDescription": "Test\nDescription",
+      "StartingCharacterUnits": [
+        {
+          "Name": "Paolo Pirata",
+          "ModelName": "Male A",
+          "PortraitName": "Warrior",
+          "Stats": {
+            "Hp": 10,
+            "Movement": 4,
+            "Attack": 2,
+            "Range": 1
+          },
+          "RandomizedTraits": false,
+          "Traits": [ "Speedy", "Floaty", "Overload" ],
+          "Faction": 0
+        },
+        {
+          "Name": "Carlo Capitano",
+          "ModelName": "Male B",
+          "PortraitName": "Archer",
+          "Stats": {
+            "Hp": 6,
+            "Movement": 3,
+            "Attack": 2,
+            "Range": 2
+          },
+          "RandomizedTraits": false,
+          "Traits": [ "Strong", "Tanky" ],
+          "Faction": 0
+        }
+      ]
+    },
+    {
+      "Name": "Primate",
+      "Character_Sprite": "Primate",
+      "BuffDescription": "Test\nDescription",
+      "StartingCharacterUnits": [
+        {
+          "Name": "Paolo Pirata",
+          "ModelName": "Male A",
+          "PortraitName": "Warrior",
+          "Stats": {
+            "Hp": 10,
+            "Movement": 4,
+            "Attack": 2,
+            "Range": 1
+          },
+          "RandomizedTraits": false,
+          "Traits": [ "Speedy", "Floaty", "Overload" ],
+          "Faction": 0
+        },
+        {
+          "Name": "Carlo Capitano",
+          "ModelName": "Male B",
+          "PortraitName": "Archer",
+          "Stats": {
+            "Hp": 6,
+            "Movement": 3,
+            "Attack": 2,
+            "Range": 2
+          },
+          "RandomizedTraits": false,
+          "Traits": [ "Strong", "Tanky" ],
+          "Faction": 0
+        }
+      ]
+    }
+  ]
+}

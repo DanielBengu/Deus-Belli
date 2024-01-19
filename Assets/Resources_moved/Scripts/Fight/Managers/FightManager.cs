@@ -187,7 +187,7 @@ public class FightManager : MonoBehaviour
 
     void ManageVictory()
     {
-		bool isFightWon = UnitsOnField.Count(u => u.FightData.currentStats.FACTION == ENEMY_FACTION) == 0;
+		bool isFightWon = UnitsOnField.Count(u => u.FightData.currentStats.FACTION != USER_FACTION) == 0;
 
         if (!isFightWon) return;
 
@@ -276,15 +276,15 @@ public class FightManager : MonoBehaviour
 		StructureManager.ClearShowcase(rightUnitShowcaseParent);
 	}
 
-    public void ResetGameState(bool resetUnitSelected)
+    public void ResetGameState(bool resetUnitSelected, bool resetShowcase = true)
     {
         if (resetUnitSelected) UnitSelected = null;
-        ShowingPathToTile = null;
+        if(resetShowcase) ClearShowcase();
+		ShowingPathToTile = null;
         StructureManager.ClearSelection(true);
         StructureManager.SetInfoPanel(false);
 		StructureManager.SetAttackPanel(false);
 		StructureManager.ClearTooltips();
-        ClearShowcase();
         ActionInQueue = ActionPerformed.Default;
         PossibleAttacks = new();
 	}
