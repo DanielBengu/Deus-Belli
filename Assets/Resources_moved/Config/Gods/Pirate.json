@@ -3,7 +3,7 @@
   "ListOfGods": [
     {
       "Name": "Pirate God",
-      "Character_Sprite": "Pirate God",
+      "Character_Model": "Pirate God",
       "BuffDescription": "Test\nDescription",
       "StartingCharacterUnits": [
         {
@@ -38,7 +38,7 @@
     },
     {
       "Name": "Valkyrie Pirate",
-      "Character_Sprite": "Valkyrie Pirate",
+      "Character_Model": "Valkyrie Pirate",
       "BuffDescription": "Test\nDescription",
       "StartingCharacterUnits": [
         {
@@ -73,7 +73,7 @@
     },
     {
       "Name": "Shogun Pirate",
-      "Character_Sprite": "Shogun Pirate",
+      "Character_Model": "Shogun Pirate",
       "BuffDescription": "Test\nDescription",
       "StartingCharacterUnits": [
         {
@@ -108,7 +108,7 @@
     },
     {
       "Name": "Old Pirate",
-      "Character_Sprite": "Old Pirate",
+      "Character_Model": "Old Pirate",
       "BuffDescription": "Test\nDescription",
       "StartingCharacterUnits": [
         {

@@ -283,8 +283,17 @@ public class StructureManager : MonoBehaviour
 
         return possible;
     }
+	public List<PossibleAttack> GetAllAttackableTilesForUnit(Unit unit, bool selectTiles, List<Tile> possibleMovements = null)
+	{
+		List<PossibleAttack> possible = pathfinding.FindAttackableTiles(unit, possibleMovements);
 
-    public Tile CheapestTileToMoveTo(List<PossibleAttack> possibleAttacks, Unit attacker, Unit defender)
+		if (selectTiles)
+			SelectTiles(possible.Select(a => a.tileToAttack).ToList(), false, TileType.Enemy);
+
+		return possible;
+	}
+
+	public Tile CheapestTileToMoveTo(List<PossibleAttack> possibleAttacks, Unit attacker, Unit defender)
     {
         Tile lowestTile = possibleAttacks.First().tileToMoveTo;
         float lowestCost = OUT_OF_BOUND_VALUE;

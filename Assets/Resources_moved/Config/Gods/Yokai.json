@@ -3,7 +3,7 @@
   "ListOfGods": [
     {
       "Name": "Yokai",
-      "Character_Sprite": "Yokai",
+      "Character_Model": "Yokai",
       "BuffDescription": "Test\nDescription",
       "StartingCharacterUnits": [
         {
@@ -38,7 +38,7 @@
     },
     {
       "Name": "Demn",
-      "Character_Sprite": "Demn",
+      "Character_Model": "Demn",
       "BuffDescription": "Test\nDescription",
       "StartingCharacterUnits": [
         {
@@ -73,7 +73,7 @@
     },
     {
       "Name": "Fox",
-      "Character_Sprite": "Fox",
+      "Character_Model": "Fox",
       "BuffDescription": "Test\nDescription",
       "StartingCharacterUnits": [
         {
@@ -108,7 +108,7 @@
     },
     {
       "Name": "Primate",
-      "Character_Sprite": "Primate",
+      "Character_Model": "Primate",
       "BuffDescription": "Test\nDescription",
       "StartingCharacterUnits": [
         {

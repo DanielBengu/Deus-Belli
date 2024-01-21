@@ -107,6 +107,33 @@ public class Pathfinding
 		}
 		return possibleAttacks;
 	}
+	public List<PossibleAttack> FindAttackableTiles(Unit attacker, List<Tile> possibleMovements)
+	{
+		//If no list of possible movements was passed, we generate it
+		possibleMovements ??= CalculateMapTilesDistance(attacker);
+		List<PossibleAttack> possibleAttacks = new();
+		List<Tile> startingPointsForAttack = possibleMovements;
+		List<Tile> tilesToSearch = new();
+
+		foreach (var tile in possibleMovements)
+		{
+			tilesToSearch = new() { tile };
+			List<Tile> tempTiles = new();
+			for (int i = 0; i < attacker.UnitData.Stats.Range; i++)
+			{
+				foreach (var tileToSearch in tilesToSearch)
+				{
+					List<Tile> neighboursTile = FindNeighbours(attacker, tileToSearch, false).Where(t => t != null).ToList();
+					tempTiles.AddRange(neighboursTile);
+
+					GetAttackableTilesOnNeighbours(neighboursTile, tile, possibleAttacks);
+				}
+				tilesToSearch.AddRange(tempTiles);
+				tempTiles = new();
+			}
+		}
+		return possibleAttacks;
+	}
 
 	void GetPossibleAttacksOnNeighbours(List<Tile> neighboursTile, Tile tileOfOrigin, int attackerFaction, List<PossibleAttack> possibleAttacks)
     {
@@ -120,8 +147,17 @@ public class Pathfinding
 				possibleAttacks.Add(attack);
 		}
 	}
+	void GetAttackableTilesOnNeighbours(List<Tile> neighboursTile, Tile tileOfOrigin, List<PossibleAttack> possibleAttacks)
+	{
+		foreach (var neighbour in neighboursTile)
+		{
+			PossibleAttack attack = new(neighbour, tileOfOrigin);
+			if (!possibleAttacks.Contains(attack))
+				possibleAttacks.Add(attack);
+		}
+	}
 
-    bool NeighbourHasAnEnemy(Tile neighbour, int attackerFaction) {
+	bool NeighbourHasAnEnemy(Tile neighbour, int attackerFaction) {
         return neighbour && neighbour.unitOnTile && neighbour.unitOnTile.FightData.currentStats.FACTION != attackerFaction;
 	}
 

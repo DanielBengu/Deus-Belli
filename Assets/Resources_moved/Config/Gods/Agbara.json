@@ -3,7 +3,7 @@
   "ListOfGods": [
     {
       "Name": "Ataiku",
-      "Character_Sprite": "Ataiku",
+      "Character_Model": "Ataiku",
       "BuffDescription": "Test\nDescription",
       "StartingCharacterUnits": [
         {
@@ -38,7 +38,7 @@
     },
     {
       "Name": "Omi",
-      "Character_Sprite": "Omi",
+      "Character_Model": "Omi",
       "BuffDescription": "Test\nDescription",
       "StartingCharacterUnits": [
         {
@@ -73,7 +73,7 @@
     },
     {
       "Name": "Teriba",
-      "Character_Sprite": "Teriba",
+      "Character_Model": "Teriba",
       "BuffDescription": "Test\nDescription",
       "StartingCharacterUnits": [
         {
@@ -108,7 +108,7 @@
     },
     {
       "Name": "Orin",
-      "Character_Sprite": "Orin",
+      "Character_Model": "Orin",
       "BuffDescription": "Test\nDescription",
       "StartingCharacterUnits": [
         {

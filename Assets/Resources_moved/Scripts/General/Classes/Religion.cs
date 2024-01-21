@@ -12,7 +12,7 @@ namespace Assets.Resources_moved.Scripts.General.Classes
 	public class God
 	{
 		public string Name;
-		public string Character_Sprite;
+		public string Character_Model;
 		public string BuffDescription;
 		public List<UnitData> StartingCharacterUnits;
 	}

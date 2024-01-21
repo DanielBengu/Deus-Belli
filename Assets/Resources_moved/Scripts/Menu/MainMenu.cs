@@ -16,26 +16,26 @@ public class MainMenu: MonoBehaviour
     [SerializeField]
     Button ContinueText;
     [SerializeField]
-    TextMeshProUGUI ContinueInfoText;
+    TooltipManager continueButtonTooltip;
 
     GameObject currentSection;
 
     private void Start()
 	{
-        currentSection = transform.GetChild(0).gameObject;
+		currentSection = transform.GetChild(0).gameObject;
         bool runIsOnGoing = PlayerPrefs.GetInt(GeneralManager.ONGOING_RUN) != 0;
 
         ContinueText.interactable = runIsOnGoing;
-        if(runIsOnGoing)
-            ContinueInfoText.text = GetContinueInfoText();
-    }
-
-    string GetContinueInfoText()
-	{
-        string godSelected = PlayerPrefs.GetString(GeneralManager.GOD_SELECTED_PP);
-        string goldAccumulated = PlayerPrefs.GetInt(GeneralManager.GOLD).ToString();
-        return $"{godSelected}: {goldAccumulated}g";
-    }
+        if (runIsOnGoing)
+        {
+			string godSelected = PlayerPrefs.GetString(GeneralManager.GOD_SELECTED_PP);
+			string goldAccumulated = PlayerPrefs.GetInt(GeneralManager.GOLD).ToString();
+			int completedRows = PlayerPrefs.GetInt(GeneralManager.CURRENT_ROW) + 1;
+            continueButtonTooltip.enabled = true;
+			continueButtonTooltip.header = godSelected;
+            continueButtonTooltip.text = $"Turn {completedRows}\n{goldAccumulated}g";
+		}
+	}
 
     public void SwitchSection(GameObject prefabToInstantiate, Vector3 position)
 	{

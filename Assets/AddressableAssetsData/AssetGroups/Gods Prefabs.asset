@@ -1,0 +1,65 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bbb281ee3bf0b054c82ac2347e9e782c, type: 3}
+  m_Name: Gods Prefabs
+  m_EditorClassIdentifier: 
+  m_GroupName: Gods Prefabs
+  m_Data:
+    m_SerializedData: []
+  m_GUID: 0af526b79d2a1af49a9d06ac8af1be90
+  m_SerializeEntries:
+  - m_GUID: 15100bce5ee77954d810f22625afd260
+    m_Address: God/Ataiku
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 947fc768fef5ff446b5dce270b5145fb
+    m_Address: God/Omi
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: b11a2d76607d306448a36b2b770b36e0
+    m_Address: God/Orin
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 0fe98578edff95845825383a22769797
+    m_Address: God/Teriba
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 20f9e67a61c881b4dbf8f0f75e2c97d6
+    m_Address: God/Orc
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 687d045b79ae6184791a4f340e18d4bc
+    m_Address: God/Fairy
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: ed8445d8e986f4d4c8813b3e568a3aa9
+    m_Address: God/Elf
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 02b9af129e31242478f3fa604dba8c78
+    m_Address: God/Treant
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  m_ReadOnly: 0
+  m_Settings: {fileID: 11400000, guid: 42fa5884c9964964993dbdd708fbd850, type: 2}
+  m_SchemaSet:
+    m_Schemas:
+    - {fileID: 11400000, guid: 862a0560993c6234d88694fe70123b23, type: 2}
+    - {fileID: 11400000, guid: 9817d73cc7c5e6645975c9695a71f06e, type: 2}

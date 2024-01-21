@@ -3,7 +3,7 @@
   "ListOfGods": [
     {
       "Name": "Orc",
-      "Character_Sprite": "Orc",
+      "Character_Model": "Orc",
       "BuffDescription": "Test\nDescription",
       "StartingCharacterUnits": [
         {
@@ -38,7 +38,7 @@
     },
     {
       "Name": "Fairy",
-      "Character_Sprite": "Fairy",
+      "Character_Model": "Fairy",
       "BuffDescription": "Test\nDescription",
       "StartingCharacterUnits": [
         {
@@ -73,7 +73,7 @@
     },
     {
       "Name": "Treant",
-      "Character_Sprite": "Treant",
+      "Character_Model": "Treant",
       "BuffDescription": "Test\nDescription",
       "StartingCharacterUnits": [
         {
@@ -108,7 +108,7 @@
     },
     {
       "Name": "Elf",
-      "Character_Sprite": "Elf",
+      "Character_Model": "Elf",
       "BuffDescription": "Test\nDescription",
       "StartingCharacterUnits": [
         {

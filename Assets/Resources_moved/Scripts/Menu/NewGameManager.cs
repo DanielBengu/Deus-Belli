@@ -17,7 +17,7 @@ public class NewGameManager : MonoBehaviour
     [SerializeField]
     TextMeshProUGUI godData;
     [SerializeField]
-    Image godImage;
+    GameObject godPrefab;
 
     [SerializeField]
     GameObject ReligionsPrefab;
@@ -63,14 +63,11 @@ public class NewGameManager : MonoBehaviour
         godSelected = godName;
         godData.text = $"{godSelectedFromList.BuffDescription}";
 
-        if(godImage.color.a == 0f)
-		{
-            Color currentColor = godImage.color;
-            currentColor.a = 1f;
-            godImage.color = currentColor;
-        }
+        for(int i = 0; i < godPrefab.transform.childCount; i++)
+            Destroy(godPrefab.transform.GetChild(i).gameObject);
 
-        godImage.sprite = AddressablesManager.LoadResource<Sprite>(AddressablesManager.TypeOfResource.Sprite, godSelectedFromList.Character_Sprite);
+        GameObject prefab = AddressablesManager.LoadResource<GameObject>(AddressablesManager.TypeOfResource.God, godName);
+        Instantiate(prefab, godPrefab.transform.position, prefab.transform.rotation, godPrefab.transform);
     }
     public void StartGame()
     {

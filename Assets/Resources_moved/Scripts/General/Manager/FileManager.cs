@@ -6,7 +6,7 @@ using System.Linq;
 using UnityEngine;
 public static class FileManager
 {
-	public const string PLAYER_UNITS_PATH = "Assets\\Resources_moved\\Scripts\\General\\Player Data\\Unit list.json";
+	public const string PLAYER_UNITS_PATH = "Assets\\Resources_moved\\Config\\Player Data\\Unit list.json";
 	public const string MAPS_PATH = "Assets\\Resources_moved\\Config\\Maps\\Generic";
 	public const string ENCOUNTERS_PATH = "Assets\\Resources_moved\\Config\\Encounters";
 	public const string GODS_PATH = "Assets\\Resources_moved\\Config\\Gods";

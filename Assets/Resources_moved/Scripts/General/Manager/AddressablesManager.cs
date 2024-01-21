@@ -44,6 +44,7 @@ public static class AddressablesManager
 		Units,
 		Terrains,
 		Sprite,
-		Prefab
+		Prefab,
+		God
 	}
 }

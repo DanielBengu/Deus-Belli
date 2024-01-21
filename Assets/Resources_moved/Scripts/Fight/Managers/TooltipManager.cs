@@ -10,6 +10,7 @@ public class TooltipManager : MonoBehaviour, IPointerEnterHandler, IPointerExitH
 	GameObject currentTooltip;
 
 	// Calculate an offset to position the tooltip above the cursor
+	[SerializeField]
 	Vector3 offset = new(0f, 105f, 0f);
 
 	public string header;

@@ -127,8 +127,10 @@ public class FightInput
 
 	void PossibleActionsForUnit(Unit currentUnit)
 	{
-		List<Tile> possibleMovements = _structureManager.GeneratePossibleMovementForUnit(currentUnit, true);
+		List<Tile> possibleMovements = _structureManager.GeneratePossibleMovementForUnit(currentUnit, false);
 		_fightManager.PossibleAttacks = _fightManager.StructureManager.GetPossibleAttacksForUnit(currentUnit, !currentUnit.Movement.HasPerformedMainAction, possibleMovements);
+		_fightManager.StructureManager.GetAllAttackableTilesForUnit(currentUnit, !currentUnit.Movement.HasPerformedMainAction, possibleMovements);
+		_fightManager.StructureManager.SelectTiles(possibleMovements, false, TileType.PossibleEnemy);
 	}
 
 	public bool HasUnitAlreadyPerformedAction()
