@@ -20,12 +20,14 @@ public struct Trait
 	public TraitsEnum traitEnum;
 	public string name;
 	public int level;
+	public bool enabled;
 
-	public Trait(TraitsEnum traitEnum, string name, int level)
+	public Trait(TraitsEnum traitEnum, string name, int level, bool enabled)
 	{
 		this.traitEnum = traitEnum;
 		this.name = name;
 		this.level = level;
+		this.enabled = enabled;
 	}
 
 	public static int GetBonus(TraitsEnum traitEnum, int level, StatsType statType = StatsType.HP, int baseValue = 1)
@@ -63,6 +65,11 @@ public struct Trait
 		else if (statType == StatsType.Armor)
 			return level;
 		else return -1;
+	}
+
+	public void DisableTrait()
+	{
+		enabled = false;
 	}
 }
 

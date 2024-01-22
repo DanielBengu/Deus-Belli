@@ -33,8 +33,11 @@ public class UnitFightData
 		if (updatedDamage > 0)
 			currentStats.CURRENT_HP -= updatedDamage;
 
-		if (ContainsTrait(TraitsEnum.Second_Wind, out int levelSecondWind))
+		if (currentStats.CURRENT_HP <= 0 && ContainsEnabledTrait(TraitsEnum.Second_Wind, out int levelSecondWind))
+		{
 			currentStats.CURRENT_HP = Trait.GetBonus(TraitsEnum.Second_Wind, levelSecondWind, StatsType.HP, baseStats.HP);
+			DisableTrait(TraitsEnum.Second_Wind);
+		}
 	}
 
 	public bool IsDead()
@@ -63,7 +66,7 @@ public class UnitFightData
 	public void StartOfTurnEffects()
     {
 		ResetMovement();
-		if (ContainsTrait(TraitsEnum.Regeneration, out int levelRegen))
+		if (ContainsEnabledTrait(TraitsEnum.Regeneration, out int levelRegen))
 			Heal(Trait.GetBonus(TraitsEnum.Regeneration, levelRegen, StatsType.HP, baseStats.HP));
 	}
 
@@ -72,15 +75,15 @@ public class UnitFightData
         foreach (var trait in traitFromJSON)
         {
             TraitsEnum traitEnum = (TraitsEnum)Enum.Parse(typeof(TraitsEnum), trait.Name);
-			traitList.Add(new Trait(traitEnum, trait.Name, trait.Level));
+			traitList.Add(new Trait(traitEnum, trait.Name, trait.Level, true));
 		}
 	}
 
-	public bool ContainsTrait(TraitsEnum traitEnum, out int level)
+	public bool ContainsEnabledTrait(TraitsEnum traitEnum, out int level)
 	{
 		try
 		{
-			Trait traitToSearch = traitList.Find(t => t.traitEnum == traitEnum);
+			Trait traitToSearch = traitList.Find(t => t.traitEnum == traitEnum && t.enabled == true);
 			level = traitToSearch.level;
 			return level != 0;
 		}
@@ -90,9 +93,20 @@ public class UnitFightData
 			return false;
 		}
 	}
+
+	public void DisableTrait(TraitsEnum traitEnum)
+	{
+		int traitToDisable = traitList.FindIndex(t => t.traitEnum == traitEnum && t.enabled == true);
+		if(traitToDisable != -1)
+		{
+			Trait trait = traitList[traitToDisable];
+			trait.enabled = false;
+			traitList[traitToDisable] = trait;
+		}
+	}
 	public int CalculateDamage(int incomingDamage, AttackType attackType)
 	{
-		if (ContainsTrait(TraitsEnum.Overload, out int levelOverload))
+		if (ContainsEnabledTrait(TraitsEnum.Overload, out int levelOverload))
 			incomingDamage = Trait.GetBonus(TraitsEnum.Overload, levelOverload, StatsType.HP, incomingDamage);
 
 		incomingDamage = ApplyArmor(incomingDamage, attackType);
@@ -114,9 +128,9 @@ public class UnitFightData
 	int LoadHp()
 	{
 		int hp = baseStats.HP;
-		if (ContainsTrait(TraitsEnum.Tanky, out int level))
+		if (ContainsEnabledTrait(TraitsEnum.Tanky, out int level))
 			hp += Trait.GetBonus(TraitsEnum.Tanky, level, StatsType.HP);
-		if (ContainsTrait(TraitsEnum.Healthy, out int levelHealthy))
+		if (ContainsEnabledTrait(TraitsEnum.Healthy, out int levelHealthy))
 			hp += Trait.GetBonus(TraitsEnum.Healthy, levelHealthy, StatsType.HP, baseStats.HP);
 
 		return hp;
@@ -125,7 +139,7 @@ public class UnitFightData
 	{
 		int movement = parent.UnitData.Stats.Movement;
 
-		if (ContainsTrait(TraitsEnum.Speedy, out int level))
+		if (ContainsEnabledTrait(TraitsEnum.Speedy, out int level))
 			movement += Trait.GetBonus(TraitsEnum.Speedy, level);
 
 		return movement;
@@ -133,9 +147,9 @@ public class UnitFightData
 	int LoadAttack()
 	{
 		int attack = baseStats.ATTACK;
-		if (ContainsTrait(TraitsEnum.Strong, out int levelStrong))
+		if (ContainsEnabledTrait(TraitsEnum.Strong, out int levelStrong))
 			attack += Trait.GetBonus(TraitsEnum.Strong, levelStrong, StatsType.Attack, baseStats.ATTACK);
-		if (ContainsTrait(TraitsEnum.Overload, out int levelOverload))
+		if (ContainsEnabledTrait(TraitsEnum.Overload, out int levelOverload))
 			attack += Trait.GetBonus(TraitsEnum.Overload, levelOverload, StatsType.Attack, baseStats.ATTACK);
 
 		return attack;
@@ -144,7 +158,7 @@ public class UnitFightData
 	{
 		int armor = baseStats.ARMOR;
 
-		if (ContainsTrait(TraitsEnum.Tanky, out int levelTanky))
+		if (ContainsEnabledTrait(TraitsEnum.Tanky, out int levelTanky))
 			armor += Trait.GetBonus(TraitsEnum.Tanky, levelTanky, StatsType.Armor);
 
 		return armor;
@@ -152,7 +166,7 @@ public class UnitFightData
 	int LoadWard()
 	{
 		int ward = baseStats.WARD;
-		if (ContainsTrait(TraitsEnum.Magic_Defence, out int levelDefence))
+		if (ContainsEnabledTrait(TraitsEnum.Magic_Defence, out int levelDefence))
 			ward += Trait.GetBonus(TraitsEnum.Magic_Defence, levelDefence, StatsType.Ward, baseStats.WARD);
 
 		return ward;

@@ -8,6 +8,7 @@ public class UIManager : MonoBehaviour
     const string fightDefeatScreenPrefabName = "Fight Defeat";
     const string rogueVictoryScreenPrefabName = "Rogue Victory";
     const string rogueDefeatScreenPrefabName = "Rogue Defeat";
+    Color disabled_trait = new(0.3f, 0.3f, 0.3f);
 
     TextMeshProUGUI Title;
 
@@ -157,15 +158,17 @@ public class UIManager : MonoBehaviour
 		for (int i = 0; i < traitParent.childCount; i++)
 		{
 			Transform traitBox = traitParent.GetChild(i);
-			if (unit.UnitData.Traits.Count > i)
+			if (unit.FightData.traitList.Count > i)
 			{
-                Traits currentTrait = unit.UnitData.Traits[i];
-                TraitsEnum traitsEnum = (TraitsEnum)Enum.Parse(typeof(TraitsEnum), currentTrait.Name);
-				traitBox.GetComponent<Image>().sprite = AddressablesManager.LoadResource<Sprite>(AddressablesManager.TypeOfResource.Sprite, currentTrait.Name);
+                Trait currentTrait = unit.FightData.traitList[i];
+                TraitsEnum traitsEnum = (TraitsEnum)Enum.Parse(typeof(TraitsEnum), currentTrait.name);
+				traitBox.GetComponent<Image>().sprite = AddressablesManager.LoadResource<Sprite>(AddressablesManager.TypeOfResource.Sprite, currentTrait.name);
 				traitBox.gameObject.SetActive(true);
-                string tooltipHeader = TraitText.GetTraitHeader(traitsEnum, currentTrait.Level);
-                string tooltipText = TraitText.GetTraitText(traitsEnum, currentTrait.Level);
+                string tooltipHeader = TraitText.GetTraitHeader(traitsEnum, currentTrait.level);
+                string tooltipText = TraitText.GetTraitText(traitsEnum, currentTrait.level);
 				SetupTooltip(traitBox.gameObject, tooltipHeader, tooltipText);
+                if (!currentTrait.enabled)
+                    traitBox.GetComponent<Image>().color = disabled_trait;
 			}
 			else
 				traitBox.gameObject.SetActive(false);
@@ -259,8 +262,9 @@ public class UIManager : MonoBehaviour
         textName.text = unit.UnitData.Name;
 		int unitUpdatedHP = unit.FightData.currentStats.CURRENT_HP - unit.FightData.CalculateDamage(enemyUnit.FightData.currentStats.ATTACK, enemyUnit.FightData.currentStats.ATTACK_TYPE);
 		textBefore.text = unit.FightData.currentStats.CURRENT_HP.ToString();
-		textAfter.text = unitUpdatedHP.ToString();
+		textAfter.text = unitUpdatedHP <= 0 ? "DEATH" : unitUpdatedHP.ToString();
 		textAfter.color = GetColor(unitUpdatedHP, unit.FightData.currentStats.CURRENT_HP);
 	}
+
 	#endregion
 }

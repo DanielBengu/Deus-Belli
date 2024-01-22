@@ -290,7 +290,7 @@ public class Pathfinding
 
     int GetMovementCost(Tile neighbourTile, Unit unit)
     {
-		if (unit.FightData.ContainsTrait(TraitsEnum.Floaty, out _))
+		if (unit.FightData.ContainsEnabledTrait(TraitsEnum.Floaty, out _))
             return 1;
 
 		return neighbourTile.data.MovementCost;

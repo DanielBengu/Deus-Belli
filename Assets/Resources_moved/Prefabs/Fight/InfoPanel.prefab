@@ -307,7 +307,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -476, y: -293}
+  m_AnchoredPosition: {x: -476, y: -360}
   m_SizeDelta: {x: 100, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &862644374360559741
@@ -400,6 +400,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   tooltipParent: {fileID: 1055382270660451751}
   tooltipPrefab: {fileID: 8560488783269486800, guid: d1009ea1a2195bd4ba46a51f29976be3, type: 3}
+  offset: {x: 0, y: 105, z: 0}
   header: 
   text: 
 --- !u!1 &1066744145190855150
@@ -533,6 +534,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   tooltipParent: {fileID: 1055382270660451751}
   tooltipPrefab: {fileID: 8560488783269486800, guid: d1009ea1a2195bd4ba46a51f29976be3, type: 3}
+  offset: {x: 0, y: 105, z: 0}
   header: 
   text: 
 --- !u!1 &1398091513257348377
@@ -685,6 +687,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   tooltipParent: {fileID: 1055382270660451751}
   tooltipPrefab: {fileID: 8560488783269486800, guid: d1009ea1a2195bd4ba46a51f29976be3, type: 3}
+  offset: {x: 0, y: 105, z: 0}
   header: 
   text: 
 --- !u!1 &2195597437376419768
@@ -1014,6 +1017,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   tooltipParent: {fileID: 1055382270660451751}
   tooltipPrefab: {fileID: 8560488783269486800, guid: d1009ea1a2195bd4ba46a51f29976be3, type: 3}
+  offset: {x: 0, y: 105, z: 0}
   header: 
   text: 
 --- !u!1 &3341323497229294380
@@ -1166,6 +1170,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   tooltipParent: {fileID: 1055382270660451751}
   tooltipPrefab: {fileID: 8560488783269486800, guid: d1009ea1a2195bd4ba46a51f29976be3, type: 3}
+  offset: {x: 0, y: 105, z: 0}
   header: 
   text: 
 --- !u!1 &3468283416919067010
@@ -1318,6 +1323,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   tooltipParent: {fileID: 1055382270660451751}
   tooltipPrefab: {fileID: 8560488783269486800, guid: d1009ea1a2195bd4ba46a51f29976be3, type: 3}
+  offset: {x: 0, y: 105, z: 0}
   header: 
   text: 
 --- !u!1 &3606450899577231900
@@ -1445,6 +1451,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   tooltipParent: {fileID: 1055382270660451751}
   tooltipPrefab: {fileID: 8560488783269486800, guid: d1009ea1a2195bd4ba46a51f29976be3, type: 3}
+  offset: {x: 0, y: 105, z: 0}
   header: 
   text: 
 --- !u!1 &4102320131788872267
@@ -1671,6 +1678,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   tooltipParent: {fileID: 1055382270660451751}
   tooltipPrefab: {fileID: 8560488783269486800, guid: d1009ea1a2195bd4ba46a51f29976be3, type: 3}
+  offset: {x: 0, y: 105, z: 0}
   header: 
   text: 
 --- !u!1 &5047334095580187298
@@ -2511,6 +2519,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   tooltipParent: {fileID: 1055382270660451751}
   tooltipPrefab: {fileID: 8560488783269486800, guid: d1009ea1a2195bd4ba46a51f29976be3, type: 3}
+  offset: {x: 0, y: 105, z: 0}
   header: 
   text: 
 --- !u!1 &7895177818211496353
@@ -2603,6 +2612,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   tooltipParent: {fileID: 1055382270660451751}
   tooltipPrefab: {fileID: 8560488783269486800, guid: d1009ea1a2195bd4ba46a51f29976be3, type: 3}
+  offset: {x: 0, y: 105, z: 0}
   header: 
   text: 
 --- !u!1 &8595812682351837985
@@ -2830,5 +2840,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   tooltipParent: {fileID: 1055382270660451751}
   tooltipPrefab: {fileID: 8560488783269486800, guid: d1009ea1a2195bd4ba46a51f29976be3, type: 3}
+  offset: {x: 0, y: 105, z: 0}
   header: 
   text: 

@@ -132,30 +132,46 @@ public class FightManager : MonoBehaviour
             int faction = factionsPresent[i];
             UnitData[] unitsOfFaction = unitsOnMap.Where(u => u.Faction == faction).ToArray();
             int[] possibleStartingTiles = level.GetValidStartingPositionForFaction(faction);
-			unitList.AddRange(GenerateListOfUnits(possibleStartingTiles, unitsOfFaction, level.seed, unitsParent));
+			unitList.AddRange(GenerateListOfUnits(possibleStartingTiles.ToList(), unitsOfFaction, level.seed, unitsParent));
 		}
 
         return unitList;
     }
 
-    List<Unit> GenerateListOfUnits(int[] possiblePlayerStartingUnits, UnitData[] playerUnits, int seed, Transform unitsParent)
+    List<Unit> GenerateListOfUnits(List<int> possiblePlayerStartingUnits, UnitData[] playerUnits, int seed, Transform unitsParent)
     {
         List<Unit> unitList = new();
 		List<int> alreadyOccupiedTiles = new();
 		for (int i = 0; i < playerUnits.Length; i++)
 		{
 			var unit = playerUnits[i];
-			bool exitClause = true;
-			while (exitClause)
+			bool exitClause = false;
+            int failsafe = 0;
+			while (!exitClause && failsafe < 100 && possiblePlayerStartingUnits.Count > 0)
 			{
-				int startingTile = RandomManager.GetRandomValue(seed * (i + 1), 0, possiblePlayerStartingUnits.Length);
+				int startingTile = RandomManager.GetRandomValue(seed * (i + 1), 0, possiblePlayerStartingUnits.Count);
 				Tile unitTile = GameObject.Find($"Terrain_{possiblePlayerStartingUnits[startingTile]}").GetComponent<Tile>();
-				alreadyOccupiedTiles.Add(unitTile.data.PositionOnGrid);
-				unitList.Add(GenerateSingleUnit(unit, unitTile, unitsParent));
-				exitClause = !(unitTile != null && unitTile.data.ValidForMovement && possiblePlayerStartingUnits.Length > 0);
+                if (IsTileValid(unitTile, alreadyOccupiedTiles))
+                {
+                    alreadyOccupiedTiles.Add(unitTile.data.PositionOnGrid);
+                    unitList.Add(GenerateSingleUnit(unit, unitTile, unitsParent));
+                    exitClause = true;
+                }
+                failsafe++;
+                possiblePlayerStartingUnits.Remove(possiblePlayerStartingUnits[startingTile]);
 			}
 		}
         return unitList;
+	}
+
+    bool IsTileValid(Tile tile, List<int> alreadyOccupiedTiles)
+    {
+        if(tile == null) return false;
+
+        bool notOccupied = !alreadyOccupiedTiles.Contains(tile.data.PositionOnGrid);
+        bool validForMovement = tile.data.ValidForMovement;
+
+		return notOccupied && validForMovement;
 	}
 
     Unit GenerateSingleUnit(UnitData unit, Tile tile, Transform parent)

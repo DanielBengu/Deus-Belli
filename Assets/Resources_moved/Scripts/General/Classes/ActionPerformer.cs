@@ -146,7 +146,7 @@ public class ActionPerformer
 
     bool IsRetaliationValid()
     {
-		bool doesAttackerHaveAntiRetaliation = sourceOfAction != null && sourceOfAction.FightData.ContainsTrait(TraitsEnum.Swift_Attack, out _);
+		bool doesAttackerHaveAntiRetaliation = sourceOfAction != null && sourceOfAction.FightData.ContainsEnabledTrait(TraitsEnum.Swift_Attack, out _);
 		bool isActionSimpleAttack = actionPerformed == ActionPerformed.SimpleAttack;
 
 		return isActionSimpleAttack && !doesAttackerHaveAntiRetaliation;

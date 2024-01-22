@@ -24,7 +24,7 @@ public class NewGameManager : MonoBehaviour
     [SerializeField]
     GameObject ReligionSelectedText;
     [SerializeField]
-    GameObject GodsPrefab;
+    GameObject godsInstance;
 
     private string godSelected;
     private Religion religionSelected;
@@ -40,8 +40,8 @@ public class NewGameManager : MonoBehaviour
         ReligionSelectedText.SetActive(true);
         ReligionSelectedText.transform.GetChild(0).GetComponent<TextMeshProUGUI>().text = religionSelected.Name;
         ReligionsPrefab.SetActive(false);
-        Instantiate(GodsPrefab, transform);
-        LoadGods(religionSelected);
+        godsInstance.SetActive(true);
+		LoadGods(religionSelected);
     }
 
     public Religion LoadReligion(string religion)
