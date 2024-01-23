@@ -1,4 +1,5 @@
 using Assets.Resources_moved.Scripts.General.Classes;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -26,7 +27,7 @@ public class NewGameManager : MonoBehaviour
     [SerializeField]
     GameObject godsInstance;
 
-    private string godSelected;
+    private God godSelected;
     private Religion religionSelected;
 
 	private void Update()
@@ -46,7 +47,8 @@ public class NewGameManager : MonoBehaviour
 
     public Religion LoadReligion(string religion)
 	{
-        return FileManager.GetGodOfReligion(religion);
+        string path = $"{FileManager.GODS_PATH}\\{religion}.json";
+        return FileManager.GetFileFromJSON<Religion>(path);
 	}
     
     public void LoadGods(Religion religionSelected)
@@ -58,10 +60,9 @@ public class NewGameManager : MonoBehaviour
 
     public void SelectGod(int god)
 	{
-        God godSelectedFromList = religionSelected.ListOfGods[god];
-		string godName = godSelectedFromList.Name.ToString();
-        godSelected = godName;
-        godData.text = $"{godSelectedFromList.BuffDescription}";
+        godSelected = religionSelected.ListOfGods[god];
+		string godName = godSelected.Name.ToString();
+        godData.text = $"{godSelected.BuffDescription}";
 
         for(int i = 0; i < godPrefab.transform.childCount; i++)
             Destroy(godPrefab.transform.GetChild(i).gameObject);
@@ -74,10 +75,15 @@ public class NewGameManager : MonoBehaviour
         if (godSelected == null)
             return;
 
-        int seed = seedInputField.text == string.Empty ? 0 : int.Parse(seedInputField.text);
-        PlayerPrefs.SetInt(GeneralManager.SEED, seed);
-        PlayerPrefs.SetString(GeneralManager.GOD_SELECTED_PP, godSelected);
+		int seed = seedInputField.text == string.Empty ? Math.Abs(Guid.NewGuid().GetHashCode()) : int.Parse(seedInputField.text);
+		List<UnitData> startingUnits = godSelected.StartingCharacterUnits;
+		int startingGold = 0;
+        int ascension = 0;
+
+		GeneralManager.RunData runData = new(religionSelected.Name, godSelected.Name, 0, 1, seed, startingGold, startingUnits, ascension);
+        SaveManager.SaveGameProgress(runData);
         PlayerPrefs.SetInt(GeneralManager.ONGOING_RUN, 0);
+
         ScenesManager.LoadSceneAsync(ScenesManager.Scenes.Fight);
     }
 

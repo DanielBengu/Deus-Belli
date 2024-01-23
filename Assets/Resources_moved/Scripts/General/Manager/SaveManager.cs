@@ -4,19 +4,20 @@ using static GeneralManager;
 
 public static class SaveManager
 {
-	public static void SaveGameProgress(int gold, int currentRow, int currentPositionInRow, int gameStatus, List<UnitData> unitList)
+	public static void SaveGameProgress(RunData runData)
 	{
-		PlayerPrefs.SetInt(GOLD, gold);
-		PlayerPrefs.SetInt(CURRENT_ROW, currentRow);
-		PlayerPrefs.SetInt(CURRENT_POSITION_IN_ROW, currentPositionInRow);
-		PlayerPrefs.SetInt(GAME_STATUS, gameStatus);
-		SaveUnits(unitList);
-	}
-	public static void SaveUnits(List<UnitData> unitsList)
-	{
-		UnitListData unitListData = new() { unitList = unitsList.ToArray() };
-		string unitJSON =  JsonUtility.ToJson(unitListData);
+		SaveData saveData = new()
+		{
+			Religion = runData.religion,
+			God = runData.god,
+			Ascension = runData.difficulty,
+			Gold = runData.gold,
+			Seed = runData.masterSeed,
+			CurrentRow = runData.currentRow,
+			CurrentPositionInRow = runData.currentPositionInRow,
+			UnitList = new() { unitList = runData.unitList.ToArray() },
+		};
 
-		FileManager.OverwriteFile(FileManager.PLAYER_UNITS_PATH, unitJSON);
+		FileManager.SaveFileToJSON(saveData, FileManager.SAVEDATA_PATH);
 	}
 }

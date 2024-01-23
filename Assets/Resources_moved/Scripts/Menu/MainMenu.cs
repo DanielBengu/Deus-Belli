@@ -28,9 +28,10 @@ public class MainMenu: MonoBehaviour
         ContinueText.interactable = runIsOnGoing;
         if (runIsOnGoing)
         {
-			string godSelected = PlayerPrefs.GetString(GeneralManager.GOD_SELECTED_PP);
-			string goldAccumulated = PlayerPrefs.GetInt(GeneralManager.GOLD).ToString();
-			int completedRows = PlayerPrefs.GetInt(GeneralManager.CURRENT_ROW) + 1;
+            SaveData saveData = FileManager.GetFileFromJSON<SaveData>(FileManager.SAVEDATA_PATH);
+            string godSelected = saveData.God;
+            string goldAccumulated = saveData.Gold.ToString();
+			int completedRows = saveData.CurrentRow + 1;
             continueButtonTooltip.enabled = true;
 			continueButtonTooltip.header = godSelected;
             continueButtonTooltip.text = $"Turn {completedRows}\n{goldAccumulated}g";

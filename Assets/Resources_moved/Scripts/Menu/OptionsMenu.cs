@@ -18,7 +18,8 @@ public class OptionsMenu : MonoBehaviour
             GameObject abandonRunButton = GameObject.Find("Abandon RUN");
             abandonRunButton.SetActive(false);
         }
-        SeedText.text = PlayerPrefs.GetInt(GeneralManager.SEED).ToString();
+        SaveData saveData = FileManager.GetFileFromJSON<SaveData>(FileManager.SAVEDATA_PATH);
+        SeedText.text = saveData.Seed.ToString();
     }
 
     void Update(){

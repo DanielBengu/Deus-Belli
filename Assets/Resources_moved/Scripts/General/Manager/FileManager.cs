@@ -10,19 +10,16 @@ public static class FileManager
 	public const string MAPS_PATH = "Assets\\Resources_moved\\Config\\Maps\\Generic";
 	public const string ENCOUNTERS_PATH = "Assets\\Resources_moved\\Config\\Encounters";
 	public const string GODS_PATH = "Assets\\Resources_moved\\Config\\Gods";
-	public static EncounterListData GetEncounters(EncounterTypes typeOfEncounter)
-	{
-		string data = File.ReadAllText($"{ENCOUNTERS_PATH}\\{typeOfEncounter}.json");
-		var encounterList = GetDataFromJSON<EncounterListData>(data);
-		return encounterList;
-	}
+	public const string SAVEDATA_PATH = "Assets\\Resources_moved\\Config\\Player Data\\SaveData.json";
+	public const string FAILSAFE_PATH = "Assets\\Resources_moved\\Config\\FailsafeUnit.json";
+
 	public static List<UnitData> GetUnits(DataSource source, string[] CustomData = null)
 	{
 		List<UnitData> playerUnits = new();
 		switch (source)
 		{
 			case DataSource.PlayerUnits:
-				playerUnits = GetPlayerUnits().ToList();
+				playerUnits = GetFileFromJSON<UnitListData>(PLAYER_UNITS_PATH).unitList.ToList();
 				break;
 			case DataSource.Custom:
 				for (int i = 0; i < CustomData.Length; i++)
@@ -47,13 +44,6 @@ public static class FileManager
 		return playerUnits;
 	}
 
-	static UnitData[] GetPlayerUnits()
-	{
-		string data = File.ReadAllText(PLAYER_UNITS_PATH);
-		var unitList = GetDataFromJSON<UnitListData>(data);
-		return unitList.unitList;
-	}
-
 	public static TileMapData GetRandomGenericMap(int seed)
 	{
 		string[] files = Directory.GetFiles(MAPS_PATH, $"*.json");
@@ -65,7 +55,7 @@ public static class FileManager
 			try
 			{
 				string mapData = File.ReadAllText(files[i]);
-				map = GetDataFromJSON<TileMapData>(mapData);
+				map = GetFileFromJSON<TileMapData>(files[i]);
 				map.FillTiles();
 				map.TileList = map.TileList.OrderBy(t => t.PositionOnGrid).ToList();
 				bool isMapValid = Validator.Validate(map);
@@ -84,27 +74,29 @@ public static class FileManager
 			map = null;
 		return map;
 	}
-
-	public static Religion GetGodOfReligion(string religionName)
+	public static T GetFileFromJSON<T>(string path)
 	{
-		string data = File.ReadAllText($"{GODS_PATH}\\{religionName}.json");
-		return GetDataFromJSON<Religion>(data);
+		string data = File.ReadAllText(path);
+		T obj = JsonUtility.FromJson<T>(data);
+		return obj;
 	}
 
-	public static T GetDataFromJSON<T>(string jsonString)
+	public static void SaveFileToJSON(object data, string path)
 	{
-		T unitListData = JsonUtility.FromJson<T>(jsonString);
-		return unitListData;
+		string textData = JsonUtility.ToJson(data);
+		File.WriteAllText(path, textData);
 	}
-	public static void OverwriteFile(string filePath, string dataLines)
+
+	public static UnitData LoadFailsafeUnit()
 	{
-		File.WriteAllText(filePath, dataLines);
+		return GetFileFromJSON<UnitData>(FAILSAFE_PATH);
 	}
 
 	public enum DataSource
 	{
 		PlayerUnits,
 		Custom,
+		SaveData
 	}
 
 	public enum EncounterTypes

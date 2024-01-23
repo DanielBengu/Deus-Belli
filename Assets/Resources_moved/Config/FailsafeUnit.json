@@ -1,0 +1,18 @@
+{
+	"Name": "Franco Failsafe",
+	"ModelName": "Male A",
+	"PortraitName": "Warrior",
+	"Stats": {
+		"Hp": 1,
+		"Movement": 1,
+		"Attack": 1,
+		"Range": 1,
+		"Armor": 1,
+		"Ward": 1
+	},
+	"RandomizedTraits": false,
+	"Traits": [
+	],
+	"Faction": 0,
+	"AttackType": "Physical"
+}

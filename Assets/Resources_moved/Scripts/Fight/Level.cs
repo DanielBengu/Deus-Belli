@@ -61,7 +61,8 @@ public class Level
 	{
 		int enemiesSetupSeed = RandomManager.GetRandomValue(seed, 0, 100000000);
 		Dictionary<int, UnitData> result = new();
-		var encounterData = FileManager.GetEncounters(FileManager.EncounterTypes.Generic);
+		string path = $"{FileManager.ENCOUNTERS_PATH}\\{FileManager.EncounterTypes.Generic}.json";
+		var encounterData = FileManager.GetFileFromJSON<EncounterListData>(path);
 		EncounterData encounter = encounterData.GenericEncounterList[RandomManager.GetRandomValue(seed, 0, encounterData.GenericEncounterList.Count)];
 		for (int i = 0; i < encounter.EnemyList.Count; i++)
 		{

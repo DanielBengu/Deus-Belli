@@ -1,11 +1,7 @@
-using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
+using Unity.VisualScripting;
 using UnityEngine;
-using UnityEngine.SceneManagement;
-using Steamworks;
-
 public class GeneralManager : MonoBehaviour
 {
     public const string GOD_SELECTED_PP = "God Selected";
@@ -59,7 +55,8 @@ public class GeneralManager : MonoBehaviour
     public bool IsOptionOpen { get; set; }
     public bool IsGameInStandby { get { return IsGameInStandbyMethod(); } }
 	public int Gold { get { return runData.gold; } set { runData.gold = value; } }
-    public IGod GodSelected { get { return runData.godSelected; } set { runData.godSelected = value; } }
+    public string GodSelected { get { return runData.god; } set { runData.god = value; } }
+	public string ReligionSelected { get { return runData.religion; } set { runData.religion = value; } }
 	public int CurrentRow { get { return runData.currentRow; } set { runData.currentRow = value; } }
 	public int CurrentPositionInRow { get { return runData.currentPositionInRow; } set { runData.currentPositionInRow = value; } }
 	public int Difficulty { get { return runData.difficulty; } set { runData.difficulty = value; } }
@@ -68,29 +65,10 @@ public class GeneralManager : MonoBehaviour
 
 	private void Start()
 	{
-        bool isOngoingRun = PlayerPrefs.GetInt(ONGOING_RUN) != 0;
-        if (isOngoingRun)
-        {
-			runData = LoadRunData();
-			GenerateRogueSection(false);
-            return;
-		}
-
-        string godSelected = PlayerPrefs.GetString(GOD_SELECTED_PP);
-        IGod god = LoadGodFromName(godSelected);
-        int optionalSeed = PlayerPrefs.GetInt(SEED);
-        int masterSeed = optionalSeed > 0 ? optionalSeed : Math.Abs(Guid.NewGuid().GetHashCode());
-        int difficulty = 1;
-        List<UnitData> startingUnits = FileManager.GetUnits(FileManager.DataSource.PlayerUnits);
-        runData = new RunData(god, 0, 1, masterSeed, 0, startingUnits, difficulty);
-
-        PlayerPrefs.SetInt(SEED, masterSeed);
-        PlayerPrefs.SetInt(GOLD, 0);
-        PlayerPrefs.SetInt(CURRENT_ROW, 0);
-        PlayerPrefs.SetInt(CURRENT_POSITION_IN_ROW, 1);
-        PlayerPrefs.SetInt(ONGOING_RUN, 1);
-        PlayerPrefs.SetInt(DIFFICULTY, difficulty);
-		GenerateRogueSection(false);
+        if (PlayerPrefs.GetInt(ONGOING_RUN) != 0)
+            LoadRun();
+        else
+            StartRun();
 	}
 
 	private void Update()
@@ -114,6 +92,22 @@ public class GeneralManager : MonoBehaviour
                 break;
         }
     }
+
+    void LoadRun()
+    {
+		runData = LoadRunData();
+		GenerateRogueSection(false);
+	}
+
+    void StartRun()
+    {
+		SaveData saveData = FileManager.GetFileFromJSON<SaveData>(FileManager.SAVEDATA_PATH);
+
+		runData = new RunData(saveData.Religion, saveData.God, saveData.CurrentRow, saveData.CurrentPositionInRow, saveData.Seed, saveData.Gold, saveData.UnitList.unitList.ToList(), saveData.Ascension);
+		PlayerPrefs.SetInt(ONGOING_RUN, 1);
+
+		GenerateRogueSection(false);
+	}
 
     void HandleFightSectionUpdate()
     {
@@ -141,32 +135,15 @@ public class GeneralManager : MonoBehaviour
 
 	RunData LoadRunData()
 	{
-        int masterSeed = PlayerPrefs.GetInt(SEED);
-        string godSelected = PlayerPrefs.GetString(GOD_SELECTED_PP);
-        IGod god = LoadGodFromName(godSelected);
-        int currentRow = PlayerPrefs.GetInt(CURRENT_ROW);
-        int currentPositionInRow = PlayerPrefs.GetInt(CURRENT_POSITION_IN_ROW);
-        int gold = PlayerPrefs.GetInt(GOLD);
-        int difficulty = PlayerPrefs.GetInt(DIFFICULTY);
-        List<UnitData> unitList = FileManager.GetUnits(FileManager.DataSource.PlayerUnits);
-        return new RunData(god, currentRow, currentPositionInRow, masterSeed, gold, unitList, difficulty);
+        SaveData saveData = FileManager.GetFileFromJSON<SaveData>(FileManager.SAVEDATA_PATH);
+        List<UnitData> unitList = saveData.UnitList.unitList.ToList();
+        return new RunData(saveData.Religion, saveData.God, saveData.CurrentRow, saveData.CurrentPositionInRow, saveData.Seed, saveData.Gold, unitList, saveData.Ascension);
 	}
 
-	public void SaveGameProgress(GameStatus status)
+	public void SaveGameProgress()
 	{
-        SaveManager.SaveGameProgress(Gold, CurrentRow, CurrentPositionInRow, (int)status, runData.unitList);
+        SaveManager.SaveGameProgress(runData);
     }
-
-    public IGod LoadGodFromName(string name)
-	{
-		return name switch
-		{
-			"Ataiku" => new Ataiku(),
-			"Omi" => new Omi(),
-			"Bandit Lord" => new BanditLord(),
-			_ => new Ataiku(),
-		};
-	}
 
     void ManageKeysDown()
 	{
@@ -213,7 +190,7 @@ public class GeneralManager : MonoBehaviour
 
     void DestroyRogueSection()
     {
-        runData = new(GodSelected, CurrentRow, CurrentPositionInRow, rogueManager.seedList[RogueManager.SeedType.Master], Gold, PlayerUnits, Difficulty);
+        runData = new(ReligionSelected, GodSelected, CurrentRow, CurrentPositionInRow, rogueManager.seedList[RogueManager.SeedType.Master], Gold, PlayerUnits, Difficulty);
         Destroy(rogueSectionInstance);
     }
 
@@ -271,7 +248,7 @@ public class GeneralManager : MonoBehaviour
         cameraManager.ResetCamera();
 
         selectedNode = null;
-        SaveGameProgress(GameStatus.Current);
+        SaveGameProgress();
 
         switch (tileTypeReturning)
 		{
@@ -295,7 +272,8 @@ public class GeneralManager : MonoBehaviour
 
     public struct RunData
     {
-        public IGod godSelected;
+        public string religion;
+        public string god;
         public int currentRow;
         public int currentPositionInRow;
         public int masterSeed;
@@ -304,9 +282,10 @@ public class GeneralManager : MonoBehaviour
         public int gold;
         public List<UnitData> unitList;
 
-        public RunData(IGod godSelected,int currentRow, int currentPositionInRow, int masterSeed, int gold, List<UnitData> unitList, int difficulty)
+        public RunData(string religion, string god,int currentRow, int currentPositionInRow, int masterSeed, int gold, List<UnitData> unitList, int difficulty)
         {
-            this.godSelected = godSelected;
+            this.religion = religion;
+            this.god = god;
             this.currentRow = currentRow;
             this.currentPositionInRow = currentPositionInRow;
             this.masterSeed = masterSeed;

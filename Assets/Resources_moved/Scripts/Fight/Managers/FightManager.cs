@@ -154,7 +154,15 @@ public class FightManager : MonoBehaviour
                 if (IsTileValid(unitTile, alreadyOccupiedTiles))
                 {
                     alreadyOccupiedTiles.Add(unitTile.data.PositionOnGrid);
-                    unitList.Add(GenerateSingleUnit(unit, unitTile, unitsParent));
+                    try
+                    {
+						unitList.Add(GenerateSingleUnit(unit, unitTile, unitsParent));
+					}
+                    catch
+                    {
+                        unitList.Add(GenerateSingleUnit(FileManager.LoadFailsafeUnit(), unitTile, unitsParent));
+                    }
+                    
                     exitClause = true;
                 }
                 failsafe++;
@@ -210,7 +218,7 @@ public class FightManager : MonoBehaviour
 		isGameOver = true;
         int goldGenerated = level.goldReward;
         AddGold(goldGenerated);
-		generalManager.SaveGameProgress(GeneralManager.GameStatus.Won);
+		generalManager.SaveGameProgress();
 		StructureManager.GetGameScreen(GameScreens.FightVictoryScreen, goldGenerated);
 	}
 
@@ -221,7 +229,7 @@ public class FightManager : MonoBehaviour
         if(!isFightLost) return false;
 
 		isGameOver = true;
-		generalManager.SaveGameProgress(GeneralManager.GameStatus.Lost);
+		generalManager.SaveGameProgress();
 		StructureManager.GetGameScreen(GameScreens.FightVictoryScreen, -1);
         return true;
 	}
@@ -236,7 +244,6 @@ public class FightManager : MonoBehaviour
     int AddGold(int goldGenerated)
 	{
         generalManager.Gold += goldGenerated;
-        PlayerPrefs.SetInt("Gold", generalManager.Gold);
         return goldGenerated;
     }
 

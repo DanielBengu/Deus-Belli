@@ -17,8 +17,22 @@
             "Range": 1
           },
           "RandomizedTraits": false,
-          "Traits": [ "Speedy", "Floaty", "Overload" ],
-          "Faction": 0
+          "Traits": [
+            {
+              "Name": "Speedy",
+              "Level": 2
+            },
+            {
+              "Name": "Floaty",
+              "Level": 1
+            },
+            {
+              "Name": "Overload",
+              "Level": 1
+            }
+          ],
+          "Faction": 0,
+          "AttackType": "Physical"
         },
         {
           "Name": "Archie Archer",
@@ -31,8 +45,18 @@
             "Range": 2
           },
           "RandomizedTraits": false,
-          "Traits": [ "Strong", "Tanky" ],
-          "Faction": 0
+          "Traits": [
+            {
+              "Name": "Strong",
+              "Level": 3
+            },
+            {
+              "Name": "Tanky",
+              "Level": 2
+            }
+          ],
+          "Faction": 0,
+          "AttackType": "Physical"
         }
       ]
     },
@@ -52,8 +76,22 @@
             "Range": 1
           },
           "RandomizedTraits": false,
-          "Traits": [ "Speedy", "Floaty", "Overload" ],
-          "Faction": 0
+          "Traits": [
+            {
+              "Name": "Speedy",
+              "Level": 2
+            },
+            {
+              "Name": "Floaty",
+              "Level": 1
+            },
+            {
+              "Name": "Overload",
+              "Level": 1
+            }
+          ],
+          "Faction": 0,
+          "AttackType": "Physical"
         },
         {
           "Name": "Archie Archer",
@@ -66,8 +104,18 @@
             "Range": 2
           },
           "RandomizedTraits": false,
-          "Traits": [ "Strong", "Tanky" ],
-          "Faction": 0
+          "Traits": [
+            {
+              "Name": "Strong",
+              "Level": 3
+            },
+            {
+              "Name": "Tanky",
+              "Level": 2
+            }
+          ],
+          "Faction": 0,
+          "AttackType": "Physical"
         }
       ]
     },
@@ -87,8 +135,22 @@
             "Range": 1
           },
           "RandomizedTraits": false,
-          "Traits": [ "Speedy", "Floaty", "Overload" ],
-          "Faction": 0
+          "Traits": [
+            {
+              "Name": "Speedy",
+              "Level": 2
+            },
+            {
+              "Name": "Floaty",
+              "Level": 1
+            },
+            {
+              "Name": "Overload",
+              "Level": 1
+            }
+          ],
+          "Faction": 0,
+          "AttackType": "Physical"
         },
         {
           "Name": "Archie Archer",
@@ -101,8 +163,18 @@
             "Range": 2
           },
           "RandomizedTraits": false,
-          "Traits": [ "Strong", "Tanky" ],
-          "Faction": 0
+          "Traits": [
+            {
+              "Name": "Strong",
+              "Level": 3
+            },
+            {
+              "Name": "Tanky",
+              "Level": 2
+            }
+          ],
+          "Faction": 0,
+          "AttackType": "Physical"
         }
       ]
     },
@@ -122,8 +194,22 @@
             "Range": 1
           },
           "RandomizedTraits": false,
-          "Traits": [ "Speedy", "Floaty", "Overload" ],
-          "Faction": 0
+          "Traits": [
+            {
+              "Name": "Speedy",
+              "Level": 2
+            },
+            {
+              "Name": "Floaty",
+              "Level": 1
+            },
+            {
+              "Name": "Overload",
+              "Level": 1
+            }
+          ],
+          "Faction": 0,
+          "AttackType": "Physical"
         },
         {
           "Name": "Archie Archer",
@@ -136,8 +222,18 @@
             "Range": 2
           },
           "RandomizedTraits": false,
-          "Traits": [ "Strong", "Tanky" ],
-          "Faction": 0
+          "Traits": [
+            {
+              "Name": "Strong",
+              "Level": 3
+            },
+            {
+              "Name": "Tanky",
+              "Level": 2
+            }
+          ],
+          "Faction": 0,
+          "AttackType": "Physical"
         }
       ]
     }

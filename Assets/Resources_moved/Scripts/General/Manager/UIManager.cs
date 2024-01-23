@@ -29,7 +29,7 @@ public class UIManager : MonoBehaviour
     GameObject tooltipParent;
     #endregion
 
-	public void SetFightVariables(IGod god){
+	public void SetFightVariables(string god){
         string godSelected = god.ToString();
         //string religionSelected = god.GetReligion().Name;
         Title = GameObject.Find("GOD_RUN").GetComponent<TextMeshProUGUI>();
@@ -61,8 +61,8 @@ public class UIManager : MonoBehaviour
         rogueVictoryScreen = AddressablesManager.LoadResource<GameObject>(AddressablesManager.TypeOfResource.Prefab, rogueVictoryScreenPrefabName);
         rogueDefeatScreen = AddressablesManager.LoadResource<GameObject>(AddressablesManager.TypeOfResource.Prefab, rogueDefeatScreenPrefabName);
         TextMeshProUGUI rogueGold = GameObject.Find("Gold Value").GetComponent<TextMeshProUGUI>();
-        rogueGold.text = gold.ToString();
-        TextMeshProUGUI rogueGod = GameObject.Find("God Text").GetComponent<TextMeshProUGUI>();
+		TextMeshProUGUI rogueGod = GameObject.Find("God Text").GetComponent<TextMeshProUGUI>();
+		rogueGold.text = gold.ToString();
         rogueGod.text = godSelected;
     }
 
