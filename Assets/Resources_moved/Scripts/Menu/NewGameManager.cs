@@ -35,6 +35,21 @@ public class NewGameManager : MonoBehaviour
         startButton.enabled = seedInputField.text.Length == 0 || seedInputField.text.Length > 2;
 	}
 
+    public void ResetNewGameMenu()
+    {
+		ClearGodShowcase();
+		ReligionsPrefab.SetActive(true);
+		godsInstance.SetActive(false);
+		ReligionSelectedText.SetActive(false);
+	}
+
+    public void BackButton()
+    {
+        ResetNewGameMenu();
+		MainMenu mm = GameObject.Find("Main").GetComponent<MainMenu>();
+        mm.BackFromNewGame();
+    }
+
     public void SelectReligion(string religion)
     {
         religionSelected = LoadReligion(religion);
@@ -60,16 +75,22 @@ public class NewGameManager : MonoBehaviour
 
     public void SelectGod(int god)
 	{
-        godSelected = religionSelected.ListOfGods[god];
+		ClearGodShowcase();
+
+		godSelected = religionSelected.ListOfGods[god];
 		string godName = godSelected.Name.ToString();
         godData.text = $"{godSelected.BuffDescription}";
 
-        for(int i = 0; i < godPrefab.transform.childCount; i++)
-            Destroy(godPrefab.transform.GetChild(i).gameObject);
-
-        GameObject prefab = AddressablesManager.LoadResource<GameObject>(AddressablesManager.TypeOfResource.God, godName);
+		GameObject prefab = AddressablesManager.LoadResource<GameObject>(AddressablesManager.TypeOfResource.God, godName);
         Instantiate(prefab, godPrefab.transform.position, prefab.transform.rotation, godPrefab.transform);
     }
+
+    void ClearGodShowcase()
+    {
+		godData.text = string.Empty;
+		for (int i = 0; i < godPrefab.transform.childCount; i++)
+			Destroy(godPrefab.transform.GetChild(i).gameObject);
+	}
     public void StartGame()
     {
         if (godSelected == null)

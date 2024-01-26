@@ -10,6 +10,8 @@ public class MainMenu: MonoBehaviour
     [SerializeField]
     GameObject StartPrefab;
     [SerializeField]
+    GameObject StartInstance;
+    [SerializeField]
     GameObject NewGameInstance;
     [SerializeField]
     GameObject ArchivePrefab;
@@ -44,6 +46,11 @@ public class MainMenu: MonoBehaviour
 		prefabToInstantiate.SetActive(true);
         currentSection = prefabToInstantiate;
 	}
+
+    public void BackFromNewGame()
+    {
+        SwitchSection(StartInstance, new(0f, 0f, 0f));
+    }
 
     #region Buttons
     public void NewGame()
