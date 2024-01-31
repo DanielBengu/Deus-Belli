@@ -15,7 +15,9 @@
             "Hp": 10,
             "Movement": 4,
             "Attack": 2,
-            "Range": 1
+            "Range": 1,
+            "Armor": 2,
+            "Ward": 3
           },
           "RandomizedTraits": false,
           "Traits": [
@@ -39,7 +41,9 @@
             "Hp": 6,
             "Movement": 3,
             "Attack": 2,
-            "Range": 2
+            "Range": 2,
+            "Armor": 2,
+            "Ward": 3
           },
           "RandomizedTraits": false,
           "Traits": [
@@ -71,7 +75,9 @@
             "Hp": 10,
             "Movement": 4,
             "Attack": 2,
-            "Range": 1
+            "Range": 1,
+            "Armor": 2,
+            "Ward": 3
           },
           "RandomizedTraits": false,
           "Traits": [ "Speedy", "Floaty", "Overload" ],
@@ -85,7 +91,9 @@
             "Hp": 6,
             "Movement": 3,
             "Attack": 2,
-            "Range": 2
+            "Range": 2,
+            "Armor": 2,
+            "Ward": 3
           },
           "RandomizedTraits": false,
           "Traits": [ "Strong", "Tanky" ],
@@ -107,7 +115,9 @@
             "Hp": 10,
             "Movement": 4,
             "Attack": 2,
-            "Range": 1
+            "Range": 1,
+            "Armor": 2,
+            "Ward": 3
           },
           "RandomizedTraits": false,
           "Traits": [ "Speedy", "Floaty", "Overload" ],
@@ -121,7 +131,9 @@
             "Hp": 6,
             "Movement": 3,
             "Attack": 2,
-            "Range": 2
+            "Range": 2,
+            "Armor": 2,
+            "Ward": 3
           },
           "RandomizedTraits": false,
           "Traits": [ "Strong", "Tanky" ],
@@ -143,7 +155,9 @@
             "Hp": 10,
             "Movement": 4,
             "Attack": 2,
-            "Range": 1
+            "Range": 1,
+            "Armor": 2,
+            "Ward": 3
           },
           "RandomizedTraits": false,
           "Traits": [ "Speedy", "Floaty", "Overload" ],
@@ -157,7 +171,9 @@
             "Hp": 6,
             "Movement": 3,
             "Attack": 2,
-            "Range": 2
+            "Range": 2,
+            "Armor": 2,
+            "Ward": 3
           },
           "RandomizedTraits": false,
           "Traits": [ "Strong", "Tanky" ],

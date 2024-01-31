@@ -245,8 +245,6 @@ public class GeneralManager : MonoBehaviour
 
     public void ReturnToRogue(RogueTileType tileTypeReturning, bool isDefeat)
 	{
-        cameraManager.ResetCamera();
-
         selectedNode = null;
         SaveGameProgress();
 

@@ -4,6 +4,7 @@ using System.Linq;
 using UnityEngine;
 public class Level
 {
+	public RogueTileType tileType;
 	const int BASE_ENEMY_GOLD_REWARD = 100;
 	public TileMapData mapData;
 
@@ -19,8 +20,9 @@ public class Level
 
 	public int seed;
 
-    public void StartLevel(int seed)
+    public void StartLevel(int seed, RogueTileType rogueTileType)
     {
+		tileType = rogueTileType;
 		this.seed = seed;
 		mapData = FileManager.GetRandomGenericMap(seed);
 		spawnPosition = new(250, 170, 1800);

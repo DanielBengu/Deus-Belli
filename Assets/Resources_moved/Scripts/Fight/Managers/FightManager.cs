@@ -393,6 +393,11 @@ public class FightManager : MonoBehaviour
         return tiles;
 	}
 
+    void ReturnToRogue(bool isDefeat)
+    {
+        generalManager.ReturnToRogue(level.tileType, isDefeat);
+    }
+
 	#endregion
 
 
@@ -419,6 +424,11 @@ public class FightManager : MonoBehaviour
 		StructureManager.KillUnit(unit);
     }
 
+    public void ButtonReturnToRogue(bool isDefeat)
+    {
+        FightManager fm = GameObject.Find(GeneralManager.FIGHT_MANAGER_OBJ_NAME).GetComponent<FightManager>();
+        fm.ReturnToRogue(isDefeat);
+    }
 	#endregion
 }
 public enum ActionPerformed

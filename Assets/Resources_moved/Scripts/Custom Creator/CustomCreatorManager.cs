@@ -34,7 +34,7 @@ public class CustomCreatorManager : MonoBehaviour
 		mapCanvas.SetActive(true);
 		Level baseLevel = new();
 
-		baseLevel.StartLevel(0);
+		baseLevel.StartLevel(0, RogueTileType.Fight);
 		baseLevel.GenerateTerrain(true, mapObjects);
 		var tiles = _structureManager.GenerateFightTiles(baseLevel.tilesDict, null, baseLevel.spawnPosition, mapRows, mapColumns);
 		_mapEditorManager.mapRows = mapRows;
