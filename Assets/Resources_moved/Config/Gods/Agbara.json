@@ -5,6 +5,7 @@
       "Name": "Ataiku",
       "Character_Model": "Ataiku",
       "BuffDescription": "Test\nDescription",
+      "StartingGold": 0,
       "StartingCharacterUnits": [
         {
           "Name": "Wario Warrior",
@@ -64,6 +65,7 @@
       "Name": "Omi",
       "Character_Model": "Omi",
       "BuffDescription": "Test\nDescription",
+      "StartingGold": 0,
       "StartingCharacterUnits": [
         {
           "Name": "Wario Warrior",
@@ -123,6 +125,7 @@
       "Name": "Teriba",
       "Character_Model": "Teriba",
       "BuffDescription": "Test\nDescription",
+      "StartingGold": 0,
       "StartingCharacterUnits": [
         {
           "Name": "Wario Warrior",
@@ -182,6 +185,7 @@
       "Name": "Orin",
       "Character_Model": "Orin",
       "BuffDescription": "Test\nDescription",
+      "StartingGold": 0,
       "StartingCharacterUnits": [
         {
           "Name": "Wario Warrior",

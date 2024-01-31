@@ -4,7 +4,8 @@
     {
       "Name": "Pirate God",
       "Character_Model": "Pirate God",
-      "BuffDescription": "Test\nDescription",
+      "BuffDescription": "<b>Captain Dreadbeard</b>\n<i>Trident Mastery: Captain Dreadbeard's expertise with the Trident of Tempest increases his chance of landing critical strikes by +15%. This bonus also applies to the entire crew.</i>",
+      "StartingGold": 400,
       "StartingCharacterUnits": [
         {
           "Name": "Paolo Pirata",
@@ -17,8 +18,18 @@
             "Range": 1
           },
           "RandomizedTraits": false,
-          "Traits": [ "Speedy", "Floaty", "Overload" ],
-          "Faction": 0
+          "Traits": [
+            {
+              "Name": "Strong",
+              "Level": 3
+            },
+            {
+              "Name": "Tanky",
+              "Level": 2
+            }
+          ],
+          "Faction": 0,
+          "AttackType": "Physical"
         },
         {
           "Name": "Carlo Capitano",
@@ -31,15 +42,26 @@
             "Range": 2
           },
           "RandomizedTraits": false,
-          "Traits": [ "Strong", "Tanky" ],
-          "Faction": 0
+          "Traits": [
+            {
+              "Name": "Plunderer__s_Fortune",
+              "Level": 2
+            },
+            {
+              "Name": "Strong",
+              "Level": 1
+            }
+          ],
+          "Faction": 0,
+          "AttackType": "Physical"
         }
       ]
     },
     {
       "Name": "Valkyrie Pirate",
       "Character_Model": "Valkyrie Pirate",
-      "BuffDescription": "Test\nDescription",
+      "BuffDescription": "<b>Captain Valkyria Stormwind</b>\n<i>Celestial Charge: Captain Stormwind leads her crew into battle with unparalleled zeal. Party members gain a +15% bonus to movement speed and a +10% bonus to attack speed for the first three turns of battle.</i>",
+      "StartingGold": 0,
       "StartingCharacterUnits": [
         {
           "Name": "Paolo Pirata",
@@ -74,7 +96,8 @@
     {
       "Name": "Shogun Pirate",
       "Character_Model": "Shogun Pirate",
-      "BuffDescription": "Test\nDescription",
+      "BuffDescription": "<b>Captain Shadowblade</b>\n<i>Samurai Spirit: Shadowblade's presence on the battlefield inspires his crew. Party members gain a +10% increase in attack damage when their health is below 50%.</i>",
+      "StartingGold": 0,
       "StartingCharacterUnits": [
         {
           "Name": "Paolo Pirata",
@@ -109,7 +132,8 @@
     {
       "Name": "Old Pirate",
       "Character_Model": "Old Pirate",
-      "BuffDescription": "Test\nDescription",
+      "BuffDescription": "<b>Captain Blackbeard Grimclaw</b>\n<i>Sea's Resilience: Captain Grimclaw and his crew have a natural resistance to water-based attacks, granting them a +20% resistance against water-elemental abilities.</i>",
+      "StartingGold": 0,
       "StartingCharacterUnits": [
         {
           "Name": "Paolo Pirata",

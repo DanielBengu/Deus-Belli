@@ -98,7 +98,7 @@ public class NewGameManager : MonoBehaviour
 
 		int seed = seedInputField.text == string.Empty ? Math.Abs(Guid.NewGuid().GetHashCode()) : int.Parse(seedInputField.text);
 		List<UnitData> startingUnits = godSelected.StartingCharacterUnits;
-		int startingGold = 0;
+		int startingGold = godSelected.StartingGold;
         int ascension = 0;
 
 		GeneralManager.RunData runData = new(religionSelected.Name, godSelected.Name, 0, 1, seed, startingGold, startingUnits, ascension);

@@ -102,13 +102,19 @@ public class Level
 		int numOfTraits = RandomManager.GetRandomValue(seed, 0, 6);
 		for (int i = 0; i < numOfTraits; i++)
 		{
-			int traitSeed = RandomManager.GetRandomValue(seed * (i + 1), 0, 10000000);
-			TraitsEnum trait = (TraitsEnum)RandomManager.GetRandomValue(traitSeed, 0, Enum.GetNames(typeof(TraitsEnum)).Length);
-			int traitLevel = RandomManager.GetRandomValue(traitSeed, 1, 4);
-			unitTraits.Add(new(){
-				Name = trait.ToString(),
-				Level = traitLevel
-			});
+			bool breakOut = false;
+			int failSafe = 1;
+			while(!breakOut && failSafe < 100) {
+                int traitSeed = RandomManager.GetRandomValue(seed * (i + 1) * failSafe, 0, 10000000);
+                Traits randomTrait = GetRandomTrait(traitSeed);
+				if(!unitTraits.Any(t => t.Name == randomTrait.Name))
+				{
+                    unitTraits.Add(randomTrait);
+                    breakOut = true;
+                }
+
+				failSafe++;
+            }
 		}
 		unit.Traits = unitTraits;
 	}
@@ -117,4 +123,16 @@ public class Level
 	{
 		return mapData.TileList.Where(t => t.StartPositionForFaction == faction && t.ValidForMovement).Select(t => t.PositionOnGrid).ToArray();
 	}
+
+	Traits GetRandomTrait(int traitSeed)
+	{
+        EnemyAvailableTraits trait = (EnemyAvailableTraits)RandomManager.GetRandomValue(traitSeed, 0, Enum.GetNames(typeof(EnemyAvailableTraits)).Length);
+        int traitLevel = RandomManager.GetRandomValue(traitSeed, 1, 4);
+
+        return new()
+        {
+            Name = trait.ToString(),
+            Level = traitLevel
+        };
+    }
 }

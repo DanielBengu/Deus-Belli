@@ -11,12 +11,12 @@ public class Unit : MonoBehaviour
 
 	public void Load(UnitData UnitData, FightManager manager, Tile currentTile)
 	{
+        FightManager = manager;
         this.UnitData.Name = UnitData.Name;
         this.UnitData.PortraitName = UnitData.PortraitName;
         Movement = new(this, currentTile);
 		LoadStats(UnitData);
 		FightData = new(this);
-		FightManager = manager;
 	}
 
 	void LoadStats(UnitData unit)
@@ -52,5 +52,6 @@ public class Unit : MonoBehaviour
 		Attack,
 		Movement,
 		Range,
+		Gold
 	}
 }

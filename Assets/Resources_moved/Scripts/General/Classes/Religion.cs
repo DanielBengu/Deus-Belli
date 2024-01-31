@@ -15,5 +15,6 @@ namespace Assets.Resources_moved.Scripts.General.Classes
 		public string Character_Model;
 		public string BuffDescription;
 		public List<UnitData> StartingCharacterUnits;
+		public int StartingGold;
 	}
 }

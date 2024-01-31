@@ -1,5 +1,6 @@
 ﻿using static Unit;
 
+//All traits in game
 public enum TraitsEnum
 {
 	Floaty,
@@ -12,7 +13,24 @@ public enum TraitsEnum
 	Strong,
 	Tanky,
 	Wealthy,
-	Swift_Attack
+	Swift_Attack,
+	Plunderer__s_Fortune
+}
+
+//Traits that the enemy can randomly get
+public enum EnemyAvailableTraits
+{
+    Floaty,
+    Healthy,
+    Magic_Defence,
+    Overload,
+    Regeneration,
+    Second_Wind,
+    Speedy,
+    Strong,
+    Tanky,
+    Wealthy,
+    Swift_Attack,
 }
 
 public struct Trait
@@ -45,6 +63,7 @@ public struct Trait
 			TraitsEnum.Tanky => GetTankyBonus(statType, level),
 			TraitsEnum.Wealthy => level * 100,
 			TraitsEnum.Swift_Attack => -1,
+			TraitsEnum.Plunderer__s_Fortune => GetPlundererBonus(statType, level, baseValue),
 			_ => -1,
 		};
 	}
@@ -67,6 +86,15 @@ public struct Trait
 		else return -1;
 	}
 
+	static int GetPlundererBonus(StatsType statType, int level, int baseValue)
+	{
+		if (statType == StatsType.Gold)
+			return 400 - (level * 100);
+		else if (statType == StatsType.Attack)
+			return baseValue / GetPlundererBonus(StatsType.Gold, level, 0);
+		else return -1;
+	}
+
 	public void DisableTrait()
 	{
 		enabled = false;
@@ -82,7 +110,7 @@ public static class TraitText
 	const string MOVEMENT = "<color=#00FF28>MOVEMENT</color>";
 	public static string GetTraitHeader(TraitsEnum traitEnum,  int level)
 	{
-		return $"<color=red><b>{traitEnum.ToString().Replace('_', ' ')}</b></color> lv.{level}\n";
+		return $"<color=red><b>{GetConvertedText(traitEnum.ToString())}</b></color> lv.{level}\n";
 	}
 	public static string GetTraitText(TraitsEnum traitEnum, int level)
 	{
@@ -99,7 +127,17 @@ public static class TraitText
 			TraitsEnum.Tanky => $"+{Trait.GetBonus(traitEnum, level, StatsType.Armor)} {ARMOR} and +{Trait.GetBonus(traitEnum, level, StatsType.HP)} {HP}",
 			TraitsEnum.Wealthy => $"Drops another {Trait.GetBonus(traitEnum, level)}g on death",
 			TraitsEnum.Swift_Attack => $"Unit can't be retaliated during attacks",
+			TraitsEnum.Plunderer__s_Fortune => $"Unit gets 1 {ATTACK} for every {Trait.GetBonus(traitEnum, level, StatsType.Gold)}g from player",
 			_ => string.Empty,
 		};
+	}
+
+	//Converts symbols in respective character
+	// _ is space, __ is single quote (')
+	static string GetConvertedText(string traitName)
+	{
+		traitName = traitName.Replace("__", "\'");
+		traitName = traitName.Replace('_', ' ');
+		return traitName;
 	}
 }

@@ -151,6 +151,8 @@ public class UnitFightData
 			attack += Trait.GetBonus(TraitsEnum.Strong, levelStrong, StatsType.Attack, baseStats.ATTACK);
 		if (ContainsEnabledTrait(TraitsEnum.Overload, out int levelOverload))
 			attack += Trait.GetBonus(TraitsEnum.Overload, levelOverload, StatsType.Attack, baseStats.ATTACK);
+		if (ContainsEnabledTrait(TraitsEnum.Plunderer__s_Fortune, out int levelPlunderer))
+			attack += Trait.GetBonus(TraitsEnum.Plunderer__s_Fortune, levelPlunderer, StatsType.Attack, parent.FightManager.generalManager.Gold);
 
 		return attack;
 	}

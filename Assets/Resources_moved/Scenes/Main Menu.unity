@@ -965,6 +965,26 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 2866787722319233444, guid: cc7216da510245046a929a1874cb5b4c, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 0.97992474
+      objectReference: {fileID: 0}
+    - target: {fileID: 2866787722319233444, guid: cc7216da510245046a929a1874cb5b4c, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: -0.19936797
+      objectReference: {fileID: 0}
+    - target: {fileID: 2866787722319233444, guid: cc7216da510245046a929a1874cb5b4c, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2866787722319233444, guid: cc7216da510245046a929a1874cb5b4c, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2866787722319233444, guid: cc7216da510245046a929a1874cb5b4c, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: -23
+      objectReference: {fileID: 0}
     - target: {fileID: 7048840558436200652, guid: cc7216da510245046a929a1874cb5b4c, type: 3}
       propertyPath: m_Name
       value: NewGame
