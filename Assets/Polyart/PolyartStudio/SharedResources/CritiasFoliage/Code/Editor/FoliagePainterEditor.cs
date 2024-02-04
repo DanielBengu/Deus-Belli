@@ -717,6 +717,7 @@ namespace CritiasFoliage
             EditorGUILayout.Space();
         }
 
+        [System.Obsolete]
         private void InspectorTypes(List<FoliageType> inspectorTypes)
         {
             Event currentEvent = Event.current;

@@ -7,11 +7,14 @@ using static Unit;
 
 public class UnitFightData
 {
+	const int INFINITE_EFFECT = 999;
 	readonly Unit parent;
 	public Sprite sprite;
 	public readonly BaseStats baseStats;
 	public CurrentStats currentStats;
-    public List<Trait> traitList = new();
+    public List<TraitStruct> traitList = new();
+
+	public List<Tuple<TraitStruct, int>> temporaryEffects = new();
 
     public UnitFightData(Unit parent)
     {
@@ -26,16 +29,28 @@ public class UnitFightData
 	}
 
 
-	public void TakeDamage(int baseDamage, AttackType typeOfDamage)
+	public void TakeDamage(int baseDamage, AttackType typeOfDamage, Unit attacker)
 	{
 		int updatedDamage = CalculateDamage(baseDamage, typeOfDamage);
 
-		if (updatedDamage > 0)
-			currentStats.CURRENT_HP -= updatedDamage;
+        currentStats.CURRENT_HP -= updatedDamage;
 
-		if (currentStats.CURRENT_HP <= 0 && ContainsEnabledTrait(TraitsEnum.Second_Wind, out int levelSecondWind))
+		if(currentStats.CURRENT_HP > 0)
 		{
-			currentStats.CURRENT_HP = Trait.GetBonus(TraitsEnum.Second_Wind, levelSecondWind, StatsType.HP, baseStats.HP);
+			if (attacker && attacker.FightData.ContainsEnabledTrait(TraitsEnum.Poisoned_Tip, out int levelPoison))
+				temporaryEffects.Add(new(
+					new(TraitsEnum.Poisoned_Tip, TraitText.GetConvertedText(TraitsEnum.Poisoned_Tip.ToString()), levelPoison, true),
+					TraitStruct.GetBonus(TraitsEnum.Poisoned_Tip, levelPoison, StatsType.Timer)
+                    ));
+
+			return;
+		}
+
+		//Dead, we check for resurrection effects
+
+		if (ContainsEnabledTrait(TraitsEnum.Second_Wind, out int levelSecondWind))
+		{
+			currentStats.CURRENT_HP = TraitStruct.GetBonus(TraitsEnum.Second_Wind, levelSecondWind, StatsType.HP, baseStats.HP);
 			DisableTrait(TraitsEnum.Second_Wind);
 		}
 	}
@@ -63,19 +78,44 @@ public class UnitFightData
 		if (currentStats.MOVEMENT < 0) currentStats.MOVEMENT = 0;
 	}
 
-	public void StartOfTurnEffects()
+	public async void StartOfTurnEffects()
     {
 		ResetMovement();
+
 		if (ContainsEnabledTrait(TraitsEnum.Regeneration, out int levelRegen))
-			Heal(Trait.GetBonus(TraitsEnum.Regeneration, levelRegen, StatsType.HP, baseStats.HP));
-	}
+			Heal(TraitStruct.GetBonus(TraitsEnum.Regeneration, levelRegen, StatsType.HP, baseStats.HP));
+
+        // Create a new list to store updated values
+        var updatedEffects = new List<Tuple<TraitStruct, int>>();
+
+        foreach (var effect in temporaryEffects)
+        {
+            switch (effect.Item1.traitEnum)
+            {
+                case TraitsEnum.Poisoned_Tip:
+					var animationCompleted = parent.FightManager.MakeUnitTakeDamage(parent, TraitStruct.GetBonus(effect.Item1.traitEnum, effect.Item1.level, StatsType.Attack, currentStats.MAXIMUM_HP), AttackType.Arcane);
+					await animationCompleted;
+                    break;
+            }
+			//We dont update the timer for infinite effects
+			if (effect.Item2 == INFINITE_EFFECT)
+				continue;
+
+			//Update timer, if timer runs out then we remove from the list of temporary effects
+			int timer = effect.Item2 - 1;
+			if(timer > 0)
+                updatedEffects.Add(new Tuple<TraitStruct, int>(effect.Item1, timer)); 
+        }
+
+        temporaryEffects = updatedEffects;
+    }
 
     public void LoadTraits(List<Traits> traitFromJSON)
     {
         foreach (var trait in traitFromJSON)
         {
             TraitsEnum traitEnum = (TraitsEnum)Enum.Parse(typeof(TraitsEnum), trait.Name);
-			traitList.Add(new Trait(traitEnum, trait.Name, trait.Level, true));
+			traitList.Add(new TraitStruct(traitEnum, trait.Name, trait.Level, true));
 		}
 	}
 
@@ -83,7 +123,7 @@ public class UnitFightData
 	{
 		try
 		{
-			Trait traitToSearch = traitList.Find(t => t.traitEnum == traitEnum && t.enabled == true);
+			TraitStruct traitToSearch = traitList.Find(t => t.traitEnum == traitEnum && t.enabled == true);
 			level = traitToSearch.level;
 			return level != 0;
 		}
@@ -99,7 +139,7 @@ public class UnitFightData
 		int traitToDisable = traitList.FindIndex(t => t.traitEnum == traitEnum && t.enabled == true);
 		if(traitToDisable != -1)
 		{
-			Trait trait = traitList[traitToDisable];
+			TraitStruct trait = traitList[traitToDisable];
 			trait.enabled = false;
 			traitList[traitToDisable] = trait;
 		}
@@ -107,9 +147,12 @@ public class UnitFightData
 	public int CalculateDamage(int incomingDamage, AttackType attackType)
 	{
 		if (ContainsEnabledTrait(TraitsEnum.Overload, out int levelOverload))
-			incomingDamage = Trait.GetBonus(TraitsEnum.Overload, levelOverload, StatsType.HP, incomingDamage);
+			incomingDamage = TraitStruct.GetBonus(TraitsEnum.Overload, levelOverload, StatsType.HP, incomingDamage);
 
 		incomingDamage = ApplyArmor(incomingDamage, attackType);
+
+		if(incomingDamage < 0)
+			incomingDamage = 0;
 
 		return incomingDamage;
 	}
@@ -129,9 +172,9 @@ public class UnitFightData
 	{
 		int hp = baseStats.HP;
 		if (ContainsEnabledTrait(TraitsEnum.Tanky, out int level))
-			hp += Trait.GetBonus(TraitsEnum.Tanky, level, StatsType.HP);
+			hp += TraitStruct.GetBonus(TraitsEnum.Tanky, level, StatsType.HP);
 		if (ContainsEnabledTrait(TraitsEnum.Healthy, out int levelHealthy))
-			hp += Trait.GetBonus(TraitsEnum.Healthy, levelHealthy, StatsType.HP, baseStats.HP);
+			hp += TraitStruct.GetBonus(TraitsEnum.Healthy, levelHealthy, StatsType.HP, baseStats.HP);
 
 		return hp;
 	}
@@ -140,7 +183,7 @@ public class UnitFightData
 		int movement = parent.UnitData.Stats.Movement;
 
 		if (ContainsEnabledTrait(TraitsEnum.Speedy, out int level))
-			movement += Trait.GetBonus(TraitsEnum.Speedy, level);
+			movement += TraitStruct.GetBonus(TraitsEnum.Speedy, level);
 
 		return movement;
 	}
@@ -148,11 +191,11 @@ public class UnitFightData
 	{
 		int attack = baseStats.ATTACK;
 		if (ContainsEnabledTrait(TraitsEnum.Strong, out int levelStrong))
-			attack += Trait.GetBonus(TraitsEnum.Strong, levelStrong, StatsType.Attack, baseStats.ATTACK);
+			attack += TraitStruct.GetBonus(TraitsEnum.Strong, levelStrong, StatsType.Attack, baseStats.ATTACK);
 		if (ContainsEnabledTrait(TraitsEnum.Overload, out int levelOverload))
-			attack += Trait.GetBonus(TraitsEnum.Overload, levelOverload, StatsType.Attack, baseStats.ATTACK);
+			attack += TraitStruct.GetBonus(TraitsEnum.Overload, levelOverload, StatsType.Attack, baseStats.ATTACK);
 		if (ContainsEnabledTrait(TraitsEnum.Plunderer__s_Fortune, out int levelPlunderer))
-			attack += Trait.GetBonus(TraitsEnum.Plunderer__s_Fortune, levelPlunderer, StatsType.Attack, parent.FightManager.generalManager.Gold);
+			attack += TraitStruct.GetBonus(TraitsEnum.Plunderer__s_Fortune, levelPlunderer, StatsType.Attack, parent.FightManager.generalManager.Gold);
 
 		return attack;
 	}
@@ -161,7 +204,7 @@ public class UnitFightData
 		int armor = baseStats.ARMOR;
 
 		if (ContainsEnabledTrait(TraitsEnum.Tanky, out int levelTanky))
-			armor += Trait.GetBonus(TraitsEnum.Tanky, levelTanky, StatsType.Armor);
+			armor += TraitStruct.GetBonus(TraitsEnum.Tanky, levelTanky, StatsType.Armor);
 
 		return armor;
 	}
@@ -169,7 +212,7 @@ public class UnitFightData
 	{
 		int ward = baseStats.WARD;
 		if (ContainsEnabledTrait(TraitsEnum.Magic_Defence, out int levelDefence))
-			ward += Trait.GetBonus(TraitsEnum.Magic_Defence, levelDefence, StatsType.Ward, baseStats.WARD);
+			ward += TraitStruct.GetBonus(TraitsEnum.Magic_Defence, levelDefence, StatsType.Ward, baseStats.WARD);
 
 		return ward;
 	}

@@ -85,7 +85,7 @@ public class GeneralManager : MonoBehaviour
 				HandleFightSectionUpdate();
 				break;
             case CurrentSection.Rogue:
-				HandleRogueSectionUpdate();
+				//HandleRogueSectionUpdate();
 				break;
             case CurrentSection.Custom:
             default:
@@ -164,7 +164,8 @@ public class GeneralManager : MonoBehaviour
             IsScrollButtonDown = false;
         } else if (Input.GetKeyDown(KeyCode.P))
         {
-            cameraManager.CameraFocus(structureManager);
+            rogueManager.ObjectMoving = RogueManager.RogueObjectMoving.Camera;
+            cameraManager.CameraFocus(structureManager, currentSection);
 		}
     }
 
@@ -224,7 +225,8 @@ public class GeneralManager : MonoBehaviour
         rogueSectionInstance = Instantiate(rogueSectionPrefab);
         rogueManager = rogueSectionInstance.transform.Find(ROGUE_MANAGER_OBJ_NAME).GetComponent<RogueManager>();
 
-        cameraManager.SetupRogueCamera(rogueSectionInstance.transform.GetChild(0), rogueManager.MapLength);
+        //cameraManager.SetupRogueCamera(rogueSectionInstance.transform.GetChild(0), rogueManager.MapLength);
+        cameraManager.SetupCameraToRogueOOF();
 
         rogueManager.SetupRogue(structureManager, this, runData.currentRow, runData.currentPositionInRow, runData.masterSeed);
         rogueManager.IsRunCompleted(isDefeat);

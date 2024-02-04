@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
@@ -67,7 +68,7 @@ public class AIManager : MonoBehaviour
 		{
 			unit.FightData.StartOfTurnEffects();
 			unitQueue.Enqueue(unit);
-		}
+        }
 
 		if (unitQueue.Count > 0)
 			CalculateTurnForUnit(unitQueue.Dequeue());
@@ -150,7 +151,7 @@ public class AIManager : MonoBehaviour
     Tile FindRandomMovementTarget(List<Tile> possibleMovements)
     {
 		//Enemy AI Randomness is NOT based on run seed and performs casually every time, even if 2 players do the same things
-		int randomInt = Random.Range(0, possibleMovements.Count);
+		int randomInt = UnityEngine.Random.Range(0, possibleMovements.Count);
 		return GameObject.Find($"Terrain_{possibleMovements[randomInt].data.PositionOnGrid}").GetComponent<Tile>();
 	}
 }

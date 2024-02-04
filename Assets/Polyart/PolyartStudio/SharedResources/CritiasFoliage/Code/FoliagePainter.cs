@@ -971,6 +971,7 @@ namespace CritiasFoliage
             }
         }
 
+        [System.Obsolete]
         public void GenerateTreeData(EExtractType extractType, bool clearExisting)
         {
             string label = "CRITIAS_Holder_" + extractType;

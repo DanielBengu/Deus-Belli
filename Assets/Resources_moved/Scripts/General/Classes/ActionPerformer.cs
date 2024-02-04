@@ -1,6 +1,8 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.CompilerServices;
+using System.Threading.Tasks;
 using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 
@@ -114,9 +116,16 @@ public class ActionPerformer
 		AnimationPerformer.PerformAnimation(Animation.Idle, target);
 	}
 
+    public bool IsObjectAnimation(GameObject target)
+    {
+        return structureManager.ObjectsAnimating.Any(o => o.Item1 == target);
+    }
+
     public void ReceiveAttack()
     {
-		unitInQueueForAnimation.FightData.TakeDamage(sourceOfAction.FightData.currentStats.ATTACK, unitInQueueForAnimation.FightData.currentStats.ATTACK_TYPE);
+        if(sourceOfAction && unitInQueueForAnimation)
+		    unitInQueueForAnimation.FightData.TakeDamage(sourceOfAction.FightData.currentStats.ATTACK, unitInQueueForAnimation.FightData.currentStats.ATTACK_TYPE, sourceOfAction);
+
         StartTakeDamageAnimation();
 
         if (unitInQueueForAnimation.FightData.IsDead()) { 
@@ -131,11 +140,42 @@ public class ActionPerformer
 		}
 	}
 
+    public Task<bool> ReceiveAttack(Unit defender, int damage, Unit.AttackType attackType)
+    {
+        defender.FightData.TakeDamage(damage, attackType, null);
+
+        var task = TakeDamageAnimationAsync(defender);
+
+        ClearState();
+
+        return task;
+    }
+
 	public void StartTakeDamageAnimation()
 	{
         Animation animation = unitInQueueForAnimation.FightData.currentStats.CURRENT_HP <= 0 ? Animation.Die : Animation.TakeDamage;
 
 		PerformAnimation(unitInQueueForAnimation.gameObject, animation, true);
+    }
+
+    public async Task<bool> TakeDamageAnimationAsync(Unit unit)
+    {
+        Animation animation = unit.FightData.currentStats.CURRENT_HP <= 0 ? Animation.Die : Animation.TakeDamage;
+
+        PerformAnimation(unit.gameObject, animation, true);
+
+        float timer = 0f;
+        float maxTime = 1000f;
+
+        while (structureManager.ObjectsAnimating.Any(o => o.Item1.GetComponent<Unit>().Id == unit.Id))
+        {
+            timer += Time.deltaTime;
+            Debug.Log($"Timer {timer} maxtime {maxTime}");
+            if (timer >= maxTime)
+                return false;
+        }
+
+        return true;
     }
 
     public void ManageRetaliation()

@@ -85,7 +85,7 @@ public class Level
 			Traits wealthyTrait = enemy.Traits.Find(t => t.Name == TraitsEnum.Wealthy.ToString());
 
 			if (wealthyTrait != null)
-				goldDroppedByUnit += Trait.GetBonus(TraitsEnum.Wealthy, wealthyTrait.Level);
+				goldDroppedByUnit += TraitStruct.GetBonus(TraitsEnum.Wealthy, wealthyTrait.Level);
 
 			goldReward += goldDroppedByUnit;
 		}
@@ -108,7 +108,7 @@ public class Level
 			int failSafe = 1;
 			while(!breakOut && failSafe < 100) {
                 int traitSeed = RandomManager.GetRandomValue(seed * (i + 1) * failSafe, 0, 10000000);
-                Traits randomTrait = GetRandomTrait(traitSeed);
+                Traits randomTrait = GetRandomTrait(traitSeed, unit);
 				if(!unitTraits.Any(t => t.Name == randomTrait.Name))
 				{
                     unitTraits.Add(randomTrait);
@@ -125,11 +125,19 @@ public class Level
 	{
 		return mapData.TileList.Where(t => t.StartPositionForFaction == faction && t.ValidForMovement).Select(t => t.PositionOnGrid).ToArray();
 	}
+    Traits GetRandomTrait(int traitSeed, UnitData unit)
+    {
+        List<TraitsEnum> availableTraits = new();
+        foreach (TraitsEnum t in (TraitsEnum[])Enum.GetValues(typeof(TraitsEnum)))
+		{
+			List<TraitAttributes> attributes = TraitStruct.GetAttributesOfTrait(t);
 
-	Traits GetRandomTrait(int traitSeed)
-	{
-        EnemyAvailableTraits trait = (EnemyAvailableTraits)RandomManager.GetRandomValue(traitSeed, 0, Enum.GetNames(typeof(EnemyAvailableTraits)).Length);
-        int traitLevel = RandomManager.GetRandomValue(traitSeed, 1, 4);
+			if(attributes.Contains(TraitAttributes.RandomFightTrait) && TraitStruct.ValidateAttributesForUnit(unit, attributes))
+                availableTraits.Add(t);
+        }
+
+        TraitsEnum trait = availableTraits[RandomManager.GetRandomValue(traitSeed, 0, availableTraits.Count)];
+        int traitLevel = RandomManager.GetRandomValue(traitSeed, 1, TraitStruct.GetMaxLevelOfTrait(trait) + 1);
 
         return new()
         {

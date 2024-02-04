@@ -17,6 +17,7 @@ public class RogueManager : MonoBehaviour
 
     public Transform playerUnitTransform;
     public float playerSpeed;
+    public float cameraSpeed;
     static readonly int MAP_LENGTH = 10;
     public int MapLength { get; set; }
     public Dictionary<SeedType, int> seedList = new();
@@ -28,6 +29,7 @@ public class RogueManager : MonoBehaviour
     public bool IsGameInStandby { get { return GeneralManager.IsGameInStandby; } }
     public DB_Event CurrentEvent { get; set; }
 	public Merchant MerchantShop { get; set; }
+    public RogueObjectMoving ObjectMoving { get; set; }
 
     private void Update()
 	{
@@ -36,13 +38,32 @@ public class RogueManager : MonoBehaviour
 
     void ManageMovement()
     {
-        StructureManager.MovementTick(playerSpeed, StartEncounter);
+        switch (ObjectMoving)
+        {
+            case RogueObjectMoving.Camera:
+                StructureManager.MovementTick(cameraSpeed, CameraSwitch);
+                break;
+            case RogueObjectMoving.PlayerCharacter:
+                StructureManager.MovementTick(playerSpeed, StartEncounter);
+                break;
+        }
 	}
+
+    void CameraSwitch()
+    {
+        ResetObjectMoving();
+    }
 
     void StartEncounter()
 	{
         RogueNode selectedNode = GeneralManager.selectedNode;
         GeneralManager.StartSection(selectedNode.rogueTileType);
+        ResetObjectMoving();
+    }
+
+    void ResetObjectMoving()
+    {
+        ObjectMoving = RogueObjectMoving.Nothing;
     }
 
     public void IsRunCompleted(bool isDefeat)
@@ -264,6 +285,7 @@ public class RogueManager : MonoBehaviour
         RogueNode startingNode = tileList.Find(t => t.mapRow == GeneralManager.CurrentRow && t.positionInRow == GeneralManager.CurrentPositionInRow);
         if (startingNode.rogueChilds.Contains(tile))
 		{
+            ObjectMoving = RogueObjectMoving.PlayerCharacter;
             GeneralManager.selectedNode = tile;
             GeneralManager.CurrentRow = tile.mapRow;
             GeneralManager.CurrentPositionInRow = tile.positionInRow;
@@ -357,5 +379,12 @@ public class RogueManager : MonoBehaviour
         MapLength,
         NodesOnRow, //How much nodes we need to generate in each row and position offset
         EnemyAI,
+    }
+
+    public enum RogueObjectMoving
+    {
+        Camera,
+        PlayerCharacter,
+        Nothing
     }
 }

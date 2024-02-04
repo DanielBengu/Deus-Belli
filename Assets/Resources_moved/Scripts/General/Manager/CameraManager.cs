@@ -2,6 +2,7 @@ using Microsoft.Win32.SafeHandles;
 using System.Collections.Generic;
 using System.Linq;
 using Unity.VisualScripting;
+using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 using static GeneralManager;
 
@@ -27,7 +28,19 @@ public class CameraManager : MonoBehaviour
 	Vector3 cameraPositionOnFocus = new(735, 930, 700);
 	Quaternion rotationOnFocus = Quaternion.Euler(51, 0, 0);
 
-	public static void UpdatePositionOrRotation(Transform objectToMove, CurrentSection section, CameraMovementOptions options = null)
+    #region Rogue Camera Setup
+
+    static Vector3 rogueCameraPositionOutOfFocus = new(-307, -292, 346);
+    static Quaternion rogueRotationOutOfFocus = Quaternion.Euler(20, 350, 1);
+
+    static Vector3 rogueCameraPositionOnFocus = new(-357, -322, 484);
+    static Quaternion rogueRotationOnFocus = Quaternion.Euler(90, -98, -98); 
+
+    bool isRogueOutOfFocus = false;
+
+    #endregion
+
+    public static void UpdatePositionOrRotation(Transform objectToMove, CurrentSection section, CameraMovementOptions options = null)
     {
         switch (section)
 		{
@@ -105,6 +118,16 @@ public class CameraManager : MonoBehaviour
         objectToMove.position = position;
     }
 
+    public void SetupCameraToRogueOOF()
+    {
+        if(isRogueOutOfFocus)
+            gameObject.transform.SetPositionAndRotation(rogueCameraPositionOnFocus, rogueRotationOnFocus);
+        else
+            gameObject.transform.SetPositionAndRotation(rogueCameraPositionOutOfFocus, rogueRotationOutOfFocus);
+
+        isRogueOutOfFocus = !isRogueOutOfFocus;
+    }
+
     public void SetupFightCamera(Transform camera)
     {
         camera.SetPositionAndRotation(cameraPositionOnFocus, rotationOnFocus);
@@ -165,25 +188,48 @@ public class CameraManager : MonoBehaviour
 	#region Switch Camera Focus (legacy)
 
 	//Switch between the two camera states: In and Out of focus
-	public void CameraFocus(StructureManager structureManager){
-        Transform cameraStart = this.transform; //cameraManager.GetCameraPosition();
-        Transform cameraTarget = GetCameraSwitchFocus();
-        if(!isOutOfFocus)
+	public void CameraFocus(StructureManager structureManager, CurrentSection section){
+        Transform cameraStart = transform;
+        Transform cameraTarget = GetCameraSwitchFocus(section);
+        if(!isOutOfFocus && section == CurrentSection.Fight)
 	        structureManager.ClearSelection(true);
 
         structureManager.actionPerformer.StartAction(ActionPerformed.CameraFocus, cameraStart.gameObject, cameraTarget.gameObject);
         Destroy(cameraTarget.gameObject);
     }
 
-    public Transform GetCameraSwitchFocus(){
+    public Transform GetCameraSwitchFocus(CurrentSection section)
+    {
         Transform cameraTarget = new GameObject().transform;
-        if(isOutOfFocus){
-            cameraTarget.SetPositionAndRotation(cameraPositionOnFocus, rotationOnFocus);
-            isOutOfFocus = false;
-        }else{
-            cameraTarget.SetPositionAndRotation(cameraPositionOutOfFocus, rotationOutOfFocus);
-            isOutOfFocus = true;
+
+        switch (section)
+        {
+            case CurrentSection.Fight:
+                if (isOutOfFocus)
+                    cameraTarget.SetPositionAndRotation(cameraPositionOnFocus, rotationOnFocus);
+                else
+                    cameraTarget.SetPositionAndRotation(cameraPositionOutOfFocus, rotationOutOfFocus);
+                isOutOfFocus = !isOutOfFocus;
+                break;
+            case CurrentSection.Rogue:
+                if (isRogueOutOfFocus)
+                    cameraTarget.SetPositionAndRotation(rogueCameraPositionOnFocus, rogueRotationOnFocus);
+                else
+                    cameraTarget.SetPositionAndRotation(rogueCameraPositionOutOfFocus, rogueRotationOutOfFocus);
+                isRogueOutOfFocus = !isRogueOutOfFocus;
+                break;
+            case CurrentSection.Custom:
+                if (isOutOfFocus)
+                    cameraTarget.SetPositionAndRotation(cameraPositionOnFocus, rotationOnFocus);
+                else
+                    cameraTarget.SetPositionAndRotation(cameraPositionOutOfFocus, rotationOutOfFocus);
+                isOutOfFocus = !isOutOfFocus;
+                break;
+            default:
+                break;
         }
+        
+        
         return cameraTarget;
     }
 

@@ -5,6 +5,7 @@ using Unity.VisualScripting;
 using static Pathfinding;
 using static FightInput;
 using static UnityEngine.UI.CanvasScaler;
+using System.Threading.Tasks;
 
 public class FightManager : MonoBehaviour
 {
@@ -413,6 +414,10 @@ public class FightManager : MonoBehaviour
 	{
         ActionPerformer.ReceiveAttack();
 	}
+    public Task<bool> MakeUnitTakeDamage(Unit defender, int damage, Unit.AttackType attackType)
+    {
+        return ActionPerformer.ReceiveAttack(defender, damage, attackType);
+    }
 	public void MakeUnitRetaliate()
     {
 		ActionPerformer.ManageRetaliation();

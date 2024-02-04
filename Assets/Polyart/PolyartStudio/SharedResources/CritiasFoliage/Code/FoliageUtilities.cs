@@ -23,6 +23,7 @@ namespace CritiasFoliage
         /**
          * Extract a foliage prefab type for an operation. Returns null if it couldn't be used for that operation.
          */
+        [System.Obsolete]
         public static GameObject ExtractFromFoliagePrefab(GameObject foliageType, EExtractType extractType, bool shouldBeStatic)
         {
             GameObject prototype = null;

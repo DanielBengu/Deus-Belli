@@ -60,10 +60,8 @@ public class UIManager : MonoBehaviour
         rogueCanvas = GameObject.Find("RogueCanvas");
         rogueVictoryScreen = AddressablesManager.LoadResource<GameObject>(AddressablesManager.TypeOfResource.Prefab, rogueVictoryScreenPrefabName);
         rogueDefeatScreen = AddressablesManager.LoadResource<GameObject>(AddressablesManager.TypeOfResource.Prefab, rogueDefeatScreenPrefabName);
-        TextMeshProUGUI rogueGold = GameObject.Find("Gold Value").GetComponent<TextMeshProUGUI>();
-		TextMeshProUGUI rogueGod = GameObject.Find("God Text").GetComponent<TextMeshProUGUI>();
-		rogueGold.text = gold.ToString();
-        rogueGod.text = godSelected;
+        TextMeshPro rogueGold = GameObject.Find("Gold Text").GetComponent<TextMeshPro>();
+		rogueGold.text = $"GOLD: {gold}";
     }
 
     public void SetMerchantVariables()
@@ -160,7 +158,7 @@ public class UIManager : MonoBehaviour
 			Transform traitBox = traitParent.GetChild(i);
 			if (unit.FightData.traitList.Count > i)
 			{
-                Trait currentTrait = unit.FightData.traitList[i];
+                TraitStruct currentTrait = unit.FightData.traitList[i];
                 TraitsEnum traitsEnum = (TraitsEnum)Enum.Parse(typeof(TraitsEnum), currentTrait.name);
 				traitBox.GetComponent<Image>().sprite = AddressablesManager.LoadResource<Sprite>(AddressablesManager.TypeOfResource.Sprite, currentTrait.name);
 				traitBox.gameObject.SetActive(true);

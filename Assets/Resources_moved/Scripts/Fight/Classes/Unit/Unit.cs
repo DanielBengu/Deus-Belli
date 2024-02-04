@@ -2,6 +2,7 @@ using System;
 using UnityEngine;
 public class Unit : MonoBehaviour
 {
+	public Guid Id { get; set; } = Guid.NewGuid();
     public UnitMovement Movement { get; set; }
 
     public FightManager FightManager { get; set; }
@@ -52,6 +53,7 @@ public class Unit : MonoBehaviour
 		Attack,
 		Movement,
 		Range,
-		Gold
+		Gold,
+		Timer,
 	}
 }
