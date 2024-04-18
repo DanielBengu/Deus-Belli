@@ -5,13 +5,15 @@ using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.UI;
 using static Pathfinding;
+using static RogueManager;
 
 public class StructureManager : MonoBehaviour
 {
     const int FIGHT_TILES_DISTANCE = 100;
-	const int ROGUE_TILES_DISTANCE = 5;
-    const int ROGUE_TILES_RANDOM_DIFFERENCE_MIN = 3;
-	const int ROGUE_TILES_RANDOM_DIFFERENCE_MAX = 6;
+	const float ROGUE_TILES_DISTANCE = +0.2F;
+    const float ROGUE_TILES_DISTANCE_Z = 0.2F;
+    const int ROGUE_TILES_RANDOM_DIFFERENCE_MIN = 1;
+	const int ROGUE_TILES_RANDOM_DIFFERENCE_MAX = 2;
     const int ROGUE_TILES_FIGHT_WEIGHT = 6;
 	const int ROGUE_TILES_MERCHANT_WEIGHT = 1;
 	const int ROGUE_TILES_EVENT_WEIGHT = 2;
@@ -87,12 +89,12 @@ public class StructureManager : MonoBehaviour
 
 	Vector3 GetRogueTileSpawnPosition(Vector3 baseSpawnPosition, int currentRow, int positionInRow, int nodeSeed)
 	{
-		int randomLength = RandomManager.GetRandomValue(nodeSeed, ROGUE_TILES_RANDOM_DIFFERENCE_MIN, ROGUE_TILES_RANDOM_DIFFERENCE_MAX);
-		float precedentRowX = baseSpawnPosition.x + (15 * (currentRow - 1));
+		//int randomLength = RandomManager.GetRandomValue(nodeSeed, ROGUE_TILES_RANDOM_DIFFERENCE_MIN, ROGUE_TILES_RANDOM_DIFFERENCE_MAX + 1);
+		float precedentRowX = baseSpawnPosition.x + ((currentRow) / 2);
 
-		float spawnPositionX = precedentRowX + randomLength + ROGUE_TILES_DISTANCE;
+        float spawnPositionX = precedentRowX + ROGUE_TILES_DISTANCE;
 		float spawnPositionY = baseSpawnPosition.y;
-		float spawnPositionZ = baseSpawnPosition.z - (ROGUE_TILES_DISTANCE * (positionInRow - 1));
+		float spawnPositionZ = baseSpawnPosition.z - (ROGUE_TILES_DISTANCE_Z * (positionInRow - 1));
 		return new(spawnPositionX, spawnPositionY, spawnPositionZ);
 	}
 
@@ -130,20 +132,17 @@ public class StructureManager : MonoBehaviour
         return RandomManager.GetRandomValueWithWeights(seed, weights);
 	}
 
-    public void GenerateRogueLine(List<RogueNode> tileList)
+    public void GenerateRogueLine(RogueNode playerNode)
 	{
-        LineRenderer lr;
-		foreach (var tile in tileList)
-		{
-            lr = tile.GetComponent<LineRenderer>();
-            lr.positionCount = tile.rogueChilds.Count * 2;
+        LineRenderer lr = playerNode.GetComponent<LineRenderer>();
+        lr.positionCount = playerNode.transform.childCount * 2;
 
-            for (int i = 0; i < tile.rogueChilds.Count; i++)
-			{
-                lr.SetPosition(i * 2, tile.transform.position);
-                lr.SetPosition((i * 2) + 1, tile.rogueChilds[i].transform.position);
-            }
-		}
+        for (int i = 0; i < playerNode.transform.childCount; i++)
+        {
+            Transform node = playerNode.transform.GetChild(i);
+            lr.SetPosition(i * 2, playerNode.transform.position);
+            lr.SetPosition(i * 2 + 1, node.position);
+        }    
     }
 
     public void ClearSelection(bool closeInfoPanel){

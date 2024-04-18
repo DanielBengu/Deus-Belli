@@ -17,11 +17,6 @@ MonoBehaviour:
     m_SerializedData: []
   m_GUID: d2ae08dd3c545104f94b9139047ea09b
   m_SerializeEntries:
-  - m_GUID: d69a4fb7ab15dce48825c806341be667
-    m_Address: Units/Bandit
-    m_ReadOnly: 0
-    m_SerializedLabels: []
-    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 3d85f2c1372aed749a28997e5a70824d
     m_Address: Units/King
     m_ReadOnly: 0
@@ -64,6 +59,11 @@ MonoBehaviour:
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 5a9cebcc184cea54e9061ceac4c87c85
     m_Address: Units/Lisa
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: d69a4fb7ab15dce48825c806341be667
+    m_Address: Units/Bandit
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0

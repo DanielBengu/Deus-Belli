@@ -1,7 +1,9 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using static UnityEngine.Rendering.DebugUI.Table;
 
 public class RogueManager : MonoBehaviour
 {
@@ -13,7 +15,8 @@ public class RogueManager : MonoBehaviour
 
     public RogueNode origin;
     public GameObject tile;
-	public readonly List<RogueNode> tileList = new();
+
+    public List<NodeData> mapList = new();
 
     public Transform playerUnitTransform;
     public float playerSpeed;
@@ -94,35 +97,61 @@ public class RogueManager : MonoBehaviour
         seedList.Add(SeedType.NodesOnRow, RandomManager.GetRandomValue(masterSeed, 200000, 299999));
         
 
-        MapLength = MAP_LENGTH; //RandomManager.GetRandomValue(seedList[SeedType.MapLength], 7, 9);
+        MapLength = MAP_LENGTH;
 
+        //We generate the abstract version of the whole map
         GenerateMap();
-        RogueNode currentNode = tileList.Find(t => t.mapRow == currentRow && t.positionInRow == currentPositionOnRow);
-        playerUnitTransform.position = new Vector3(currentNode.transform.position.x, playerUnitTransform.position.y, currentNode.transform.position.z);
+
+        //We find the current node of the player and we put the player character on it
+        RogueNode currentNodeScript = GameObject.Find($"RogueTile").GetComponent<RogueNode>();
+        playerUnitTransform.position = new Vector3(currentNodeScript.transform.position.x, playerUnitTransform.position.y, currentNodeScript.transform.position.z);
+
+        //We generate the physical nodes that are shown on the table
+        GeneratePhysicalMap(currentNodeScript, mapList.Find(n => n.row == currentNodeScript.mapRow && n.positionInRow == currentNodeScript.positionInRow));
     }
 
-	void GenerateMap()
-	{
-        RogueNode originTile = origin;
-        originTile.SetupTile(this, RogueTileType.Starting, originTile.mapRow, originTile.positionInRow, 0, 0);
-        tileList.Add(originTile);
+    List<NodeData> GenerateMap()
+    {
+        NodeData startingNode = new(RogueTileType.Starting, 0, 1, 0, new(), new());
+        mapList.Add(startingNode);
+        List<NodeData> result = new()
+        {
+            startingNode
+        };
 
         for (int i = 1; i <= MapLength; i++)
         {
-            CreateRowOfNodes(i, MapLength, origin.transform);
-            SetNodesChilds(tileList.Where(t => t.mapRow == i - 1).ToList(), tileList.Where(t => t.mapRow == i).ToList());
-        }
+            result.AddRange(GenerateNodeRow(i));
+        };
 
-        //We force links for the nodes that didn't get any
-        SetMissingChilds(tileList);
-
-        GenerateNewNodeLines();
+        return result;
     }
 
-    void CreateRowOfNodes(int row, int maxRowOfMap, Transform firstNode)
-	{
-        List<RogueNode> newNodes = new();
-        List<RogueNode> previousRowNodes = tileList.Where(t => t.mapRow == row - 1).OrderBy(t=> t.positionInRow).ToList();
+    List<NodeData> GenerateNodeRow(int row)
+    {
+        List<NodeData> nodeRow = new();
+        List<NodeData> previousRowNodes = mapList.Where(t => t.row == row - 1).OrderBy(t => t.positionInRow).ToList();
+        int nodesOnCurrentRow = GenerateAmountNodesCurrentRow(row, previousRowNodes);
+
+        for (int i = 0; i < nodesOnCurrentRow; i++)
+        {
+            int positionOnRow = i + FindOffsetPositionOnRow(nodesOnCurrentRow, row, previousRowNodes);
+            int nodeIndex = mapList.Count + i + 1;
+            int nodeSeed = seedList[SeedType.RogueTile] * nodeIndex;
+            RogueTileType nodeType = StructureManager.GenerateRogueNodeType(row, MapLength, this, nodeIndex);
+            NodeData node = new(nodeType, row, positionOnRow, nodeSeed, new(), new());
+
+            nodeRow.Add(node);
+            mapList.Add(node);
+
+            SetNodesChilds(mapList.Where(t => t.row == i - 1).ToList(), mapList.Where(t => t.row == i).ToList());
+        }
+
+        return nodeRow;
+    }
+
+    int GenerateAmountNodesCurrentRow(int row, List<NodeData> previousRowNodes)
+    {
         int nodesOnCurrentRow;
         int nodesOnPreviousRow = previousRowNodes.Count;
         int maximumNodesPossibleForCurrentRow = nodesOnPreviousRow < MAXIMUM_NODES ? nodesOnPreviousRow + 1 : MAXIMUM_NODES;
@@ -138,36 +167,41 @@ public class RogueManager : MonoBehaviour
             nodesOnCurrentRow = 2;
         else
             nodesOnCurrentRow = RandomManager.GetRandomValue(seedList[SeedType.NodesOnRow] + row, MINIMUM_NODES, maximumNodesPossibleForCurrentRow + 1);
-
-		for (int i = 0; i < nodesOnCurrentRow; i++)
-		{
-            int positionOnRow = i + FindOffsetPositionOnRow(nodesOnCurrentRow, row, previousRowNodes);
-            int nodeIndex = tileList.Count + i + 1;
-            int nodeSeed = seedList[SeedType.RogueTile] * nodeIndex;
-
-            newNodes.Add(StructureManager.GenerateRogueTile(row, positionOnRow, maxRowOfMap, nodeIndex, nodeSeed, tile.transform, firstNode, this));
-        }
         
-        if(newNodes != null)
-		{
-            tileList.AddRange(newNodes);
-        }
+        return nodesOnCurrentRow;
     }
 
-    int FindOffsetPositionOnRow(int nodesOnCurrentRow, int currentRow, List<RogueNode> previousRowNodes)
+    //We only show the possible next nodes for the player to move onto
+    void GeneratePhysicalMap(RogueNode currentNode, NodeData nodeData)
 	{
+        CreateRowOfNodes(currentNode, nodeData);
+
+        GenerateNewNodeLines();
+    }
+
+    void CreateRowOfNodes(RogueNode currentNode, NodeData nodeData)
+	{
+        int row = currentNode.mapRow;
+        int maxRowOfMap = mapList.Max(n => n.row);
+
+        foreach (var node in nodeData.nodeChilds)
+            StructureManager.GenerateRogueTile(node.row, node.positionInRow, maxRowOfMap, mapList.IndexOf(node), node.seed, tile.transform, currentNode.transform, this);
+    }
+
+    int FindOffsetPositionOnRow(int nodesOnCurrentRow, int currentRow, List<NodeData> previousRowNodes)
+    {
         int randomSeed = seedList[SeedType.NodesOnRow] * nodesOnCurrentRow * (currentRow + 1);
 
         int firstNodeInPreviousRowPosition = previousRowNodes.First().positionInRow;
 
-		int minimumOffset;
-		if (nodesOnCurrentRow == previousRowNodes.Count - 1)
+        int minimumOffset;
+        if (nodesOnCurrentRow == previousRowNodes.Count - 1)
             minimumOffset = firstNodeInPreviousRowPosition;
         else
             minimumOffset = firstNodeInPreviousRowPosition - 1 >= 0 ? firstNodeInPreviousRowPosition - 1 : 0;
 
-		int maximumOffset;
-		if (nodesOnCurrentRow == previousRowNodes.Count + 1)
+        int maximumOffset;
+        if (nodesOnCurrentRow == previousRowNodes.Count + 1)
             maximumOffset = firstNodeInPreviousRowPosition;
         else
             maximumOffset = firstNodeInPreviousRowPosition + 1 <= 3 ? firstNodeInPreviousRowPosition + 1 : 3;
@@ -182,30 +216,30 @@ public class RogueManager : MonoBehaviour
         else
             position = RandomManager.GetRandomValue(randomSeed, minimumOffset, maximumOffset + 1);
 
-		return position;
+        return position;
     }
 
-    void SetNodesChilds(List<RogueNode> tileParents, List<RogueNode> tileChilds)
-	{
-        
+    void SetNodesChilds(List<NodeData> tileParents, List<NodeData> tileChilds)
+    {
+
         foreach (var parent in tileParents)
-		{
-            int seed = seedList[SeedType.RogueTile] * parent.mapRow * parent.positionInRow;
-            List<RogueNode> possibleLinks = tileChilds.Where(t =>
+        {
+            int seed = seedList[SeedType.RogueTile] * parent.row * parent.positionInRow;
+            List<NodeData> possibleLinks = tileChilds.Where(t =>
             (t.positionInRow == parent.positionInRow - 1) ||
             (t.positionInRow == parent.positionInRow) ||
             (t.positionInRow == parent.positionInRow + 1)).ToList();
 
             bool isParentTileFirstInRow = parent.positionInRow == tileParents.Min(t => t.positionInRow);
             bool isParentTileLastInRow = parent.positionInRow == tileParents.Max(t => t.positionInRow);
-            
-            List<RogueNode> linksToAdd = new();
 
-			foreach (var link in possibleLinks)
-			{
-                RogueNode previousNodeInParentRow = tileParents.Find(t => t.positionInRow == parent.positionInRow - 1);
+            List<NodeData> linksToAdd = new();
+
+            foreach (var link in possibleLinks)
+            {
+                NodeData previousNodeInParentRow = tileParents.Find(t => t.positionInRow == parent.positionInRow - 1);
                 bool isLastPossibleLinkForChild = parent.positionInRow == link.positionInRow + 1;
-                bool isCrossingWithPreviousParent = previousNodeInParentRow != null && previousNodeInParentRow.rogueChilds.Any(t => t.positionInRow == link.positionInRow + 1); //Check that we do not create a crossing of links (e.g. A1 <-> B2 && A2 <-> B1
+                bool isCrossingWithPreviousParent = previousNodeInParentRow.nodeChilds != null && previousNodeInParentRow.nodeChilds.Any(t => t.positionInRow == link.positionInRow + 1); //Check that we do not create a crossing of links (e.g. A1 <-> B2 && A2 <-> B1)
                 if (isParentTileFirstInRow && link.positionInRow == possibleLinks.Min(t => t.positionInRow) ||
                         isParentTileLastInRow && link.positionInRow == possibleLinks.Max(t => t.positionInRow))
                     linksToAdd.Add(link);
@@ -213,77 +247,22 @@ public class RogueManager : MonoBehaviour
                     linksToAdd.Add(link);
             }
 
-            parent.rogueChilds.AddRange(linksToAdd);
-            linksToAdd.ForEach(t => t.rogueParents.Add(parent));
-        }
-    }
-
-    void SetMissingChilds(List<RogueNode> nodes)
-	{
-        //Check for unlinked childs to force
-        foreach (var node in nodes.Where(t => t.mapRow != 0 && t.rogueParents.Count == 0))
-        {
-            int seed = seedList[SeedType.RogueTile] * node.mapRow * node.positionInRow;
-            List<RogueNode> possibleChoices = nodes.Where(t => t.mapRow == node.mapRow - 1 &&
-            ((t.positionInRow == node.positionInRow - 1) ||
-            (t.positionInRow == node.positionInRow) ||
-            (t.positionInRow == node.positionInRow + 1))).ToList();
-            List<RogueNode> tempChoices = new();
-            foreach (var parent in possibleChoices)
-            {
-                //Check that we do not create a crossing of links (e.g. A1 <-> B2 && A2 <-> B1)
-                RogueNode previousNodeInParentRow = possibleChoices.Find(t => t.positionInRow == parent.positionInRow - 1);
-                bool isCrossingWithPreviousParent = previousNodeInParentRow != null && previousNodeInParentRow.rogueChilds.Any(t => t.positionInRow == node.positionInRow + 1);
-                RogueNode followingNodeInParentRow = possibleChoices.Find(t => t.positionInRow == parent.positionInRow + 1);
-                bool isCrossingWithFollowingParent = followingNodeInParentRow != null && followingNodeInParentRow.rogueChilds.Any(t => t.positionInRow == node.positionInRow - 1);
-                if (!isCrossingWithPreviousParent && !isCrossingWithFollowingParent)
-                    tempChoices.Add(parent);
-            }
-
-            int randomChoice = RandomManager.GetRandomValue(seed, tempChoices.Min(t => t.positionInRow), tempChoices.Max(t => t.positionInRow) + 1);
-            RogueNode parentToLink = possibleChoices.Find(t => t.positionInRow == randomChoice);
-            parentToLink.rogueChilds.Add(node);
-            node.rogueParents.Add(parentToLink);
-        }
-
-        //Check for unlinked parents to force
-        foreach (var node in nodes.Where(t => t.mapRow != MapLength && t.rogueChilds.Count == 0))
-        {
-            int seed = seedList[SeedType.RogueTile] * node.mapRow * node.positionInRow;
-            List<RogueNode> possibleChoices = nodes.Where(t =>  t.mapRow == node.mapRow + 1 &&
-            ((t.positionInRow == node.positionInRow - 1) ||
-            (t.positionInRow == node.positionInRow) ||
-            (t.positionInRow == node.positionInRow + 1))).ToList();
-            List<RogueNode> tempChoices = new();
-            foreach (var child in possibleChoices)
-            {
-                //Check that we do not create a crossing of links (e.g. A1 <-> B2 && A2 <-> B1)
-                RogueNode followingNodeInChildRow = possibleChoices.Find(t => t.positionInRow == child.positionInRow + 1);
-                bool isCrossingWithFollowingParent = followingNodeInChildRow != null && followingNodeInChildRow.rogueParents.Any(t => t.positionInRow == node.positionInRow - 1);
-                RogueNode previousNodeInChildRow = possibleChoices.Find(t => t.positionInRow == child.positionInRow + 1);
-                bool isCrossingWithPreviousParent = previousNodeInChildRow != null && previousNodeInChildRow.rogueParents.Any(t => t.positionInRow == node.positionInRow - 1);
-                if (!isCrossingWithFollowingParent && !isCrossingWithPreviousParent)
-                    tempChoices.Add(child);
-            }
-
-            int randomChoice = RandomManager.GetRandomValue(seed, tempChoices.Min(t => t.positionInRow), tempChoices.Max(t => t.positionInRow) + 1);
-            RogueNode childToLink = possibleChoices.Find(t => t.positionInRow == randomChoice);
-            childToLink.rogueParents.Add(node);
-            node.rogueChilds.Add(childToLink);
+            parent.nodeChilds.AddRange(linksToAdd);
+            linksToAdd.ForEach(t => t.nodeParents.Add(parent));
         }
     }
 
     public void GenerateNewNodeLines()
 	{
-        StructureManager.GenerateRogueLine(tileList);
+        StructureManager.GenerateRogueLine(origin);
     }
 
     public void NodeClicked(RogueNode tile)
 	{
 		if (IsAnyUnitMoving) return;
 
-        RogueNode startingNode = tileList.Find(t => t.mapRow == GeneralManager.CurrentRow && t.positionInRow == GeneralManager.CurrentPositionInRow);
-        if (startingNode.rogueChilds.Contains(tile))
+        NodeData startingNode = mapList.Find(t => t.row == GeneralManager.CurrentRow && t.positionInRow == GeneralManager.CurrentPositionInRow);
+        if (tile.mapRow != startingNode.row)
 		{
             ObjectMoving = RogueObjectMoving.PlayerCharacter;
             GeneralManager.selectedNode = tile;
@@ -291,7 +270,6 @@ public class RogueManager : MonoBehaviour
             GeneralManager.CurrentPositionInRow = tile.positionInRow;
             StructureManager.MoveUnit(playerUnitTransform, tile);
         }
-            
     }
 
     //Method called by the red "Abandon Run" button on the Rogue section UI
@@ -386,5 +364,25 @@ public class RogueManager : MonoBehaviour
         Camera,
         PlayerCharacter,
         Nothing
+    }
+
+    public struct NodeData
+    {
+        public RogueTileType tileType;
+        public int row;
+        public int positionInRow;
+        public int seed;
+        public List<NodeData> nodeChilds;
+        public List<NodeData> nodeParents;
+
+        public NodeData(RogueTileType type, int row, int positionInRow, int seed, List<NodeData> nodeChilds, List<NodeData> nodeParents)
+        {
+            tileType = type;
+            this.row = row;
+            this.positionInRow = positionInRow;
+            this.seed = seed;
+            this.nodeChilds = nodeChilds;
+            this.nodeParents = nodeParents;
+        }
     }
 }

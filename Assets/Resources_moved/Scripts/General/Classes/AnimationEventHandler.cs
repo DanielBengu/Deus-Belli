@@ -6,7 +6,15 @@ public class AnimationEventHandler : MonoBehaviour
 
 	private void Start()
 	{
-		fm = GameObject.Find(GeneralManager.FIGHT_MANAGER_OBJ_NAME).GetComponent<FightManager>();
+		try
+		{
+            fm = GameObject.Find(GeneralManager.FIGHT_MANAGER_OBJ_NAME).GetComponent<FightManager>();
+        }
+		catch
+		{
+			//Rogue section, should not be called there in theory but in case it happens we disable it since it's a fight only script
+			enabled = false;
+		}
 	}
 
 	public void FinishAnimation()

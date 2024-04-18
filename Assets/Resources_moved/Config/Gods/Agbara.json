@@ -4,7 +4,7 @@
     {
       "Name": "Ataiku",
       "Character_Model": "Ataiku",
-      "BuffDescription": "Test\nDescription",
+      "BuffDescription": "<b>Ataiku</b>\n<i>Iron Monarch's Endurance: Ataiku's endurance grants him immunity to crowd control effects.</i>",
       "StartingGold": 0,
       "StartingCharacterUnits": [
         {
@@ -64,7 +64,7 @@
     {
       "Name": "Omi",
       "Character_Model": "Omi",
-      "BuffDescription": "Test\nDescription",
+      "BuffDescription": "<b>Omi</b>\n<i>Liquid Armor: Omi's liquid metal armor provides a +20% bonus to defense against magical attacks.</i>",
       "StartingGold": 0,
       "StartingCharacterUnits": [
         {
@@ -124,7 +124,7 @@
     {
       "Name": "Teriba",
       "Character_Model": "Teriba",
-      "BuffDescription": "Test\nDescription",
+      "BuffDescription": "<b>Ataiku</b>\n<i>Iron Monarch's Endurance: Ataiku's endurance grants him immunity to crowd control effects.</i>",
       "StartingGold": 0,
       "StartingCharacterUnits": [
         {
@@ -184,7 +184,7 @@
     {
       "Name": "Orin",
       "Character_Model": "Orin",
-      "BuffDescription": "Test\nDescription",
+      "BuffDescription": "<b>Orin</b>\n<i>Percussive Momentum: Teriba's relentless drumming has a 10% chance to boost the entire party's movement speed by +10% for two turns.</i>",
       "StartingGold": 0,
       "StartingCharacterUnits": [
         {

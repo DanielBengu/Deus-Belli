@@ -17,42 +17,32 @@ MonoBehaviour:
     m_SerializedData: []
   m_GUID: 0af526b79d2a1af49a9d06ac8af1be90
   m_SerializeEntries:
-  - m_GUID: 15100bce5ee77954d810f22625afd260
+  - m_GUID: b07b05ce72fffb340bc3b43537a7783c
     m_Address: God/Ataiku
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: 947fc768fef5ff446b5dce270b5145fb
+  - m_GUID: a25c5d76b3090204cabdba1780621f63
     m_Address: God/Omi
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: b11a2d76607d306448a36b2b770b36e0
+  - m_GUID: d04c8a0bbbdb3034bad7ccccd0a722cf
     m_Address: God/Orin
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: 0fe98578edff95845825383a22769797
+  - m_GUID: 4d6defb59c6482443a55669a9b5ea903
     m_Address: God/Teriba
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: 20f9e67a61c881b4dbf8f0f75e2c97d6
-    m_Address: God/Orc
-    m_ReadOnly: 0
-    m_SerializedLabels: []
-    FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: 687d045b79ae6184791a4f340e18d4bc
-    m_Address: God/Fairy
-    m_ReadOnly: 0
-    m_SerializedLabels: []
-    FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: ed8445d8e986f4d4c8813b3e568a3aa9
+  - m_GUID: 6a328e38700bf594db89be662396dca4
     m_Address: God/Elf
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: 02b9af129e31242478f3fa604dba8c78
+  - m_GUID: a322b3280cc28ff4992f3e53ff66b3cf
     m_Address: God/Treant
     m_ReadOnly: 0
     m_SerializedLabels: []
@@ -74,6 +64,16 @@ MonoBehaviour:
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 60e8218091f83244c9bf9c8c2569a009
     m_Address: God/Old Pirate
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: d4349deb09d0dab498738dc88763842d
+    m_Address: God/Orc
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: bb69df42e5d58b749a720205df563438
+    m_Address: God/Fairy
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0

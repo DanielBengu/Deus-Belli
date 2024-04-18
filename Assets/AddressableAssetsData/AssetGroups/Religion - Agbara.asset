@@ -16,7 +16,27 @@ MonoBehaviour:
   m_Data:
     m_SerializedData: []
   m_GUID: 43e878f8baa976040b8682100d14bd70
-  m_SerializeEntries: []
+  m_SerializeEntries:
+  - m_GUID: 4bed24655078d724aa729a47cbd72f00
+    m_Address: Agbara.json
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 0443e789756537f4485fd94673daa91b
+    m_Address: FantasyForest.json
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 4835ecda2dc50b54388826a7dd681511
+    m_Address: Pirate.json
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 88451201e7d13664193219d78c25ee46
+    m_Address: Yokai.json
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
   m_ReadOnly: 0
   m_Settings: {fileID: 11400000, guid: 42fa5884c9964964993dbdd708fbd850, type: 2}
   m_SchemaSet:

@@ -69,7 +69,11 @@ public class GeneralManager : MonoBehaviour
             LoadRun();
         else
             StartRun();
-	}
+
+        LoadRogueStructure();
+
+        StartEnemyGodIntro();
+    }
 
 	private void Update()
 	{
@@ -93,10 +97,23 @@ public class GeneralManager : MonoBehaviour
         }
     }
 
+    void LoadRogueStructure()
+    {
+        GenerateRogueSection(false);
+        GenerateEnemyGod();
+    }
+
+    void GenerateEnemyGod()
+    {
+        GameObject godSpawnPosition = GameObject.Find("EnemyGodPosition");
+        GameObject prefab = AddressablesManager.LoadResource<GameObject>(AddressablesManager.TypeOfResource.God, runData.god);
+        var godInstance = Instantiate(prefab, godSpawnPosition.transform.position, prefab.transform.rotation, godSpawnPosition.transform);
+        godInstance.transform.localScale = new(35, 35, 35);
+    }
+
     void LoadRun()
     {
 		runData = LoadRunData();
-		GenerateRogueSection(false);
 	}
 
     void StartRun()
@@ -105,9 +122,12 @@ public class GeneralManager : MonoBehaviour
 
 		runData = new RunData(saveData.Religion, saveData.God, saveData.CurrentRow, saveData.CurrentPositionInRow, saveData.Seed, saveData.Gold, saveData.UnitList.unitList.ToList(), saveData.Ascension);
 		PlayerPrefs.SetInt(ONGOING_RUN, 1);
-
-		GenerateRogueSection(false);
 	}
+
+    void StartEnemyGodIntro()
+    {
+
+    }
 
     void HandleFightSectionUpdate()
     {
@@ -116,21 +136,6 @@ public class GeneralManager : MonoBehaviour
 			cameraManager.HandleScroll(scrollWheelInput, cameraManager.transform, currentSection, -1);
 
 		CameraManager.UpdatePositionOrRotation(fightManager.fightObjects, currentSection, new(structureManager.gameData.GetMapBounds()) { Rotator = fightManager.fightObjectsRotator, Tiles = fightManager.TileList });
-	}
-	void HandleRogueSectionUpdate()
-	{
-		float scrollWheelInput = Input.GetAxis("Mouse ScrollWheel");
-		if (scrollWheelInput != 0f)
-			cameraManager.HandleScroll(scrollWheelInput, cameraManager.transform, currentSection, -1);
-		rogueManager.GenerateNewNodeLines();
-
-		if (IsScrollButtonDown)
-        {
-			Transform objectToMove = rogueSectionInstance.transform.GetChild(0);
-			CameraManager.UpdatePositionOrRotation(objectToMove, currentSection, new() { MapLength = rogueManager.MapLength });
-			rogueManager.GenerateNewNodeLines();
-		}
-
 	}
 
 	RunData LoadRunData()
@@ -225,11 +230,12 @@ public class GeneralManager : MonoBehaviour
         rogueSectionInstance = Instantiate(rogueSectionPrefab);
         rogueManager = rogueSectionInstance.transform.Find(ROGUE_MANAGER_OBJ_NAME).GetComponent<RogueManager>();
 
-        //cameraManager.SetupRogueCamera(rogueSectionInstance.transform.GetChild(0), rogueManager.MapLength);
-        cameraManager.SetupCameraToRogueOOF();
-
         rogueManager.SetupRogue(structureManager, this, runData.currentRow, runData.currentPositionInRow, runData.masterSeed);
         rogueManager.IsRunCompleted(isDefeat);
+
+        Vector3 playerUnit = rogueManager.playerUnitTransform.position;
+        cameraManager.rogueCameraPositionOnFocus = new(playerUnit.x, playerUnit.y + 100, playerUnit.z);
+        cameraManager.SetupCameraToRogueOOF();
 
         currentSection = CurrentSection.Rogue;
     }

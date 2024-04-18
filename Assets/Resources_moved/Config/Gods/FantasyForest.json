@@ -4,7 +4,7 @@
     {
       "Name": "Orc",
       "Character_Model": "Orc",
-      "BuffDescription": "Test\nDescription",
+      "BuffDescription": "<b>Grommash Thundertusk</b>\n<i>Nature's Might: Grommash and his orcish horde gain +15% bonus damage against enemies in forest environments, harnessing the power of the natural terrain.</i>",
       "StartingCharacterUnits": [
         {
           "Name": "Paolo Pirata",
@@ -39,7 +39,7 @@
     {
       "Name": "Fairy",
       "Character_Model": "Fairy",
-      "BuffDescription": "Test\nDescription",
+      "BuffDescription": "<b>Titania Whisperwing</b>\n<i>Blossom Blessing: Titania's soothing whispers grant a +10% bonus to the entire party's maximum health for the duration of the battle.</i>",
       "StartingCharacterUnits": [
         {
           "Name": "Paolo Pirata",
@@ -74,7 +74,7 @@
     {
       "Name": "Treant",
       "Character_Model": "Treant",
-      "BuffDescription": "Test\nDescription",
+      "BuffDescription": "<b>Oakheart Greenbough</b>\n<i>Entangling Roots: Once per battle, Oakheart can summon roots from the ground, entangling enemies and immobilizing them for one turn.</i>",
       "StartingCharacterUnits": [
         {
           "Name": "Paolo Pirata",
@@ -109,7 +109,7 @@
     {
       "Name": "Elf",
       "Character_Model": "Elf",
-      "BuffDescription": "Test\nDescription",
+      "BuffDescription": "<b>Lirael Starwhisper</b>\n<i>Elven Grace: Lirael and her elven companions provide a +15% bonus to evasion for the entire party, their agility and grace unmatched.</i>",
       "StartingCharacterUnits": [
         {
           "Name": "Paolo Pirata",

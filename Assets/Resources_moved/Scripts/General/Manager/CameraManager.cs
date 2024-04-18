@@ -29,11 +29,10 @@ public class CameraManager : MonoBehaviour
 	Quaternion rotationOnFocus = Quaternion.Euler(51, 0, 0);
 
     #region Rogue Camera Setup
+    static Vector3 rogueCameraPositionOutOfFocus = new Vector3(-343.244995F, -532.328979F, 496.550995F);
+    static Quaternion rogueRotationOutOfFocus = Quaternion.Euler(12, 350, 1);
 
-    static Vector3 rogueCameraPositionOutOfFocus = new(-307, -292, 346);
-    static Quaternion rogueRotationOutOfFocus = Quaternion.Euler(20, 350, 1);
-
-    static Vector3 rogueCameraPositionOnFocus = new(-357, -322, 484);
+    public Vector3 rogueCameraPositionOnFocus;
     static Quaternion rogueRotationOnFocus = Quaternion.Euler(90, -98, -98); 
 
     bool isRogueOutOfFocus = false;
