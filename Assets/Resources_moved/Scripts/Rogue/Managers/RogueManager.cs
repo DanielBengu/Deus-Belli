@@ -1,8 +1,11 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.UI;
+using static RogueManager;
 using static UnityEngine.Rendering.DebugUI.Table;
 
 public class RogueManager : MonoBehaviour
@@ -100,7 +103,7 @@ public class RogueManager : MonoBehaviour
         MapLength = MAP_LENGTH;
 
         //We generate the abstract version of the whole map
-        GenerateMap();
+        GenerateAbstractMap();
 
         //We find the current node of the player and we put the player character on it
         RogueNode currentNodeScript = GameObject.Find($"RogueTile").GetComponent<RogueNode>();
@@ -108,9 +111,62 @@ public class RogueManager : MonoBehaviour
 
         //We generate the physical nodes that are shown on the table
         GeneratePhysicalMap(currentNodeScript, mapList.Find(n => n.row == currentNodeScript.mapRow && n.positionInRow == currentNodeScript.positionInRow));
+
+        GenerateMiniMap();
     }
 
-    List<NodeData> GenerateMap()
+    void GenerateMiniMap()
+    {
+        List<NodeData> visibleMap = GenerateVisibleMap();
+
+        // Find the "Map" GameObject
+        GameObject map = GameObject.Find("Map");
+        if (map == null)
+        {
+            Debug.LogError("Map GameObject not found.");
+            return;
+        }
+
+        GameObject startingPlayer = new("ImageMap");
+        startingPlayer.transform.parent = map.transform;
+
+        // Add Image component to the mini-map GameObject
+        Image miniMapImage = startingPlayer.AddComponent<Image>();
+
+        miniMapImage.color = Color.blue;
+        miniMapImage.transform.localPosition = new Vector3(-20, -20, 0);
+    }
+
+    List<NodeData> GenerateVisibleMap()
+    {
+        NodeData playerNode = mapList.Find(n => n.row == GeneralManager.runData.currentRow && n.positionInRow == GeneralManager.runData.currentPositionInRow);
+        List<NodeData> nodeData = new()
+        {
+            playerNode
+        };
+
+        foreach (var node in mapList.Skip(1))
+            if(IsNodeVisibleRecursive(node, nodeData))
+                nodeData.Add(node);
+
+        return nodeData;
+    }
+
+    //This method uses recursion to check whether a node is considered visible on the map (it's visible if is a node a player can still go to in the run).
+    //To do this we check every parent of the node to find nodes we already know are visible (like the current node of the player)
+    bool IsNodeVisibleRecursive(NodeData nodeToCheck, List<NodeData> alreadyVisibleNodes)
+    {
+        if (alreadyVisibleNodes.Contains(nodeToCheck))
+            return true;
+        else
+            foreach (var node in nodeToCheck.nodeParents)
+                if (IsNodeVisibleRecursive(node, alreadyVisibleNodes))
+                    return true;
+
+        return false;
+    }
+
+    List<NodeData> GenerateAbstractMap()
     {
         NodeData startingNode = new(RogueTileType.Starting, 0, 1, 0, new(), new());
         mapList.Add(startingNode);
