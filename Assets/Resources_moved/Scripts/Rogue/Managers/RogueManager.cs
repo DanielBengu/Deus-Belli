@@ -111,7 +111,7 @@ public class RogueManager : MonoBehaviour
         playerUnitTransform.position = new Vector3(currentNodeScript.transform.position.x, playerUnitTransform.position.y, currentNodeScript.transform.position.z);
 
         //We generate the physical nodes that are shown on the table
-        GeneratePhysicalMap(currentNodeScript, mapList.Find(n => n.row == currentNodeScript.mapRow && n.positionInRow == currentNodeScript.positionInRow));
+        GeneratePhysicalMap(currentNodeScript, mapList.Find(n => n.row == GeneralManager.runData.currentRow && n.positionInRow == GeneralManager.runData.currentPositionInRow));
 
         GenerateMiniMap();
     }
@@ -123,7 +123,7 @@ public class RogueManager : MonoBehaviour
         Dictionary<RogueTileType, Sprite> spriteList = new();
 
 
-        string folderPath = "Assets/Resources_moved/Sprites/Map";
+        string folderPath = "Assets/Resources_moved/Sprites/Map/Icons";
         string[] assetPaths = AssetDatabase.FindAssets("t:Sprite", new string[] { folderPath });
 
         // Iterate through each asset path and load the sprite
@@ -133,7 +133,6 @@ public class RogueManager : MonoBehaviour
             spriteList.Add((RogueTileType)Enum.Parse(typeof(RogueTileType), sprite.name),sprite);
         }
 
-        // Find the "Map" GameObject
         GameObject map = GameObject.Find("Map");
         if (map == null)
         {
@@ -151,9 +150,8 @@ public class RogueManager : MonoBehaviour
             // Add Image component to the mini-map GameObject
             Image miniMapImage = startingPlayer.AddComponent<Image>();
 
-            miniMapImage.color = Color.blue;
             int imageX = -25 + node.positionInRow * 25;
-            int imageY = -20 + (node.row - 1) * 20;
+            int imageY = -20 + (node.row - GeneralManager.CurrentRow) * 20;
             miniMapImage.transform.localPosition = new Vector3(imageX, imageY, 0);
             miniMapImage.transform.localScale = minimapStartingPlayer.transform.localScale;
             miniMapImage.sprite = spriteList[node.tileType];
@@ -169,7 +167,7 @@ public class RogueManager : MonoBehaviour
         };
 
         foreach (var node in mapList.Skip(1))
-            if(IsNodeVisibleRecursive(node, nodeData))
+            if(IsNodeVisibleRecursive(node, nodeData) && !nodeData.Contains(node))
                 nodeData.Add(node);
 
         return nodeData;
@@ -215,13 +213,13 @@ public class RogueManager : MonoBehaviour
         for (int i = 0; i < nodesOnCurrentRow; i++)
         {
             int positionOnRow = i + FindOffsetPositionOnRow(nodesOnCurrentRow, row, previousRowNodes);
-            int nodeIndex = mapList.Count + i + 1;
-            int nodeSeed = seedList[SeedType.RogueTile] * nodeIndex;
-            RogueTileType nodeType = StructureManager.GenerateRogueNodeType(row, MapLength, this, nodeIndex);
+            int nodeSeed = seedList[SeedType.RogueTile] * mapList.Count;
+            RogueTileType nodeType = StructureManager.GenerateRogueNodeType(row, MapLength, this, mapList.Count);
             NodeData node = new(nodeType, row, positionOnRow, nodeSeed, new(), new());
 
             nodeRow.Add(node);
-            mapList.Add(node);
+            if(!mapList.Contains(node))
+                mapList.Add(node);
 
             List<NodeData> parentNodes = mapList.Where(t => t.row == row - 1).ToList();
             List<NodeData> childNodes = mapList.Where(t => t.row == row).ToList();
@@ -262,7 +260,7 @@ public class RogueManager : MonoBehaviour
 
     void CreateRowOfNodes(RogueNode currentNode, NodeData nodeData)
 	{
-        int row = currentNode.mapRow;
+        int row = nodeData.row;
         int maxRowOfMap = mapList.Max(n => n.row);
 
         foreach (var node in nodeData.nodeChilds)

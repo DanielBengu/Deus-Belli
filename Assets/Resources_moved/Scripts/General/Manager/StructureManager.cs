@@ -12,11 +12,9 @@ public class StructureManager : MonoBehaviour
     const int FIGHT_TILES_DISTANCE = 100;
 	const float ROGUE_TILES_DISTANCE = +0.2F;
     const float ROGUE_TILES_DISTANCE_Z = 0.2F;
-    const int ROGUE_TILES_RANDOM_DIFFERENCE_MIN = 1;
-	const int ROGUE_TILES_RANDOM_DIFFERENCE_MAX = 2;
     const int ROGUE_TILES_FIGHT_WEIGHT = 6;
 	const int ROGUE_TILES_MERCHANT_WEIGHT = 1;
-	const int ROGUE_TILES_EVENT_WEIGHT = 2;
+	const int ROGUE_TILES_EVENT_WEIGHT = 4;
 
 	public UIManager uiManager;
     public SpriteManager spriteManager;
@@ -90,9 +88,8 @@ public class StructureManager : MonoBehaviour
 	Vector3 GetRogueTileSpawnPosition(Vector3 baseSpawnPosition, int currentRow, int positionInRow, int nodeSeed)
 	{
 		//int randomLength = RandomManager.GetRandomValue(nodeSeed, ROGUE_TILES_RANDOM_DIFFERENCE_MIN, ROGUE_TILES_RANDOM_DIFFERENCE_MAX + 1);
-		float precedentRowX = baseSpawnPosition.x + ((currentRow) / 2);
 
-        float spawnPositionX = precedentRowX + ROGUE_TILES_DISTANCE;
+        float spawnPositionX = baseSpawnPosition.x + ROGUE_TILES_DISTANCE;
 		float spawnPositionY = baseSpawnPosition.y;
 		float spawnPositionZ = baseSpawnPosition.z - (ROGUE_TILES_DISTANCE_Z * (positionInRow - 1));
 		return new(spawnPositionX, spawnPositionY, spawnPositionZ);
@@ -114,14 +111,14 @@ public class StructureManager : MonoBehaviour
 		if (currentRow == maxRowOnMap)
             return RogueTileType.Boss;
 
-        int seed = rm.seedList[RogueManager.SeedType.RogueTile];
+        int seed = rm.seedList[SeedType.RogueTile];
         int minibossRow = RandomManager.GetRandomValue(seed, 3, 5);
         if (minibossRow == currentRow)
             return RogueTileType.Miniboss;
         if (currentRow == 1)
             return RogueTileType.Fight;
 
-        seed = rm.seedList[RogueManager.SeedType.RogueTile] * (nodeIndex + 1);
+        seed = rm.seedList[SeedType.RogueTile] * (nodeIndex + 1);
 
         Dictionary<RogueTileType, int> weights = new()
         {
