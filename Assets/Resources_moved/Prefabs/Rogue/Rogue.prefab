@@ -407,14 +407,14 @@ RectTransform:
   m_GameObject: {fileID: 8267552445648277961}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 0.20390837, y: 0.13164632, z: 1}
+  m_LocalScale: {x: 0.15, y: 0.107142836, z: 0.74999994}
   m_ConstrainProportionsScale: 1
   m_Children: []
   m_Father: {fileID: 5887912506630219860}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: -40}
+  m_AnchoredPosition: {x: 0, y: -41.91}
   m_SizeDelta: {x: 100, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &6459359466772585106
@@ -550,6 +550,18 @@ PrefabInstance:
     - target: {fileID: 3291967608303097353, guid: 442a9bc3c35b6eb4bae368edadfec9eb, type: 3}
       propertyPath: m_Name
       value: Map
+      objectReference: {fileID: 0}
+    - target: {fileID: 6845185586488031209, guid: 442a9bc3c35b6eb4bae368edadfec9eb, type: 3}
+      propertyPath: m_LocalScale.x
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 6845185586488031209, guid: 442a9bc3c35b6eb4bae368edadfec9eb, type: 3}
+      propertyPath: m_LocalScale.y
+      value: 7
+      objectReference: {fileID: 0}
+    - target: {fileID: 6845185586488031209, guid: 442a9bc3c35b6eb4bae368edadfec9eb, type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: 198
       objectReference: {fileID: 0}
     - target: {fileID: 7716525230042981494, guid: 442a9bc3c35b6eb4bae368edadfec9eb, type: 3}
       propertyPath: m_Name
@@ -949,6 +961,10 @@ PrefabInstance:
       propertyPath: cameraSpeed
       value: 200
       objectReference: {fileID: 0}
+    - target: {fileID: -4015313132077449474, guid: ee6197ad340c22942bbd95779136a1e5, type: 3}
+      propertyPath: fightSprite
+      value: 
+      objectReference: {fileID: 21300000, guid: 2b3599fc653770b4d8bd5a218e1e47ab, type: 3}
     - target: {fileID: -4015313132077449474, guid: ee6197ad340c22942bbd95779136a1e5, type: 3}
       propertyPath: playerSpeed
       value: 0.5

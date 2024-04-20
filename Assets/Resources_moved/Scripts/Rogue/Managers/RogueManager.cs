@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using UnityEditor;
 using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -119,6 +120,19 @@ public class RogueManager : MonoBehaviour
     {
         List<NodeData> visibleMap = GenerateVisibleMap();
 
+        Dictionary<RogueTileType, Sprite> spriteList = new();
+
+
+        string folderPath = "Assets/Resources_moved/Sprites/Map";
+        string[] assetPaths = AssetDatabase.FindAssets("t:Sprite", new string[] { folderPath });
+
+        // Iterate through each asset path and load the sprite
+        foreach (string assetPath in assetPaths)
+        {
+            Sprite sprite = AssetDatabase.LoadAssetAtPath<Sprite>(AssetDatabase.GUIDToAssetPath(assetPath));
+            spriteList.Add((RogueTileType)Enum.Parse(typeof(RogueTileType), sprite.name),sprite);
+        }
+
         // Find the "Map" GameObject
         GameObject map = GameObject.Find("Map");
         if (map == null)
@@ -127,14 +141,23 @@ public class RogueManager : MonoBehaviour
             return;
         }
 
-        GameObject startingPlayer = new("ImageMap");
-        startingPlayer.transform.parent = map.transform;
+        Transform minimapStartingPlayer = GameObject.Find("StartingPlayerPosition").transform;
 
-        // Add Image component to the mini-map GameObject
-        Image miniMapImage = startingPlayer.AddComponent<Image>();
+        foreach (var node in visibleMap.Skip(1))
+        {
+            GameObject startingPlayer = new($"Node_{node.row}_{node.positionInRow}");
+            startingPlayer.transform.parent = map.transform;
 
-        miniMapImage.color = Color.blue;
-        miniMapImage.transform.localPosition = new Vector3(-20, -20, 0);
+            // Add Image component to the mini-map GameObject
+            Image miniMapImage = startingPlayer.AddComponent<Image>();
+
+            miniMapImage.color = Color.blue;
+            int imageX = -25 + node.positionInRow * 25;
+            int imageY = -20 + (node.row - 1) * 20;
+            miniMapImage.transform.localPosition = new Vector3(imageX, imageY, 0);
+            miniMapImage.transform.localScale = minimapStartingPlayer.transform.localScale;
+            miniMapImage.sprite = spriteList[node.tileType];
+        }
     }
 
     List<NodeData> GenerateVisibleMap()
@@ -200,7 +223,9 @@ public class RogueManager : MonoBehaviour
             nodeRow.Add(node);
             mapList.Add(node);
 
-            SetNodesChilds(mapList.Where(t => t.row == i - 1).ToList(), mapList.Where(t => t.row == i).ToList());
+            List<NodeData> parentNodes = mapList.Where(t => t.row == row - 1).ToList();
+            List<NodeData> childNodes = mapList.Where(t => t.row == row).ToList();
+            SetNodesChilds(parentNodes, childNodes);
         }
 
         return nodeRow;
