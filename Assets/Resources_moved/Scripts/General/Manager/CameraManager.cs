@@ -18,8 +18,8 @@ public class CameraManager : MonoBehaviour
 	public static float fightscrollSpeed = 25000f;
 	public static float rogueScrollSpeed = 3000f;
 
-	Vector3 defaultCameraPosition = new(670, 1070, 73);
-    Quaternion defaultCameraRotation = Quaternion.Euler((float)33.3, 0, 0);
+	Vector3 defaultCameraPosition = new(670, 560, 350);
+    Quaternion defaultCameraRotation = Quaternion.Euler(8, 0, 0);
 
 	bool isOutOfFocus = false;
 

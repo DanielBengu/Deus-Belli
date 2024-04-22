@@ -201,6 +201,8 @@ public class RogueManager : MonoBehaviour
             result.AddRange(GenerateNodeRow(i));
         };
 
+        SetMissingChilds(mapList);
+
         return result;
     }
 
@@ -328,6 +330,61 @@ public class RogueManager : MonoBehaviour
 
             parent.nodeChilds.AddRange(linksToAdd);
             linksToAdd.ForEach(t => t.nodeParents.Add(parent));
+        }
+    }
+
+    void SetMissingChilds(List<NodeData> nodes)
+    {
+        //Check for unlinked childs to force
+        foreach (var node in nodes.Where(t => t.row != 0 && t.nodeParents.Count == 0))
+        {
+            int seed = seedList[SeedType.RogueTile] * node.row * node.positionInRow;
+            List<NodeData> possibleChoices = nodes.Where(t => t.row == node.row - 1 &&
+            ((t.positionInRow == node.positionInRow - 1) ||
+            (t.positionInRow == node.positionInRow) ||
+            (t.positionInRow == node.positionInRow + 1))).ToList();
+            List<NodeData> tempChoices = new();
+            foreach (var parent in possibleChoices)
+            {
+                //Check that we do not create a crossing of links (e.g. A1 <-> B2 && A2 <-> B1)
+                NodeData previousNodeInParentRow = possibleChoices.Find(t => t.positionInRow == parent.positionInRow - 1);
+                bool isCrossingWithPreviousParent = previousNodeInParentRow.nodeChilds != null && previousNodeInParentRow.nodeChilds.Any(t => t.positionInRow == node.positionInRow + 1);
+                NodeData followingNodeInParentRow = possibleChoices.Find(t => t.positionInRow == parent.positionInRow + 1);
+                bool isCrossingWithFollowingParent = followingNodeInParentRow.nodeChilds != null && followingNodeInParentRow.nodeChilds.Any(t => t.positionInRow == node.positionInRow - 1);
+                if (!isCrossingWithPreviousParent && !isCrossingWithFollowingParent)
+                    tempChoices.Add(parent);
+            }
+
+            int randomChoice = RandomManager.GetRandomValue(seed, tempChoices.Min(t => t.positionInRow), tempChoices.Max(t => t.positionInRow) + 1);
+            NodeData parentToLink = possibleChoices.Find(t => t.positionInRow == randomChoice);
+            parentToLink.nodeChilds.Add(node);
+            node.nodeParents.Add(parentToLink);
+        }
+
+        //Check for unlinked parents to force
+        foreach (var node in nodes.Where(t => t.row != MapLength && t.nodeChilds.Count == 0))
+        {
+            int seed = seedList[SeedType.RogueTile] * node.row * node.positionInRow;
+            List<NodeData> possibleChoices = nodes.Where(t => t.row == node.row + 1 &&
+            ((t.positionInRow == node.positionInRow - 1) ||
+            (t.positionInRow == node.positionInRow) ||
+            (t.positionInRow == node.positionInRow + 1))).ToList();
+            List<NodeData> tempChoices = new();
+            foreach (var child in possibleChoices)
+            {
+                //Check that we do not create a crossing of links (e.g. A1 <-> B2 && A2 <-> B1)
+                NodeData followingNodeInChildRow = possibleChoices.Find(t => t.positionInRow == child.positionInRow + 1);
+                bool isCrossingWithFollowingParent = followingNodeInChildRow.nodeParents != null && followingNodeInChildRow.nodeParents.Any(t => t.positionInRow == node.positionInRow - 1);
+                NodeData previousNodeInChildRow = possibleChoices.Find(t => t.positionInRow == child.positionInRow + 1);
+                bool isCrossingWithPreviousParent = previousNodeInChildRow.nodeParents != null && previousNodeInChildRow.nodeParents.Any(t => t.positionInRow == node.positionInRow - 1);
+                if (!isCrossingWithFollowingParent && !isCrossingWithPreviousParent)
+                    tempChoices.Add(child);
+            }
+
+            int randomChoice = RandomManager.GetRandomValue(seed, tempChoices.Min(t => t.positionInRow), tempChoices.Max(t => t.positionInRow) + 1);
+            NodeData childToLink = possibleChoices.Find(t => t.positionInRow == randomChoice);
+            childToLink.nodeParents.Add(node);
+            node.nodeChilds.Add(childToLink);
         }
     }
 
